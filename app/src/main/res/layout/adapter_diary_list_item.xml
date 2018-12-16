@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/diary_row_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <com.cenes.util.CenesRoundedCornerLinearLayout
+        android:id="@+id/ll_dairy_list_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_gray_stroke_thin"
+        android:elevation="2dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivDiaryImage"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_margin="1px"
+            android:background="@color/white"
+            android:scaleType="centerCrop"
+            android:src="@drawable/diary_default" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <com.cenes.util.CenesTextView
+                android:id="@+id/tv_item_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:textColor="@color/cenes_dark_gray"
+                android:textSize="18sp"
+                app:fontName="@string/font_lato_regular" />
+
+            <com.cenes.util.CenesTextView
+                android:id="@+id/tv_item_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="2"
+                android:textColor="@color/cenes_light_gray"
+                android:textSize="14sp"
+                app:fontName="@string/font_lato_regular" />
+        </LinearLayout>
+    </com.cenes.util.CenesRoundedCornerLinearLayout>
+</LinearLayout>

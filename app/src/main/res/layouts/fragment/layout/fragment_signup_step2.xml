@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/guest_bg">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <LinearLayout
+            android:id="@+id/ll_signup_step2_back"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="40dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="12dp"
+                android:src="@drawable/signup_step1_back_arrow" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="back"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="120dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Verification Code"
+            android:textSize="24dp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/tv_signup_step2_guide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please type the verification code sent to [phone_number]."
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:layout_marginTop="30dp"
+            android:textAlignment="center"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="7"
+            android:layout_marginTop="40dp"
+            android:gravity="center">
+            <EditText
+                android:id="@+id/et_box_1"
+                android:layout_weight="1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="#33FFFFFF"
+                android:maxLength="1"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:editable="false"/>
+            <View
+                android:layout_width="10dp"
+                android:layout_height="60dp"/>
+            <EditText
+                android:id="@+id/et_box_2"
+                android:layout_weight="1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="#33FFFFFF"
+                android:maxLength="1"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:editable="false"/>
+            />
+            <View
+                android:layout_width="10dp"
+                android:layout_height="60dp"/>
+            <EditText
+                android:id="@+id/et_box_3"
+                android:layout_weight="1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="#33FFFFFF"
+                android:maxLength="1"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:editable="false"/>
+            />
+            <View
+                android:layout_width="10dp"
+                android:layout_height="60dp"/>
+            <EditText
+                android:id="@+id/et_box_4"
+                android:layout_weight="1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="#33FFFFFF"
+                android:maxLength="1"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:editable="false"/>
+            />
+
+        </LinearLayout>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp">
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:columnCount="3"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/bt_keypad_1"
+                android:text="1"
+                style="@style/keyboard_button"/>
+
+            <Button
+                android:id="@+id/bt_keypad_2"
+                android:text="2"
+                style="@style/keyboard_button" />
+
+            <Button
+                android:id="@+id/bt_keypad_3"
+                android:text="3"
+                style="@style/keyboard_button" />
+
+
+            <Button
+                android:id="@+id/bt_keypad_4"
+                android:text="4"
+                style="@style/keyboard_button" />
+
+            <Button
+                android:id="@+id/bt_keypad_5"
+                android:text="5"
+                style="@style/keyboard_button" />
+
+            <Button
+                android:id="@+id/bt_keypad_6"
+                android:text="6"
+                style="@style/keyboard_button" />
+
+            <Button
+                android:id="@+id/bt_keypad_7"
+                android:text="7"
+                style="@style/keyboard_button" />
+
+            <Button
+                android:id="@+id/bt_keypad_8"
+                android:text="8"
+                style="@style/keyboard_button" />
+
+            <Button
+                android:id="@+id/bt_keypad_9"
+                android:text="9"
+                style="@style/keyboard_button" />
+
+            <Button
+                android:id="@+id/bt_keypad_0"
+                android:layout_column="1"
+                style="@style/keyboard_button"
+                android:text="0" />
+
+            <Button
+                android:id="@+id/bt_keypad_delete"
+                android:background="@drawable/signup_step2_delete"
+                android:layout_height="40dp"
+                android:layout_width="60dp"
+                style="@style/keyboard_button" />
+        </GridLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

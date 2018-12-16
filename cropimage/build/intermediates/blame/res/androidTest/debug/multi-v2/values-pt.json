@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-pt/values-pt.xml",
+            "map": [
+                {
+                    "source": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/bundles/debug/res/values-pt/values-pt.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "100,174,224,302,360",
+                        "endColumns": "73,49,77,57,58",
+                        "endOffsets": "169,219,297,355,414"
+                    }
+                }
+            ]
+        }
+    ]
+}

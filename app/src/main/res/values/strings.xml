@@ -1,0 +1,118 @@
+<resources>
+    <string name="app_name">Cenes 1.1.3</string>
+
+    <string name="title_1">Welcome to CENES\nYour personal in-synced\ncalendar</string>
+    <string name="title_2">Time Prediction\nwith no conflicts</string>
+<!--
+    <string name="title_3">Private Diary\nrecord your memories</string>
+-->
+    <string name="gs_heading">Private Diary\nrecord your memories</string>
+
+
+    <string name="slide_2_title">GATHERING</string>
+    <string name="slide_2_desc">Making plans can’t get any easier. A tap on your phone will find the best
+time for everyone to meet.\n\n\nNo more back and forth messaging.\nNo more time wasting.\nKeep it simple.</string>
+
+    <string name="slide_3_title">COLLABORATIVE\nREMINDERS</string>
+    <string name="slide_3_desc">Collaborative Reminders is not just for yourself. Share it with others and track its progress.\n\n\nWe’re making productivity a little more social.</string>
+
+    <string name="slide_4_title">MeTIME</string>
+    <string name="slide_4_desc">Finding time is difficult. We get it. MeTIME provides a customizable schedule to set aside some much deserved time to yourself.\n\n\nIf something is worth doing, we’ll make the time for it.</string>
+
+    <string name="slide_5_title">MAKE LIFE EASIER TO SOCIALIZE</string>
+    <string name="slide_5_desc"></string>
+
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GET STARTED</string>
+
+
+    <string name="ins_1">Empower self-awareness and\ncustomize all types of schedules.</string>
+    <string name="ins_2">Easily manage your events, tasks, an\n reminders at one place.</string>
+    <string name="gs_ins">Mark every milestone on your job\nand every gathering with friends.</string>
+
+    <string name="name">NAME</string>
+    <string name="email">EMAIL</string>
+    <string name="phone">PHONE</string>
+    <string name="password">PASSWORD</string>
+    <string name="get_started">GET STARTED</string>
+    <string name="sign_up_with_enmail">SIGNUP WITH EMAIL</string>
+    <string name="signin">LOGIN TO ACCOUNT</string>
+    <string name="choiceScreenLoginText">Already Have an Account? <b>Log In</b></string>
+    <string name="signupStep1Text">We will send you a One time SMS message\nCarrier rates may apply</string>
+    <string name="username">USERNAME</string>
+    <string name="login">LOGIN</string>
+    <string name="join_us_with_facebook">JOIN US WITH FACEBOOK</string>
+    <string name="or">OR</string>
+    <string name="join_us_with_email">JOIN US WITH EMAIL</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="forgot_password_title">Don\'t worry. Enter your email address or\n mobile number to reset your password.</string>
+    <string name="forgot_password_hint">EMAIL</string>
+    <string name="login_btn_text"><p>Already Have an Account? </p><b>Log In</b></string>
+    <string name="signup_btn_text"><p>Don't have an Account? </p><b>Sign Up Now</b></string>
+
+    <!--<string name="facebook_app_id">150590745521474</string>-->
+    <string name="facebook_app_id">603197326738059</string>
+        <string name="server_client_id">77781968786-mc0cf9tvppklj256pf2piu8p00jo5vrb.apps.googleusercontent.com</string>
+    <string name="invite_user_text">Check out Cenes for your smartphone. Download it today from http://cenesgroup.com</string>
+    <bool name="loggingOn">false</bool>
+
+    <string-array name="weekdays">
+        <item>S</item>
+        <item>M</item>
+        <item>T</item>
+        <item>W</item>
+        <item>T</item>
+        <item>F</item>
+        <item>S</item>
+    </string-array>
+
+    <string name="first_predictive_intelligent_calendar"><![CDATA[First Predictive & Intelligent Calendar]]></string>
+    <string name="reminder_title">Reminder Title</string>
+    <string name="time_and_date">Time and Date</string>
+    <string name="location">Location</string>
+    <string name="add_people">Add People</string>
+    <string name="reminders">Reminders</string>
+    <string name="completed">Completed</string>
+    <string name="no_completed_reminders_text">You have not completed\nany reminders!</string>
+    <string name="no_reminders_text">\"The way to get started is to quit\ntalking and begin doing.\"\nWALT DISNEY</string>
+    <string name="event_title">Event Title</string>
+    <string name="diary_title">Diary Title</string>
+    <string name="time">Time</string>
+    <string name="event_details">Event Details</string>
+    <string name="diary_entry">Diary Entry</string>
+    <string name="people">People</string>
+    <string name="diary_time">Time</string>
+    <string name="diary_friends">Add Friends</string>
+    <string name="diary_photos">Add Photos</string>
+    <string name="switch_to_monthly_view">- - SWITCH TO MONTHLY VIEW - -</string>
+    <string name="switch_to_weekly_view">- - SWITCH TO WEEKLY VIEW - -</string>
+    <string name="font_lato_regular">lato_regular.ttf</string>
+    <string name="font_lato_light">lato_light.ttf</string>
+    <string name="alarm">Alarm</string>
+
+    <string-array name="gender">
+<!--
+        <item>Select</item>
+-->
+        <item>Male</item>
+        <item>Female</item>
+       <!-- <item>Trans</item>
+        <item>Other</item>-->
+    </string-array>
+
+    <string name="select">Select</string>
+    <string name="help_feedback"><![CDATA[Help & Feedback]]></string>
+    <string name="about">About</string>
+    <string name="log_out">Log Out</string>
+    <string name="my_reminders">My Reminders</string>
+    <string name="sync_your_mail_box_desc"><![CDATA[Sync your mail box to better help you manage your appointments & invites]]></string>
+
+    <!-- Side Menu Screens Text  -->
+    <string name="about_us_version_text">Version 1.6.8</string>
+    <string name="about_us_version_update_link">http://www.cenesgroup.com</string>
+
+
+    <!-- Cenes Constants  -->
+    <string name="cenesWebDomain">http://cenes-web.com.s3-website-us-east-1.amazonaws.com</string>
+</resources>

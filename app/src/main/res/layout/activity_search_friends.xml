@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/gath_search_friend_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/border_square">
+
+        <ImageView
+            android:id="@+id/close_search_friends_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:src="@drawable/back_arrow_ios" />
+
+        <EditText
+            android:id="@+id/invite_friend_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:background="#00000000"
+            android:hint="Invite Friends"
+            android:textAlignment="center"
+            android:textColorHint="@color/cenes_new_orange" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/gath_search_friend_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/gath_search_friend_header"></ListView>
+</RelativeLayout>

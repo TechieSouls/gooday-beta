@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "212716305349",
+    "firebase_url": "https://cenesapp.firebaseio.com",
+    "project_id": "cenesapp",
+    "storage_bucket": "cenesapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:212716305349:android:ae1966a51898d0ac",
+        "android_client_info": {
+          "package_name": "com.cenes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "212716305349-qqqivqr05q7moonjcpct30am1e72vgtf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cenes",
+            "certificate_hash": "be2849a5ede84f18eceb202fd3b2b532ba654d39"
+          }
+        },
+        {
+          "client_id": "212716305349-dqqjgf3njkqt9s3ucied3bit42po3m39.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQhxBB8JXznyH4NUfWDivuCG6HP3sLj8E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "212716305349-dqqjgf3njkqt9s3ucied3bit42po3m39.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

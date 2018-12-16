@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        android:background="@drawable/gradient_header">
+
+        <ImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="5dp"
+            android:gravity="center" />
+
+        <com.cenes.util.CenesTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Me Time"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            app:fontName="@string/font_lato_regular" />
+
+        <com.cenes.util.CenesTextView
+            android:id="@+id/tvSave"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Save"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:fontName="@string/font_lato_regular" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/rl_header">
+
+        <com.cenes.util.CenesTextView
+            android:id="@+id/metime_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="43dp"
+            android:text="Me Time"
+            android:textColor="@color/cenes_dark_gray"
+            android:textSize="35dp"
+            app:fontName="@string/font_lato_regular" />
+
+        <com.cenes.util.CenesTextView
+            android:id="@+id/metime_desc"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/metime_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="Reserve your usual routine to block your calendar(others won't see this)"
+            android:textAlignment="center"
+            android:textColor="@color/cenes_dark_gray"
+            android:textSize="16dp"
+            app:fontName="@string/font_lato_regular" />
+
+        <RelativeLayout
+            android:id="@+id/metime_categories"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/metime_desc"
+            android:layout_margin="20dp"
+            android:background="@drawable/border_radius"
+            android:paddingBottom="10dp"
+            android:paddingEnd="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:id="@+id/me_time_categories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <com.cenes.util.CenesTextView
+                        android:id="@+id/metime_bed_time"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:padding="5dp"
+                        android:text="Me Time"
+                        android:textColor="@color/black"
+                        android:textSize="21sp"
+                        app:fontName="@string/font_lato_regular" />
+
+                    <ImageView
+                        android:id="@+id/add_new_category"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_weight="1"
+                        android:src="@drawable/add" />
+
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/metime_cat_list_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@color/transparent"
+                    android:dividerHeight="1dp" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

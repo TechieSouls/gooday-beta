@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/gradient_header"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="5dp"
+            android:gravity="center" />
+
+        <com.cenes.util.CenesTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Holiday Calendar"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            app:fontName="@string/font_lato_regular" />
+
+        <com.cenes.util.CenesTextView
+            android:id="@+id/tvSave"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Save"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:fontName="@string/font_lato_regular" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/ivAttachment"
+        android:layout_width="fill_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/rl_header"
+        android:layout_marginTop="45dp"
+        android:src="@drawable/holiday_globe" />
+
+    <com.cenes.util.CenesTextView
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivAttachment"
+        android:layout_marginTop="25dp"
+        android:gravity="center"
+        android:text="Select Holiday Calendar to\npersonalize your schedule"
+        android:textColor="@color/cenes_dark_gray"
+        android:textSize="17sp"
+        app:fontName="@string/font_lato_regular" />
+
+    <com.cenes.util.CenesTextView
+        android:id="@+id/holiday_search_textbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/rounded_gray_stroke"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Tap to select your country"
+        android:textColor="@color/cenes_light_gray"
+        android:textSize="15sp"
+        app:fontName="@string/font_lato_regular" />
+
+</RelativeLayout>

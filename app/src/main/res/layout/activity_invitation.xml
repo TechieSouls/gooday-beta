@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/gradient_header">
+
+        <com.cenes.util.RoundedImageView
+            android:id="@+id/user_profile_pic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/tvSkip"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Later"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_invitation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_header"
+        android:background="@drawable/invitation"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="50dp"
+            android:orientation="vertical">
+
+            <com.cenes.util.CenesTextView
+                android:id="@+id/tv_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="You have been invited to..."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:fontName="@string/font_lato_regular" />
+
+            <com.cenes.util.CenesTextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:fontName="@string/font_lato_regular" />
+
+            <com.cenes.util.CenesTextView
+                android:id="@+id/tv_invite_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                android:background="@drawable/rounded_red_solid"
+                android:gravity="center"
+                android:padding="15dp"
+                android:text="Open Gathering Invite!"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:fontName="@string/font_lato_regular" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_invitation_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_header"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <com.cenes.util.CenesTextView
+            android:id="@+id/tv_invitation_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:fontName="@string/font_lato_regular" />
+
+        <com.cenes.util.CenesTextView
+            android:id="@+id/tv_invitation_day"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:fontName="@string/font_lato_regular" />
+
+        <com.cenes.util.CenesTextView
+            android:id="@+id/tv_invitation_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:fontName="@string/font_lato_regular" />
+
+        <com.cenes.util.CenesTextView
+            android:id="@+id/tv_invitation_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:fontName="@string/font_lato_regular" />
+
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/loc_map"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <com.cenes.util.CenesTextView
+            android:id="@+id/tv_invitation_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="3"
+            android:text=""
+            android:textSize="18sp"
+            app:fontName="@string/font_lato_regular" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:padding="10dp">
+
+            <com.cenes.util.CenesTextView
+                android:id="@+id/tvAccept"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_red_solid"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Accept"
+                android:textColor="@color/white"
+                app:fontName="@string/font_lato_regular" />
+
+            <com.cenes.util.CenesTextView
+                android:id="@+id/tvDecline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_red_stroke"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Decline"
+                android:textColor="@color/black"
+                app:fontName="@string/font_lato_regular" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

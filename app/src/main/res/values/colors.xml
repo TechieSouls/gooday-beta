@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="red">#FF574E</color>
+    <color name="transparent">#00000000</color>
+    <color name="cenes_dark_gray">#686868</color>
+    <color name="cenes_light_gray">#B8B8B8</color>
+    <color name="cenes_lighter_gray">#c7c7c7</color>
+    <color name="cenes_mustard">#ffb536</color>
+    <color name="cenes_red">#F07851</color>
+    <color name="cenes_blue">#2673ef</color>
+    <color name="cenes_very_light_gray">#efefef</color>
+    <color name="cenes_new_orange">#F9992C</color>
+    <color name="cenes_teal">#004346</color>
+    <color name="facebook_blue">#3b5998</color>
+    <color name="outlook_blue">#0072c6</color>
+    <color name="google_plus_red">#d34836</color>
+    <color name="apple_gray">#999999</color>
+    <color name="login_blue">#3E5997</color>
+
+    <!-- Material View Calendar Highlight Colors-->
+    <color name="cenes_mcv_red">#FF574E</color>
+    <color name="cenes_mcv_orange">#FFAA4E</color>
+    <color name="cenes_mcv_yellow">#FEFF4E</color>
+    <color name="cenes_mcv_lime">#B3FF4E</color>
+    <color name="cenes_mcv_green">#4EFF4E</color>
+    <color name="cenes_mcv_white">#ffffff</color>
+
+
+    <!-- onBoarding Colors -->
+    <!-- Screens background color-->
+    <color name="bg_screen1">#f64c73</color>
+    <color name="bg_screen2">#20d2bb</color>
+    <color name="bg_screen3">#3395ff</color>
+    <color name="bg_screen4">#c873f4</color>
+
+    <!-- dots inactive colors -->
+    <color name="dot_dark_screen1">#ffffff</color>
+    <color name="dot_dark_screen2">#ffffff</color>
+    <color name="dot_dark_screen3">#ffffff</color>
+    <color name="dot_dark_screen4">#ffffff</color>
+    <color name="dot_dark_screen5">#ffffff</color>
+
+    <!-- dots active colors -->
+
+    <color name="dot_light_screen1">#F9992C</color>
+    <color name="dot_light_screen2">#F9992C</color>
+    <color name="dot_light_screen3">#F9992C</color>
+    <color name="dot_light_screen4">#F9992C</color>
+    <color name="dot_light_screen5">#F9992C</color>
+
+    <array name="array_dot_active">
+        <item>@color/dot_light_screen1</item>
+        <item>@color/dot_light_screen2</item>
+        <item>@color/dot_light_screen3</item>
+        <item>@color/dot_light_screen4</item>
+        <item>@color/dot_light_screen5</item>
+
+    </array>
+
+    <array name="array_dot_inactive">
+        <item>@color/dot_dark_screen1</item>
+        <item>@color/dot_dark_screen2</item>
+        <item>@color/dot_dark_screen3</item>
+        <item>@color/dot_dark_screen4</item>
+        <item>@color/dot_dark_screen5</item>
+    </array>
+
+</resources>

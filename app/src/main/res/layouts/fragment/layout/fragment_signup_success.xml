@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/search_cc_bg">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="50dp">
+
+            <TextView
+                android:id="@+id/create_your_profile_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Create Your Profile"
+                android:textAlignment="center"
+                android:textColor="@color/cenes_mcv_orange"
+                android:textSize="16dip"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"/>
+
+            <View
+                android:id="@+id/avatar"
+                android:layout_width="250dp"
+                android:layout_height="200dp"
+                android:layout_below="@+id/create_your_profile_text"
+                android:background="@drawable/avatar_signup"
+                android:layout_centerInParent="true"/>
+
+            <View
+                android:id="@+id/avatar_uploaded"
+                android:layout_width="250dp"
+                android:layout_height="200dp"
+                android:layout_below="@+id/create_your_profile_text"
+                android:background="@drawable/avatar_signup"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
+
+            <View
+                android:id="@+id/signup_grad_bg"
+                android:layout_width="290dp"
+                android:layout_height="380dp"
+                android:layout_below="@+id/avatar"
+                android:background="@drawable/signup_success_bg"
+                android:layout_centerInParent="true"/>
+
+<!--
+
+-->
+
+
+            <RelativeLayout
+                android:id="@+id/signup_success_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="210dp"
+                android:layout_marginRight="50dp">
+
+                <LinearLayout
+                    android:layout_width="290dp"
+                    android:layout_height="350dp"
+                    android:orientation="vertical"
+                    android:padding="30dp"
+                    android:background="@color/white"
+                    android:layout_centerInParent="true"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:hint="NAME" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/signup_success_name_icon" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/et_signup_success_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:hint="EMAIL" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/signup_success_email_icon" />
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/et_signup_success_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:hint="PASSWORD" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@drawable/signup_success_password_icon" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/et_signup_success_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/signup_success_fb_icon" />
+
+                        <TextView
+                            android:id="@+id/tv_sync_with_fb"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="SYNC WITH FACEBOOK" />
+
+                        <com.facebook.login.widget.LoginButton
+                            android:id="@+id/bt_fb_join"
+                            android:layout_width="300dp"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@+id/ll_mid"
+                            android:background="@color/cenes_blue"
+                            android:text="JOIN US WITH FACEBOOK"
+                            android:textColor="@color/white"
+                            android:visibility="gone" />
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/signup_success_form_next_step"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/signup_success_form"
+                android:padding="5dp"
+                android:text="NEXT STEP"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:layout_marginTop="20dp"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</ScrollView>

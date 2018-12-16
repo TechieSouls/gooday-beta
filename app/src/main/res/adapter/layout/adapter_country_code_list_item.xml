@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/ll_country_code_item"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:weightSum="5"
+        android:gravity="center_vertical"
+        android:background="@drawable/border_bottom_white_transparent">
+
+        <ImageView
+            android:id="@+id/iv_country_flag"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/flag_germany"
+            />
+        <TextView
+            android:id="@+id/tv_country_name"
+            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="17dip"
+            android:textStyle="bold"
+            android:text="Andorra"/>
+
+        <TextView
+            android:id="@+id/tv_country_code"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="+367"
+            android:textColor="#31B3EF"
+            android:textAlignment="center"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/gradient_header"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="5dp"
+            android:gravity="center" />
+
+        <com.cenes.util.CenesTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Sync Account"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            app:fontName="@string/font_lato_regular" />
+
+        <com.cenes.util.CenesTextView
+            android:id="@+id/tvSave"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Save"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:fontName="@string/font_lato_regular"
+            android:visibility="invisible"/>
+    </RelativeLayout>
+
+    <com.cenes.util.CenesTextView
+        android:id="@+id/metime_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_header"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="43dp"
+        android:text="Sync Account"
+        android:textColor="@color/cenes_dark_gray"
+        android:textSize="35dp"
+        app:fontName="@string/font_lato_regular" />
+
+    <com.cenes.util.CenesTextView
+        android:id="@+id/metime_desc"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/metime_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="@string/sync_your_mail_box_desc"
+        android:textAlignment="center"
+        android:textColor="@color/cenes_dark_gray"
+        android:textSize="16dp"
+        app:fontName="@string/font_lato_regular" />
+
+    <com.cenes.util.CenesTextView
+        android:id="@+id/cal_options_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/metime_desc"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="Select any of the following calendars below:"
+        android:textColor="@color/cenes_dark_gray"
+        app:fontName="@string/font_lato_regular" />
+
+    <LinearLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cal_options_text"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/rounded_et_white_bg"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ll_outlook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/iv_outlook_checkmark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:src="@drawable/calendar_sync_unselected" />
+
+            <ImageView
+                android:id="@+id/iv_outlook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/outlook_ios" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/cenes_light_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/btn_sign_in"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="Google Calendar" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/iv_google_checkmark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="15dp"
+                        android:src="@drawable/calendar_sync_unselected" />
+
+                    <ImageView
+                        android:id="@+id/google_cal_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/logo_lockup_calendar_icon_horizontal" />
+                </LinearLayout>
+
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

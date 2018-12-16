@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_signin_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp">
+
+            <ImageView
+                android:id="@+id/signin_back_arrow"
+                android:layout_width="20dp"
+                android:layout_height="30dp"
+                android:padding="5dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/signup_step1_back_arrow" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="back"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_header"
+        android:orientation="vertical"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        android:layout_marginTop="70dp"
+        android:id="@+id/ll_login_form">
+
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:hint="Email"
+            android:padding="10dp"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/signup_step1_et_border_radius"/>
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:hint="Password"
+            android:padding="10dp"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:inputType="textPassword"
+            android:background="@drawable/signup_step1_et_border_radius"/>
+
+        <Button
+            android:id="@+id/bt_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/signin_rounded_login_btn"
+            android:text="Log In"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/bt_forget_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/ll_footer"
+            android:layout_centerHorizontal="true"
+            android:background="@color/transparent"
+            android:text="Forgot password"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+</RelativeLayout>

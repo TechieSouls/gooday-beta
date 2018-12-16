@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_picture_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cenes_very_light_gray"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:visibility="visible"
+        android:background="@drawable/gradient_header">
+
+        <ImageView
+            android:id="@+id/ivProfileHeader"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/default_profile_icon"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="5dp"
+            android:gravity="center" />
+
+        <com.cenes.util.CenesTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Profile"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            app:fontName="@string/font_lato_regular" />
+
+        <com.cenes.util.CenesTextView
+            android:id="@+id/tvSave"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Save"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:fontName="@string/font_lato_regular" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/ivProfile"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/profile_icon" />
+
+    <com.cenes.util.CenesTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="25dp"
+        android:background="@color/transparent"
+        android:padding="10dp"
+        android:text="Name"
+        android:textColor="@color/cenes_teal"
+        android:textSize="16sp"
+        app:fontName="@string/font_lato_regular" />
+
+    <com.cenes.util.CenesEditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_et_white_bg"
+        android:drawablePadding="10dp"
+        android:drawableRight="@drawable/close"
+        android:hint="Enter Name"
+        android:imeOptions="actionNext"
+        android:inputType="textCapWords"
+        android:paddingBottom="10dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="15dp"
+        android:paddingTop="10dp"
+        android:textSize="16sp"
+        app:fontName="@string/font_lato_regular" />
+
+    <com.cenes.util.CenesTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="25dp"
+        android:background="@color/transparent"
+        android:padding="10dp"
+        android:text="Email"
+        android:textColor="@color/cenes_teal"
+        android:textSize="16sp"
+        app:fontName="@string/font_lato_regular" />
+
+    <com.cenes.util.CenesEditText
+        android:id="@+id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_et_white_bg"
+        android:drawablePadding="10dp"
+        android:hint="Enter Email"
+        android:imeOptions="actionNext"
+        android:inputType="textCapWords"
+        android:paddingBottom="10dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="15dp"
+        android:paddingTop="10dp"
+        android:textSize="16sp"
+        app:fontName="@string/font_lato_regular" />
+
+    <com.cenes.util.CenesTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="25dp"
+        android:background="@color/transparent"
+        android:padding="10dp"
+        android:text="Gender"
+        android:textColor="@color/cenes_teal"
+        android:textSize="16sp"
+        app:fontName="@string/font_lato_regular" />
+
+    <Spinner
+        android:id="@+id/spGender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_et_white_bg"
+        android:entries="@array/gender"
+        android:paddingBottom="10dp"
+        android:paddingStart="8dp"
+        android:paddingTop="10dp"
+        android:prompt="@string/select" />
+
+</LinearLayout>

@@ -1,0 +1,200 @@
+{
+    "logs": [
+        {
+            "outputFile": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/res/merged/androidTest/debug/values-pt_values-pt.arsc.flat",
+            "map": [
+                {
+                    "source": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/bundles/debug/res/values-pt/values-pt.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "100,174,224,302,360",
+                        "endColumns": "73,49,77,57,58",
+                        "endOffsets": "169,219,297,355,414"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/res/merged/androidTest/debug/values-ru_values-ru.arsc.flat",
+            "map": [
+                {
+                    "source": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/bundles/debug/res/values-ru/values-ru.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "100,172,218,289,355",
+                        "endColumns": "71,45,70,65,61",
+                        "endOffsets": "167,213,284,350,412"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/res/merged/androidTest/debug/values-ko_values-ko.arsc.flat",
+            "map": [
+                {
+                    "source": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/bundles/debug/res/values-ko/values-ko.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "100,168,210,271,324",
+                        "endColumns": "67,41,60,52,50",
+                        "endOffsets": "163,205,266,319,370"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/res/merged/androidTest/debug/values-es_values-es.arsc.flat",
+            "map": [
+                {
+                    "source": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/bundles/debug/res/values-es/values-es.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "100,174,221,294,353",
+                        "endColumns": "73,46,72,58,56",
+                        "endOffsets": "169,216,289,348,405"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/res/merged/androidTest/debug/values-id_values-id.arsc.flat",
+            "map": [
+                {
+                    "source": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/bundles/debug/res/values-id/values-id.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "100,171,218,301,360",
+                        "endColumns": "70,46,82,58,54",
+                        "endOffsets": "166,213,296,355,410"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/res/merged/androidTest/debug/values-large-v4_values-large-v4.arsc.flat",
+            "map": [
+                {
+                    "source": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/bundles/debug/res/values-large-v4/values-large-v4.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "47",
+                        "endOffsets": "98"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/res/merged/androidTest/debug/values-fr_values-fr.arsc.flat",
+            "map": [
+                {
+                    "source": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/bundles/debug/res/values-fr/values-fr.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "100,173,221,290,359",
+                        "endColumns": "72,47,68,68,58",
+                        "endOffsets": "168,216,285,354,413"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/res/merged/androidTest/debug/values-zh_values-zh.arsc.flat",
+            "map": [
+                {
+                    "source": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/bundles/debug/res/values-zh/values-zh.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "100,168,210,261,310",
+                        "endColumns": "67,41,50,48,43",
+                        "endOffsets": "163,205,256,305,349"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/res/merged/androidTest/debug/values-ar_values-ar.arsc.flat",
+            "map": [
+                {
+                    "source": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/bundles/debug/res/values-ar/values-ar.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "100,171,213,275,334",
+                        "endColumns": "70,41,61,58,54",
+                        "endOffsets": "166,208,270,329,384"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/res/merged/androidTest/debug/values-ja_values-ja.arsc.flat",
+            "map": [
+                {
+                    "source": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/bundles/debug/res/values-ja/values-ja.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "100,171,213,269,315",
+                        "endColumns": "70,41,55,45,47",
+                        "endOffsets": "166,208,264,310,358"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/res/merged/androidTest/debug/values_values.arsc.flat",
+            "map": [
+                {
+                    "source": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/bundles/debug/res/values/values.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,12,13,14,15,16,17,18,19,25,36,40,44",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "100,153,204,256,315,745,793,865,909,981,1038,1090,1115,1418,2028,2226,2418",
+                        "endLines": "2,3,4,5,6,12,13,14,15,16,17,18,24,35,39,43,51",
+                        "endColumns": "52,50,51,58,58,47,71,43,71,56,51,24,12,12,12,12,12",
+                        "endOffsets": "148,199,251,310,369,788,860,904,976,1033,1085,1110,1413,2023,2221,2413,2803"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/res/merged/androidTest/debug/values-v21_values-v21.arsc.flat",
+            "map": [
+                {
+                    "source": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/bundles/debug/res/values-v21/values-v21.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "56",
+                        "endOffsets": "107"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/res/merged/androidTest/debug/values-land_values-land.arsc.flat",
+            "map": [
+                {
+                    "source": "/home/mandeep/svn/cenes/cenes-android/Cenes/cropimage/build/intermediates/bundles/debug/res/values-land/values-land.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "47",
+                        "endOffsets": "98"
+                    }
+                }
+            ]
+        }
+    ]
+}

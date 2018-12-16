@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/cenes_mcv_orange">
+
+        <LinearLayout
+            android:id="@+id/ll_signup_cc_back"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="40dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="12dp"
+                android:src="@drawable/signup_step1_back_arrow" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="back"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_header"
+        android:orientation="vertical"
+        android:background="@drawable/search_cc_bg">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp">
+            <EditText
+                android:id="@+id/et_search_cc"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="Search"
+                android:drawableLeft="@drawable/search_icon"
+                android:drawablePadding="20dp"
+                android:paddingLeft="10dp"
+                android:textColor="#ccc"
+                android:background="@drawable/rounded_et_white_bg"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_centerVertical="true"
+                />
+        </RelativeLayout>
+        <ExpandableListView
+            android:id="@+id/ex_country_code_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:groupIndicator="@null">
+
+        </ExpandableListView>
+    </LinearLayout>
+
+
+</RelativeLayout>

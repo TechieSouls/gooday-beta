@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cenes_very_light_gray"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/gradient_header">
+
+        <com.cenes.util.CenesTextView
+            android:id="@+id/create_reminder_back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Cancel"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:fontName="@string/font_lato_regular" />
+
+        <com.cenes.util.CenesTextView
+            android:id="@+id/tv_add_reminder_header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Add New Reminder"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:fontName="@string/font_lato_regular" />
+
+        <com.cenes.util.CenesTextView
+            android:id="@+id/save_reminder_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Save"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <com.cenes.util.CenesTextView
+            android:id="@+id/edit_reminder_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Edit"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:visibility="gone"
+            app:fontName="@string/font_lato_regular" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.cenes.util.CenesEditText
+            android:id="@+id/reminder_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/rounded_corner_white"
+            android:drawableEnd="@drawable/close"
+            android:drawablePadding="15dp"
+            android:drawableStart="@drawable/pencil"
+            android:gravity="center_vertical"
+            android:hint="@string/reminder_title"
+            android:inputType="textCapSentences"
+            android:padding="15dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textSize="15sp"
+            app:fontName="@string/font_lato_regular" />
+
+        <com.cenes.util.CenesTextView
+            android:id="@+id/reminder_datetime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/rounded_corner_white"
+            android:drawablePadding="15dp"
+            android:drawableStart="@drawable/reminder_clock"
+            android:gravity="center_vertical"
+            android:padding="15dp"
+            android:text="@string/time_and_date"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:fontName="@string/font_lato_regular" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/rounded_corner_white"
+            android:orientation="vertical">
+
+            <com.cenes.util.CenesTextView
+                android:id="@+id/reminder_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="15dp"
+                android:drawableStart="@drawable/reminder_loc"
+                android:gravity="center_vertical"
+                android:padding="15dp"
+                android:text="@string/location"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:fontName="@string/font_lato_regular" />
+
+            <LinearLayout
+                android:id="@+id/reminder_search_location_block"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.cenes.util.CenesEditText
+                    android:id="@+id/reminder_location_search_keyword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:fontName="@string/font_lato_regular" />
+
+                <ListView
+                    android:id="@+id/reminder_locations_list_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/rounded_corner_white"
+            android:orientation="vertical">
+
+            <com.cenes.util.CenesTextView
+                android:id="@+id/add_reminder_people"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:drawablePadding="15dp"
+                android:drawableStart="@drawable/add_people_icon"
+                android:gravity="center_vertical"
+                android:padding="15dp"
+                android:text="@string/add_people"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:fontName="@string/font_lato_regular" />
+
+            <HorizontalScrollView
+                android:id="@+id/ll_friends_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="45dp"
+                android:scrollbars="none"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:padding="5dp"
+                        android:scrollbars="none" />
+
+                    <ImageView
+                        android:id="@+id/iv_add_more_friends"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/round_button_gray_dark"
+                        android:gravity="center"
+                        android:padding="7dp"
+                        android:src="@drawable/plus_white" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.cenes.util.CenesTextView
+        android:id="@+id/btn_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/rounded_corner_white"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Delete"
+        android:textColor="@color/red"
+        android:textSize="15sp"
+        android:visibility="gone"
+        app:fontName="@string/font_lato_regular" />
+
+    <View
+        android:id="@+id/rl_footer_top_border"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/rl_footer"
+        android:background="@color/cenes_dark_gray"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/rl_footer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/footer_home_icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:src="@drawable/home_icon_grey"
+                android:text="Home" />
+
+            <ImageView
+                android:id="@+id/footer_reminder_icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:src="@drawable/reminder_icon_selected" />
+
+            <ImageView
+                android:id="@+id/footer_gathering_icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:src="@drawable/gathering_icon" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:src="@drawable/diary_icon" />
+
+            <ImageView
+                android:id="@+id/footer_alarm_icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:src="@drawable/alarm_icon" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

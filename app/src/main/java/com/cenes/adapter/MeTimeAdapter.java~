@@ -1,0 +1,622 @@
+package com.cenes.adapter;
+
+import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.text.Html;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
+
+import com.cenes.R;
+import com.cenes.bo.MeTimeItem;
+import com.cenes.bo.User;
+import com.cenes.fragment.MeTimeFragment;
+import com.cenes.util.CenesUtils;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by mandeep on 7/9/17.
+ */
+
+public class MeTimeAdapter extends BaseAdapter {
+
+    List<String> meTimeCategories;
+    LayoutInflater inflter;
+    MeTimeFragment context;
+    private final static int TIME_PICKER_INTERVAL = 5;
+    private boolean loadExistingData;
+    private Map<String,Map<String,Boolean>> daysSelectionCategoryMap = new HashMap<>();
+    private Map<String,Boolean> daysSelectionMap = new HashMap<>();
+
+    JSONObject meTimeJSONObj = new JSONObject();
+
+    private Map<String, JSONObject> meTimeData = new HashMap<>();
+
+    public MeTimeAdapter(MeTimeFragment context, List<String> meTimeCategories, Map<String, JSONObject> meTimeData,boolean loadExistingData) {
+        this.meTimeCategories = meTimeCategories;
+        this.meTimeData = meTimeData;
+        this.loadExistingData = loadExistingData;
+        this.context = context;
+        inflter = (LayoutInflater.from(context.getCenesActivity()));
+    }
+
+
+    @Override
+    public int getCount() {
+        return meTimeCategories.size();
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return meTimeCategories.get(i);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(final int position, View view, ViewGroup viewGroup) {
+        final ViewHolder holder;
+        if (view == null) {
+            view = inflter.inflate(R.layout.adapter_metime_headers, null);
+
+            holder = new ViewHolder();
+            holder.lblListHeader = (TextView) view.findViewById(R.id.lblListHeader);
+            holder.me_time_picker_section = (RelativeLayout) view.findViewById(R.id.me_time_picker_section);
+            holder.sunday = (Button) view.findViewById(R.id.metime_sun_text);
+            holder.monday = (Button) view.findViewById(R.id.metime_mon_text);
+            holder.tuesday = (Button) view.findViewById(R.id.metime_tue_text);
+            holder.wednesday = (Button) view.findViewById(R.id.metime_wed_text);
+            holder.thursday = (Button) view.findViewById(R.id.metime_thu_text);
+            holder.friday = (Button) view.findViewById(R.id.metime_fri_text);
+            holder.saturday = (Button) view.findViewById(R.id.metime_sat_text);
+
+            holder.startTimeText = (TextView) view.findViewById(R.id.metime_start_time);
+            holder.endTimeText = (TextView) view.findViewById(R.id.metime_end_time);
+            holder.startAmPmText = (TextView) view.findViewById(R.id.metime_start_ampm);
+            holder.endAmPmText = (TextView) view.findViewById(R.id.metime_end_ampm);
+
+            view.setTag(holder);
+        } else {
+            holder = (ViewHolder) view.getTag();
+        }
+
+        holder.lblListHeader = (TextView) view.findViewById(R.id.lblListHeader);
+        holder.lblListHeader.setText(meTimeCategories.get(position));
+
+        if (loadExistingData) {
+            if (meTimeData.containsKey(meTimeCategories.get(position))) {
+                meTimeJSONObj = meTimeData.get(meTimeCategories.get(position));
+                daysSelectionCategoryMap.put(meTimeCategories.get(position),new HashMap());
+                daysSelectionMap = daysSelectionCategoryMap.get(meTimeCategories.get(position));
+                try {
+                    if (meTimeJSONObj.has("Sunday") && meTimeJSONObj.getBoolean("Sunday")) {
+                        daysSelectionMap.put("Sunday",true);
+                        holder.sunday.setBackground(context.getResources().getDrawable(R.drawable.round_button_red));
+                        holder.sunday.setTextColor(context.getResources().getColor(R.color.white));
+                    }
+                    if (meTimeJSONObj.has("Monday") && meTimeJSONObj.getBoolean("Monday")) {
+                        daysSelectionMap.put("Monday",true);
+                        holder.monday.setBackground(context.getResources().getDrawable(R.drawable.round_button_red));
+                        holder.monday.setTextColor(context.getResources().getColor(R.color.white));
+                    }
+                    if (meTimeJSONObj.has("Tuesday") && meTimeJSONObj.getBoolean("Tuesday")) {
+                        daysSelectionMap.put("Tuesday",true);
+                        holder.tuesday.setBackground(context.getResources().getDrawable(R.drawable.round_button_red));
+                        holder.tuesday.setTextColor(context.getResources().getColor(R.color.white));
+                    }
+                    if (meTimeJSONObj.has("Wednesday") && meTimeJSONObj.getBoolean("Wednesday")) {
+                        daysSelectionMap.put("Wednesday",true);
+                        holder.wednesday.setBackground(context.getResources().getDrawable(R.drawable.round_button_red));
+                        holder.wednesday.setTextColor(context.getResources().getColor(R.color.white));
+                    }
+                    if (meTimeJSONObj.has("Thursday") && meTimeJSONObj.getBoolean("Thursday")) {
+                        daysSelectionMap.put("Thursday",true);
+                        holder.thursday.setBackground(context.getResources().getDrawable(R.drawable.round_button_red));
+                        holder.thursday.setTextColor(context.getResources().getColor(R.color.white));
+                    }
+                    if (meTimeJSONObj.has("Friday") && meTimeJSONObj.getBoolean("Friday")) {
+                        daysSelectionMap.put("Friday",true);
+                        holder.friday.setBackground(context.getResources().getDrawable(R.drawable.round_button_red));
+                        holder.friday.setTextColor(context.getResources().getColor(R.color.white));
+                    }
+                    if (meTimeJSONObj.has("Saturday") && meTimeJSONObj.getBoolean("Saturday")) {
+                        daysSelectionMap.put("Saturday",true);
+                        holder.saturday.setBackground(context.getResources().getDrawable(R.drawable.round_button_red));
+                        holder.saturday.setTextColor(context.getResources().getColor(R.color.white));
+                    }
+
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(meTimeJSONObj.getLong("start_time"));
+                    holder.startTimeText.setText(CenesUtils.hhmm.format(calendar.getTimeInMillis()));
+                    String amPm = "AM";
+                    if (calendar.get(Calendar.HOUR_OF_DAY) > 11) {
+                        amPm = "PM";
+                    }
+                    holder.startAmPmText.setText(amPm);
+
+                    calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(meTimeJSONObj.getLong("end_time"));
+                    holder.endTimeText.setText(CenesUtils.hhmm.format(calendar.getTimeInMillis()));
+
+                    amPm = "AM";
+                    if (calendar.get(Calendar.HOUR_OF_DAY) > 11) {
+                        amPm = "PM";
+                    }
+                    holder.endAmPmText.setText(amPm);
+
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+        }
+        if (CenesUtils.isEmpty(holder.startTimeText.getText().toString().trim())) {
+            Calendar calendar = Calendar.getInstance();
+            holder.startTimeText.setText(CenesUtils.hhmm.format(calendar.getTimeInMillis()));
+            holder.startAmPmText.setText(CenesUtils.ampm.format(calendar.getTimeInMillis()));
+            try {
+		    JSONObject meTimeJSONObjTemp = meTimeData.get(meTimeCategories.get(position));
+		    meTimeJSONObjTemp.put("start_time", calendar.getTimeInMillis());
+		    meTimeData.put(meTimeCategories.get(position), meTimeJSONObjTemp);
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+        }
+        if (CenesUtils.isEmpty(holder.endTimeText.getText().toString().trim())) {
+            Calendar calendar = Calendar.getInstance();
+            holder.endTimeText.setText(CenesUtils.hhmm.format(calendar.getTimeInMillis()));
+            holder.endAmPmText.setText(CenesUtils.ampm.format(calendar.getTimeInMillis()));
+             try {
+		    JSONObject meTimeJSONObjTemp = meTimeData.get(meTimeCategories.get(position));
+		    meTimeJSONObjTemp.put("start_time", calendar.getTimeInMillis());
+		    meTimeData.put(meTimeCategories.get(position), meTimeJSONObjTemp);
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+        }
+
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONObject meTimeJSONObjTemp = new JSONObject();
+
+                if (!meTimeData.containsKey(meTimeCategories.get(position))) {
+                    meTimeData.put(meTimeCategories.get(position), new JSONObject());
+                } else {
+                    meTimeJSONObjTemp = meTimeData.get(meTimeCategories.get(position));
+                }
+                if (!daysSelectionCategoryMap.containsKey(meTimeCategories.get(position))) {
+                    daysSelectionCategoryMap.put(meTimeCategories.get(position), new HashMap());
+                } else {
+                    daysSelectionMap = daysSelectionCategoryMap.get(meTimeCategories.get(position));
+                }
+
+                switch (v.getId()) {
+                    case R.id.metime_sun_text:
+                        try {
+                            if (!meTimeJSONObjTemp.has("Sunday") || !meTimeJSONObjTemp.getBoolean("Sunday")) {
+                                holder.sunday.setBackground(context.getResources().getDrawable(R.drawable.round_button_red));
+                                holder.sunday.setTextColor(context.getResources().getColor(R.color.white));
+                                meTimeJSONObjTemp.put("Sunday", true);
+                            } else {
+                                holder.sunday.setBackground(context.getResources().getDrawable(R.drawable.round_button_outline));
+                                holder.sunday.setTextColor(context.getResources().getColor(R.color.cenes_dark_gray));
+                                meTimeJSONObjTemp.put("Sunday", false);
+                            }
+                            meTimeData.put(meTimeCategories.get(position), meTimeJSONObjTemp);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case R.id.metime_mon_text:
+                        try {
+                            if (!meTimeJSONObjTemp.has("Monday") || !meTimeJSONObjTemp.getBoolean("Monday")) {
+                                holder.monday.setBackground(context.getResources().getDrawable(R.drawable.round_button_red));
+                                holder.monday.setTextColor(context.getResources().getColor(R.color.white));
+                                meTimeJSONObjTemp.put("Monday", true);
+                            } else {
+                                holder.monday.setBackground(context.getResources().getDrawable(R.drawable.round_button_outline));
+                                holder.monday.setTextColor(context.getResources().getColor(R.color.cenes_dark_gray));
+                                meTimeJSONObjTemp.put("Monday", false);
+                            }
+                            meTimeData.put(meTimeCategories.get(position), meTimeJSONObjTemp);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    case R.id.metime_tue_text:
+                        try {
+                            if (!meTimeJSONObjTemp.has("Tuesday") || !meTimeJSONObjTemp.getBoolean("Tuesday")) {
+                                holder.tuesday.setBackground(context.getResources().getDrawable(R.drawable.round_button_red));
+                                holder.tuesday.setTextColor(context.getResources().getColor(R.color.white));
+                                meTimeJSONObjTemp.put("Tuesday", true);
+
+                            } else {
+                                meTimeJSONObjTemp.put("Tuesday", false);
+                                holder.tuesday.setBackground(context.getResources().getDrawable(R.drawable.round_button_outline));
+                                holder.tuesday.setTextColor(context.getResources().getColor(R.color.cenes_dark_gray));
+                                meTimeJSONObjTemp.put("Tuesday", false);
+                            }
+                            meTimeData.put(meTimeCategories.get(position), meTimeJSONObjTemp);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    case R.id.metime_wed_text:
+                        try {
+                            if (!meTimeJSONObjTemp.has("Wednesday") || !meTimeJSONObjTemp.getBoolean("Wednesday")) {
+                                holder.wednesday.setBackground(context.getResources().getDrawable(R.drawable.round_button_red));
+                                holder.wednesday.setTextColor(context.getResources().getColor(R.color.white));
+                                meTimeJSONObjTemp.put("Wednesday", true);
+
+                            } else {
+                                holder.wednesday.setBackground(context.getResources().getDrawable(R.drawable.round_button_outline));
+                                holder.wednesday.setTextColor(context.getResources().getColor(R.color.cenes_dark_gray));
+                                meTimeJSONObjTemp.put("Wednesday", false);
+                            }
+                            meTimeData.put(meTimeCategories.get(position), meTimeJSONObjTemp);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    case R.id.metime_thu_text:
+                        try {
+                            if (!meTimeJSONObjTemp.has("Thursday") || !meTimeJSONObjTemp.getBoolean("Thursday")) {
+                                holder.thursday.setBackground(context.getResources().getDrawable(R.drawable.round_button_red));
+                                holder.thursday.setTextColor(context.getResources().getColor(R.color.white));
+                                meTimeJSONObjTemp.put("Thursday", true);
+
+                            } else {
+                                holder.thursday.setBackground(context.getResources().getDrawable(R.drawable.round_button_outline));
+                                holder.thursday.setTextColor(context.getResources().getColor(R.color.cenes_dark_gray));
+                                meTimeJSONObjTemp.put("Thursday", false);
+                            }
+                            meTimeData.put(meTimeCategories.get(position), meTimeJSONObjTemp);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    case R.id.metime_fri_text:
+                        try {
+                            if (!meTimeJSONObjTemp.has("Friday") || !meTimeJSONObjTemp.getBoolean("Friday")) {
+                                holder.friday.setBackground(context.getResources().getDrawable(R.drawable.round_button_red));
+                                holder.friday.setTextColor(context.getResources().getColor(R.color.white));
+                                meTimeJSONObjTemp.put("Friday", true);
+
+                            } else {
+                                holder.friday.setBackground(context.getResources().getDrawable(R.drawable.round_button_outline));
+                                holder.friday.setTextColor(context.getResources().getColor(R.color.cenes_dark_gray));
+                                meTimeJSONObjTemp.put("Friday", false);
+
+                            }
+                            meTimeData.put(meTimeCategories.get(position), meTimeJSONObjTemp);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    case R.id.metime_sat_text:
+                        try {
+                            if (!meTimeJSONObjTemp.has("Saturday") || !meTimeJSONObjTemp.getBoolean("Saturday")) {
+                                holder.saturday.setBackground(context.getResources().getDrawable(R.drawable.round_button_red));
+                                holder.saturday.setTextColor(context.getResources().getColor(R.color.white));
+                                meTimeJSONObjTemp.put("Saturday", true);
+                            } else {
+                                holder.saturday.setBackground(context.getResources().getDrawable(R.drawable.round_button_outline));
+                                holder.saturday.setTextColor(context.getResources().getColor(R.color.cenes_dark_gray));
+                                meTimeJSONObjTemp.put("Saturday", false);
+                            }
+                            meTimeData.put(meTimeCategories.get(position), meTimeJSONObjTemp);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        break;
+                    case R.id.metime_start_time:
+                        Calendar mcurrentTimeForStartTime = Calendar.getInstance();
+                        int mcurrentTimeForStartTimeHour = mcurrentTimeForStartTime.get(Calendar.HOUR_OF_DAY);
+                        int mcurrentTimeForStartTimeMinute = mcurrentTimeForStartTime.get(Calendar.MINUTE);
+
+                        TimePickerDialog.OnTimeSetListener startTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                                Calendar mcurrentTime = Calendar.getInstance();
+                                mcurrentTime.set(Calendar.HOUR_OF_DAY, selectedHour);
+                                mcurrentTime.set(Calendar.MINUTE, selectedMinute);
+                                String ampm = "AM";
+                                if (selectedHour > 12) {
+                                    ampm = "PM";
+                                }
+                                String singleDigitZero = "";
+                                if (mcurrentTime.get(Calendar.HOUR) < 10) {
+                                    singleDigitZero = "0";
+                                }
+                                String singleDigitMinuteZero = "";
+                                if (selectedMinute < 10) {
+                                    singleDigitMinuteZero = "0";
+                                }
+                                holder.startTimeText.setText(Html.fromHtml("<b>" + singleDigitZero + mcurrentTime.get(Calendar.HOUR) + "</b>:" + singleDigitMinuteZero + selectedMinute));
+                                holder.startAmPmText.setText(ampm);
+                                try {
+                                    JSONObject meTimeJSONObjTemp = meTimeData.get(meTimeCategories.get(position));
+                                    meTimeJSONObjTemp.put("start_time", mcurrentTime.getTimeInMillis());
+                                    meTimeData.put(meTimeCategories.get(position), meTimeJSONObjTemp);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        };
+
+                        TimePickerDialog startTimeDateTimePicker = new TimePickerDialog(context.getCenesActivity(), startTimePickerListener, mcurrentTimeForStartTimeHour, mcurrentTimeForStartTimeMinute, false);
+
+                        startTimeDateTimePicker.setTitle("Select Time");
+                        startTimeDateTimePicker.show();
+
+                        break;
+                    case R.id.metime_end_time:
+                        Calendar endCalTime = Calendar.getInstance();
+                        int endTimeHour = endCalTime.get(Calendar.HOUR_OF_DAY);
+                        int endTimeMinute = endCalTime.get(Calendar.MINUTE);
+
+                        TimePickerDialog.OnTimeSetListener onTimeSetListenerEndTime = new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                                Calendar mcurrentTime = Calendar.getInstance();
+                                mcurrentTime.set(Calendar.HOUR_OF_DAY, selectedHour);
+                                mcurrentTime.set(Calendar.MINUTE, selectedMinute);
+                                String ampm = "AM";
+                                if (selectedHour > 12) {
+                                    ampm = "PM";
+                                }
+                                String singleDigitZero = "";
+                                if (mcurrentTime.get(Calendar.HOUR) < 10) {
+                                    singleDigitZero = "0";
+                                }
+                                String singleDigitMinuteZero = "";
+                                if (selectedMinute < 10) {
+                                    singleDigitMinuteZero = "0";
+                                }
+                                holder.endTimeText.setText(Html.fromHtml("<b>" + singleDigitZero + mcurrentTime.get(Calendar.HOUR) + "</b>:" + singleDigitMinuteZero + selectedMinute));
+                                holder.endAmPmText.setText(ampm);
+                                try {
+                                    JSONObject meTimeJSONObjTemp = meTimeData.get(meTimeCategories.get(position));
+                                    meTimeJSONObjTemp.put("end_time", mcurrentTime.getTimeInMillis());
+                                    meTimeData.put(meTimeCategories.get(position), meTimeJSONObjTemp);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        };
+
+
+                        TimePickerDialog endTimeDateTimePicker;
+                        endTimeDateTimePicker = new TimePickerDialog(context.getCenesActivity(), onTimeSetListenerEndTime, endTimeHour, endTimeMinute / TIME_PICKER_INTERVAL, false);
+                        endTimeDateTimePicker.setTitle("Select Time");
+                        endTimeDateTimePicker.show();
+                        break;
+                    case R.id.metime_start_ampm:
+                        String metimestartAMPMText = holder.startAmPmText.getText().toString();
+                        if ("AM".equals(metimestartAMPMText)) {
+                            holder.startAmPmText.setText("PM");
+                        } else {
+                            holder.startAmPmText.setText("AM");
+                        }
+                        break;
+                    case R.id.metime_end_ampm:
+                        String metimeendAMPMText = holder.endAmPmText.getText().toString();
+                        if ("AM".equals(metimeendAMPMText)) {
+                            holder.endAmPmText.setText("PM");
+                        } else {
+                            holder.endAmPmText.setText("AM");
+                        }
+                        break;
+                }
+            }
+        };
+        holder.sunday.setOnClickListener(onClickListener);
+        holder.monday.setOnClickListener(onClickListener);
+        holder.tuesday.setOnClickListener(onClickListener);
+        holder.wednesday.setOnClickListener(onClickListener);
+        holder.thursday.setOnClickListener(onClickListener);
+        holder.friday.setOnClickListener(onClickListener);
+        holder.saturday.setOnClickListener(onClickListener);
+        holder.startTimeText.setOnClickListener(onClickListener);
+        holder.endTimeText.setOnClickListener(onClickListener);
+        holder.startAmPmText.setOnClickListener(onClickListener);
+        holder.endAmPmText.setOnClickListener(onClickListener);
+
+
+        holder.lblListHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (holder.me_time_picker_section.getVisibility() == View.VISIBLE) {
+                    holder.lblListHeader.setCompoundDrawablesWithIntrinsicBounds(context.getResources().getDrawable(R.drawable.plus_black), null, null, null);
+                    holder.me_time_picker_section.setVisibility(View.GONE);
+                } else {
+                    holder.me_time_picker_section.setVisibility(View.VISIBLE);
+                    holder.lblListHeader.setCompoundDrawablesWithIntrinsicBounds(context.getResources().getDrawable(R.drawable.minus_red), null, null, null);
+                }
+
+            }
+        });
+        return view;
+    }
+
+    static class ViewHolder {
+        private TextView lblListHeader;
+        private RelativeLayout me_time_picker_section;
+        private Button sunday, monday, tuesday, wednesday, thursday, friday, saturday;
+        private TextView startTimeText, endTimeText, startAmPmText, endAmPmText;
+
+    }
+
+    public void saveMeTime() {
+        new MeTimePostingTask().execute();
+    }
+
+    class MeTimePostingTask extends AsyncTask<List<MeTimeItem>, Void, Object> {
+        ProgressDialog processDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            processDialog = new ProgressDialog(context.getCenesActivity());
+            processDialog.setMessage("Processing..");
+            processDialog.setIndeterminate(false);
+            processDialog.setCanceledOnTouchOutside(false);
+            processDialog.setCancelable(false);
+            processDialog.show();
+
+        }
+
+        @Override
+        protected Object doInBackground(List<MeTimeItem>... lists) {
+
+            Calendar mcurrentTime = Calendar.getInstance();
+            User user = context.userManager.getUser();
+            user.setApiUrl(context.urlManager.getApiUrl("dev"));
+            JSONObject jsonObject = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+
+            try {
+                for (Map.Entry<String, JSONObject> meTimeEntryMap : meTimeData.entrySet()) {
+                    if (meTimeEntryMap.getValue().getString("start_time") != null && meTimeEntryMap.getValue().getString("end_time") != null) {
+
+
+                        if (meTimeEntryMap.getValue().has("Sunday") && meTimeEntryMap.getValue().getBoolean("Sunday") == true) {
+                            JSONObject jsonEventObject = new JSONObject();
+                            jsonEventObject.put("title", meTimeEntryMap.getKey());
+                            jsonEventObject.put("start_time", meTimeEntryMap.getValue().getString("start_time"));
+                            jsonEventObject.put("end_time", meTimeEntryMap.getValue().getString("end_time"));
+                            jsonEventObject.put("description", meTimeEntryMap.getKey());
+                            jsonEventObject.put("day_of_week", "Sunday");
+                            jsonArray.put(jsonEventObject);
+                        }
+                        if (meTimeEntryMap.getValue().has("Monday") && meTimeEntryMap.getValue().getBoolean("Monday") == true) {
+                            JSONObject jsonEventObject = new JSONObject();
+                            jsonEventObject.put("title", meTimeEntryMap.getKey());
+                            jsonEventObject.put("description", meTimeEntryMap.getKey());
+                            jsonEventObject.put("start_time", meTimeEntryMap.getValue().getString("start_time"));
+                            jsonEventObject.put("end_time", meTimeEntryMap.getValue().getString("end_time"));
+                            jsonEventObject.put("day_of_week", "Monday");
+                            jsonArray.put(jsonEventObject);
+                        }
+                        if (meTimeEntryMap.getValue().has("Tuesday") && meTimeEntryMap.getValue().getBoolean("Tuesday") == true) {
+                            JSONObject jsonEventObject = new JSONObject();
+                            jsonEventObject.put("title", meTimeEntryMap.getKey());
+                            jsonEventObject.put("description", meTimeEntryMap.getKey());
+                            jsonEventObject.put("start_time", meTimeEntryMap.getValue().getString("start_time"));
+                            jsonEventObject.put("end_time", meTimeEntryMap.getValue().getString("end_time"));
+                            jsonEventObject.put("day_of_week", "Tuesday");
+                            jsonArray.put(jsonEventObject);
+                        }
+                        if (meTimeEntryMap.getValue().has("Wednesday") && meTimeEntryMap.getValue().getBoolean("Wednesday") == true) {
+                            JSONObject jsonEventObject = new JSONObject();
+                            jsonEventObject.put("title", meTimeEntryMap.getKey());
+                            jsonEventObject.put("description", meTimeEntryMap.getKey());
+                            jsonEventObject.put("start_time", meTimeEntryMap.getValue().getString("start_time"));
+                            jsonEventObject.put("end_time", meTimeEntryMap.getValue().getString("end_time"));
+                            jsonEventObject.put("day_of_week", "Wednesday");
+                            jsonArray.put(jsonEventObject);
+                        }
+                        if (meTimeEntryMap.getValue().has("Thursday") && meTimeEntryMap.getValue().getBoolean("Thursday") == true) {
+                            JSONObject jsonEventObject = new JSONObject();
+                            jsonEventObject.put("title", meTimeEntryMap.getKey());
+                            jsonEventObject.put("description", meTimeEntryMap.getKey());
+                            jsonEventObject.put("start_time", meTimeEntryMap.getValue().getString("start_time"));
+                            jsonEventObject.put("end_time", meTimeEntryMap.getValue().getString("end_time"));
+                            jsonEventObject.put("day_of_week", "Thursday");
+                            jsonArray.put(jsonEventObject);
+                        }
+                        if (meTimeEntryMap.getValue().has("Friday") && meTimeEntryMap.getValue().getBoolean("Friday") == true) {
+                            JSONObject jsonEventObject = new JSONObject();
+                            jsonEventObject.put("title", meTimeEntryMap.getKey());
+                            jsonEventObject.put("description", meTimeEntryMap.getKey());
+                            jsonEventObject.put("start_time", meTimeEntryMap.getValue().getString("start_time"));
+                            jsonEventObject.put("end_time", meTimeEntryMap.getValue().getString("end_time"));
+                            jsonEventObject.put("day_of_week", "Friday");
+                            jsonArray.put(jsonEventObject);
+                        }
+                        if (meTimeEntryMap.getValue().has("Saturday") && meTimeEntryMap.getValue().getBoolean("Saturday") == true) {
+                            JSONObject jsonEventObject = new JSONObject();
+                            jsonEventObject.put("title", meTimeEntryMap.getKey());
+                            jsonEventObject.put("description", meTimeEntryMap.getKey());
+                            jsonEventObject.put("start_time", meTimeEntryMap.getValue().getString("start_time"));
+                            jsonEventObject.put("end_time", meTimeEntryMap.getValue().getString("end_time"));
+                            jsonEventObject.put("day_of_week", "Saturday");
+                            jsonArray.put(jsonEventObject);
+                        }
+
+                    }
+
+                }
+
+                jsonObject.put("events", jsonArray);
+                jsonObject.put("user_id", user.getUserId());
+                jsonObject.put("timezone", mcurrentTime.getTimeZone().getID());
+
+                JSONObject responseObj = context.apiManager.meTime(user, jsonObject, context.getCenesActivity());
+                Log.e("Me Time response ", responseObj.toString());
+                return responseObj;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            if (processDialog.isShowing()) {
+                processDialog.dismiss();
+             }
+            processDialog = null;
+            /*if(context.isFirstLogin) {
+                context.getActivity().onBackPressed();
+            }*/
+
+            if(o != null) {
+                Toast.makeText(context.getCenesActivity(),"MyTime Saved",Toast.LENGTH_SHORT).show();
+            } else {
+                context.getCenesActivity().showRequestTimeoutDialog();
+            }
+
+            try {
+                JSONObject jObj = (JSONObject) o;
+                if (o == null) {
+                    //Toast.makeText(context.getCenesActivity(), jObj.getString("errorDetail"), Toast.LENGTH_LONG).show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+}
