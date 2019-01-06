@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,20 +74,21 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
 
         final ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = inflter.inflate(R.layout.activity_home_data_rows, null);
+            convertView = inflter.inflate(R.layout.adapter_home_data_rows, null);
             viewHolder = new ViewHolder();
             viewHolder.eventTitle = (TextView) convertView.findViewById(R.id.event_title);
             viewHolder.eventLocation = (TextView) convertView.findViewById(R.id.event_location);
-            viewHolder.eventImage = (RoundedImageView) convertView.findViewById(R.id.event_image);
-            viewHolder.eventTime = (TextView) convertView.findViewById(R.id.event_time);
             viewHolder.reminderTime = (TextView) convertView.findViewById(R.id.tv_reminder_time);
             viewHolder.eventBar = convertView.findViewById(R.id.event_bar);
             viewHolder.llEventRowItem = (LinearLayout) convertView.findViewById(R.id.event_row_item);
             viewHolder.llReminderRowItem = (LinearLayout) convertView.findViewById(R.id.ll_reminder_row_item);
-            viewHolder.homeEventMemberImages = (LinearLayout) convertView.findViewById(R.id.home_adapter_event_member_images);
-            viewHolder.memberImagesContainer = (LinearLayout) convertView.findViewById(R.id.ll_member_images_container);
-            viewHolder.homeEventMemberImagesCount = (TextView) convertView.findViewById(R.id.tv_event_member_images_count);
-            viewHolder.homeAdapterHorizontalImageScrollView = (HorizontalScrollView) convertView.findViewById(R.id.home_adapter_horizontal_scroll_view);
+            viewHolder.divider = (View) convertView.findViewById(R.id.view_divider);
+            viewHolder.startTime = (TextView) convertView.findViewById(R.id.tv_start_time);
+            viewHolder.ivOwnerImage = (RoundedImageView) convertView.findViewById(R.id.iv_owner);
+            //viewHolder.homeEventMemberImages = (LinearLayout) convertView.findViewById(R.id.home_adapter_event_member_images);
+            ////viewHolder.memberImagesContainer = (LinearLayout) convertView.findViewById(R.id.ll_member_images_container);
+            //viewHolder.homeEventMemberImagesCount = (TextView) convertView.findViewById(R.id.tv_event_member_images_count);
+            //viewHolder.homeAdapterHorizontalImageScrollView = (HorizontalScrollView) convertView.findViewById(R.id.home_adapter_horizontal_scroll_view);
             viewHolder.tvReminderTitle = (TextView) convertView.findViewById(R.id.tv_reminder_title);
             viewHolder.trash = (TextView) convertView.findViewById(R.id.trash);
             viewHolder.eventId = null;
@@ -97,6 +100,11 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
 
         final Event child = (Event) getChild(groupPosition, childPosition);
 
+        if (childPosition == 0) {
+            viewHolder.divider.setVisibility(View.GONE);
+        } else {
+            viewHolder.divider.setVisibility(View.VISIBLE);
+        }
         if(child.getType().equalsIgnoreCase("Reminder")) {
             viewHolder.llEventRowItem.setVisibility(View.GONE);
             viewHolder.llReminderRowItem.setVisibility(View.VISIBLE);
@@ -113,6 +121,13 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
             viewHolder.scheduleAs = child.getScheduleAs();
             viewHolder.eventId = child.getEventId();
             viewHolder.eventTitle.setText(child.getTitle());
+
+
+            if (child.getIsFullDay() != null && child.getIsFullDay()) {
+                viewHolder.startTime.setText("00:00AM");
+            } else {
+                viewHolder.startTime.setText(child.getStartTime());
+            }
 
             String eventType = child.getSource();
 
@@ -139,18 +154,15 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                 viewHolder.eventLocation.setText(child.getLocation());
             }
 
-            if (child.getEventPicture() != null && child.getEventPicture() != "" && child.getEventPicture() != "null") {
-                Glide.with(this.context).load(child.getEventPicture()).apply(RequestOptions.placeholderOf(R.drawable.default_profile_icon)).into(viewHolder.eventImage);
-            } else {
-                viewHolder.eventImage.setImageResource(R.drawable.party_image);
-            }
+            EventMember owner = child.getEventMembers().get(0);
+            Glide.with(context).load(owner.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.default_profile_icon)).into(viewHolder.ivOwnerImage);
 
-            if (child.getIsFullDay()) {
+            /*if (child.getIsFullDay()) {
                 viewHolder.eventTime.setText("00:00 AM");
             } else {
                 viewHolder.eventTime.setText(child.getStartTime());
-            }
-            viewHolder.homeEventMemberImagesCount.setVisibility(View.GONE);
+            }*/
+            /*viewHolder.homeEventMemberImagesCount.setVisibility(View.GONE);
 
             if (child.getEventMembers() != null && child.getEventMembers().size() > 0) {
                 viewHolder.homeEventMemberImages.removeAllViews();
@@ -202,7 +214,7 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
             } else {
                 viewHolder.homeAdapterHorizontalImageScrollView.setVisibility(View.GONE);
             }
-
+            */
 
             viewHolder.llEventRowItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -217,7 +229,7 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                 }
             });
 
-            viewHolder.memberImagesContainer.setOnClickListener(new View.OnClickListener() {
+            /*viewHolder.memberImagesContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent data = new Intent(context, GatheringScreenActivity.class);
@@ -227,7 +239,7 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                     context.startActivity(data);
 
                 }
-            });
+            });*/
 
             viewHolder.trash.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -268,7 +280,7 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
         mExpandableListView.expandGroup(groupPosition);
         HeaderViewHolder holder;
         if (convertView == null) {
-            convertView = inflter.inflate(R.layout.activity_home_data_headers, null);
+            convertView = inflter.inflate(R.layout.adapter_home_data_headers, null);
             holder = new HeaderViewHolder();
             holder.lblListHeader = (TextView) convertView.findViewById(R.id.lblListHeader);
             convertView.setTag(holder);
@@ -277,8 +289,11 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
         }
 
         String headerTitle = (String) getGroup(groupPosition);
-        holder.lblListHeader.setText(headerTitle);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            holder.lblListHeader.setText(Html.fromHtml(headerTitle, Html.FROM_HTML_MODE_COMPACT));
+        } else {
+            holder.lblListHeader.setText(Html.fromHtml(headerTitle));
+        }
         return convertView;
     }
 
@@ -307,18 +322,19 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
         private Long eventId;
         private TextView eventTitle;
         private TextView eventLocation;
-        private TextView eventTime;
         private View eventBar;
-        private RoundedImageView eventImage;
         private LinearLayout llEventRowItem;
         private LinearLayout llReminderRowItem;
         private TextView reminderTime;
-        private LinearLayout homeEventMemberImages;
-        private LinearLayout memberImagesContainer;
-        private TextView homeEventMemberImagesCount;
+        private View divider;
+        private TextView startTime;
+        private RoundedImageView ivOwnerImage;
+        //private LinearLayout homeEventMemberImages;
+        //private LinearLayout memberImagesContainer;
+        //private TextView homeEventMemberImagesCount;
         private TextView tvReminderTitle;
         private String scheduleAs;
-        private HorizontalScrollView homeAdapterHorizontalImageScrollView;
+        //private HorizontalScrollView homeAdapterHorizontalImageScrollView;
         private TextView trash;
     }
 

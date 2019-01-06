@@ -37,6 +37,9 @@ public class CoreManager {
     public ApiManager apiManager = null;
     public UserManager userManager = null;
     public HomeScreenApiManager homeScreenApiManager = null;
+    public LocationApiManager locationApiManager = null;
+    public GatheringApiManager gatheringApiManager = null;
+    public NotificationAPiManager notificationAPiManager = null;
 
     public CoreManager(CenesApplication cenesApplication){
         this.cenesApplication = cenesApplication;
@@ -50,6 +53,10 @@ public class CoreManager {
         this.apiManager = new ApiManagerImpl(cenesApplication);
         this.userAppiManager = new UserApiManager(cenesApplication);
         this.homeScreenApiManager = new HomeScreenApiManager(cenesApplication);
+        this.locationApiManager = new LocationApiManager(cenesApplication);
+        this.gatheringApiManager = new GatheringApiManager(cenesApplication);
+        this.notificationAPiManager = new NotificationAPiManager(cenesApplication);
+
     }
 
     public UserManager getUserManager(){
@@ -89,5 +96,17 @@ public class CoreManager {
 
     public HomeScreenApiManager getHomeScreenApiManager() {
         return  this.homeScreenApiManager;
+    }
+
+    public LocationApiManager getLocationApiManager() {
+        return this.locationApiManager;
+    }
+
+    public GatheringApiManager getGatheringApiManager() {
+        return this.gatheringApiManager;
+    }
+
+    public NotificationAPiManager getNotificationAPiManager() {
+        return this.notificationAPiManager;
     }
 }

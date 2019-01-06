@@ -3,6 +3,7 @@ package com.cenes.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -196,7 +197,7 @@ public class FriendsFragment extends CenesFragment {
                 holder.inviteFriendItem = (LinearLayout) view.findViewById(R.id.invite_friend_item);
                 holder.inviteFriendName = (TextView) view.findViewById(R.id.invite_friend_name);
                 holder.inviteFriendPicture = (RoundedImageView) view.findViewById(R.id.invite_friend_picture);
-                holder.cenesMemberIcon = (TextView) view.findViewById(R.id.iv_cenes_member_icon);
+                holder.cenesMemberIcon = (ImageView) view.findViewById(R.id.iv_cenes_member_icon);
                 holder.inviteFriendNameCenesUserText = (TextView) view.findViewById(R.id.invite_friend_name_cenes_user_text);
                 view.setTag(holder);
             } else {
@@ -217,13 +218,13 @@ public class FriendsFragment extends CenesFragment {
                     holder.inviteFriendPicture.setImageResource(R.drawable.default_profile_icon);
                 }
                 System.out.println("cenesMember : "+ friends.getJSONObject(position).getInt("cenesMember"));
-                if (friends.getJSONObject(position).getInt("cenesMember") == 1) {
+               /* if (friends.getJSONObject(position).getInt("cenesMember") == 1) {
                     holder.inviteFriendNameCenesUserText.setVisibility(View.GONE);
                     holder.cenesMemberIcon.setVisibility(View.VISIBLE);
                 } else {
                     holder.inviteFriendNameCenesUserText.setVisibility(View.VISIBLE);
                     holder.cenesMemberIcon.setVisibility(View.GONE);
-                }
+                }*/
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -232,7 +233,7 @@ public class FriendsFragment extends CenesFragment {
                 @Override
                 public void onClick(View view) {
                     hideKeyBoard(view);
-                    Intent intent = new Intent();
+                    /*Intent intent = new Intent();
                     try {
                         JSONObject friendObj = (JSONObject) friends.get(position);
                         String photo = friendObj.getJSONObject("user").getString("photo");
@@ -247,10 +248,10 @@ public class FriendsFragment extends CenesFragment {
                         );
                     } catch (Exception e) {
                         e.printStackTrace();
-                    }
+                    }*/
+                    holder.cenesMemberIcon.setImageResource(R.drawable.circle_selected);
                 }
             });
-
             return view;
         }
 
@@ -261,8 +262,9 @@ public class FriendsFragment extends CenesFragment {
 
         class FriendViewHolder {
             private LinearLayout inviteFriendItem;
-            private TextView inviteFriendName,inviteFriendNameCenesUserText,cenesMemberIcon;
+            private TextView inviteFriendName,inviteFriendNameCenesUserText;
             private RoundedImageView inviteFriendPicture;
+            private ImageView cenesMemberIcon;
         }
     }
 }

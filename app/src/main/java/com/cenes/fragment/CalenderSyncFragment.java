@@ -161,6 +161,8 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
                     break;
                 case R.id.ll_outlook:
                     outlookAuth();
+                    //Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=0b228193-26f2-4837-b791-ffd7eab7441e&redirect_uri=http://localhost:8181/api/guest/outlookAuthCode&response_type=code&scope=Calendars.Read"));
+                    //startActivity(browserIntent);
                     break;
             }
         }

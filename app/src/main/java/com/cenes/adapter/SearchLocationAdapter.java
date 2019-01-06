@@ -83,6 +83,7 @@ public class SearchLocationAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     hideKeyBoard(holder.linerLayout);
                     Intent intent = new Intent();
+                    intent.putExtra("selection", "list");
                     intent.putExtra("title", holder.locTitle.getText().toString());
                     intent.putExtra("address", holder.locAddress.getText().toString());
                     intent.putExtra("placeId", holder.placeId);

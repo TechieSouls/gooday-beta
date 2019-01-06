@@ -34,6 +34,7 @@ import com.cenes.countrypicker.CountryPickerListener;
 import com.cenes.database.manager.UserManager;
 
 import java.net.URLEncoder;
+import java.util.Map;
 
 /**
  * Created by rohan on 10/10/17.
@@ -43,7 +44,6 @@ public class HolidaySyncFragment extends CenesFragment {
 
     public final static String TAG = "HolidaySyncFragment";
 
-    private GestureDetector gestureDetector;
     CenesApplication cenesApplication;
     CoreManager coreManager;
     DeviceManager deviceManager;
@@ -78,6 +78,8 @@ public class HolidaySyncFragment extends CenesFragment {
         rlHeader = (RelativeLayout) v.findViewById(R.id.rl_header);
         ivProfile = (ImageView) v.findViewById(R.id.ivProfile);
         tvSave = (TextView) v.findViewById(R.id.tvSave);
+
+        selectHolidayCalendarBasedOnCountry();
 
         holiday_search_textbox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +128,29 @@ public class HolidaySyncFragment extends CenesFragment {
         }
 
         return v;
+    }
+
+    public void selectHolidayCalendarBasedOnCountry() {
+
+        Map<String, String> countryNameCodeMap = CountryUtils.getCountryCodeMap();
+
+        //String userCountryCode = CenesUtils.getDeviceCountryCode();
+        String userCountryCode = CenesUtils.getDeviceCountryCode(getContext());
+
+        String countryName = null;
+
+        for (Map.Entry<String, String> countryNameCodeEntryMap: countryNameCodeMap.entrySet()) {
+
+            if (countryNameCodeEntryMap.getValue().equals(userCountryCode.toLowerCase())) {
+                countryName = countryNameCodeEntryMap.getKey();
+                break;
+            }
+        }
+
+        if (countryName != null) {
+            holiday_search_textbox.setText(countryName);
+            holidayCalendarId = CountryUtils.getCountryCalendarIdMap().get(countryName);
+        }
     }
 
     @Override

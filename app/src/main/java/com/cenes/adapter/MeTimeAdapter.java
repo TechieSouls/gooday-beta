@@ -2,7 +2,6 @@ package com.cenes.adapter;
 
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.Html;
 import android.util.Log;
@@ -27,7 +26,6 @@ import com.cenes.util.CenesUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -360,18 +358,18 @@ public class MeTimeAdapter extends BaseAdapter {
                                 mcurrentTime.set(Calendar.HOUR_OF_DAY, selectedHour);
                                 mcurrentTime.set(Calendar.MINUTE, selectedMinute);
                                 String ampm = "AM";
-                                if (selectedHour > 12) {
+                                if (selectedHour >= 12) {
                                     ampm = "PM";
                                 }
                                 String singleDigitZero = "";
-                                if (mcurrentTime.get(Calendar.HOUR) < 10) {
+                                if (mcurrentTime.get(Calendar.HOUR) < 10  && ampm.equals("AM")) {
                                     singleDigitZero = "0";
                                 }
                                 String singleDigitMinuteZero = "";
                                 if (selectedMinute < 10) {
                                     singleDigitMinuteZero = "0";
                                 }
-                                holder.startTimeText.setText(Html.fromHtml("<b>" + singleDigitZero + mcurrentTime.get(Calendar.HOUR) + "</b>:" + singleDigitMinuteZero + selectedMinute));
+                                holder.startTimeText.setText(Html.fromHtml("<b>" + singleDigitZero + mcurrentTime.get(Calendar.HOUR_OF_DAY) + "</b>:" + singleDigitMinuteZero + selectedMinute));
                                 holder.startAmPmText.setText(ampm);
                                 try {
                                     JSONObject meTimeJSONObjTemp = meTimeData.get(meTimeCategories.get(position));
@@ -402,18 +400,18 @@ public class MeTimeAdapter extends BaseAdapter {
                                 mcurrentTime.set(Calendar.HOUR_OF_DAY, selectedHour);
                                 mcurrentTime.set(Calendar.MINUTE, selectedMinute);
                                 String ampm = "AM";
-                                if (selectedHour > 12) {
+                                if (selectedHour >= 12) {
                                     ampm = "PM";
                                 }
                                 String singleDigitZero = "";
-                                if (mcurrentTime.get(Calendar.HOUR) < 10) {
+                                if (mcurrentTime.get(Calendar.HOUR) < 10 && ampm.equals("AM")) {
                                     singleDigitZero = "0";
                                 }
                                 String singleDigitMinuteZero = "";
                                 if (selectedMinute < 10) {
                                     singleDigitMinuteZero = "0";
                                 }
-                                holder.endTimeText.setText(Html.fromHtml("<b>" + singleDigitZero + mcurrentTime.get(Calendar.HOUR) + "</b>:" + singleDigitMinuteZero + selectedMinute));
+                                holder.endTimeText.setText(Html.fromHtml("<b>" + singleDigitZero + mcurrentTime.get(Calendar.HOUR_OF_DAY) + "</b>:" + singleDigitMinuteZero + selectedMinute));
                                 holder.endAmPmText.setText(ampm);
                                 try {
                                     JSONObject meTimeJSONObjTemp = meTimeData.get(meTimeCategories.get(position));

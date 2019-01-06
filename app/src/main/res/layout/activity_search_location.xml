@@ -2,13 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
-
+    android:background="#CCF7F7F7">
     <RelativeLayout
         android:id="@+id/gath_search_location_header"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentTop="true"
         android:background="@drawable/border_square">
 
         <ImageView
@@ -20,21 +18,109 @@
             android:padding="5dp"
             android:src="@drawable/back_arrow_ios" />
 
-        <EditText
-            android:id="@+id/search_location_edit_text"
+        <TextView
+            android:id="@+id/tv_search_location_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:background="#00000000"
-            android:hint="Location"
+            android:text="LOCATION"
             android:textAlignment="center"
-            android:textColorHint="@color/cenes_new_orange" />
+            android:gravity="center_vertical"
+            android:textStyle="bold"
+            android:textColor="#FF000000"/>
+        <Button
+            android:id="@+id/btn_custom_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DONE"
+            android:background="@color/transparent"
+            android:textColor="#FF4A90E2"
+            android:layout_alignParentRight="true"/>
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/gath_search_location_sub_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20px"
+        android:layout_below="@+id/gath_search_location_header">
+
+        <EditText
+            android:id="@+id/search_location_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/curved_search_edit_text_whitebg"
+            android:drawableLeft="@drawable/search_icon"
+            android:paddingLeft="10dp"
+            />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_suggested_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/gath_search_location_sub_header"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Suggested Location"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:textStyle="bold"
+            android:textSize="27sp"
+            android:textColor="#FF545352"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_suggested_places"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:paddingStart="20dp"
+                android:scrollbars="none"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_recent_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_suggested_recycler_view"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Previous Searches"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:textStyle="bold"
+            android:textSize="27sp"
+            android:textColor="#FF545352"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_recent_places"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@color/transparent"
+            android:paddingEnd="5dp"
+            android:paddingRight="5dp"
+            android:paddingStart="5dp"
+            android:layout_marginTop="10dp"
+            android:scrollbars="none"/>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/gath_search_location_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/gath_search_location_header"></ListView>
+        android:layout_below="@+id/ll_recent_recycler_view"
+        android:visibility="gone"></ListView>
 </RelativeLayout>

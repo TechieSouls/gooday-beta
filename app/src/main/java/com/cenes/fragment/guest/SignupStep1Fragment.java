@@ -28,6 +28,8 @@ import com.cenes.fragment.CenesFragment;
 
 import org.json.JSONObject;
 
+import java.util.Locale;
+
 /**
  * Created by mandeep on 18/9/18.
  */
@@ -37,7 +39,7 @@ public class SignupStep1Fragment extends CenesFragment {
     public final static String TAG = "SignupStep1Fragment";
     private Integer countryCodeFragmentCode = 101;
 
-    private LinearLayout llSignupStep1Back, llCountryCodeDropdown;
+    private LinearLayout llCountryCodeDropdown;
     private Button btAlreadyLogin, btSignupStep1Continue;
     private EditText etPhoneNumber;
     TextView tvDropdownCountryCode;
@@ -46,15 +48,16 @@ public class SignupStep1Fragment extends CenesFragment {
     private CoreManager coreManager;
     private UserApiManager userApiManager;
     private AlertManager alertManager;
-
+    private AuthenticateService authenticateService;
     private String etPhoneNumberStr;
     private String countryCode = "0";
+    private Boolean isCountrySelected = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_guest_input_phone, container, false);
 
-        llSignupStep1Back = (LinearLayout) v.findViewById(R.id.ll_signup_step1_back);
+        //llSignupStep1Back = (LinearLayout) v.findViewById(R.id.ll_signup_step1_back);
         llCountryCodeDropdown = (LinearLayout) v.findViewById(R.id.ll_country_code_dropdown);
 
         btAlreadyLogin = (Button) v.findViewById(R.id.bt_already_login);
@@ -64,13 +67,20 @@ public class SignupStep1Fragment extends CenesFragment {
         tvDropdownCountryCode = (TextView) v.findViewById(R.id.tv_dropdown_country_code);
 
         btAlreadyLogin.setOnClickListener(onClickListener);
-        llSignupStep1Back.setOnClickListener(onClickListener);
+        //llSignupStep1Back.setOnClickListener(onClickListener);
         llCountryCodeDropdown.setOnClickListener(onClickListener);
         btSignupStep1Continue.setOnClickListener(onClickListener);
         etPhoneNumber.addTextChangedListener(phoneNumberWatcher);
 
         initializeVariables();
 
+        //Setting country code based on the country selected in mobile.
+       // String androidCountryCode = CenesUtils.getDeviceCountryCode();
+        if (isCountrySelected == false) {
+            String androidCountryCode = CenesUtils.getDeviceCountryCode(getContext());
+            countryCode = "+"+authenticateService.getPhoneCodeByCountryCode(androidCountryCode.toUpperCase());
+            tvDropdownCountryCode.setText(countryCode);
+        }
         return v;
     }
 
@@ -80,6 +90,8 @@ public class SignupStep1Fragment extends CenesFragment {
         coreManager = cenesApplication.getCoreManager();
         userApiManager = coreManager.getUserAppiManager();
         alertManager = coreManager.getAlertManager();
+
+        authenticateService = new AuthenticateService();
     }
 
 
@@ -104,9 +116,9 @@ public class SignupStep1Fragment extends CenesFragment {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                case R.id.ll_signup_step1_back:
-                    getActivity().onBackPressed();
-                break;
+                //case R.id.ll_signup_step1_back:
+                    //getActivity().onBackPressed();
+                //break;
                 case R.id.bt_already_login:
                     startActivity(new Intent(getActivity(), SignInActivity.class));
                     getActivity().finish();
@@ -143,6 +155,7 @@ public class SignupStep1Fragment extends CenesFragment {
                 @Override
                 public void run() {
                     tvDropdownCountryCode.setText(cc+"");
+                    isCountrySelected = true;
                 }
             }, 500);
 

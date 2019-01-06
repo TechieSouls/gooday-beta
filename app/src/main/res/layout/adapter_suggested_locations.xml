@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <ImageView
+            android:id="@+id/iv_image_thumbnail"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:src="@drawable/signup_success_fb_icon"
+            android:scaleType="centerCrop"
+            />
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Turner's Kitchen"
+            android:layout_margin="2dp"
+            android:textStyle="bold"
+            android:textSize="27sp"
+            android:textColor="#FF545352"/>
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="386 sector 32A"
+            android:layout_margin="2dp"
+            android:visibility="gone"/>
+        <Button
+            android:id="@+id/btn_use_location"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:textSize="17sp"
+            android:text="Use Location"
+            android:textColor="@color/cenes_new_orange"
+            android:background="@drawable/rectangular_border_orange"
+            android:layout_margin="2dp">
+
+        </Button>
+    </LinearLayout>
+
+</LinearLayout>

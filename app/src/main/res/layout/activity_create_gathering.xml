@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cenes_very_light_gray">
+    android:background="@color/new_theme_grey_color">
 
     <RelativeLayout
         android:id="@+id/rl_header"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:background="@drawable/gradient_header">
+        android:background="@color/transparent">
 
         <TextView
             android:id="@+id/crt_gath_cls_btn"
@@ -21,7 +21,7 @@
             android:padding="10dp"
             android:textSize="15sp"
             android:text="Cancel"
-            android:textColor="@color/white" />
+            android:textColor="#FF4A4A4A" />
 
         <TextView
             android:id="@+id/cenes_title"
@@ -30,7 +30,7 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="Add Gathering"
-            android:textColor="@color/white"
+            android:textColor="#FF000000"
             android:textSize="18dp" />
 
         <TextView
@@ -42,7 +42,7 @@
             android:padding="10dp"
             android:textSize="15sp"
             android:text="Save"
-            android:textColor="@color/white" />
+            android:textColor="#FF4A90E2" />
 
         <ImageView
             android:id="@+id/iv_event_share_icon"
@@ -65,7 +65,7 @@
             android:padding="10dp"
             android:textSize="15sp"
             android:text="Edit"
-            android:textColor="@color/white"
+            android:textColor="#FF4A90E2"
             android:visibility="gone"/>
 
         <TextView
@@ -76,6 +76,7 @@
             android:layout_margin="10dp"
             android:padding="5dp"
             android:text="Save"
+            android:textColor="#FF4A90E2"
             android:visibility="gone" />
 
     </RelativeLayout>
@@ -99,14 +100,13 @@
             <com.cenes.util.CenesRoundedCornerLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center_horizontal">
 
                 <ImageView
                     android:id="@+id/gath_event_image"
                     android:layout_width="match_parent"
-                    android:layout_height="131dp"
-                    android:background="@color/white"
+                    android:layout_height="230dp"
                     android:src="@drawable/party_image"
                     android:visibility="visible" />
             </com.cenes.util.CenesRoundedCornerLinearLayout>
@@ -115,25 +115,25 @@
                 android:id="@+id/gath_event_title_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
                 android:background="@drawable/rounded_corner_white"
                 android:drawableEnd="@null"
                 android:drawablePadding="15dp"
                 android:drawableStart="@drawable/pencil"
                 android:gravity="center_vertical"
-                android:hint="@string/event_title"
+                android:hint="Title"
                 android:inputType="textCapSentences"
                 android:padding="15dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
                 android:textSize="15sp"
+                android:layout_marginTop="20dp"
                 android:visibility="visible" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
                 android:background="@drawable/rounded_corner_white"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -186,7 +186,7 @@
                     android:id="@+id/gath_select_datetime_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/rounded_corner_white"
                     android:drawablePadding="15dp"
                     android:drawableStart="@drawable/reminder_clock"
@@ -370,7 +370,7 @@
                 android:id="@+id/gath_search_location_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/rounded_corner_white"
                 android:drawablePadding="15dp"
                 android:drawableStart="@drawable/reminder_loc"
@@ -384,7 +384,7 @@
                 android:id="@+id/gath_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/rounded_corner_white"
                 android:drawableEnd="@null"
                 android:drawablePadding="15dp"
