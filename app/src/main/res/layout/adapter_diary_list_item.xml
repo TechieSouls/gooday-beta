@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:orientation="horizontal">
 
-    <com.cenes.util.CenesRoundedCornerLinearLayout
+    <com.deploy.util.CenesRoundedCornerLinearLayout
         android:id="@+id/ll_dairy_list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:orientation="vertical"
             android:padding="5dp">
 
-            <com.cenes.util.CenesTextView
+            <com.deploy.util.CenesTextView
                 android:id="@+id/tv_item_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                 android:textSize="18sp"
                 app:fontName="@string/font_lato_regular" />
 
-            <com.cenes.util.CenesTextView
+            <com.deploy.util.CenesTextView
                 android:id="@+id/tv_item_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,5 +51,5 @@
                 android:textSize="14sp"
                 app:fontName="@string/font_lato_regular" />
         </LinearLayout>
-    </com.cenes.util.CenesRoundedCornerLinearLayout>
+    </com.deploy.util.CenesRoundedCornerLinearLayout>
 </LinearLayout>

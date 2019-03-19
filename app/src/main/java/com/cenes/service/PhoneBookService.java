@@ -1,17 +1,10 @@
 package com.cenes.service;
 
-import android.Manifest;
 import android.content.ContentResolver;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Handler;
 import android.provider.ContactsContract;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-
-import com.cenes.activity.SplashActivity;
-import com.cenes.observer.ContactObserver;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -12,8 +12,15 @@ import com.cenes.Manager.Impl.ValidatioManagerImpl;
 import com.cenes.Manager.InternetManager;
 import com.cenes.Manager.UrlManager;
 import com.cenes.Manager.ValidationManager;
+import com.cenes.api.CenesCommonAPI;
+import com.cenes.api.GatheringAPI;
 import com.cenes.application.CenesApplication;
+import com.cenes.backendManager.CenesCommonAPIManager;
+import com.cenes.backendManager.GatheringApiManager;
 import com.cenes.backendManager.HomeScreenApiManager;
+import com.cenes.backendManager.LocationApiManager;
+import com.cenes.backendManager.MeTimeApiManager;
+import com.cenes.backendManager.NotificationAPiManager;
 import com.cenes.backendManager.UserApiManager;
 import com.cenes.database.impl.AlarmManagerImpl;
 import com.cenes.database.impl.UserManagerImpl;
@@ -40,6 +47,8 @@ public class CoreManager {
     public LocationApiManager locationApiManager = null;
     public GatheringApiManager gatheringApiManager = null;
     public NotificationAPiManager notificationAPiManager = null;
+    public MeTimeApiManager meTimeApiManager = null;
+    public CenesCommonAPIManager cenesCommonAPIManager = null;
 
     public CoreManager(CenesApplication cenesApplication){
         this.cenesApplication = cenesApplication;
@@ -56,7 +65,8 @@ public class CoreManager {
         this.locationApiManager = new LocationApiManager(cenesApplication);
         this.gatheringApiManager = new GatheringApiManager(cenesApplication);
         this.notificationAPiManager = new NotificationAPiManager(cenesApplication);
-
+        this.meTimeApiManager = new MeTimeApiManager(cenesApplication);
+        this.cenesCommonAPIManager = new CenesCommonAPIManager(cenesApplication);
     }
 
     public UserManager getUserManager(){
@@ -108,5 +118,13 @@ public class CoreManager {
 
     public NotificationAPiManager getNotificationAPiManager() {
         return this.notificationAPiManager;
+    }
+
+    public MeTimeApiManager getMeTimeApiManager() {
+        return this.meTimeApiManager;
+    }
+
+    public CenesCommonAPIManager getCenesCommonAPIManager() {
+        return this.cenesCommonAPIManager;
     }
 }

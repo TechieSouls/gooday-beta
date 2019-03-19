@@ -15,8 +15,8 @@ import android.widget.RelativeLayout;
 import com.cenes.R;
 import com.cenes.fragment.CalenderSyncFragment;
 import com.cenes.fragment.HolidaySyncFragment;
-import com.cenes.fragment.MeTimeFragment;
 import com.cenes.fragment.PictureFragment;
+import com.cenes.fragment.guest.SignupStepSuccessFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +28,13 @@ public class CompleteYourProfileActivity extends CenesActivity {
 
     ViewPager viewPager;
     ImageView ivDots;
-    Button btDoItLater, btNext;
     RelativeLayout layoutFooter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.complete_your_profile);
+        setContentView(R.layout.pager_complete_your_profile);
 
-        btDoItLater = (Button) findViewById(R.id.bt_skip);
-        btNext = (Button) findViewById(R.id.bt_next);
         ivDots = (ImageView) findViewById(R.id.iv_dots);
         layoutFooter = (RelativeLayout) findViewById(R.id.rl_footer);
 
@@ -45,7 +42,7 @@ public class CompleteYourProfileActivity extends CenesActivity {
         setupViewPager(viewPager);
         viewPager.setOnPageChangeListener(mPageChangeListener);
 
-        btDoItLater.setOnClickListener(new View.OnClickListener() {
+        /*btDoItLater.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -54,9 +51,9 @@ public class CompleteYourProfileActivity extends CenesActivity {
                 }
                 viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
             }
-        });
+        });*/
 
-        btNext.setOnClickListener(new View.OnClickListener() {
+        /*btNext.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -64,14 +61,12 @@ public class CompleteYourProfileActivity extends CenesActivity {
                     ((PictureFragment) adapter.getItem(viewPager.getCurrentItem())).nextClickListener();
                 } else if (adapter.getItem(viewPager.getCurrentItem()) instanceof HolidaySyncFragment) {
                     ((HolidaySyncFragment) adapter.getItem(viewPager.getCurrentItem())).nextClickListener();
-                } else if (adapter.getItem(viewPager.getCurrentItem()) instanceof MeTimeFragment) {
-                    ((MeTimeFragment) adapter.getItem(viewPager.getCurrentItem())).nextClickListener();
-                } else if (adapter.getItem(viewPager.getCurrentItem()) instanceof CalenderSyncFragment) {
+                }else if (adapter.getItem(viewPager.getCurrentItem()) instanceof CalenderSyncFragment) {
                     ((CalenderSyncFragment) adapter.getItem(viewPager.getCurrentItem())).nextClickListener();
                 }
                 viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
             }
-        });
+        });*/
     }
 
     @Override
@@ -83,9 +78,9 @@ public class CompleteYourProfileActivity extends CenesActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        //adapter.addFragment(new PictureFragment());
+        adapter.addFragment(new SignupStepSuccessFragment());
         adapter.addFragment(new HolidaySyncFragment());
-        adapter.addFragment(new MeTimeFragment());
+        //adapter.addFragment(new MeTimeFragment());
         adapter.addFragment(new CalenderSyncFragment());
         viewPager.setAdapter(adapter);
     }
@@ -124,7 +119,7 @@ public class CompleteYourProfileActivity extends CenesActivity {
 
         @Override
         public void onPageSelected(final int position) {
-            btNext.setText("NEXT");
+            //btNext.setText("NEXT");
             if (position == 0) {
                 ivDots.setImageResource(R.drawable.dots_1);
             } else if (position == 1) {
@@ -133,7 +128,7 @@ public class CompleteYourProfileActivity extends CenesActivity {
                 ivDots.setImageResource(R.drawable.dots_3);
             }*/ else if (position == 2) {
                 ivDots.setImageResource(R.drawable.dots_3);
-                btNext.setText("FINISH");
+                //btNext.setText("FINISH");
             }
         }
     };

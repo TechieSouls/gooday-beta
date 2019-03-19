@@ -4,17 +4,14 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.cenes.Manager.AlertManager;
 import com.cenes.Manager.ApiManager;
@@ -23,6 +20,7 @@ import com.cenes.Manager.InternetManager;
 import com.cenes.Manager.UrlManager;
 import com.cenes.Manager.ValidationManager;
 import com.cenes.R;
+import com.cenes.activity.CenesBaseActivity;
 import com.cenes.activity.GuestActivity;
 import com.cenes.activity.HomeScreenActivity;
 import com.cenes.activity.SignInActivity;
@@ -31,10 +29,13 @@ import com.cenes.bo.User;
 import com.cenes.coremanager.CoreManager;
 import com.cenes.database.manager.UserManager;
 import com.cenes.fragment.CenesFragment;
+import com.cenes.fragment.dashboard.HomeFragment;
+import com.cenes.service.InstabugService;
 import com.cenes.util.CenesUtils;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 /**
  * Created by mandeep on 6/10/18.
@@ -57,7 +58,9 @@ public class SigninFragment  extends CenesFragment {
 
     LinearLayout llSigningBackBtn;
     EditText editTextEmail, editTextPassword;
-    Button buttonLogin, tvForgotpasswordLink;
+    Button buttonLogin;
+    TextView tvForgotpasswordLink;
+    ImageView ivBugReport;
     //Button buttonFbLogin;
     //LoginButton facebookLoginBtn;
     ImageView signinBackArrow;
@@ -85,13 +88,16 @@ public class SigninFragment  extends CenesFragment {
 
         editTextEmail = (EditText) view.findViewById(R.id.et_email);
         editTextPassword = (EditText) view.findViewById(R.id.et_password);
-        tvForgotpasswordLink = (Button) view.findViewById(R.id.bt_forget_password);
+        tvForgotpasswordLink = (TextView) view.findViewById(R.id.tv_forget_password);
 
         buttonLogin = (Button) view.findViewById(R.id.bt_login);
+
+        ivBugReport = (ImageView) view.findViewById(R.id.iv_bug_report);
 
         buttonLogin.setOnClickListener(onClickListener);
         tvForgotpasswordLink.setOnClickListener(onClickListener);
 
+        ivBugReport.setOnClickListener(onClickListener);
         //signinBackArrow = (ImageView) findViewById(R.id.signin_back_arrow);
         //signinBackArrow.setOnClickListener(onClickListener);
 
@@ -130,6 +136,9 @@ public class SigninFragment  extends CenesFragment {
                     startActivity(new Intent((SignInActivity)getActivity(),GuestActivity.class));
                     getActivity().finish();
                     break;
+                case R.id.iv_bug_report:
+                    new InstabugService().invokeBugReporting();
+                    break;
                 /*case R.id.bt_fb_join:
                     facebookLoginBtn.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                         @Override
@@ -158,7 +167,7 @@ public class SigninFragment  extends CenesFragment {
                 case R.id.bt_fb_login:
                     facebookLoginBtn.performClick();
                     break;*/
-                case R.id.bt_forget_password:
+                case R.id.tv_forget_password:
                     ((SignInActivity) getActivity()).replaceFragment(new ForgotPasswordFragment(), "ForgotPasswordFragment");
                     break;
             }
@@ -266,6 +275,9 @@ public class SigninFragment  extends CenesFragment {
                             if (jsonObject.has(user.TOKEN)) {
                                 user.setAuthToken(jsonObject.getString(user.TOKEN));
                             }
+                            if (jsonObject.has(user.PHONE)) {
+                                user.setPhone(jsonObject.getString(user.PHONE));
+                            }
                             if (jsonObject.has(user.EMAIL)) {
                                 user.setEmail(jsonObject.getString(user.EMAIL));
                             }
@@ -274,6 +286,10 @@ public class SigninFragment  extends CenesFragment {
                             }
                             if (jsonObject.has(user.NAME)) {
                                 user.setName(jsonObject.getString(user.NAME));
+                            }
+
+                            if (jsonObject.has("birthDate") && jsonObject.getString("birthDate") != "null") {
+                                user.setBirthDate(Long.valueOf(jsonObject.getString("birthDate")));
                             }
                             if (jsonObject.has("gender") && !CenesUtils.isEmpty(jsonObject.getString("gender")) ) {
                                 user.setGender(jsonObject.getString("gender"));
@@ -290,14 +306,18 @@ public class SigninFragment  extends CenesFragment {
                                 registerDeviceObj.put("deviceToken",token);
                                 registerDeviceObj.put("deviceType","android");
                                 registerDeviceObj.put("userId",user.getUserId());
+                                registerDeviceObj.put("model", CenesUtils.getDeviceModel());
+                                registerDeviceObj.put("manufacturer", CenesUtils.getDeviceManufacturer());
+                                registerDeviceObj.put("version", CenesUtils.getDeviceVersion());
                                 new DeviceTokenSync().execute(registerDeviceObj);
                             }
 
-                            startActivity(new Intent((SignInActivity)getActivity(), HomeScreenActivity.class));
+                            //startActivity(new Intent((SignInActivity)getActivity(), HomeScreenActivity.class));
                             //startActivity(new Intent(SignInActivity.this, PictureActivity.class));
                             //startActivity(new Intent(SignInActivity.this, CompleteYourProfileActivity.class));
+                            //getActivity().finish();
+                            startActivity(new Intent((SignInActivity)getActivity(), CenesBaseActivity.class));
                             getActivity().finish();
-
                         } else {
                             if (jsonObject.has("errorDetail")) {
                                 alertManager.getAlert((SignInActivity)getActivity(), jsonObject.getString("errorDetail"), "Error", null, false, "OK");

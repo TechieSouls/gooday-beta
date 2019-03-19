@@ -228,7 +228,7 @@ public class ImageUtils {
     public static void cropImageWithAspect(Uri uri, CenesFragment fragment, int width, int height) {
         try {
             Uri resultUri = Uri.fromFile(new File(getDefaultFile()));
-            com.soundcloud.android.crop.Crop.of(uri, resultUri).asSquare().withMaxSize(width, height).start(fragment.getActivity(), fragment);
+            com.soundcloud.android.crop.Crop.of(uri, resultUri).withMaxSize(width, height).start(fragment.getActivity(), fragment);
         } catch (ActivityNotFoundException anfe) {
         }
     }

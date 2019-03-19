@@ -1,4 +1,4 @@
-package com.deploy.adapter;
+package com.cenes.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,10 +15,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
-import com.deploy.R;
-import com.deploy.activity.SearchFriendActivity;
-import com.deploy.activity.SearchLocationActivity;
-import com.deploy.bo.Location;
+import com.cenes.R;
+import com.cenes.activity.SearchFriendActivity;
+import com.cenes.activity.SearchLocationActivity;
+import com.cenes.bo.Location;
+import com.cenes.util.CurvedImageView;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -32,13 +34,13 @@ public class RecentLocationAdapter extends RecyclerView.Adapter<RecentLocationAd
         private SearchLocationActivity context;
 
         public class RecentLocationHolder extends RecyclerView.ViewHolder {
-            ImageView ivLocationPhoto;
+            CurvedImageView ivLocationPhoto;
             TextView tvLocation;
             Button btnUseLocation;
 
             public RecentLocationHolder(View view) {
                 super(view);
-                ivLocationPhoto = (ImageView) view.findViewById(R.id.iv_image_thumbnail);
+                ivLocationPhoto = (CurvedImageView) view.findViewById(R.id.iv_image_thumbnail);
                 tvLocation = (TextView) view.findViewById(R.id.tv_title);
                 btnUseLocation = (Button) view.findViewById(R.id.btn_use_location);
             }
@@ -62,17 +64,16 @@ public class RecentLocationAdapter extends RecyclerView.Adapter<RecentLocationAd
 
                 holder.ivLocationPhoto.setImageResource(R.drawable.party_image);
                 if (locationObj.getPhoto() != null) {
-                    Glide.with(context).load(locationObj.getPhoto()).apply(RequestOptions.bitmapTransform(new RoundedCorners(14))).apply(RequestOptions.placeholderOf(R.drawable.party_image)).into(holder.ivLocationPhoto);
+                    Glide.with(context).load(locationObj.getPhoto()).apply(RequestOptions.placeholderOf(R.drawable.party_image)).into(holder.ivLocationPhoto);
                 }
-                holder.tvLocation.setText(locationObj.getLocation());
+                holder.tvLocation.setText(locationObj.getLocation().split(",")[0]);
 
                 holder.btnUseLocation.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent();
-                        intent.putExtra("selection", "scroll");
-                        intent.putExtra("title", locationObj.getLocation());
-                        intent.putExtra("photo", locationObj.getPhoto());
+                        intent.putExtra("selection", "horizontalScroll");
+                        intent.putExtra("locationObj", new Gson().toJson(locationObj));
                         context.setResult(Activity.RESULT_OK, intent);
                         context.finish();
                     }

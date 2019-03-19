@@ -7,10 +7,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GravityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -28,8 +30,11 @@ import com.cenes.Manager.ValidationManager;
 import com.cenes.R;
 import com.cenes.activity.AlarmActivity;
 import com.cenes.activity.CenesActivity;
+import com.cenes.activity.CenesBaseActivity;
+import com.cenes.activity.ChoiceActivity;
 import com.cenes.activity.DiaryActivity;
 import com.cenes.activity.GatheringScreenActivity;
+import com.cenes.activity.GuestActivity;
 import com.cenes.activity.HomeScreenActivity;
 import com.cenes.application.CenesApplication;
 import com.cenes.bo.User;
@@ -97,10 +102,9 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
     private JSONArray syncStatusJson;
 
 
-    RelativeLayout rlHeader;
-    ImageView ivProfile;
-    private User user;
-    TextView tvSave;
+    RelativeLayout rlHeader, rlSignupCalsyncHeader;
+    ImageView ivProfile, ivCalsyncInstabug, homeIcon;
+    Button btnFinishCalSync;
     public static boolean isFirstLogin;
 
     private static final int RC_SIGN_IN = 007;
@@ -109,6 +113,16 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.activity_calender_sync, container, false);
+
+        isFirstLogin = ((CenesActivity) getActivity()).sharedPrefs.getBoolean("isFirstLogin", true);
+
+        if (getActivity() instanceof ChoiceActivity) {
+            isFirstLogin = ((ChoiceActivity) getActivity()).sharedPrefs.getBoolean("isFirstLogin", true);
+        } else if (getActivity() instanceof CenesBaseActivity) {
+            isFirstLogin = ((CenesBaseActivity) getActivity()).sharedPrefs.getBoolean("isFirstLogin", true);
+        } else if (getActivity() instanceof GuestActivity) {
+            isFirstLogin = ((GuestActivity) getActivity()).sharedPrefs.getBoolean("isFirstLogin", true);
+        }
 
         init(v);
 
@@ -141,9 +155,9 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
     }
 
     public void nextClickListener() {
-        CenesUtils.logEntries(loggedInUser, "Calendar Sync Screen Next Clicked", getCenesActivity().getApplicationContext());
-        startActivity(new Intent(getCenesActivity(), HomeScreenActivity.class));
-        getCenesActivity().finishAffinity();
+        //CenesUtils.logEntries(loggedInUser, "Calendar Sync Screen Next Clicked", getCenesActivity().getApplicationContext());
+        startActivity(new Intent(getCenesActivity(), CenesBaseActivity.class));
+        getActivity().finish();
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -185,13 +199,18 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
 //                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
 //                .build();
 
-        mGoogleSignInClient = GoogleSignIn.getClient(getCenesActivity(), gso);
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getCenesActivity());
-        if (account != null) {
-            signOutGoogleAccount();
-        } else {
-            signInGoogleAccount();
+        try {
+            mGoogleSignInClient = GoogleSignIn.getClient(getCenesActivity(), gso);
+            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getCenesActivity());
+            if (account != null) {
+                signOutGoogleAccount();
+            } else {
+                signInGoogleAccount();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
 
 
         //onStart1();
@@ -228,39 +247,61 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
         llOutlook.setOnClickListener(onClickListener);
 
         rlHeader = (RelativeLayout) v.findViewById(R.id.rl_header);
-        ivProfile = (ImageView) v.findViewById(R.id.ivProfile);
-        tvSave = (TextView) v.findViewById(R.id.tvSave);
+        rlSignupCalsyncHeader = (RelativeLayout) v.findViewById(R.id.rl_signup_calsync_header);
+        homeIcon = (ImageView) v.findViewById(R.id.home_icon);
 
-        isFirstLogin = ((CenesActivity) getActivity()).sharedPrefs.getBoolean("isFirstLogin", true);
+        ivProfile = (ImageView) v.findViewById(R.id.home_profile_pic);
+        ivCalsyncInstabug = (ImageView) v.findViewById(R.id.iv_calsync_instabug);
+        btnFinishCalSync = (Button) v.findViewById(R.id.btn_finish_cal_sync);
 
         if (isFirstLogin) {
             rlHeader.setVisibility(View.GONE);
+            btnFinishCalSync.setVisibility(View.VISIBLE);
+            rlSignupCalsyncHeader.setVisibility(View.VISIBLE);
         } else {
+
+            ((CenesBaseActivity)getActivity()).hideFooter();
             rlHeader.setVisibility(View.VISIBLE);
-            user = userManager.getUser();
-            if (user != null && user.getPicture() != null && user.getPicture() != "null") {
+            rlSignupCalsyncHeader.setVisibility(View.GONE);
+            btnFinishCalSync.setVisibility(View.GONE);
+
+            if (loggedInUser != null && loggedInUser.getPicture() != null && loggedInUser.getPicture() != "null") {
                 RequestOptions requestOptions = new RequestOptions();
                 requestOptions.circleCrop();
                 requestOptions.placeholder(R.drawable.default_profile_icon);
-                Glide.with(getActivity()).load(user.getPicture()).apply(requestOptions).into(ivProfile);
+                Glide.with(getActivity()).load(loggedInUser.getPicture()).apply(requestOptions).into(ivProfile);
             }
-
-            tvSave.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    nextClickListener();
-                }
-            });
 
             ivProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (getActivity() instanceof HomeScreenActivity) {
+                        HomeScreenActivity.mDrawerLayout.openDrawer(GravityCompat.START);
+                    } else if (getActivity() instanceof CenesBaseActivity) {
+                        ((CenesBaseActivity)getActivity()).mDrawerLayout.openDrawer(GravityCompat.START);
+                    }
+                }
+            });
+
+            homeIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
                     getActivity().onBackPressed();
                 }
             });
 
-            new SyncStatusTask().execute();
+            if (internetManager.isInternetConnection((CenesBaseActivity)getActivity())) {
+                new SyncStatusTask().execute();
+            }
         }
+
+        btnFinishCalSync.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), CenesBaseActivity.class));
+                getActivity().finish();
+            }
+        });
 
     }
 
@@ -300,8 +341,13 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
      */
     public void outlookAuth() {
         //super.onStart();
-        Iterable<String> scopes = Arrays.asList("wl.calendars,wl.offline_access ");
-        mAuthClient.login(getActivity(), scopes, this);
+        try {
+
+            Iterable<String> scopes = Arrays.asList("wl.calendars,wl.offline_access ");
+            mAuthClient.login(getActivity(), scopes, this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /*private void googleSigningDialog() {
@@ -522,7 +568,7 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
 
             if (param != null) {
                 Toast.makeText(getCenesActivity(), "Google Calendar Synced", Toast.LENGTH_LONG).show();
-                ivGoogleCheckmark.setImageResource(R.drawable.calendar_sync_selected);
+                ivGoogleCheckmark.setImageResource(R.drawable.circle_selected);
             } else {
                 getCenesActivity().showRequestTimeoutDialog();
             }
@@ -549,22 +595,27 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
 
         @Override
         protected String doInBackground(JSONObject... voids) {
-            CenesUtils.logEntries(loggedInUser, "Outlook Sync Processing STARTS", getCenesActivity().getApplicationContext());
+            //CenesUtils.logEntries(loggedInUser, "Outlook Sync Processing STARTS", getCenesActivity().getApplicationContext());
 
-            JSONObject postJson = voids[0];
-            String postParams = "user_id=" + user.getUserId();
             try {
-                postParams += "&access_token="+postJson.getString("accessToken");
-                postParams += "&refreshToken="+postJson.getString("refreshToken");
+                JSONObject postJson = voids[0];
+                String postParams = "user_id=" + loggedInUser.getUserId();
+                try {
+                    postParams += "&access_token="+postJson.getString("accessToken");
+                    postParams += "&refreshToken="+postJson.getString("refreshToken");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                User user = userManager.getUser();
+                user.setApiUrl(urlManager.getApiUrl("dev"));
+                String queryStr = "?"+postParams;
+                JSONArray events = apiManager.syncOutlookEvents(user, queryStr, getCenesActivity());
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            User user = userManager.getUser();
-            user.setApiUrl(urlManager.getApiUrl("dev"));
-                String queryStr = "?"+postParams;
-            JSONArray events = apiManager.syncOutlookEvents(user, queryStr, getCenesActivity());
 
-            CenesUtils.logEntries(loggedInUser, "Outlook Sync Processing ENDS", getCenesActivity().getApplicationContext());
+           // CenesUtils.logEntries(loggedInUser, "Outlook Sync Processing ENDS", getCenesActivity().getApplicationContext());
 
             return null;
         }
@@ -577,7 +628,7 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
             mpProgressDialog = null;
 
             Toast.makeText(getCenesActivity(), "Outlook Calendar Synced", Toast.LENGTH_LONG).show();
-            ivOutlookCheckmark.setImageResource(R.drawable.calendar_sync_selected);
+            ivOutlookCheckmark.setImageResource(R.drawable.circle_selected);
 
         }
     }
@@ -613,6 +664,8 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
                 pDialog.dismiss();
                 pDialog = null;
             }
+
+            System.out.println("Calendar Sync Status : "+response.toString());
             try {
                 if (response != null && response.getBoolean("success")) {
                     ///Toast.makeText(getContext(),"Information Update Successfully",Toast.LENGTH_SHORT).show();
@@ -623,10 +676,10 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
                             JSONObject syncStatusObj = syncStatusJson.getJSONObject(i);
                             JSONObject propertyObj = syncStatusObj.getJSONObject("cenesProperty");
                             if ("outlook_calendar".equals(propertyObj.getString("name")) && syncStatusObj.getString("value").equals("true")) {
-                                ivOutlookCheckmark.setImageResource(R.drawable.calendar_sync_selected);
+                                ivOutlookCheckmark.setImageResource(R.drawable.circle_selected);
                             }
                             if ("google_calendar".equals(propertyObj.getString("name")) && syncStatusObj.getString("value").equals("true")) {
-                                ivGoogleCheckmark.setImageResource(R.drawable.calendar_sync_selected);
+                                ivGoogleCheckmark.setImageResource(R.drawable.circle_selected);
                             }
                         }
                     }

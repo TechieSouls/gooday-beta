@@ -1,7 +1,6 @@
 package com.cenes.fragment.guest;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,18 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cenes.Manager.AlertManager;
 import com.cenes.R;
 import com.cenes.activity.GuestActivity;
-import com.cenes.activity.SignInActivity;
-import com.cenes.activity.SignUpActivity;
 import com.cenes.application.CenesApplication;
 import com.cenes.backendManager.UserApiManager;
 import com.cenes.coremanager.CoreManager;
 import com.cenes.fragment.CenesFragment;
+import com.cenes.service.InstabugService;
 
 import org.json.JSONObject;
 
@@ -39,6 +38,7 @@ public class SignupStep2Fragment extends CenesFragment {
     private Button btKeypad1,btKeypad2, btKeypad3, btKeypad4, btKeypad5, btKeypad6, btKeypad7, btKeypad8;
     private Button btKeypad9, btKeypad0, btKeypadDelete;
     private TextView tvSignupStep2Guide;
+    private ImageView ivBugReport;
 
     private String verificationCode = "";
 
@@ -46,7 +46,7 @@ public class SignupStep2Fragment extends CenesFragment {
     private CoreManager coreManager;
     private UserApiManager userApiManager;
     private AlertManager alertManager;
-    private String countryCode, phoneNumber;
+    private String countryCode, phoneNumber, countryCodeStr;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,6 +72,8 @@ public class SignupStep2Fragment extends CenesFragment {
 
         tvSignupStep2Guide = (TextView) v.findViewById(R.id.tv_signup_step2_guide);
 
+        ivBugReport = (ImageView) v.findViewById(R.id.iv_bug_report);
+
         llSignupStep2Back.setOnClickListener(onClickListener);
         btKeypad1.setOnClickListener(onClickListener);
         btKeypad2.setOnClickListener(onClickListener);
@@ -84,6 +86,7 @@ public class SignupStep2Fragment extends CenesFragment {
         btKeypad9.setOnClickListener(onClickListener);
         btKeypad0.setOnClickListener(onClickListener);
         btKeypadDelete.setOnClickListener(onClickListener);
+        ivBugReport.setOnClickListener(onClickListener);
 
 
         etBox1.addTextChangedListener(et1TextWatcher);
@@ -93,8 +96,9 @@ public class SignupStep2Fragment extends CenesFragment {
 
         phoneNumber = getArguments().getString("phoneNumber");
         countryCode = getArguments().getString("countryCode");
+        countryCodeStr = getArguments().getString("countryCodeStr");
         String guideText = tvSignupStep2Guide.getText().toString();
-        tvSignupStep2Guide.setText(guideText.replaceAll("\\[phone_number\\]", phoneNumber)+"");
+        tvSignupStep2Guide.setText("Please enter code sent to ["+countryCode+" XXX XXX "+phoneNumber.substring(phoneNumber.length() - 4, phoneNumber.length())+"]");
 
         initializeVariables();
 
@@ -152,6 +156,9 @@ public class SignupStep2Fragment extends CenesFragment {
                     break;
                 case R.id.bt_keypad_delete:
                     setTExtInEditBoxes("-1");
+                    break;
+                case R.id.iv_bug_report:
+                    new InstabugService().invokeBugReporting();
                     break;
             }
         }
@@ -318,8 +325,10 @@ public class SignupStep2Fragment extends CenesFragment {
             try {
                 if (response.getBoolean("success")) {
                     //startActivity(new Intent((GuestActivity)getActivity(), SignUpActivity.class));
+                    System.out.println("countryCodeStr : "+countryCodeStr);
                     SignupStepSuccessFragment signupStepSuccessFragment = new SignupStepSuccessFragment();
                     Bundle bundle = new Bundle();
+                    bundle.putString("countryCodeStr", countryCodeStr);
                     bundle.putString("phoneNumber", countryCode+phoneNumber);
                     signupStepSuccessFragment.setArguments(bundle);
 

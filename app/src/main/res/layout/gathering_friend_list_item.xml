@@ -16,7 +16,13 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/default_profile_icon" />
+            android:src="@drawable/cenes_user_no_image" />
+
+        <RelativeLayout
+            android:id="@+id/rv_non_cenes_mem_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"></RelativeLayout>
 
         <TextView
             android:id="@+id/tv_friend_name"

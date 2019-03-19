@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/new_theme_grey_color">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/transparent">
+
+        <TextView
+            android:id="@+id/crt_gath_cls_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textSize="15sp"
+            android:text="Cancel"
+            android:textColor="#FF4A4A4A" />
+
+        <TextView
+            android:id="@+id/cenes_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="Gathering"
+            android:textColor="#FF000000"
+            android:textSize="@dimen/header_title_font"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/save_gathering_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textSize="15sp"
+            android:text="Preview"
+            android:textColor="@color/cenes_blue"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/preview_gathering_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textSize="15sp"
+            android:text="Preview"
+            android:textColor="@color/cenes_blue" />
+
+        <ImageView
+            android:id="@+id/iv_event_share_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/event_share_icon"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="50dp"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/edit_gathering_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textSize="15sp"
+            android:text="Edit"
+            android:textColor="#FF4A90E2"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/save_edited_gathering_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:text="Save"
+            android:textColor="#FF4A90E2"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/rl_header"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:id="@+id/ll_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/rl_header"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/gath_event_image"
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:src="@drawable/gath_upload_img"
+                android:visibility="visible"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"/>
+
+            <EditText
+                android:id="@+id/gath_event_title_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corner_white"
+                android:drawableEnd="@null"
+                android:drawablePadding="15dp"
+                android:drawableStart="@drawable/pencil"
+                android:gravity="center_vertical"
+                android:hint="Title"
+                android:inputType="textCapSentences"
+                android:padding="15dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="15sp"
+                android:layout_marginTop="20dp"
+                android:visibility="visible"
+                android:singleLine="true"
+                android:imeOptions="actionDone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corner_white"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/gath_invite_frnds_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:drawablePadding="15dp"
+                    android:drawableStart="@drawable/add_people_icon"
+                    android:gravity="center_vertical"
+                    android:padding="15dp"
+                    android:text="@string/people"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:paddingBottom="5dp"
+                    android:paddingEnd="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingStart="60dp"
+                    android:scrollbars="none"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/gath_date_after_fix"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corner_white"
+                android:drawablePadding="15dp"
+                android:layout_marginTop="10dp"
+                android:drawableStart="@drawable/reminder_clock"
+                android:gravity="center_vertical"
+                android:padding="15dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/predictive_cal_date_time_cal_block"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/gath_select_datetime_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rounded_corner_white"
+                    android:drawablePadding="15dp"
+                    android:drawableStart="@drawable/reminder_clock"
+                    android:gravity="center_vertical"
+                    android:padding="15dp"
+                    android:text="@string/time"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <RelativeLayout
+                    android:id="@+id/gath_select_datetime_mcv_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/gath_select_datetime_btn"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/rounded_corner_white"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:id="@+id/gath_select_dtime_start_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/reminder_clock"
+                            android:layout_gravity="center"/>
+                        <TextView
+                            android:id="@+id/start_time_picker_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawablePadding="10dp"
+                            android:drawableRight="@drawable/down_arrow"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="7:00 PM"
+                            android:textColor="@color/black"/>
+
+                        <TextView
+                            android:id="@+id/end_time_picker_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawablePadding="10dp"
+                            android:drawableRight="@drawable/down_arrow"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="7:00 PM"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:layout_below="@+id/gath_select_dtime_start_view">
+
+                        <RelativeLayout
+                            android:id="@+id/rv_time_hour_row"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:padding="10dp">
+
+                            <LinearLayout
+                                android:layout_width="200dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="30dp"
+                                    android:text="TimeMatch"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp" />
+                                <ImageView
+                                    android:id="@+id/iv_show_time_match_info"
+                                    android:layout_width="14dp"
+                                    android:layout_height="14dp"
+                                    android:src="@drawable/time_match_info"/>
+                            </LinearLayout>
+
+
+                            <Switch
+                                android:id="@+id/predictive_cal_switch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginEnd="30dp" />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/rv_time_hour_row"
+                            android:layout_marginLeft="20dp"
+                            android:background="@color/white"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/suggested_date_time_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:text="Suggested Time and Date:"
+                                android:textSize="18sp"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/event_time"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:textSize="16sp"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/event_time_am_pm"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:textSize="16sp"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+
+                        <com.cenes.materialcalendarview.MaterialCalendarView
+                            android:id="@+id/material_calendar_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            app:mcv_headerTextAppearance="@style/TextAppearance.MaterialCalendarWidget.Header.Orange"
+                            app:mcv_selectionColor="@color/white"
+                            app:mcv_weekDayLabels="@array/weekdays"
+                            app:mcv_weekDayTextAppearance="@style/TextAppearance.MaterialCalendarWidget.WeekDay.Orange" />
+
+
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rv_time_match_info_tip"
+                        android:layout_width="130dp"
+                        android:layout_height="90dp"
+                        android:layout_marginLeft="150dp"
+                        android:layout_marginTop="100dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/time_match_info_text"
+                            android:background="#FFDCDDDD"
+                            android:textAlignment="center"
+                            android:textSize="12sp"
+                            android:lineSpacingMultiplier="1.0"
+                            android:padding="10dp"
+                            android:layout_centerInParent="true"
+                            />
+                    </RelativeLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/gath_search_location_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_corner_white"
+                android:drawablePadding="15dp"
+                android:drawableStart="@drawable/reminder_loc"
+                android:gravity="center_vertical"
+                android:padding="15dp"
+                android:text="@string/location"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/gath_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_corner_white"
+                android:drawableEnd="@null"
+                android:drawablePadding="15dp"
+                android:drawableStart="@drawable/notes_icon"
+                android:gravity="center_vertical"
+                android:inputType="textMultiLine|textCapSentences"
+                android:padding="15dp"
+                android:textColor="@color/black"
+                android:hint="@string/event_details"
+                android:textColorHint="@color/black"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/gath_delete_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/rounded_corner_white"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Delete"
+                android:textColor="@color/red"
+                android:textSize="15sp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

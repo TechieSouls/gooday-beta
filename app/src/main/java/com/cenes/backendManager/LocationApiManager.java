@@ -1,10 +1,10 @@
-package com.deploy.backendManager;
+package com.cenes.backendManager;
 
-import com.deploy.Manager.Impl.UrlManagerImpl;
-import com.deploy.Manager.JsonParsing;
-import com.deploy.api.LocationAPI;
-import com.deploy.application.CenesApplication;
-import com.deploy.bo.Location;
+import com.cenes.Manager.Impl.UrlManagerImpl;
+import com.cenes.Manager.JsonParsing;
+import com.cenes.api.LocationAPI;
+import com.cenes.application.CenesApplication;
+import com.cenes.bo.Location;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -30,6 +30,7 @@ public class LocationApiManager {
 
     public List<Location> fetchRecentEvents(String params, String authToken) {
         String url = UrlManagerImpl.prodAPIUrl+ LocationAPI.get_recentLocations+"?"+params;
+        System.out.println("Loaction API : "+url);
         JsonParsing jsonParsing = new JsonParsing();
         JSONArray locationArray = jsonParsing.httpGet(url, authToken);
 

@@ -2,8 +2,6 @@ package com.cenes.bo;
 
 import com.cenes.materialcalendarview.CalendarDay;
 
-import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;

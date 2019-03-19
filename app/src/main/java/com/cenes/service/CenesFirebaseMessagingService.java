@@ -1,20 +1,21 @@
 package com.cenes.service;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.cenes.R;
+import com.cenes.activity.CenesBaseActivity;
 import com.cenes.activity.GatheringScreenActivity;
+import com.cenes.activity.HomeScreenActivity;
 import com.cenes.activity.ReminderActivity;
-import com.cenes.leolin.shortcurtbadger.ShortcutBadgeException;
 import com.cenes.leolin.shortcurtbadger.ShortcutBadger;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -59,6 +60,7 @@ public class CenesFirebaseMessagingService extends FirebaseMessagingService {
     private void sendNotification(RemoteMessage remoteMessage) {
         Map<String, String> notification = remoteMessage.getData();
 
+        String CHANNEL_ID = "cenes_channel";// The id of the channel.
 
         int badgeCount = 1;
         if (getSharedPreferences("CenesPrefs",MODE_PRIVATE).getInt("badgeCounts",0) != 0) {
@@ -72,46 +74,47 @@ public class CenesFirebaseMessagingService extends FirebaseMessagingService {
 
         try {
             PendingIntent pendingIntent = null;
+            Intent intent = null;
             if (notification.containsKey("payload")) {
                 Log.d(TAG, "Payload : " + notification.get("payload"));
                 JSONObject payloadObj = new JSONObject(notification.get("payload"));
-                Intent intent = null;
                 if (payloadObj.getString("type").equals("Gathering")) {
 
                     if (payloadObj.has("status") && payloadObj.getString("status").equals("AcceptAndDecline")) {
-                        intent = new Intent(this, GatheringScreenActivity.class);
+                        intent = new Intent(this, CenesBaseActivity.class);
                     } else if (payloadObj.has("status") && !payloadObj.getString("status").equalsIgnoreCase("old")) {
-                        intent = new Intent(this, GatheringScreenActivity.class);
+                        intent = new Intent(this, CenesBaseActivity.class);
                         intent.putExtra("dataFrom", "push");
                         intent.putExtra("eventId", payloadObj.getLong("id"));
                         intent.putExtra("message", "Your have been invited to...");
                         intent.putExtra("title", payloadObj.getString("title"));
                     } else if (payloadObj.has("status") && payloadObj.getString("status").equalsIgnoreCase("old")) {
-                        intent = new Intent(this, GatheringScreenActivity.class);
+                        intent = new Intent(this, CenesBaseActivity.class);
                         intent.putExtra("dataFrom", "gathering_push");
                         intent.putExtra("eventId", payloadObj.getLong("id"));
+                    } else {
+                        intent = new Intent(this, HomeScreenActivity.class);
                     }
-
-
                 } else if (payloadObj.getString("type").equals("Reminder")) {
                     intent = new Intent(this, ReminderActivity.class);
                     /* intent.putExtra("dataFrom","push");
                     intent.putExtra("reminderId",payloadObj.getLong("notificationTypeId"));*/
                 }
-                if (intent != null) {
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                }
-
+            } else {
+                intent = new Intent(this, HomeScreenActivity.class);
             }
-
+            if (intent != null) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            }
             //Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                     //.setLargeIcon(R.drawable.ic_ceneslogos_push)
                     .setSmallIcon(R.drawable.ic_ceneslogos)
                     .setContentTitle(notification.get("title"))
                     .setContentText(notification.get("body"))
-                    .setAutoCancel(false)
+                    .setPriority(Notification.PRIORITY_DEFAULT)
+                    .setAutoCancel(true).setChannelId(CHANNEL_ID)
                     .setSound(Uri.parse("android.resource://"
                             + getApplicationContext().getPackageName() + "/" + R.raw.cenes_notification_ringtone))
                     .setContentIntent(pendingIntent);
@@ -120,6 +123,15 @@ public class CenesFirebaseMessagingService extends FirebaseMessagingService {
             NotificationManager notificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             Notification notificationObj = notificationBuilder.build();
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+                NotificationChannel mChannel = new NotificationChannel(
+                        CHANNEL_ID, "Cenes Channel", importance);
+                notificationManager.createNotificationChannel(mChannel);
+            }
+
 
             notificationManager.notify(0, notificationObj);
 

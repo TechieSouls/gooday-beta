@@ -16,7 +16,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/profile_icon" />
 
-    <com.cenes.util.CenesTextView
+    <com.deploy.util.CenesTextView
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
         android:text="Complete your profile so your\nfriends can recognize you"
         app:fontName="@string/font_lato_regular" />
 
-    <com.cenes.util.CenesButton
+    <com.deploy.util.CenesButton
         android:id="@+id/bt_takepicture"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
         android:textColor="@color/white"
         app:fontName="@string/font_lato_regular" />
 
-    <com.cenes.util.CenesButton
+    <com.deploy.util.CenesButton
         android:id="@+id/bt_selectpicture"
         android:layout_width="200dp"
         android:layout_height="wrap_content"

@@ -1,5 +1,3 @@
 <manifest  xmlns:android="http://schemas.android.com/apk/res/android" package="com.soundcloud.android.crop" >
 
-    <uses-sdk android:minSdkVersion="16" />
-
 </manifest>

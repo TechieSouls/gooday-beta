@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/gradient_header">
 
-        <com.cenes.util.CenesTextView
+        <com.deploy.util.CenesTextView
             android:id="@+id/create_reminder_back_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -25,7 +25,7 @@
             android:textSize="15sp"
             app:fontName="@string/font_lato_regular" />
 
-        <com.cenes.util.CenesTextView
+        <com.deploy.util.CenesTextView
             android:id="@+id/tv_add_reminder_header_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
             android:textSize="18sp"
             app:fontName="@string/font_lato_regular" />
 
-        <com.cenes.util.CenesTextView
+        <com.deploy.util.CenesTextView
             android:id="@+id/save_reminder_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -46,7 +46,7 @@
             android:textColor="@color/white"
             android:textSize="15sp" />
 
-        <com.cenes.util.CenesTextView
+        <com.deploy.util.CenesTextView
             android:id="@+id/edit_reminder_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -67,7 +67,7 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <com.cenes.util.CenesEditText
+        <com.deploy.util.CenesEditText
             android:id="@+id/reminder_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
             android:textSize="15sp"
             app:fontName="@string/font_lato_regular" />
 
-        <com.cenes.util.CenesTextView
+        <com.deploy.util.CenesTextView
             android:id="@+id/reminder_datetime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
             android:background="@drawable/rounded_corner_white"
             android:orientation="vertical">
 
-            <com.cenes.util.CenesTextView
+            <com.deploy.util.CenesTextView
                 android:id="@+id/reminder_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -127,7 +127,7 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <com.cenes.util.CenesEditText
+                <com.deploy.util.CenesEditText
                     android:id="@+id/reminder_location_search_keyword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -147,7 +147,7 @@
             android:background="@drawable/rounded_corner_white"
             android:orientation="vertical">
 
-            <com.cenes.util.CenesTextView
+            <com.deploy.util.CenesTextView
                 android:id="@+id/add_reminder_people"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -199,7 +199,7 @@
 
     </LinearLayout>
 
-    <com.cenes.util.CenesTextView
+    <com.deploy.util.CenesTextView
         android:id="@+id/btn_delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -244,7 +244,7 @@
                 android:layout_weight="1"
                 android:drawablePadding="5dp"
                 android:gravity="center"
-                android:src="@drawable/home_icon_grey"
+                android:src="@drawable/home_icon_unselected"
                 android:text="Home" />
 
             <ImageView
@@ -263,7 +263,7 @@
                 android:layout_weight="1"
                 android:drawablePadding="5dp"
                 android:gravity="center"
-                android:src="@drawable/gathering_icon" />
+                android:src="@drawable/gathering_icon_unselected" />
 
             <ImageView
                 android:layout_width="0dp"

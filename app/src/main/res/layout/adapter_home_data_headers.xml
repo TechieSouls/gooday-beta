@@ -14,6 +14,6 @@
         android:paddingLeft="10dp"
         android:textColor="@color/font_orange_color"
         android:text="11NOV SUNDAY"
-        android:textSize="17sp" />
+        android:textSize="16sp" />
 
 </LinearLayout>

@@ -9,8 +9,14 @@
     <dimen name="dots_margin_top">10dp</dimen>
     <dimen name="dots_margin_bottom">20dp</dimen>
     <dimen name="img_width_height">120dp</dimen>
-    <dimen name="slide_title">35sp</dimen>
+    <dimen name="slide_title">40sp</dimen>
     <dimen name="slide_desc">16dp</dimen>
     <dimen name="desc_padding">40dp</dimen>
+
+    <dimen name="header_title_font">18sp</dimen>
+    <dimen name="header_title_margin_left">80dp</dimen>
+    <dimen name="header_title_margin_right">80dp</dimen>
+    <dimen name="header_profile_pic_height">40dp</dimen>
+    <dimen name="header_profile_pic_width">40dp</dimen>
 
 </resources>

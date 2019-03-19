@@ -104,8 +104,8 @@ public class CountryUtils {
     public static Map<String,String> getCountryCodeMap() {
         Map<String,String> countryCodeMap = new HashMap<>();
         countryCodeMap.put("Australian Holidays","au");
-        countryCodeMap.put("Austrian Holidays","br");
-        countryCodeMap.put("Brazilian Holidays","at");
+        countryCodeMap.put("Austrian Holidays","at");
+        countryCodeMap.put("Brazilian Holidays","br");
         countryCodeMap.put("Canadian Holidays","ca");
         countryCodeMap.put("China Holidays","cn");
         countryCodeMap.put("Christian Holidays","christ");

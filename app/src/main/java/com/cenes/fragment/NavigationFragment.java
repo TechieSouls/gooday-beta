@@ -3,7 +3,6 @@ package com.cenes.fragment;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -23,7 +23,7 @@ import com.cenes.Manager.ApiManager;
 import com.cenes.Manager.UrlManager;
 import com.cenes.R;
 import com.cenes.activity.AlarmActivity;
-import com.cenes.activity.ChoiceActivity;
+import com.cenes.activity.CenesBaseActivity;
 import com.cenes.activity.DiaryActivity;
 import com.cenes.activity.GatheringScreenActivity;
 import com.cenes.activity.GuestActivity;
@@ -35,12 +35,10 @@ import com.cenes.bo.User;
 import com.cenes.coremanager.CoreManager;
 import com.cenes.database.manager.AlarmManager;
 import com.cenes.database.manager.UserManager;
+import com.cenes.fragment.metime.MeTimeFragment;
+import com.cenes.fragment.profile.ProfileFragment;
 import com.cenes.service.AlarmReceiver;
-import com.cenes.util.CenesTextView;
 import com.facebook.login.LoginManager;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -58,9 +56,9 @@ public class NavigationFragment extends CenesFragment {
     private AlarmManager alarmManager;
 
     ImageView ivProfile;
-    CenesTextView tvUsername, tvNotifications, tvProfile, tvMeTime, tvCalendarSync, tvHolidayCalendar,
-            tvHelpAndFeedback, tvAbout, tvLogout;
-    TextView tvNotificationCount, tvNotificationCountPic;
+    TextView tvUsername, tvNotifications, tvCalendarSync, tvHolidayCalendar,
+            tvHelpAndFeedback, tvAbout;
+    LinearLayout llProfileSection;
 
     private User user;
 
@@ -87,38 +85,22 @@ public class NavigationFragment extends CenesFragment {
         setFragmentManager();
 
         ivProfile = (ImageView) v.findViewById(R.id.ivProfile);
-        tvUsername = (CenesTextView) v.findViewById(R.id.tvUsername);
-        tvNotifications = (CenesTextView) v.findViewById(R.id.tvNotifications);
-        tvProfile = (CenesTextView) v.findViewById(R.id.tvProfile);
-        tvMeTime = (CenesTextView) v.findViewById(R.id.tvMeTime);
-        tvCalendarSync = (CenesTextView) v.findViewById(R.id.tvCalendarSync);
-        tvHolidayCalendar = (CenesTextView) v.findViewById(R.id.tvHolidayCalendar);
-        tvHelpAndFeedback = (CenesTextView) v.findViewById(R.id.tvHelpAndFeedback);
-        tvAbout = (CenesTextView) v.findViewById(R.id.tvAbout);
-        tvLogout = (CenesTextView) v.findViewById(R.id.tvLogout);
-        tvNotificationCount = (TextView) v.findViewById(R.id.tv_notification_count);
-        tvNotificationCountPic = (TextView) v.findViewById(R.id.tv_notification_count_pic);
+        tvUsername = (TextView) v.findViewById(R.id.tvUsername);
+        tvNotifications = (TextView) v.findViewById(R.id.tvNotifications);
+        llProfileSection = (LinearLayout) v.findViewById(R.id.ll_profile_section);
+        tvCalendarSync = (TextView) v.findViewById(R.id.tvCalendarSync);
+        tvHolidayCalendar = (TextView) v.findViewById(R.id.tvHolidayCalendar);
+        tvHelpAndFeedback = (TextView) v.findViewById(R.id.tvHelpAndFeedback);
+        tvAbout = (TextView) v.findViewById(R.id.tvAbout);
 
-
-        ivProfile.setOnClickListener(itemClickListener);
-        tvUsername.setOnClickListener(itemClickListener);
         tvNotifications.setOnClickListener(itemClickListener);
-        tvProfile.setOnClickListener(itemClickListener);
-        tvMeTime.setOnClickListener(itemClickListener);
+        llProfileSection.setOnClickListener(itemClickListener);
         tvCalendarSync.setOnClickListener(itemClickListener);
         tvHolidayCalendar.setOnClickListener(itemClickListener);
         tvHelpAndFeedback.setOnClickListener(itemClickListener);
         tvAbout.setOnClickListener(itemClickListener);
-        tvLogout.setOnClickListener(itemClickListener);
-
         refreshUserInfo(user);
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                //TODO your background code
-                new NotificationCountTask().execute();
-            }
-        });
+
     }
 
     public void setFragmentManager() {
@@ -146,6 +128,8 @@ public class NavigationFragment extends CenesFragment {
             DiaryActivity.mDrawerLayout.closeDrawer(GravityCompat.START);
         } else if (getActivity() instanceof AlarmActivity) {
             AlarmActivity.mDrawerLayout.closeDrawer(GravityCompat.START);
+        }else if (getActivity() instanceof CenesBaseActivity) {
+            ((CenesBaseActivity)getActivity()).mDrawerLayout.closeDrawer(GravityCompat.START);
         }
     }
 
@@ -160,7 +144,16 @@ public class NavigationFragment extends CenesFragment {
             ((DiaryActivity) getActivity()).replaceFragment(fragment, tag);
         } else if (getActivity() instanceof AlarmActivity) {
             ((AlarmActivity) getActivity()).replaceFragment(fragment, tag);
+        } else if (getActivity() instanceof CenesBaseActivity) {
+            ((CenesBaseActivity) getActivity()).replaceFragment(fragment, tag);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("On Resume called");
+        refreshUserInfo(user);
     }
 
     public void refreshUserInfo(User user) {
@@ -179,45 +172,35 @@ public class NavigationFragment extends CenesFragment {
             closeDrawer();
             switch (v.getId()) {
                 case R.id.tvNotifications:
-                    checkFragmentBeforeOpening(new NotificationFragment(), NotificationFragment.TAG);
+                    //checkFragmentBeforeOpening(new NotificationFragment(), NotificationFragment.TAG);
+                    getFragmentManager().popBackStack();
+                    replaceFragment(new NotificationFragment(), NotificationFragment.TAG);
                     break;
-                case R.id.tvProfile:
-                    checkFragmentBeforeOpening(new ProfileFragment(), ProfileFragment.TAG);
-                    break;
-                case R.id.tvMeTime:
-                    checkFragmentBeforeOpening(new MeTimeFragment(), MeTimeFragment.TAG);
+                case R.id.ll_profile_section:
+                    System.out.println("Profile Fragment Clicked...");
+                    //checkFragmentBeforeOpening(new ProfileFragment(), ProfileFragment.TAG);
+                    getFragmentManager().popBackStack();
+                    replaceFragment(new ProfileFragment(), ProfileFragment.TAG);
                     break;
                 case R.id.tvCalendarSync:
-                    checkFragmentBeforeOpening(new CalenderSyncFragment(), CalenderSyncFragment.TAG);
+                    //checkFragmentBeforeOpening(new CalenderSyncFragment(), CalenderSyncFragment.TAG);
+                    getFragmentManager().popBackStack();
+                    replaceFragment(new CalenderSyncFragment(), CalenderSyncFragment.TAG);
                     break;
                 case R.id.tvHolidayCalendar:
-                    checkFragmentBeforeOpening(new HolidaySyncFragment(), HolidaySyncFragment.TAG);
+                    //checkFragmentBeforeOpening(new HolidaySyncFragment(), HolidaySyncFragment.TAG);
+                    getFragmentManager().popBackStack();
+                    replaceFragment(new HolidaySyncFragment(), HolidaySyncFragment.TAG);
                     break;
                 case R.id.tvHelpAndFeedback:
-                    checkFragmentBeforeOpening(new HelpFeedbackFragment(), HelpFeedbackFragment.TAG);
+                    //checkFragmentBeforeOpening(new HelpFeedbackFragment(), HelpFeedbackFragment.TAG);
+                    getFragmentManager().popBackStack();
+                    replaceFragment(new HelpFeedbackFragment(), HelpFeedbackFragment.TAG);
                     break;
                 case R.id.tvAbout:
-                    checkFragmentBeforeOpening(new AboutUsFragment(), AboutUsFragment.TAG);
-                    break;
-                case R.id.tvLogout:
-                    android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(getActivity());
-                    alert.setTitle("Log Out");
-                    alert.setMessage("Are you sure you want to Log Out?");
-                    alert.setPositiveButton("Log Out", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                String queryStr = "?userId=" + user.getUserId() + "&deviceType=android";
-                                new LogoutTask().execute(queryStr);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            dialog.dismiss();
-                        }
-                    });
-                    alert.setNegativeButton("Cancel", null);
-                    alert.show();
+                   // checkFragmentBeforeOpening(new AboutUsFragment(), AboutUsFragment.TAG);
+                    getFragmentManager().popBackStack();
+                    replaceFragment(new AboutUsFragment(), AboutUsFragment.TAG);
                     break;
             }
         }
@@ -270,45 +253,6 @@ public class NavigationFragment extends CenesFragment {
             getActivity().finishAffinity();
         }
     }
-
-    class NotificationCountTask extends AsyncTask<JSONObject, JSONObject, JSONObject> {
-        ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-//            progressDialog = new ProgressDialog(getActivity());
- //           progressDialog.setCancelable(false);
-  //          progressDialog.setMessage("Loading...");
-            //progressDialog.show();
-        }
-
-        @Override
-        protected JSONObject doInBackground(JSONObject... strings) {
-            User user = userManager.getUser();
-            user.setApiUrl(urlManager.getApiUrl("dev"));
-            String queryStr = "?userId="+user.getUserId();
-            return apiManager.getNotificationCounts(user,queryStr,getCenesActivity());
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject s) {
-            super.onPostExecute(s);
-
-            try {
-                tvNotificationCount.setText(String.valueOf(s.getInt("data")));
-                tvNotificationCountPic.setText(String.valueOf(s.getInt("data")));
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            //progressDialog.hide();
-            //progressDialog.dismiss();
-            //progressDialog = null;
-        }
-    }
-
 
     private void cancelAlarm(int RSQ) {
         System.out.println("\n\n***\nAlarm is cancelled for alarmId " + RSQ + "\n***\n");

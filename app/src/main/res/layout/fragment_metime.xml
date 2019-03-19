@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/xml_border_bottom_grey">
+
+        <com.cenes.util.RoundedImageView
+            android:id="@+id/home_profile_pic"
+            android:layout_width="@dimen/header_profile_pic_width"
+            android:layout_height="@dimen/header_profile_pic_height"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/profile_icon"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="MeTIME"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/header_title_font"
+            android:layout_marginLeft="@dimen/header_title_margin_left"
+            android:layout_marginRight="@dimen/header_title_margin_right"/>
+        <ImageView
+            android:id="@+id/iv_add_metime"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/add_item_icon"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
+    <ScrollView
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+        android:layout_below="@+id/rl_header">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_metime_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/metimeDesc"
+            android:gravity="center"
+            android:padding="5dp"
+            android:textSize="18sp"
+            android:layout_marginTop="20dp"/>
+
+        <LinearLayout
+            android:id="@+id/ll_metime_tiles_container"
+            android:layout_below="@+id/tv_metime_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="30dp">
+
+            <LinearLayout
+                android:id="@+id/ll_metime_tiles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/xml_round_rect_whitebg"
+                android:padding="10dp"
+                android:layout_marginTop="30dp"
+                android:visibility="gone">
+
+               <!-- <com.cenes.util.RoundedImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/profile_icon"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"/>-->
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="MA"
+                    android:background="@drawable/xml_circle_trans_blue_border"
+                    android:padding="1dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView
+                        android:id="@+id/tv_metime_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Sleep Cycle"
+                        android:textColor="#FF4A90E2"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Not Scheduled"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/cenes_new_orange"
+                        android:textSize="14sp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="11:00PM-7:30AM"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    </ScrollView>
+</RelativeLayout>

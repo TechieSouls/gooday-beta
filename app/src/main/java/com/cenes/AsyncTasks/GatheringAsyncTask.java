@@ -1,23 +1,41 @@
-package com.deploy.AsyncTasks;
+package com.cenes.AsyncTasks;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.provider.Telephony;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.widget.Toast;
 
-import com.deploy.application.CenesApplication;
-import com.deploy.backendManager.GatheringApiManager;
-import com.deploy.backendManager.NotificationAPiManager;
-import com.deploy.bo.Event;
-import com.deploy.bo.EventMember;
-import com.deploy.bo.User;
-import com.deploy.coremanager.CoreManager;
-import com.deploy.database.manager.UserManager;
-import com.deploy.util.CenesUtils;
+import com.cenes.R;
+import com.cenes.activity.CenesBaseActivity;
+import com.cenes.activity.GatheringScreenActivity;
+import com.cenes.application.CenesApplication;
+import com.cenes.backendManager.GatheringApiManager;
+import com.cenes.backendManager.NotificationAPiManager;
+import com.cenes.bo.Event;
+import com.cenes.bo.EventMember;
+import com.cenes.bo.User;
+import com.cenes.coremanager.CoreManager;
+import com.cenes.database.manager.UserManager;
+import com.cenes.util.CenesConstants;
+import com.cenes.util.CenesUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,9 +48,10 @@ import java.util.Map;
 public class GatheringAsyncTask {
 
     private static CenesApplication cenesApplication;
-
-    public GatheringAsyncTask(CenesApplication cenesApplication) {
+    private static CenesBaseActivity activity;
+    public GatheringAsyncTask(CenesApplication cenesApplication, CenesBaseActivity activity) {
         this.cenesApplication = cenesApplication;
+        this.activity = activity;
     }
 
     public static class GatheringsTask extends AsyncTask<String, String, Map<String, Object>> {
@@ -82,7 +101,7 @@ public class GatheringAsyncTask {
 
                             SimpleDateFormat weekCategory = new SimpleDateFormat("EEEE");
                             SimpleDateFormat calCategory = new SimpleDateFormat("ddMMM");
-                            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mma");
+                            SimpleDateFormat timeFormat = new SimpleDateFormat("h:mma");
                             SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d\nEEE");
 
                             if (eventObj.has("eventId")) {
@@ -90,6 +109,9 @@ public class GatheringAsyncTask {
                             }
                             if (eventObj.has("title")) {
                                 event.setTitle(eventObj.getString("title"));
+                            }
+                            if (eventObj.has("createdById")) {
+                                event.setCreatedById(eventObj.getLong("createdById"));
                             }
                             if (eventObj.has("event_picture")) {
                                 event.setEventPicture(eventObj.getString("event_picture"));
@@ -130,12 +152,16 @@ public class GatheringAsyncTask {
                                 event.setSender(eventObj.getString("sender"));
                             }
                             if (eventObj.has("event_member_id")) {
-                                event.setEventMemberId(eventObj.getLong("event_member_id"));
+                                event.setCreatedById(eventObj.getLong("event_member_id"));
                             }
 
                             if (eventObj.has("eventMembers")) {
                                 JSONArray membersArray = eventObj.getJSONArray("eventMembers");
-                                List<EventMember> members = new ArrayList<>();
+
+
+
+                                /*List<EventMember> members = new ArrayList<>();
+                                EventMember owner = null;
                                 for (int idx = 0; idx < membersArray.length(); idx++) {
                                     JSONObject memberObj = (JSONObject) membersArray.get(idx);
                                     EventMember eventMember = new EventMember();
@@ -148,17 +174,37 @@ public class GatheringAsyncTask {
                                     if (memberObj.has("owner")) {
                                         eventMember.setOwner(memberObj.getBoolean("owner"));
                                     }
+                                    if (memberObj.has("userId")) {
+                                        eventMember.setUserId(memberObj.getLong("userId"));
+                                    }
+
+
+                                    if (event.getCreatedById() == eventMember.getUserId()) {
+                                        owner = eventMember;
+                                    }
+
                                     members.add(eventMember);
-                                }
-                                event.setEventMembers(members);
+                                }*/
+
+                                //System.out.println("Owner Found : "+owner);
+                                //event.setOwner(owner);
+
+                                Type listType = new TypeToken<List<EventMember>>() {}.getType();
+                                List<EventMember> eventMembers = new Gson().fromJson(membersArray.toString(), listType);
+                                event.setEventMembers(eventMembers);
+                            }
+
+                            if (user.getUserId() == event.getCreatedById()) {
+                                event.setIsOwner(true);
                             }
                         }
 
                         boolean isInvitation = false;
-                        if (status.equalsIgnoreCase("pending")) {
+                        if (status.equalsIgnoreCase("pending") || status.equalsIgnoreCase("NotGoing")) {
                             isInvitation = true;
                         }
 
+                        Collections.sort(headers);
                         responseMap = new HashMap<>();
                         responseMap.put("headers", headers);
                         responseMap.put("eventMap", eventMap);
@@ -220,6 +266,281 @@ public class GatheringAsyncTask {
         protected void onCancelled() {
             super.onCancelled();
             cancel(true);
+        }
+    }
+
+    public static class CreateGatheringTask extends AsyncTask<JSONObject, Object, JSONObject> {
+
+
+        ProgressDialog processDialog;
+
+        // you may separate this or combined to caller class.
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+        public AsyncResponse delegate = null;
+
+        public CreateGatheringTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            processDialog = new ProgressDialog(activity);
+            processDialog.setMessage("Creating..");
+            processDialog.setIndeterminate(false);
+            processDialog.setCanceledOnTouchOutside(false);
+            processDialog.setCancelable(false);
+            processDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(JSONObject... jsonObjList) {
+            JSONObject jsonObject = jsonObjList[0];
+
+            CoreManager coreManager = cenesApplication.getCoreManager();
+            UserManager userManager = coreManager.getUserManager();
+            GatheringApiManager gatheringApiManager = coreManager.getGatheringApiManager();
+
+            User user = userManager.getUser();
+            JSONObject job = gatheringApiManager.createGathering(user.getAuthToken(), jsonObject);
+            //Log.e("Resp", job.toString());
+            return job;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject obj) {
+            Log.e("Gathering Obj ", obj.toString());
+            if (processDialog != null) {
+                processDialog.dismiss();
+                processDialog = null;
+            }
+            delegate.processFinish(obj);
+        }
+    }
+
+    public static class EventInfoTask extends AsyncTask<Long, JSONObject, JSONObject> {
+        ProgressDialog eventInfoDialog;
+
+        // you may separate this or combined to caller class.
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+
+        public AsyncResponse delegate = null;
+
+        public EventInfoTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            eventInfoDialog = new ProgressDialog(activity);
+            eventInfoDialog.setMessage("Loading");
+            eventInfoDialog.setIndeterminate(false);
+            eventInfoDialog.setCanceledOnTouchOutside(false);
+            eventInfoDialog.setCancelable(false);
+            eventInfoDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(Long... eventIds) {
+            Long evventId = eventIds[0];
+
+            CoreManager coreManager = cenesApplication.getCoreManager();
+            UserManager userManager = coreManager.getUserManager();
+            GatheringApiManager gatheringApiManager = coreManager.getGatheringApiManager();
+
+            User user = userManager.getUser();
+
+            JSONObject gatheringObj = gatheringApiManager.getGatheringData(user.getAuthToken(), evventId);
+            return gatheringObj;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject responseObj) {
+            super.onPostExecute(responseObj);
+            if (eventInfoDialog != null) {
+                eventInfoDialog.dismiss();
+                eventInfoDialog = null;
+            }
+            delegate.processFinish(responseObj);
+        }
+    }
+
+    public static class UploadImageTask extends AsyncTask<Map<String, Object>, Object, JSONObject> {
+        private CoreManager coreManager = cenesApplication.getCoreManager();
+
+        ProgressDialog uploadDialog;
+
+        // you may separate this or combined to caller class.
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+
+        public AsyncResponse delegate = null;
+
+        public UploadImageTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            uploadDialog = new ProgressDialog(activity);
+            uploadDialog.setMessage("Uploading..");
+            uploadDialog.setIndeterminate(false);
+            uploadDialog.setCanceledOnTouchOutside(false);
+            uploadDialog.setCancelable(false);
+            uploadDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(Map<String, Object>... mapObjects) {
+
+            UserManager userManager = coreManager.getUserManager();
+            User user = userManager.getUser();
+
+            GatheringApiManager gatheringApiManager = coreManager.getGatheringApiManager();
+            Map<String, Object> mapPostObject = mapObjects[0];
+            try {
+                String queryStr = "eventId="+(Long)mapPostObject.get("eventId");
+                File file = (File)mapPostObject.get("file");
+                JSONObject response = gatheringApiManager.uploadEventPhoto(queryStr, user.getAuthToken(), file);
+                return response;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject response) {
+            super.onPostExecute(response);
+            if (uploadDialog != null) {
+                uploadDialog.dismiss();
+                uploadDialog = null;
+            }
+            delegate.processFinish(response);
+        }
+    }
+
+    public static class UpdateStatusActionTask extends AsyncTask<String, Void, Boolean> {
+
+        private CoreManager coreManager = cenesApplication.getCoreManager();
+
+        ProgressDialog mProgressDialog;
+
+        // you may separate this or combined to caller class.
+        public interface AsyncResponse {
+            void processFinish(Boolean response);
+        }
+
+        public AsyncResponse delegate = null;
+
+        public UpdateStatusActionTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+
+
+        @Override
+        protected void onPreExecute() {
+            mProgressDialog = new ProgressDialog(activity);
+            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.setIndeterminate(false);
+            mProgressDialog.setCanceledOnTouchOutside(false);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... queryStrs) {
+            String queryStr = "";
+            if (queryStrs != null && queryStrs.length != 0) {
+                queryStr = queryStrs[0];
+            }
+
+            UserManager userManager = coreManager.getUserManager();
+            GatheringApiManager gatheringApiManager = coreManager.getGatheringApiManager();
+            User user = userManager.getUser();
+            JSONObject jObj = gatheringApiManager.updateGatheringStatus(queryStr, user.getAuthToken());
+
+            try {
+                System.out.println("blah: response: " + jObj.toString());
+                return jObj.getBoolean("success");
+            } catch (Exception e) {
+
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+
+            if (mProgressDialog != null) {
+                mProgressDialog.dismiss();
+                mProgressDialog = null;
+            }
+            delegate.processFinish(success);
+        }
+    }
+
+    public static class DeleteGatheringTask extends AsyncTask<Long, JSONObject, JSONObject> {
+
+        private CoreManager coreManager = cenesApplication.getCoreManager();
+
+        // you may separate this or combined to caller class.
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+
+        public AsyncResponse delegate = null;
+
+        public DeleteGatheringTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+
+
+        ProgressDialog deleteGathDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            deleteGathDialog = new ProgressDialog(activity);
+            deleteGathDialog.setMessage("Deleting..");
+            deleteGathDialog.setIndeterminate(false);
+            deleteGathDialog.setCanceledOnTouchOutside(false);
+            deleteGathDialog.setCancelable(false);
+            deleteGathDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(Long... longs) {
+            UserManager userManager = coreManager.getUserManager();
+            GatheringApiManager gatheringApiManager = coreManager.getGatheringApiManager();
+            User user = userManager.getUser();
+
+            Long eventId = longs[0];
+            String queryStr = "event_id=" + eventId;
+            JSONObject response = gatheringApiManager.deleteGatheringByUserId(queryStr, user.getAuthToken());
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject response) {
+            super.onPostExecute(response);
+            if (deleteGathDialog != null) {
+                deleteGathDialog.dismiss();
+                deleteGathDialog = null;
+            }
+            delegate.processFinish(response);
         }
     }
 }

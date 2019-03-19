@@ -1,10 +1,7 @@
 package com.cenes.activity;
 
 import android.Manifest;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -13,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.cenes.R;
 import com.cenes.fragment.guest.GuestFragment;
+import com.cenes.service.InstabugService;
 
 import java.util.List;
 
@@ -29,6 +27,8 @@ public class GuestActivity extends CenesActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest);
+
+        new InstabugService().initiateInstabug(getApplication());
 
         fragmentManager = getSupportFragmentManager();
         replaceFragment(new GuestFragment(), null);
@@ -72,6 +72,11 @@ public class GuestActivity extends CenesActivity {
             }
         }
         return null;
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.moveTaskToBack(true);
     }
 
     @Override

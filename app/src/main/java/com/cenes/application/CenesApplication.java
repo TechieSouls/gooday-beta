@@ -5,10 +5,14 @@ import android.os.StrictMode;
 
 import com.cenes.R;
 import com.cenes.coremanager.CoreManager;
+import com.cenes.service.InstabugService;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.ndk.CrashlyticsNdk;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.instabug.library.Instabug;
+import com.instabug.library.invocation.InstabugInvocationEvent;
+
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -28,6 +32,9 @@ public class CenesApplication extends Application {
         Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
         coreManager = new CoreManager(this);
         sAnalytics = GoogleAnalytics.getInstance(this);
+
+        //new Instabug.Builder(this, "d81ee39bd8a6ea5c21f101ae80daef5a").setInvocationEvents(InstabugInvocationEvent.NONE).build();
+
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());

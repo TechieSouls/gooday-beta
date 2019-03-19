@@ -22,14 +22,23 @@ public class DeviceManagerImpl implements DeviceManager {
 
     @Override
     public void hideKeyBoard(EditText editText, AppCompatActivity appCompatActivity) {
-        InputMethodManager inputManager = (InputMethodManager) appCompatActivity
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        try {
+            InputMethodManager inputManager = (InputMethodManager) appCompatActivity
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     public void showKeyBoard(EditText editText, AppCompatActivity appCompatActivity) {
-        InputMethodManager imm = (InputMethodManager) appCompatActivity
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+        try {
+            InputMethodManager imm = (InputMethodManager) appCompatActivity
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+        } catch (Exception e) {
+
+        }
     }
 }

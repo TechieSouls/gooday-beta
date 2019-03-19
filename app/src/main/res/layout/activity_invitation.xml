@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/gradient_header">
 
-        <com.cenes.util.RoundedImageView
+        <com.deploy.util.RoundedImageView
             android:id="@+id/user_profile_pic"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -49,7 +49,7 @@
             android:layout_marginBottom="50dp"
             android:orientation="vertical">
 
-            <com.cenes.util.CenesTextView
+            <com.deploy.util.CenesTextView
                 android:id="@+id/tv_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                 android:textSize="16sp"
                 app:fontName="@string/font_lato_regular" />
 
-            <com.cenes.util.CenesTextView
+            <com.deploy.util.CenesTextView
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                 android:textStyle="bold"
                 app:fontName="@string/font_lato_regular" />
 
-            <com.cenes.util.CenesTextView
+            <com.deploy.util.CenesTextView
                 android:id="@+id/tv_invite_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
         android:orientation="vertical"
         android:visibility="visible">
 
-        <com.cenes.util.CenesTextView
+        <com.deploy.util.CenesTextView
             android:id="@+id/tv_invitation_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
             android:textStyle="bold"
             app:fontName="@string/font_lato_regular" />
 
-        <com.cenes.util.CenesTextView
+        <com.deploy.util.CenesTextView
             android:id="@+id/tv_invitation_day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -118,7 +118,7 @@
             android:textSize="18sp"
             app:fontName="@string/font_lato_regular" />
 
-        <com.cenes.util.CenesTextView
+        <com.deploy.util.CenesTextView
             android:id="@+id/tv_invitation_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -129,7 +129,7 @@
             android:textSize="18sp"
             app:fontName="@string/font_lato_regular" />
 
-        <com.cenes.util.CenesTextView
+        <com.deploy.util.CenesTextView
             android:id="@+id/tv_invitation_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -146,7 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp" />
 
-        <com.cenes.util.CenesTextView
+        <com.deploy.util.CenesTextView
             android:id="@+id/tv_invitation_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -172,7 +172,7 @@
             android:layout_marginBottom="10dp"
             android:padding="10dp">
 
-            <com.cenes.util.CenesTextView
+            <com.deploy.util.CenesTextView
                 android:id="@+id/tvAccept"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -186,7 +186,7 @@
                 android:textColor="@color/white"
                 app:fontName="@string/font_lato_regular" />
 
-            <com.cenes.util.CenesTextView
+            <com.deploy.util.CenesTextView
                 android:id="@+id/tvDecline"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

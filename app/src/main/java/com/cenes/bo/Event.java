@@ -1,5 +1,7 @@
 package com.cenes.bo;
 
+import android.net.Uri;
+
 import java.util.List;
 
 /**
@@ -8,21 +10,37 @@ import java.util.List;
 
 public class Event {
     private Long eventId;
-    private Long eventMemberId;
     private String logo;
     private String title;
     private String startTime;
+    private String endTime;
     private String eventDate;
     private String location;
     private String eventPicture;
+    private String thumbnail;
+    private String latitude;
+    private String longitude;
     private String status;
     private String source;
     private String scheduleAs;
     private String type;
+    private String key;
     private Long startTimeMillis;
+    private Long endTimeInMillis;
     private Boolean isFullDay;
     private String sender;
+    private String description;
+    private Long createdById;
+    private String eventImageURI;
+    private boolean isOwner;
+    private String placeId;
+    private EventMember owner;
+    private EventMember userEventMemberData;
     private List<EventMember> eventMembers;
+    private String predictiveData;
+    private Boolean isPredictiveOn = false;
+    private String timezone;
+    private String fullDayStartTime;
 
     public Long getEventId() {
         return eventId;
@@ -88,14 +106,6 @@ public class Event {
         this.status = status;
     }
 
-    public Long getEventMemberId() {
-        return eventMemberId;
-    }
-
-    public void setEventMemberId(Long eventMemberId) {
-        this.eventMemberId = eventMemberId;
-    }
-
     public String getSender() {
         return sender;
     }
@@ -150,5 +160,187 @@ public class Event {
 
     public void setIsFullDay(Boolean isFullDay) {
         this.isFullDay = isFullDay;
+    }
+
+    public Boolean getFullDay() {
+        return isFullDay;
+    }
+
+    public void setFullDay(Boolean fullDay) {
+        isFullDay = fullDay;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Long getEndTimeInMillis() {
+        return endTimeInMillis;
+    }
+
+    public void setEndTimeInMillis(Long endTimeInMillis) {
+        this.endTimeInMillis = endTimeInMillis;
+    }
+
+    public Long getCreatedById() {
+        return createdById;
+    }
+
+    public void setCreatedById(Long createdById) {
+        this.createdById = createdById;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getEventImageURI() {
+        return eventImageURI;
+    }
+
+    public void setEventImageURI(String eventImageURI) {
+        this.eventImageURI = eventImageURI;
+    }
+
+    public EventMember getOwner() {
+        return owner;
+    }
+
+    public void setOwner(EventMember owner) {
+        this.owner = owner;
+    }
+
+    public void setIsOwner(boolean owner) {
+        isOwner = owner;
+    }
+
+    public boolean getIsOwner() {
+        return isOwner;
+    }
+
+    public EventMember getUserEventMemberData() {
+        return userEventMemberData;
+    }
+
+    public void setUserEventMemberData(EventMember userEventMemberData) {
+        this.userEventMemberData = userEventMemberData;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public String getPredictiveData() {
+        return predictiveData;
+    }
+
+    public void setPredictiveData(String predictiveData) {
+        this.predictiveData = predictiveData;
+    }
+
+    public Boolean getPredictiveOn() {
+        return isPredictiveOn;
+    }
+
+    public void setPredictiveOn(Boolean predictiveOn) {
+        isPredictiveOn = predictiveOn;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
+    }
+
+    public String getFullDayStartTime() {
+        return fullDayStartTime;
+    }
+
+    public void setFullDayStartTime(String fullDayStartTime) {
+        this.fullDayStartTime = fullDayStartTime;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "eventId=" + eventId +
+                ", logo='" + logo + '\'' +
+                ", title='" + title + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", eventDate='" + eventDate + '\'' +
+                ", location='" + location + '\'' +
+                ", eventPicture='" + eventPicture + '\'' +
+                ", thumbnail='" + thumbnail + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", status='" + status + '\'' +
+                ", source='" + source + '\'' +
+                ", scheduleAs='" + scheduleAs + '\'' +
+                ", type='" + type + '\'' +
+                ", startTimeMillis=" + startTimeMillis +
+                ", endTimeInMillis=" + endTimeInMillis +
+                ", isFullDay=" + isFullDay +
+                ", sender='" + sender + '\'' +
+                ", description='" + description + '\'' +
+                ", createdById=" + createdById +
+                ", eventImageURI='" + eventImageURI + '\'' +
+                ", isOwner=" + isOwner +
+                ", placeId='" + placeId + '\'' +
+                ", owner=" + owner +
+                ", userEventMemberData=" + userEventMemberData +
+                ", eventMembers=" + eventMembers +
+                ", predictiveData='" + predictiveData + '\'' +
+                ", isPredictiveOn=" + isPredictiveOn +
+                ", timezone='" + timezone + '\'' +
+                ", fullDayStartTime='" + fullDayStartTime + '\'' +
+                ", Private Key='" + key + '\'' +
+                '}';
     }
 }

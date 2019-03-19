@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.cenes.util.CenesTextView
+    <com.deploy.util.CenesTextView
         android:id="@+id/alarm_options_item_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

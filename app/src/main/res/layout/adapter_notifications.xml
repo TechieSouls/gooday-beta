@@ -4,36 +4,82 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/ll_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <com.cenes.util.RoundedImageView
-            android:id="@+id/notification_sender_profile_pic"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="12dp"
-            android:scaleType="centerCrop" />
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_margin="10dp">
 
         <LinearLayout
-            android:id="@+id/notification_details_layout"
-            android:layout_width="match_parent"
+            android:id="@+id/ll_container"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:orientation="vertical">
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:background="@drawable/xml_curved_corner_blue_fill">
+
+            <com.cenes.util.RoundedImageView
+                android:id="@+id/notification_sender_profile_pic"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="12dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile_icon"/>
 
             <TextView
                 android:id="@+id/notification_mesasge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/cenes_dark_gray" />
+                android:textColor="@color/white"
+                android:text="ouhdliqjhdwoqhdjiqoh shdjk ahsdjk hsdjkl ahsd"
+                android:layout_gravity="center_vertical"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:padding="1dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_gravity="center">
 
             <TextView
-                android:id="@+id/notifcation_date"
+                android:id="@+id/notifcation_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/cenes_light_gray" />
+                android:textColor="@color/cenes_selectedText_color"
+                android:text="1 JAN"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:gravity="center_horizontal"
+
+                />
+            <TextView
+                android:id="@+id/notification_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Just Now"
+                android:textSize="12sp"
+                android:textColor="@color/cenes_selectedText_color"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:id="@+id/notification_readstatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Read"
+                android:textSize="12sp"
+                android:textColor="@color/cenes_unselectedText_color"
+                android:gravity="right"
+                android:layout_marginRight="20dp"
+                android:visibility="gone"/>
+
         </LinearLayout>
     </LinearLayout>
+
 </RelativeLayout>

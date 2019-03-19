@@ -43,7 +43,7 @@ public class GetStartedActivity extends FragmentActivity {
 
     private List<Fragment> getFragments() {
         List<Fragment> fList = new ArrayList<Fragment>();
-        fList.add(GetStartedFragment.newInstance(R.drawable.onboarding_4, R.string.gs_heading, R.string.gs_ins,R.string.get_started));
+        //fList.add(GetStartedFragment.newInstance(R.drawable.onboarding_4, R.string.gs_heading, R.string.gs_ins,R.string.get_started));
         return fList;
     }
 

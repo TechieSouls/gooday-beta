@@ -95,12 +95,12 @@ public class WalkthroughActivity extends FragmentActivity {
     private List<Fragment> getFragments() {
         List<Fragment> fList = new ArrayList<Fragment>();
 
-        fList.add(WalkthroughFragment.newInstance(R.drawable.onboarding_1, R.string.title_1, R.string.ins_1,false));
-        fList.add(WalkthroughFragment.newInstance(R.drawable.onboarding_2, R.string.title_2, R.string.ins_2,false));
+        //fList.add(WalkthroughFragment.newInstance(R.drawable.onboarding_1, R.string.title_1, R.string.ins_1,false));
+        //fList.add(WalkthroughFragment.newInstance(R.drawable.onboarding_2, R.string.title_2, R.string.ins_2,false));
 /*
         fList.add(WalkthroughFragment.newInstance(R.drawable.onboarding_3, R.string.title_3, R.string.ins_3,false));
 */
-        fList.add(WalkthroughFragment.newInstance(R.drawable.onboarding_3, R.string.gs_heading, R.string.gs_ins,true));
+        //fList.add(WalkthroughFragment.newInstance(R.drawable.onboarding_3, R.string.gs_heading, R.string.gs_ins,true));
         return fList;
     }
 

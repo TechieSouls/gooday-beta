@@ -250,9 +250,8 @@ public class DiariesFragment extends CenesFragment {
 
             ExpandableListView mExpandableListView = (ExpandableListView) parent;
             mExpandableListView.expandGroup(groupPosition);
-            GatheringsFragment.GatheringsAdapter holder;
             if (convertView == null) {
-                convertView = inflter.inflate(R.layout.activity_home_data_headers, null);
+                convertView = inflter.inflate(R.layout.adapter_home_data_headers, null);
             }
             TextView lblListHeader = (TextView) convertView.findViewById(R.id.lblListHeader);
             if (isInvitation) {
@@ -300,7 +299,7 @@ public class DiariesFragment extends CenesFragment {
 
     public class SectionedExpandableGridAdapter extends RecyclerView.Adapter<SectionedExpandableGridAdapter.ViewHolder> {
 
-        private static final int VIEW_TYPE_SECTION = R.layout.activity_home_data_headers;
+        private static final int VIEW_TYPE_SECTION = R.layout.adapter_home_data_headers;
         private static final int VIEW_TYPE_ITEM = R.layout.adapter_diary_list_item;
 
         private final Context mContext;

@@ -10,13 +10,14 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp">
 
-        <ImageView
+        <com.cenes.util.CurvedImageView
             android:id="@+id/iv_image_thumbnail"
-            android:layout_width="170dp"
-            android:layout_height="170dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:src="@drawable/signup_success_fb_icon"
             android:scaleType="centerCrop"
             />
+
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="match_parent"

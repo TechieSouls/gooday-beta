@@ -1,4 +1,4 @@
-package com.deploy.fragment.reminder;
+package com.cenes.fragment.reminder;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -24,17 +24,17 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.deploy.Manager.ApiManager;
-import com.deploy.Manager.UrlManager;
-import com.deploy.R;
-import com.deploy.activity.ReminderActivity;
-import com.deploy.application.CenesApplication;
-import com.deploy.bo.User;
-import com.deploy.coremanager.CoreManager;
-import com.deploy.database.manager.UserManager;
-import com.deploy.fragment.CenesFragment;
-import com.deploy.util.CenesUtils;
-import com.deploy.util.RoundedImageView;
+import com.cenes.Manager.ApiManager;
+import com.cenes.Manager.UrlManager;
+import com.cenes.R;
+import com.cenes.activity.ReminderActivity;
+import com.cenes.application.CenesApplication;
+import com.cenes.bo.User;
+import com.cenes.coremanager.CoreManager;
+import com.cenes.database.manager.UserManager;
+import com.cenes.fragment.CenesFragment;
+import com.cenes.util.CenesUtils;
+import com.cenes.util.RoundedImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;

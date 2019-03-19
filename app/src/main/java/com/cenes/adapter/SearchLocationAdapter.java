@@ -74,8 +74,11 @@ public class SearchLocationAdapter extends BaseAdapter {
         try {
             JSONObject locObj = this.locations.getJSONObject(i);
             JSONObject joStructuredFormatting = locObj.getJSONObject("structured_formatting");
+
+            System.out.println(joStructuredFormatting.toString());
+
             holder.locTitle.setText(joStructuredFormatting.getString("main_text"));
-            holder.locAddress.setText(joStructuredFormatting.getString("secondary_text"));
+            holder.locAddress.setText(joStructuredFormatting.getString("main_text"));
             holder.placeId = locObj.getString("place_id");
 
             holder.linerLayout.setOnClickListener(new View.OnClickListener() {

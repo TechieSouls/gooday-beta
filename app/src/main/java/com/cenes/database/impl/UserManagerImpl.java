@@ -30,7 +30,7 @@ public class UserManagerImpl implements UserManager {
                 + " , '" + user.getEmail() + "' , '" + user.getFacebookAuthToken()
                 + "' , '" + user.getFacebookID() + "' , '" + user.getName()+"' , '" + user.getPassword()
                 + "' , '" + user.getAuthToken()
-                + "' , '"+user.getApiUrl()+"' , '"+user.getPicture()+"' , '"+user.getGender()+"')");
+                + "' , '"+user.getApiUrl()+"' , '"+user.getPicture()+"' , '"+user.getGender()+"', '"+user.getPhone()+"', "+user.getBirthDate()+")");
     }
 
     @Override
@@ -57,6 +57,8 @@ public class UserManagerImpl implements UserManager {
             user.setName(cursor.getString(cursor.getColumnIndex("name")));
             user.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
             user.setGender(cursor.getString(cursor.getColumnIndex("gender")));
+            user.setPhone(cursor.getString(cursor.getColumnIndex("phone")));
+            user.setBirthDate(cursor.getLong(cursor.getColumnIndex("birth_date")));
             return user;
         }
         return user;
@@ -78,6 +80,8 @@ public class UserManagerImpl implements UserManager {
             user.setName(cursor.getString(cursor.getColumnIndex("name")));
             user.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
             user.setGender(cursor.getString(cursor.getColumnIndex("gender")));
+            user.setPhone(cursor.getString(cursor.getColumnIndex("phone")));
+            user.setBirthDate(cursor.getLong(cursor.getColumnIndex("birth_date")));
             return user;
         }
         return user;
@@ -91,7 +95,8 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public void updateUser(User user) {
-        db.execSQL("update user_record set name = '"+user.getName()+"', gender = '"+user.getGender()+"', email = '"+user.getEmail()+"', tocken = '"+user.getAuthToken()+"', picture = '"+user.getPicture()+"'");
+        db.execSQL("update user_record set name = '"+user.getName()+"', gender = '"+user.getGender()+"', email = '"+user.getEmail()+"', " +
+                "tocken = '"+user.getAuthToken()+"', picture = '"+user.getPicture()+"', birth_date = "+user.getBirthDate()+"");
     }
 
     @Override

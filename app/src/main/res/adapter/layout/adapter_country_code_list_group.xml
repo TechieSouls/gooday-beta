@@ -4,16 +4,18 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="5dp"
-    android:background="@color/white">
+    android:background="@color/theme_color">
 
 
     <TextView
         android:id="@+id/lblCountryListHeader"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:textSize="18dp"
-        android:textColor="#ccc"
-        android:text="A"/>
+        android:textSize="16dp"
+        android:layout_marginLeft="20dp"
+        android:padding="5dp"
+        android:textColor="@color/cenes_blue"
+        android:text="A"
+        android:textStyle="bold"/>
 
 </LinearLayout>

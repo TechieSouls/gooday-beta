@@ -1,84 +1,212 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
     <RelativeLayout
-        android:id="@+id/rl_header"
+        android:id="@+id/rl_side_menu_view"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/gradient_header"
-        android:visibility="gone">
+        android:layout_height="match_parent"
+        >
 
-        <ImageView
-            android:id="@+id/ivProfile"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentLeft="true"
-            android:layout_margin="5dp"
-            android:gravity="center" />
-
-        <com.cenes.util.CenesTextView
+        <RelativeLayout
+            android:id="@+id/rl_header"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Holiday Calendar"
-            android:textColor="@color/white"
-            android:textSize="18dp"
-            app:fontName="@string/font_lato_regular" />
+            android:layout_height="80dp"
+            android:layout_alignParentTop="true">
 
-        <com.cenes.util.CenesTextView
-            android:id="@+id/tvSave"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="Save"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            app:fontName="@string/font_lato_regular" />
+            <com.cenes.util.RoundedImageView
+                android:id="@+id/home_profile_pic"
+                android:layout_width="@dimen/header_profile_pic_width"
+                android:layout_height="@dimen/header_profile_pic_height"
+                android:src="@drawable/cenes_user_no_image"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Choose Holiday"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="@dimen/header_title_font"
+                android:layout_marginLeft="@dimen/header_title_margin_left"
+                android:layout_marginRight="@dimen/header_title_margin_right"/>
+            <ImageView
+                android:id="@+id/home_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/home_icon_selected"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:padding="5dp"
+                android:layout_marginRight="20dp"
+                />
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_below="@+id/rl_header"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_holiday_text1"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:text="You've selected the following country:"
+                    android:textAlignment="center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="40dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    />
+
+                <RelativeLayout
+                    android:id="@+id/rl_gradient_bg"
+                    android:layout_width="175dp"
+                    android:layout_height="175dp"
+                    android:background="@drawable/holiday_cal_circle_gradient"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="40dp"
+                    android:layout_below="@+id/tv_holiday_text1"
+                    >
+
+                    <com.cenes.util.RoundedImageView
+                        android:id="@+id/riv_country_flag"
+                        android:layout_width="165dp"
+                        android:layout_height="165dp"
+                        android:src="@drawable/holiday_globe"
+                        android:layout_centerInParent="true"
+                        android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
+                        />
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/tv_sidemenu_selected_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rl_gradient_bg"
+                    android:layout_marginTop="40dp"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:textAlignment="center"/>
+
+                <Button
+                    android:id="@+id/btn_sidemenu_change_country"
+                    android:layout_below="@+id/tv_sidemenu_selected_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Change Country"
+                    android:textColor="@color/cenes_blue"
+                    android:background="@color/transparent"
+                    android:textSize="12sp"
+
+                    />
+
+                <Button
+                    android:id="@+id/btn_sidemenu_save_country"
+                    android:layout_below="@+id/btn_sidemenu_change_country"
+                    android:layout_width="100dp"
+                    android:layout_height="45dp"
+                    android:text="Save"
+                    android:textColor="@color/white"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/xml_round_rect_orange"
+                    android:textSize="20sp"
+                    android:layout_marginTop="30dp"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+
+       </ScrollView>
+
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/ivAttachment"
-        android:layout_width="fill_parent"
-        android:layout_height="150dp"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/rl_header"
-        android:layout_marginTop="45dp"
-        android:src="@drawable/holiday_globe" />
 
-    <com.cenes.util.CenesTextView
-        android:id="@+id/editText"
+    <RelativeLayout
+        android:id="@+id/rv_signup_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivAttachment"
-        android:layout_marginTop="25dp"
-        android:gravity="center"
-        android:text="Select Holiday Calendar to\npersonalize your schedule"
-        android:textColor="@color/cenes_dark_gray"
-        android:textSize="17sp"
-        app:fontName="@string/font_lato_regular" />
+        android:layout_height="match_parent"
+        android:background="@drawable/holiday_setup_base"
+        android:visibility="gone">
 
-    <com.cenes.util.CenesTextView
-        android:id="@+id/holiday_search_textbox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/rounded_gray_stroke"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="Tap to select your country"
-        android:textColor="@color/cenes_light_gray"
-        android:textSize="15sp"
-        app:fontName="@string/font_lato_regular" />
+        <RelativeLayout
+            android:id="@+id/rl_signup_view_header"
+            android:layout_width="match_parent"
+            android:layout_height="70dp">
+
+            <ImageView
+                android:id="@+id/instabug_report"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/instabug_report"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="30dp"/>
+
+            <ImageView
+                android:id="@+id/iv_holiday_forward"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/profile_forward_white"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="20dp"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_holiday_cal_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:text="Add a Holiday Calendar"
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:textAlignment="center"/>
+
+        <ImageView
+            android:layout_below="@+id/tv_holiday_cal_text"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/holiday_world_map"
+            android:layout_marginTop="40dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_signup_selected_country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:text="India"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="130dp"/>
+
+        <Button
+            android:id="@+id/btn_change_country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Country"
+            android:layout_alignParentBottom="true"
+            android:background="@color/transparent"
+            android:textColor="@color/white"
+            android:layout_marginBottom="80dp"
+            />
+    </RelativeLayout>
 
 </RelativeLayout>

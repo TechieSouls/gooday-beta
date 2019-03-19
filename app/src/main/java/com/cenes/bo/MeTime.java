@@ -8,27 +8,21 @@ import java.util.List;
 
 public class MeTime {
 
-    Boolean isSelected;
-    String category;
+    String title;
     List<MeTimeItem> items;
     String userId;
     String timezone;
-    Boolean doNotDisturb;
+    private String photo;
+    private Long startTime;
+    private Long endTime;
+    private String days;
 
-    public Boolean getSelected() {
-        return isSelected;
+    public String getTitle() {
+        return title;
     }
 
-    public void setSelected(Boolean selected) {
-        isSelected = selected;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public List<MeTimeItem> getItems() {
@@ -55,11 +49,49 @@ public class MeTime {
         this.timezone = timezone;
     }
 
-    public Boolean getDoNotDisturb() {
-        return doNotDisturb;
+    public Long getStartTime() {
+        return startTime;
     }
 
-    public void setDoNotDisturb(Boolean doNotDisturb) {
-        this.doNotDisturb = doNotDisturb;
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
+
+    public Long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Long endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public String getDays() {
+        return days;
+    }
+
+    public void setDays(String days) {
+        this.days = days;
+    }
+
+    @Override
+    public String toString() {
+        return "MeTime{" +
+                "title='" + title + '\'' +
+                ", items=" + items +
+                ", userId='" + userId + '\'' +
+                ", timezone='" + timezone + '\'' +
+                ", photo='" + photo + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", days='" + days + '\'' +
+                '}';
     }
 }

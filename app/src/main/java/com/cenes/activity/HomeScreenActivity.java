@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.cenes.R;
-import com.cenes.fragment.HomeFragment;
+import com.cenes.fragment.dashboard.HomeFragment;
 import com.cenes.fragment.NavigationFragment;
 
 import java.util.List;
@@ -25,13 +25,13 @@ public class HomeScreenActivity extends CenesActivity {
 
     public FragmentTransaction fragmentTransaction;
     public FragmentManager fragmentManager;
-    public ImageView footerHomeIcon, footerGatheringIcon, footerReminderIcon, footerAlarmIcon, footerDiaryIcon;
+    public ImageView footerHomeIcon, footerGatheringIcon, footerReminderIcon, footerAlarmIcon, footerDiaryIcon, footerMeTimeIcon;
     LinearLayout llFooter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.base_home);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -45,6 +45,7 @@ public class HomeScreenActivity extends CenesActivity {
         footerAlarmIcon = (ImageView) findViewById(R.id.footer_alarm_icon);
         footerGatheringIcon = (ImageView) findViewById(R.id.footer_gathering_icon);
         footerDiaryIcon = (ImageView) findViewById(R.id.footer_diary_icon);
+        footerMeTimeIcon = (ImageView) findViewById(R.id.footer_metime_icon);
     }
 
     public void hideFooter() {

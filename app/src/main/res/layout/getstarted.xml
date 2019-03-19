@@ -24,8 +24,7 @@
         android:layout_above="@+id/gs_instructions"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:src="@drawable/onboarding_4" />
+        android:layout_marginRight="15dp"/>
 
     <TextView
         android:id="@+id/gs_instructions"

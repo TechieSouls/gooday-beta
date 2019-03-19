@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0d189f3d-49c4-41ae-8cc7-57c7caa8f3f3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/AsyncTasks/GatheringAsyncTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/AsyncTasks/GatheringAsyncTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/AlertManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/AlertManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/ApiManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/ApiManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/DeviceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/DeviceManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/Impl/AlertManagerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/Impl/AlertManagerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/Impl/ApiManagerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/Impl/ApiManagerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/Impl/DeviceManagerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/Impl/DeviceManagerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/Impl/InternetManagerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/Impl/InternetManagerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/Impl/UrlManagerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/Impl/UrlManagerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/Impl/ValidatioManagerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/Impl/ValidatioManagerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/InternetManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/InternetManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/JsonParsing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/JsonParsing.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/UrlManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/UrlManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/ValidationManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/Manager/ValidationManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/AlarmActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/AlarmActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/CenesActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/CenesActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/ChoiceActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/ChoiceActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/CompleteYourProfileActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/CompleteYourProfileActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/CreateReminderActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/CreateReminderActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/DiaryActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/DiaryActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/GatheringScreenActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/GatheringScreenActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/GetStartedActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/GetStartedActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/GuestActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/GuestActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/HomeScreenActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/HomeScreenActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/ReminderActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/ReminderActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/SearchFriendActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/SearchFriendActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/SearchLocationActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/SearchLocationActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/SignInActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/SignInActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/SignUpActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/SignUpActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/SplashActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/SplashActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/WalkthroughActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/WalkthroughActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/activity/WelcomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/activity/WelcomeActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/CountryCodeAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/CountryCodeAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/EventCardExpandableAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/EventCardExpandableAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/FriendsAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/FriendsAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/GatheringAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/GatheringAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/HomeScreenAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/HomeScreenAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/MeTimeAdapter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/RecentLocationAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/RecentLocationAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/SearchFriendAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/SearchFriendAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/SearchLocationAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/adapter/SearchLocationAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/api/GatheringAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/api/GatheringAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/api/HomeScreenAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/api/HomeScreenAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/api/NotificationAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/api/NotificationAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/api/UserAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/api/UserAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/application/CenesApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/application/CenesApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/backendManager/GatheringApiManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/backendManager/GatheringApiManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/backendManager/HomeScreenApiManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/backendManager/HomeScreenApiManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/backendManager/LocationApiManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/backendManager/LocationApiManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/backendManager/NotificationAPiManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/backendManager/NotificationAPiManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/backendManager/UserApiManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/backendManager/UserApiManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/bo/Alarm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/bo/Alarm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/bo/CountryCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/bo/CountryCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/bo/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/bo/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/bo/EventMember.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/bo/EventMember.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/bo/Friend.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/bo/Friend.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/bo/Gathering.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/bo/Gathering.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/bo/Location.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/bo/Location.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/bo/MeTime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/bo/MeTime.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/bo/MeTimeItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/bo/MeTimeItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/bo/Notification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/bo/Notification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/bo/Reminder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/bo/Reminder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/bo/Section.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/bo/Section.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/bo/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/bo/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/coremanager/CoreManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/coremanager/CoreManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/countrypicker/CountryListAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/countrypicker/CountryListAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/countrypicker/CountryPicker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/countrypicker/CountryPicker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/countrypicker/CountryPickerListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/countrypicker/CountryPickerListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/countrypicker/CountryUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/countrypicker/CountryUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/database/CenesDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/database/CenesDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/database/impl/AlarmManagerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/database/impl/AlarmManagerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/database/impl/ReminderManagerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/database/impl/ReminderManagerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/database/impl/UserManagerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/database/impl/UserManagerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/database/manager/AlarmManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/database/manager/AlarmManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/database/manager/ReminderManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/database/manager/ReminderManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/database/manager/UserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/database/manager/UserManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/AboutUsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/AboutUsFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/AddAlarmFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/AddAlarmFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/AddDiaryFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/AddDiaryFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/AlarmsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/AlarmsFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/CalenderSyncFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/CalenderSyncFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/CenesFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/CenesFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/DiariesFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/DiariesFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/DiarySummaryFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/DiarySummaryFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/FriendsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/FriendsFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/GetStartedFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/GetStartedFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/HelpFeedbackFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/HelpFeedbackFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/HolidaySyncFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/HolidaySyncFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/InvitationFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/InvitationFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/MeTimeFragment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/NavigationFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/NavigationFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/NotificationFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/NotificationFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/PictureFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/PictureFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/ProfileFragment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/WalkthroughFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/WalkthroughFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/dashboard/HomeFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/dashboard/HomeFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/gathering/CreateGatheringFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/gathering/CreateGatheringFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/gathering/GatheringsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/gathering/GatheringsFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/guest/ForgotPasswordFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/guest/ForgotPasswordFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/guest/ForgotPasswordSuccessFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/guest/ForgotPasswordSuccessFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/guest/GuestFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/guest/GuestFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/guest/SigninFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/guest/SigninFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/guest/SignupCountryListFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/guest/SignupCountryListFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/guest/SignupStep1Fragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/guest/SignupStep1Fragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/guest/SignupStep2Fragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/guest/SignupStep2Fragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/guest/SignupStepSuccessFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/fragment/guest/SignupStepSuccessFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/service/AlarmReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/service/AlarmReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/service/CenesFirebaseInstanceIdService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/service/CenesFirebaseInstanceIdService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/service/CenesFirebaseMessagingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/service/CenesFirebaseMessagingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/service/ContactWatchService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/service/ContactWatchService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/service/GatheringService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/service/GatheringService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/service/NetworkChangeReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/service/NetworkChangeReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/service/PhoneBookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/service/PhoneBookService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/service/PrefManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/service/PrefManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/util/CenesButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/util/CenesButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/util/CenesConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/util/CenesConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/util/CenesEditText.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/util/CenesEditText.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/util/CenesExpandableListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/util/CenesExpandableListView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/util/CenesRoundedCornerLinearLayout.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/util/CenesRoundedCornerLinearLayout.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/util/CenesSwipeGestureUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/util/CenesSwipeGestureUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/util/CenesTextView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/util/CenesTextView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/util/CenesUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/util/CenesUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/util/ImageUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/util/ImageUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/util/RoundedDrawable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/util/RoundedDrawable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/cenes/util/RoundedImageView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/cenes/util/RoundedImageView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/adapter/layout/adapter_country_code_list_group.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/adapter/layout/adapter_country_code_list_group.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/adapter/layout/adapter_country_code_list_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/adapter/layout/adapter_country_code_list_item.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_afghanistan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_afghanistan.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_aland.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_aland.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_albania.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_albania.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_algeria.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_algeria.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_american_samoa.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_american_samoa.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_andorra.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_andorra.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_angola.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_angola.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_anguilla.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_anguilla.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_antarctica.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_antarctica.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_antigua_and_barbuda.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_antigua_and_barbuda.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_argentina.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_argentina.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_armenia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_armenia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_aruba.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_aruba.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_australia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_australia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_austria.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_austria.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_azerbaijan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_azerbaijan.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_bahamas.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_bahamas.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_bahrain.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_bahrain.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_bangladesh.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_bangladesh.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_barbados.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_barbados.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_belarus.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_belarus.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_belgium.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_belgium.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_belize.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_belize.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_benin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_benin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_bermuda.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_bermuda.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_bhutan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_bhutan.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_bolivia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_bolivia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_bosnia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_bosnia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_botswana.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_botswana.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_brazil.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_brazil.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_british_indian_ocean_territory.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_british_indian_ocean_territory.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_british_virgin_islands.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_british_virgin_islands.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_brunei.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_brunei.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_bulgaria.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_bulgaria.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_burkina_faso.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_burkina_faso.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_burundi.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_burundi.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cambodia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cambodia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cameroon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cameroon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_canada.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_canada.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cape_verde.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cape_verde.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cayman_islands.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cayman_islands.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_central_african_republic.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_central_african_republic.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_chad.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_chad.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_chile.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_chile.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_china.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_china.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_christmas_island.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_christmas_island.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cocos.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cocos.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_colombia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_colombia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_comoros.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_comoros.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cook_islands.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cook_islands.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_costa_rica.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_costa_rica.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cote_divoire.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cote_divoire.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_croatia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_croatia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cuba.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cuba.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cyprus.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_cyprus.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_czech_republic.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_czech_republic.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_democratic_republic_of_the_congo.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_democratic_republic_of_the_congo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_denmark.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_denmark.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_djibouti.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_djibouti.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_dominica.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_dominica.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_dominican_republic.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_dominican_republic.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_ecuador.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_ecuador.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_egypt.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_egypt.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_el_salvador.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_el_salvador.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_equatorial_guinea.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_equatorial_guinea.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_eritrea.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_eritrea.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_estonia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_estonia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_ethiopia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_ethiopia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_falkland_islands.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_falkland_islands.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_faroe_islands.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_faroe_islands.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_fiji.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_fiji.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_finland.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_finland.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_france.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_france.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_french_polynesia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_french_polynesia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_gabon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_gabon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_gambia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_gambia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_georgia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_georgia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_germany.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_germany.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_ghana.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_ghana.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_gibraltar.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_gibraltar.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_greece.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_greece.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_greenland.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_greenland.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_grenada.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_grenada.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_guadeloupe.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_guadeloupe.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_guam.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_guam.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_guatemala.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_guatemala.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_guinea.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_guinea.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_guinea_bissau.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_guinea_bissau.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_guyana.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_guyana.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_guyane.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_guyane.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_haiti.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_haiti.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_honduras.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_honduras.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_hong_kong.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_hong_kong.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_hungary.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_hungary.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_iceland.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_iceland.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_india.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_india.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_indonesia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_indonesia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_iran.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_iran.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_iraq.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_iraq.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_iraq_new.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_iraq_new.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_ireland.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_ireland.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_isleof_man.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_isleof_man.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_israel.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_israel.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_italy.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_italy.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_jamaica.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_jamaica.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_japan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_japan.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_jersey.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_jersey.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_jordan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_jordan.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_kazakhstan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_kazakhstan.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_kenya.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_kenya.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_kiribati.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_kiribati.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_kosovo.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_kosovo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_kuwait.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_kuwait.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_kyrgyzstan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_kyrgyzstan.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_laos.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_laos.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_latvia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_latvia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_lebanon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_lebanon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_lesotho.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_lesotho.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_liberia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_liberia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_libya.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_libya.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_liechtenstein.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_liechtenstein.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_lithuania.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_lithuania.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_luxembourg.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_luxembourg.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_macao.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_macao.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_macedonia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_macedonia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_madagascar.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_madagascar.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_malawi.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_malawi.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_malaysia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_malaysia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_maldives.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_maldives.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_mali.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_mali.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_malta.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_malta.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_marshall_islands.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_marshall_islands.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_martinique.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_martinique.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_mauritania.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_mauritania.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_mauritius.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_mauritius.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_mexico.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_mexico.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_micronesia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_micronesia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_moldova.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_moldova.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_monaco.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_monaco.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_mongolia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_mongolia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_montserrat.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_montserrat.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_morocco.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_morocco.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_mozambique.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_mozambique.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_myanmar.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_myanmar.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_namibia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_namibia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_nauru.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_nauru.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_nepal.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_nepal.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_netherlands.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_netherlands.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_new_caledonia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_new_caledonia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_new_zealand.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_new_zealand.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_nicaragua.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_nicaragua.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_niger.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_niger.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_nigeria.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_nigeria.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_niue.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_niue.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_norfolk_island.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_norfolk_island.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_north_korea.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_north_korea.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_northern_mariana_islands.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_northern_mariana_islands.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_norway.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_norway.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_of_montenegro.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_of_montenegro.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_oman.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_oman.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_pakistan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_pakistan.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_palau.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_palau.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_palestine.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_palestine.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_panama.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_panama.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_papua_new_guinea.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_papua_new_guinea.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_paraguay.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_paraguay.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_peru.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_peru.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_philippines.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_philippines.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_pitcairn_islands.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_pitcairn_islands.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_poland.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_poland.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_portugal.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_portugal.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_puerto_rico.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_puerto_rico.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_qatar.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_qatar.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_republic_of_the_congo.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_republic_of_the_congo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_romania.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_romania.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_russian_federation.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_russian_federation.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_rwanda.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_rwanda.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_saint_barthelemy.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_saint_barthelemy.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_saint_helena.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_saint_helena.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_saint_kitts_and_nevis.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_saint_kitts_and_nevis.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_saint_lucia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_saint_lucia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_saint_martin.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_saint_martin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_saint_pierre.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_saint_pierre.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_saint_vicent_and_the_grenadines.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_saint_vicent_and_the_grenadines.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_samoa.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_samoa.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_san_marino.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_san_marino.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_sao_tome_and_principe.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_sao_tome_and_principe.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_saudi_arabia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_saudi_arabia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_senegal.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_senegal.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_serbia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_serbia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_seychelles.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_seychelles.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_sierra_leone.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_sierra_leone.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_singapore.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_singapore.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_sint_maarten.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_sint_maarten.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_slovakia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_slovakia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_slovenia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_slovenia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_soloman_islands.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_soloman_islands.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_somalia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_somalia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_south_africa.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_south_africa.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_south_korea.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_south_korea.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_spain.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_spain.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_sri_lanka.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_sri_lanka.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_sudan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_sudan.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_suriname.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_suriname.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_swaziland.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_swaziland.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_sweden.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_sweden.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_switzerland.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_switzerland.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_syria.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_syria.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_taiwan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_taiwan.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_tajikistan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_tajikistan.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_tanzania.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_tanzania.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_thailand.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_thailand.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_timor_leste.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_timor_leste.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_togo.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_togo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_tokelau.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_tokelau.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_tonga.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_tonga.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_trinidad_and_tobago.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_trinidad_and_tobago.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_tunisia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_tunisia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_turkey.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_turkey.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_turkmenistan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_turkmenistan.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_turks_and_caicos_islands.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_turks_and_caicos_islands.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_tuvalu.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_tuvalu.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_uae.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_uae.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_uganda.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_uganda.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_ukraine.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_ukraine.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_united_kingdom.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_united_kingdom.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_united_states_of_america.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_united_states_of_america.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_uruguay.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_uruguay.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_us_virgin_islands.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_us_virgin_islands.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_uzbekistan.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_uzbekistan.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_vanuatu.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_vanuatu.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_vatican_city.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_vatican_city.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_venezuela.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_venezuela.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_vietnam.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_vietnam.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_wallis_and_futuna.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_wallis_and_futuna.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_yemen.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_yemen.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_zambia.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_zambia.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_zimbabwe.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-nodpi/flag_zimbabwe.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/add_item_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/add_item_icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/add_people_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/add_people_icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/calendar_close.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/calendar_close.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/calendar_open.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/calendar_open.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_ac.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_ac.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_at.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_at.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_au.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_au.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_br.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_br.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_ca.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_ca.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_christ.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_christ.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_cn.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_cn.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_de.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_de.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_dk.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_dk.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_dut.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_dut.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_es.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_es.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_fi.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_fi.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_fr.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_fr.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_gr.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_gr.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_hk.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_hk.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_id.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_id.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_ie.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_ie.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_in.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_in.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_ir.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_ir.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_isl.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_isl.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_it.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_it.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_jew.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_jew.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_jp.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_jp.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_kr.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_kr.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_mx.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_mx.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_my.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_my.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_nw.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_nw.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_nz.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_nz.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_ph.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_ph.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_pl.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_pl.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_pt.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_pt.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_ru.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_ru.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_se.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_se.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_sg.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_sg.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_th.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_th.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_tw.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_tw.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_us.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_us.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_vn.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_vn.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_za.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/flag_za.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/gathering_icon_selected.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/gathering_icon_selected.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/logo_lockup_calendar_icon_horizontal.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/logo_lockup_calendar_icon_horizontal.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/notes_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/notes_icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/notification_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/notification_icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/outlook_ios.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/outlook_ios.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/pencil.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/pencil.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/reminder_clock.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/reminder_clock.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/reminder_loc.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable-xxhdpi/reminder_loc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable/border_bottom_orange.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable/border_bottom_orange.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable/rounded_white_background.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable/rounded_white_background.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/drawable/signin_rounded_login_btn.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/drawable/signin_rounded_login_btn.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_about_us.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_about_us.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_alarm_add.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_alarm_add.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_alarms.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_alarms.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_calender_sync.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_calender_sync.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_create_diary.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_create_diary.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_create_reminder.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_create_reminder.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_diaries.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_diaries.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_gathering_summary.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_gathering_summary.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_holiday_sync.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_holiday_sync.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_invitation.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_invitation.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_notifications.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_notifications.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_picture.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_picture.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_reminder.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_reminder.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_search_friends.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_search_friends.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_search_location.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_search_location.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_welcome.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_welcome.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/adapter_alarm_options_items.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/adapter_alarm_options_items.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/adapter_alarms_listview_items.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/adapter_alarms_listview_items.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/adapter_diary_list_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/adapter_diary_list_item.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/adapter_gathering_card_rows.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/adapter_gathering_card_rows.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/adapter_home_data_headers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/adapter_home_data_headers.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/adapter_home_data_rows.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/adapter_home_data_rows.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/adapter_metime_headers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/adapter_metime_headers.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/adapter_notifications.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/adapter_notifications.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/adapter_reminder_list_items.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/adapter_reminder_list_items.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/adapter_search_friends.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/adapter_search_friends.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/adapter_suggested_locations.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/adapter_suggested_locations.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/alarm_base.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/alarm_base.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/diary_base.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/diary_base.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/diary_summary_fragment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/diary_summary_fragment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/fragment_gatherings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/fragment_gatherings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/gathering_friend_list_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/gathering_friend_list_item.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/getstarted.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/getstarted.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/help_feedback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/help_feedback.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/layout_signin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/layout_signin.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/navigation_fragment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/navigation_fragment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/onboarding_step1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/onboarding_step1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/onboarding_step2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/onboarding_step2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/onboarding_step4.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/onboarding_step4.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/onboarding_step5.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/onboarding_step5.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/profile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/profile.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/walkthrough_vp.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/walkthrough_vp.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layouts/fragment/layout/fragment_forget_password.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layouts/fragment/layout/fragment_forget_password.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layouts/fragment/layout/fragment_forget_password_success.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layouts/fragment/layout/fragment_forget_password_success.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layouts/fragment/layout/fragment_guest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layouts/fragment/layout/fragment_guest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layouts/fragment/layout/fragment_signin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layouts/fragment/layout/fragment_signin.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layouts/fragment/layout/fragment_signup_country_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layouts/fragment/layout/fragment_signup_country_list.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layouts/fragment/layout/fragment_signup_step2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layouts/fragment/layout/fragment_signup_step2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layouts/fragment/layout/fragment_signup_success.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layouts/fragment/layout/fragment_signup_success.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/values-v21/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values-v21/styles.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/colors.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/values/dimens.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/dimens.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cropimage/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../cropimage/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cropimage/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../cropimage/src/main/AndroidManifest.xml" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="300056972">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.0" value="2" />
+          <entry key="project.opened" value="2" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1680" />
+    <option name="height" value="956" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="AndroidView" />
+      <pane id="ProjectPane" />
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0d189f3d-49c4-41ae-8cc7-57c7caa8f3f3" name="Default Changelist" comment="" />
+      <created>1551358590534</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1551358590534</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1680" height="956" extended-state="0" />
+    <layout>
+      <window_info id="Captures" order="0" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.33333334" />
+      <window_info id="Structure" order="2" side_tool="true" />
+      <window_info id="Build Variants" order="3" side_tool="true" />
+      <window_info id="Image Layers" order="4" />
+      <window_info id="Designer" order="5" />
+      <window_info id="Capture Tool" order="6" />
+      <window_info id="Favorites" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="0" show_stripe_button="false" />
+      <window_info anchor="bottom" id="TODO" order="1" />
+      <window_info anchor="bottom" id="Terminal" order="2" />
+      <window_info anchor="bottom" id="Event Log" order="3" side_tool="true" />
+      <window_info anchor="bottom" id="Build" order="4" weight="0.3298611" />
+      <window_info anchor="right" id="Capture Analysis" order="0" />
+      <window_info anchor="right" id="Gradle" order="1" />
+      <window_info anchor="right" id="Theme Preview" order="2" />
+      <window_info anchor="right" id="Palette&#9;" order="3" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+</project>

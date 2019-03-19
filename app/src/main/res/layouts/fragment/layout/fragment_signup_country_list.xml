@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/theme_color">
 
     <RelativeLayout
         android:id="@+id/rl_header"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/cenes_mcv_orange">
+        android:layout_height="50dp">
 
         <LinearLayout
             android:id="@+id/ll_signup_cc_back"
@@ -16,11 +16,6 @@
             android:layout_marginLeft="40dp"
             android:gravity="center"
             android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="12dp"
-                android:src="@drawable/signup_step1_back_arrow" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -34,8 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/rl_header"
-        android:orientation="vertical"
-        android:background="@drawable/search_cc_bg">
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -48,8 +42,8 @@
                 android:drawableLeft="@drawable/search_icon"
                 android:drawablePadding="20dp"
                 android:paddingLeft="10dp"
-                android:textColor="#ccc"
-                android:background="@drawable/rounded_et_white_bg"
+                android:textColor="@color/cenes_selectedText_color"
+                android:background="@drawable/xml_curved_corner_transparent_blue_border"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_centerVertical="true"

@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:text="DONE"
             android:background="@color/transparent"
-            android:textColor="#FF4A90E2"
+            android:textColor="@color/cenes_blue"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
     <RelativeLayout
@@ -56,6 +56,8 @@
             android:background="@drawable/curved_search_edit_text_greybg"
             android:drawableLeft="@drawable/search_icon"
             android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
             />
 
     </RelativeLayout>

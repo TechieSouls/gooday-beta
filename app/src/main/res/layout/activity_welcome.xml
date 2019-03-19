@@ -15,11 +15,11 @@
     <LinearLayout
         android:id="@+id/layoutDots"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dots_height"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="@dimen/dots_margin_top"
-        android:layout_marginBottom="@dimen/dots_margin_bottom"
         android:gravity="center"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
         android:orientation="horizontal">
 
     </LinearLayout>
@@ -29,7 +29,8 @@
         android:layout_height="1dp"
         android:alpha=".5"
         android:layout_above="@id/layoutDots"
-        android:background="@android:color/white" />
+        android:background="@android:color/white"
+        android:visibility="gone"/>
     <View
         android:id="@+id/get_started_separator"
         android:layout_width="match_parent"

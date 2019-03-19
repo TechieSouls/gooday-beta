@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/guest_bg">
+    android:background="#FFE97C44">
 
     <RelativeLayout
         android:id="@+id/rl_header"
@@ -15,7 +15,9 @@
             android:layout_height="50dp"
             android:layout_marginLeft="40dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone"
+            >
 
             <ImageView
                 android:layout_width="20dp"
@@ -29,6 +31,21 @@
                 android:textColor="@color/white"
                 android:textSize="14sp" />
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            >
+
+            <ImageView
+                android:id="@+id/iv_bug_report"
+                android:layout_width="25dp"
+                android:layout_height="30dp"
+                android:src="@drawable/instabug_report"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="25dp"/>
+        </RelativeLayout>
     </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,25 +54,27 @@
         android:layout_marginTop="120dp"
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
+        android:layout_centerHorizontal="true"
         >
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Verification Code"
-            android:textSize="24dp"
+            android:text="Verify Your Phone"
+            android:textSize="26sp"
             android:textColor="@color/white"
             android:gravity="center"
             android:textStyle="bold"/>
         <TextView
             android:id="@+id/tv_signup_step2_guide"
-            android:layout_width="match_parent"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:text="Please type the verification code sent to [phone_number]."
+            android:text="Please enter code sent to [+X XXX XXX XXXX]."
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:layout_marginTop="30dp"
             android:textAlignment="center"
+            android:layout_gravity="center"
             />
         <LinearLayout
             android:layout_width="match_parent"
@@ -130,7 +149,8 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:columnCount="3"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
             <Button
                 android:id="@+id/bt_keypad_1"

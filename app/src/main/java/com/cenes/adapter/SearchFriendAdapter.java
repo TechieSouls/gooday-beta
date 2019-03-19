@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +13,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cenes.R;
 import com.cenes.activity.SearchFriendActivity;
+import com.cenes.service.SearchFriendService;
+import com.cenes.util.CenesUtils;
 import com.cenes.util.RoundedImageView;
 
 import org.json.JSONArray;
@@ -77,6 +83,8 @@ public class SearchFriendAdapter extends BaseAdapter {
             holder.inviteFriendPicture = (RoundedImageView) view.findViewById(R.id.invite_friend_picture);
             holder.cenesMemberIcon = (CheckBox) view.findViewById(R.id.iv_cenes_member_icon);
             holder.inviteFriendNameCenesUserText = (TextView) view.findViewById(R.id.invite_friend_name_cenes_user_text);
+            holder.rvNonCenesLayout = (RelativeLayout) view.findViewById(R.id.rv_non_cenes_layout);
+
             view.setTag(holder);
 
         } else {
@@ -103,17 +111,45 @@ public class SearchFriendAdapter extends BaseAdapter {
 
             //if (friends.getJSONObject(position).getString("photo") != null && friends.getJSONObject(position).getString("photo") != "null") {
             if (photo != null) {
-                Glide.with(myActivity).load(photo).apply(RequestOptions.placeholderOf(R.drawable.default_profile_icon)).into(holder.inviteFriendPicture);
+                Glide.with(myActivity).load(photo).apply(RequestOptions.placeholderOf(R.drawable.cenes_user_no_image)).into(holder.inviteFriendPicture);
             } else {
-                holder.inviteFriendPicture.setImageResource(R.drawable.default_profile_icon);
+                holder.inviteFriendPicture.setImageResource(R.drawable.cenes_user_no_image);
             }
            // System.out.println("cenesMember : "+ friends.getJSONObject(position).getString("cenesMember"));
             if ("yes".equals(friends.getJSONObject(position).getString("cenesMember"))) {
                 //holder.inviteFriendNameCenesUserText.setVisibility(View.VISIBLE);
                 //holder.cenesMemberIcon.setVisibility(View.GONE);
+                holder.inviteFriendPicture.setVisibility(View.VISIBLE);
+                holder.rvNonCenesLayout.setVisibility(View.GONE);
+                Glide.with(myActivity).load(photo).apply(RequestOptions.placeholderOf(R.drawable.cenes_user_no_image)).into(holder.inviteFriendPicture);
             } else {
                 //holder.inviteFriendNameCenesUserText.setVisibility(View.GONE);
                 //holder.cenesMemberIcon.setVisibility(View.VISIBLE);
+                String imageName = "";
+                String[] titleArr = friends.getJSONObject(position).getString("name").split(" ");
+                int i=0;
+                for (String str: titleArr) {
+                    if (i > 1) {
+                        break;
+                    }
+                    imageName += str.substring(0,1).toUpperCase();
+                    i++;
+                }
+                TextView circleText = new TextView(myActivity);
+                LinearLayout.LayoutParams imageViewParams = new LinearLayout.LayoutParams(CenesUtils.dpToPx(40), CenesUtils.dpToPx(40));
+                //imageViewParams.setMargins(CenesUtils.dpToPx(20),0,0,0);
+                circleText.setLayoutParams(imageViewParams);
+                circleText.setText(imageName);
+                circleText.setGravity(Gravity.CENTER);
+                circleText.setTextColor(myActivity.getResources().getColor(R.color.white));
+                circleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                circleText.setBackground(myActivity.getResources().getDrawable(R.drawable.xml_circle_noncenes_grey));
+
+
+                holder.inviteFriendPicture.setVisibility(View.GONE);
+                holder.rvNonCenesLayout.setVisibility(View.VISIBLE);
+                holder.rvNonCenesLayout.removeAllViews();
+                holder.rvNonCenesLayout.addView(circleText);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -165,7 +201,7 @@ public class SearchFriendAdapter extends BaseAdapter {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
+                myActivity.searchFriendEditText.setText("");
                 if (myActivity.checkboxObjectHolder.size() > 0) {
                     myActivity.findViewById(R.id.rl_selected_friends_recycler_view).setVisibility(View.VISIBLE);
                     myActivity.runOnUiThread(new Thread(new Runnable() {
@@ -200,6 +236,7 @@ public class SearchFriendAdapter extends BaseAdapter {
         private TextView inviteFriendName,inviteFriendNameCenesUserText;
         private RoundedImageView inviteFriendPicture;
         private CheckBox cenesMemberIcon;
+        private RelativeLayout rvNonCenesLayout;
     }
 
     public void hideKeyBoard(View view) {

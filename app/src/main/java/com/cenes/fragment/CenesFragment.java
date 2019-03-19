@@ -14,7 +14,6 @@ public abstract class CenesFragment extends Fragment {
         return (CenesActivity) getActivity();
     }
 
-
     @Override
     public void onPause() {
         super.onPause();
@@ -22,4 +21,6 @@ public abstract class CenesFragment extends Fragment {
             ((CenesActivity) getActivity()).hideSoftInput(getView());
         }
     }
+
+
 }

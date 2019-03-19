@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawablePadding="5dp"
-            android:src="@drawable/home_icon_grey" />
+            android:src="@drawable/home_icon_unselected" />
 
         <ImageView
             android:id="@+id/footer_reminder_icon"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawablePadding="5dp"
-            android:src="@drawable/gathering_icon" />
+            android:src="@drawable/gathering_icon_unselected" />
 
         <ImageView
             android:id="@+id/footer_diary_icon"

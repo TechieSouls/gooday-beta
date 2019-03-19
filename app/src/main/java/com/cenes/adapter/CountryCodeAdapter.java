@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cenes.R;
-import com.cenes.activity.GuestActivity;
 import com.cenes.bo.CountryCode;
 import com.cenes.fragment.guest.SignupCountryListFragment;
 
@@ -88,7 +87,7 @@ public class CountryCodeAdapter extends BaseExpandableListAdapter {
         }
 
         String headerTitle = (String) getGroup(position);
-        holder.lblCountryListHeader.setText(headerTitle);
+        holder.lblCountryListHeader.setText("The \""+headerTitle+"\" Countries");
 
         return view;
     }

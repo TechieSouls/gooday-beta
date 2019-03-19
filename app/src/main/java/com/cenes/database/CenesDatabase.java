@@ -40,7 +40,7 @@ public class CenesDatabase {
         @Override
         public void onCreate(SQLiteDatabase db) {
             // TODO Auto-generated method stub
-            db.execSQL("CREATE TABLE IF NOT EXISTS user_record (user_id LONG, email TEXT, facebook_auth_token TEXT, facebook_id TEXT,name TEXT, password TEXT, tocken TEXT, api_url TEXT, picture TEXT, gender TEXT)");
+            db.execSQL("CREATE TABLE IF NOT EXISTS user_record (user_id LONG, email TEXT, facebook_auth_token TEXT, facebook_id TEXT,name TEXT, password TEXT, tocken TEXT, api_url TEXT, picture TEXT, gender TEXT, phone TEXT, birth_date LONG)");
             db.execSQL("CREATE TABLE alarms (alarm_id INTEGER PRIMARY KEY AUTOINCREMENT, label TEXT, repeat TEXT, sound TEXT,alarm_time LONG, is_on INTEGER)");
             //db.execSQL("CREATE TABLE reminders (reminder_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT,reminder_time LONG, location TEXT,created_by_id LONG, status TEXT)");
         }

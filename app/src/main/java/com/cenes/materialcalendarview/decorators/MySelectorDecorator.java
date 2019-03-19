@@ -16,7 +16,7 @@ public class MySelectorDecorator implements DayViewDecorator {
     private final Drawable drawable;
 
     public MySelectorDecorator(Activity context) {
-        drawable = context.getResources().getDrawable(R.drawable.home_icon);
+        drawable = context.getResources().getDrawable(R.drawable.home_icon_selected);
     }
 
     @Override

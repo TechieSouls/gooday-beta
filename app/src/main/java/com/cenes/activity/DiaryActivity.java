@@ -31,7 +31,7 @@ public class DiaryActivity extends CenesActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.base_home);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -55,7 +55,7 @@ public class DiaryActivity extends CenesActivity {
         footerGatheringIcon.setOnClickListener(onClickListener);
         footerAlarmIcon.setOnClickListener(onClickListener);
 
-        footerHomeIcon.setImageResource(R.drawable.home_icon_grey);
+        footerHomeIcon.setImageResource(R.drawable.home_icon_unselected);
         footerDiaryIcon.setImageResource(R.drawable.diary_icon_selected);
     }
 

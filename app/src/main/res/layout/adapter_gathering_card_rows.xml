@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@drawable/rounded_white_background"
+        android:background="@drawable/rounded_white_background_with_shadow"
         android:divider="@color/transparent"
         android:orientation="vertical">
 
@@ -66,15 +66,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/xml_gradient_border_transparentbg"
-                    android:padding="3dp">
+                    android:background="@drawable/host_gradient_circle_small"
+                    android:padding="2.8dp">
 
-                    <com.deploy.util.RoundedImageView
+                    <com.cenes.util.RoundedImageView
                         android:id="@+id/iv_owner"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/profile_icon" />
+                        android:src="@drawable/cenes_user_no_image" />
                 </RelativeLayout>
 
 
@@ -95,7 +95,7 @@
                 android:padding="5dp">
 
 
-                <com.deploy.util.CenesTextView
+                <com.cenes.util.CenesTextView
                     android:id="@+id/event_owner_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
                     android:textColor="@color/cenes_dark_gray"
                     android:textSize="18sp" />
 
-                <com.deploy.util.CenesTextView
+                <com.cenes.util.CenesTextView
                     android:id="@+id/event_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <com.deploy.util.CenesTextView
+                <com.cenes.util.CenesTextView
                     android:id="@+id/event_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal" />
 
-                        <com.deploy.util.CenesTextView
+                        <com.cenes.util.CenesTextView
                             android:id="@+id/tv_event_member_images_count"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
@@ -176,7 +176,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <com.deploy.util.RoundedImageView
+            <com.cenes.util.RoundedImageView
                 android:id="@+id/event_image"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -196,7 +196,7 @@
         android:visibility="gone"
         android:orientation="horizontal">
 
-        <com.deploy.util.CenesTextView
+        <com.cenes.util.CenesTextView
             android:id="@+id/tv_reminder_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -212,7 +212,7 @@
             android:textSize="17sp"
             app:fontName="@string/font_lato_regular" />
 
-        <com.deploy.util.CenesTextView
+        <com.cenes.util.CenesTextView
             android:id="@+id/tv_reminder_time"
             android:layout_width="0dp"
             android:layout_height="30dp"

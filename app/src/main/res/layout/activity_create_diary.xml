@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/gradient_header">
 
-        <com.cenes.util.CenesTextView
+        <com.deploy.util.CenesTextView
             android:id="@+id/tv_cancel"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -24,7 +24,7 @@
             android:textSize="15sp"
             app:fontName="@string/font_lato_regular" />
 
-        <com.cenes.util.CenesTextView
+        <com.deploy.util.CenesTextView
             android:id="@+id/cenes_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -35,7 +35,7 @@
             android:textSize="18dp"
             app:fontName="@string/font_lato_regular" />
 
-        <com.cenes.util.CenesTextView
+        <com.deploy.util.CenesTextView
             android:id="@+id/tv_save_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -65,7 +65,7 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
-            <com.cenes.util.CenesEditText
+            <com.deploy.util.CenesEditText
                 android:id="@+id/et_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                 android:textSize="15sp"
                 app:fontName="@string/font_lato_regular" />
 
-            <com.cenes.util.CenesTextView
+            <com.deploy.util.CenesTextView
                 android:id="@+id/tv_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
                 android:textSize="15sp"
                 app:fontName="@string/font_lato_regular" />
 
-            <com.cenes.util.CenesEditText
+            <com.deploy.util.CenesEditText
                 android:id="@+id/et_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
                 android:background="@drawable/rounded_corner_white"
                 android:orientation="vertical">
 
-                <com.cenes.util.CenesTextView
+                <com.deploy.util.CenesTextView
                     android:id="@+id/tv_add_photos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -155,7 +155,7 @@
                 android:background="@drawable/rounded_corner_white"
                 android:orientation="vertical">
 
-                <com.cenes.util.CenesTextView
+                <com.deploy.util.CenesTextView
                     android:id="@+id/tv_invite_frnds_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -205,7 +205,7 @@
 
             </LinearLayout>
 
-            <com.cenes.util.CenesTextView
+            <com.deploy.util.CenesTextView
                 android:id="@+id/tv_search_location_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -220,7 +220,7 @@
                 android:textSize="15sp"
                 app:fontName="@string/font_lato_regular" />
 
-            <com.cenes.util.CenesTextView
+            <com.deploy.util.CenesTextView
                 android:id="@+id/delete_btn_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

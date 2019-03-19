@@ -16,14 +16,15 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/xml_border_bottom_grey">
 
-        <com.deploy.util.RoundedImageView
+        <com.cenes.util.RoundedImageView
             android:id="@+id/home_profile_pic"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/header_profile_pic_width"
+            android:layout_height="@dimen/header_profile_pic_height"
             android:layout_alignParentLeft="true"
             android:layout_margin="5dp"
             android:gravity="center"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/profile_icon"/>
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
@@ -31,7 +32,8 @@
             android:layout_marginTop="20dp"
             android:textColor="@color/white"
             android:layout_alignParentLeft="true"
-            android:background="@drawable/badge_notify_icon" />
+            android:background="@drawable/badge_notify_icon"
+            android:visibility="gone"/>
         <TextView
             android:id="@+id/tv_notification_count_pic"
             android:layout_width="wrap_content"
@@ -41,7 +43,8 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="38dp"/>
+            android:layout_marginLeft="38dp"
+            android:visibility="gone"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -50,12 +53,13 @@
             android:gravity="center_horizontal"
             android:text="Gathering"
             android:textColor="@color/black"
-            android:textSize="18dp" />
+            android:textSize="@dimen/header_title_font"
+            android:textStyle="bold"/>
 
         <ImageView
             android:id="@+id/create_gath_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_alignParentRight="true"
             android:layout_margin="5dp"
             android:padding="5dp"
@@ -75,7 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="2dp">
+            android:layout_marginTop="-1dp">
 
             <TextView
                 android:id="@+id/confirmed_btn"

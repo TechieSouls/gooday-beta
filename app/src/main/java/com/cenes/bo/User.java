@@ -1,5 +1,7 @@
 package com.cenes.bo;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by puneet on 11/8/17.
  */
@@ -18,7 +20,7 @@ public class User {
     public final String TOKEN = "token";
     public final String PHOTO = "photo";
     public final String PHONE = "phone";
-
+    public final String BIRTHDATE = "birthDate";
 
 
 
@@ -30,10 +32,13 @@ public class User {
     private int userId;
     private String username;
     private String facebookID;
+
+    @SerializedName("photo")
     private String picture;
     private String authType;
     private String gender;
     private String phone;
+    private Long birthDate;
 
     public int getUserId() {
         return userId;
@@ -141,5 +146,33 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Long getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Long birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", apiUrl='" + apiUrl + '\'' +
+                ", authToken='" + authToken + '\'' +
+                ", userId=" + userId +
+                ", username='" + username + '\'' +
+                ", facebookID='" + facebookID + '\'' +
+                ", picture='" + picture + '\'' +
+                ", authType='" + authType + '\'' +
+                ", gender='" + gender + '\'' +
+                ", phone='" + phone + '\'' +
+                ", birthDate='" + birthDate + '\'' +
+                ", facebookAuthToken='" + facebookAuthToken + '\'' +
+                '}';
     }
 }

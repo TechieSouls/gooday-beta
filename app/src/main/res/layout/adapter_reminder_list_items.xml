@@ -23,7 +23,7 @@
             android:paddingTop="10dp"
             android:src="@drawable/reminder_unchecked" />
 
-        <com.cenes.util.CenesTextView
+        <com.deploy.util.CenesTextView
             android:id="@+id/tv_title"
             android:layout_width="0dp"
             android:layout_height="60dp"
@@ -45,7 +45,7 @@
             android:src="@drawable/pencil_thin"
             android:visibility="gone" />
 
-        <com.cenes.util.CenesTextView
+        <com.deploy.util.CenesTextView
             android:id="@+id/tv_invite_from"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
@@ -56,7 +56,7 @@
             android:visibility="gone"
             app:fontName="@string/font_lato_regular" />
 
-        <com.cenes.util.RoundedImageView
+        <com.deploy.util.RoundedImageView
             android:id="@+id/iv_invite_from"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -65,7 +65,7 @@
             android:layout_gravity="center"
             android:scaleType="centerCrop" />
 
-        <com.cenes.util.CenesTextView
+        <com.deploy.util.CenesTextView
             android:id="@+id/tv_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
             android:layout_marginStart="35dp"
             android:orientation="vertical">
 
-            <com.cenes.util.CenesTextView
+            <com.deploy.util.CenesTextView
                 android:id="@+id/tv_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
                 android:textSize="16sp"
                 app:fontName="@string/font_lato_regular" />
 
-            <com.cenes.util.CenesTextView
+            <com.deploy.util.CenesTextView
                 android:id="@+id/tv_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -119,7 +119,7 @@
                 app:fontName="@string/font_lato_regular" />
 
 
-            <com.cenes.util.CenesTextView
+            <com.deploy.util.CenesTextView
                 android:id="@+id/tv_from"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -1,14 +1,11 @@
 package com.cenes.fragment;
 
 import android.app.ProgressDialog;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +18,7 @@ import com.cenes.Manager.ApiManager;
 import com.cenes.Manager.InternetManager;
 import com.cenes.Manager.UrlManager;
 import com.cenes.R;
+import com.cenes.activity.CenesBaseActivity;
 import com.cenes.activity.GatheringScreenActivity;
 import com.cenes.application.CenesApplication;
 import com.cenes.bo.User;
@@ -32,7 +30,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -46,6 +43,8 @@ import java.util.Calendar;
  */
 
 public class InvitationFragment extends CenesFragment{
+
+    public static String TAG = "InvitationFragment";
 
     private CenesApplication cenesApplication;
     private CoreManager coreManager;
@@ -290,7 +289,7 @@ public class InvitationFragment extends CenesFragment{
                         mMapView.setVisibility(View.GONE);
                     }
 
-                    //Iterating event members from Event to get Logged In user as EventMember
+                    //Iterating parentEvent members from Event to get Logged In user as EventMember
                     if (gatheringData.has("eventMembers") && gatheringData.getJSONArray("eventMembers").length() > 0) {
                         for (int i=0; i<gatheringData.getJSONArray("eventMembers").length(); i++) {
                             JSONObject gatheringMemberObj = gatheringData.getJSONArray("eventMembers").getJSONObject(i);
@@ -319,6 +318,7 @@ public class InvitationFragment extends CenesFragment{
     @Override
     public void onResume() {
         super.onResume();
-        ((GatheringScreenActivity) getActivity()).hideFooter();
+
+        ((CenesBaseActivity) getActivity()).hideFooter();
     }
 }

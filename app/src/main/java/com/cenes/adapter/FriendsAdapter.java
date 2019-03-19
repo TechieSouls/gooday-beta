@@ -1,21 +1,24 @@
-package com.deploy.adapter;
+package com.cenes.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.deploy.R;
-import com.deploy.activity.SearchFriendActivity;
-import com.deploy.util.CenesUtils;
-import com.deploy.util.RoundedImageView;
+import com.cenes.R;
+import com.cenes.activity.SearchFriendActivity;
+import com.cenes.util.CenesUtils;
+import com.cenes.util.RoundedImageView;
 
 import org.json.JSONObject;
 
@@ -35,6 +38,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.MyViewHo
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public RoundedImageView ivFriend;
+        RelativeLayout rvNonCenesMemImg;
         TextView tvName;
         RelativeLayout container;
         ImageButton ibDelete;
@@ -45,6 +49,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.MyViewHo
             tvName = (TextView) view.findViewById(R.id.tv_friend_name);
             container = (RelativeLayout) view.findViewById(R.id.container);
             ibDelete = (ImageButton) view.findViewById(R.id.ib_delete);
+            rvNonCenesMemImg = (RelativeLayout) view.findViewById(R.id.rv_non_cenes_mem_img);
         }
     }
 
@@ -72,13 +77,47 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.MyViewHo
             }
             holder.tvName.setText(invFrn.get("name"));
             holder.ibDelete.setVisibility(View.VISIBLE);
-            holder.ivFriend.setImageResource(R.drawable.default_profile_icon);
-            if (photo != null ) {
-                Glide.with(context).load(photo).apply(RequestOptions.placeholderOf(R.drawable.default_profile_icon)).into(holder.ivFriend);
-            } else {
-                holder.ivFriend.setImageResource(R.drawable.default_profile_icon);
-            }
+            holder.ivFriend.setImageResource(R.drawable.cenes_user_no_image);
 
+            if (invFrn.get("cenesMember").toString().equals("no")) {
+
+                holder.rvNonCenesMemImg.setVisibility(View.VISIBLE);
+                holder.ivFriend.setVisibility(View.GONE);
+
+                String imageName = "";
+                String[] titleArr = invFrn.get("name").toString().split(" ");
+                int i=0;
+                for (String str: titleArr) {
+                    if (i > 1) {
+                        break;
+                    }
+                    imageName += str.substring(0,1).toUpperCase();
+                    i++;
+                }
+
+                TextView circleText = new TextView(context);
+                LinearLayout.LayoutParams imageViewParams = new LinearLayout.LayoutParams(CenesUtils.dpToPx(40), CenesUtils.dpToPx(40));
+                circleText.setLayoutParams(imageViewParams);
+                circleText.setText(imageName);
+                circleText.setGravity(Gravity.CENTER);
+                circleText.setTextColor(context.getResources().getColor(R.color.white));
+                circleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                circleText.setBackground(context.getResources().getDrawable(R.drawable.xml_circle_noncenes_grey));
+
+                holder.rvNonCenesMemImg.removeAllViews();
+                holder.rvNonCenesMemImg.addView(circleText);
+
+            } else {
+
+                holder.rvNonCenesMemImg.setVisibility(View.GONE);
+                holder.ivFriend.setVisibility(View.VISIBLE);
+
+                if (photo != null) {
+                    Glide.with(context).load(photo).apply(RequestOptions.placeholderOf(R.drawable.cenes_user_no_image)).into(holder.ivFriend);
+                } else {
+                    holder.ivFriend.setImageResource(R.drawable.cenes_user_no_image);
+                }
+            }
             holder.ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

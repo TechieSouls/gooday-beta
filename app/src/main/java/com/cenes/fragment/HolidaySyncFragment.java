@@ -1,10 +1,9 @@
 package com.cenes.fragment;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.GestureDetector;
+import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,24 +15,38 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.cenes.AsyncTasks.ProfileAsyncTask;
 import com.cenes.Manager.ApiManager;
 import com.cenes.Manager.DeviceManager;
 import com.cenes.Manager.UrlManager;
 import com.cenes.R;
 import com.cenes.activity.AlarmActivity;
-import com.cenes.activity.CenesActivity;
+import com.cenes.activity.CenesBaseActivity;
 import com.cenes.activity.DiaryActivity;
 import com.cenes.activity.GatheringScreenActivity;
+import com.cenes.activity.GuestActivity;
 import com.cenes.activity.HomeScreenActivity;
 import com.cenes.activity.ReminderActivity;
 import com.cenes.application.CenesApplication;
+import com.cenes.bo.HolidayCalendar;
 import com.cenes.bo.User;
 import com.cenes.coremanager.CoreManager;
 import com.cenes.countrypicker.CountryPicker;
 import com.cenes.countrypicker.CountryPickerListener;
+import com.cenes.countrypicker.CountryUtils;
 import com.cenes.database.manager.UserManager;
+import com.cenes.fragment.dashboard.HomeFragment;
+import com.cenes.service.InstabugService;
+import com.cenes.util.CenesUtils;
+import com.cenes.util.RoundedImageView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,14 +63,21 @@ public class HolidaySyncFragment extends CenesFragment {
     UserManager userManager;
     ApiManager apiManager;
     UrlManager urlManager;
+    private HolidayCalendar holidayCalendar;
+    private User loggedInUser;
+    private ProfileAsyncTask profileAsyncTask;
 
     RelativeLayout rlHeader;
-    ImageView ivProfile;
+    ImageView ivHolidayForward, instabugReport;
     private User user;
-    TextView tvSave;
+    private RoundedImageView homeProfilePic, rivCountryFlag;
+    private ImageView homeIcon;
+    private RelativeLayout rvSignupView, rlSideMenuView;
+    private Button btnChangeCountry, btnSidemenuChangeCountry;
 
-    TextView holiday_search_textbox;
-    String holidayCalendarId;
+    TextView tvSignupSelectedCountry, tvSidemenuSelectedCountry;
+    Button btnSidemenuSaveCountry;
+    String holidayCalendarId, tempHolidayCalendarId;
     public static boolean isFirstLogin;
 
     @Override
@@ -65,6 +85,13 @@ public class HolidaySyncFragment extends CenesFragment {
 
         View v = inflater.inflate(R.layout.activity_holiday_sync, container, false);
 
+        if (getActivity() instanceof CenesBaseActivity) {
+            isFirstLogin = ((CenesBaseActivity) getActivity()).sharedPrefs.getBoolean("isFirstLogin", true);
+        } else if (getActivity() instanceof GuestActivity) {
+            isFirstLogin = ((GuestActivity) getActivity()).sharedPrefs.getBoolean("isFirstLogin", true);
+        }
+
+        holidayCalendar = null;
         holidayCalendarId = null;
         cenesApplication = getCenesActivity().getCenesApplication();
         coreManager = cenesApplication.getCoreManager();
@@ -72,63 +99,193 @@ public class HolidaySyncFragment extends CenesFragment {
         userManager = coreManager.getUserManager();
         apiManager = coreManager.getApiManager();
         urlManager = coreManager.getUrlManager();
+        loggedInUser = userManager.getUser();
+        profileAsyncTask = new ProfileAsyncTask(cenesApplication, getActivity());
 
-        holiday_search_textbox = (TextView) v.findViewById(R.id.holiday_search_textbox);
+        rvSignupView = (RelativeLayout) v.findViewById(R.id.rv_signup_view);
+        tvSignupSelectedCountry = (TextView) v.findViewById(R.id.tv_signup_selected_country);
+        ivHolidayForward= (ImageView) v.findViewById(R.id.iv_holiday_forward);
+        btnChangeCountry = (Button) v.findViewById(R.id.btn_change_country);
+        instabugReport = (ImageView) v.findViewById(R.id.instabug_report);
 
+        btnSidemenuSaveCountry  = (Button) v.findViewById(R.id.btn_sidemenu_save_country);
+        rlSideMenuView = (RelativeLayout) v.findViewById(R.id.rl_side_menu_view);
+        tvSidemenuSelectedCountry = (TextView) v.findViewById(R.id.tv_sidemenu_selected_country);
+        homeProfilePic = (RoundedImageView) v.findViewById(R.id.home_profile_pic);
+        homeIcon = (ImageView) v.findViewById(R.id.home_icon);
         rlHeader = (RelativeLayout) v.findViewById(R.id.rl_header);
-        ivProfile = (ImageView) v.findViewById(R.id.ivProfile);
-        tvSave = (TextView) v.findViewById(R.id.tvSave);
+        rivCountryFlag = (RoundedImageView) v.findViewById(R.id.riv_country_flag);
+        btnSidemenuChangeCountry = (Button) v.findViewById(R.id.btn_sidemenu_change_country);
 
-        selectHolidayCalendarBasedOnCountry();
+        if (getActivity() instanceof GuestActivity) {
+            //((GuestActivity)getActivity()).hideFooter();
+        } else if (getActivity() instanceof CenesBaseActivity) {
+            ((CenesBaseActivity) getActivity()).hideFooter();
+        }
 
-        holiday_search_textbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final CountryPicker picker = CountryPicker.newInstance("Select Holiday Calendar");
-                //deviceManager.showKeyBoard(picker.getSearchEditText(),HolidaySyncActivity.this);
-                picker.show(getCenesActivity().getSupportFragmentManager(), "COUNTRY_PICKER");
-                picker.setListener(new CountryPickerListener() {
-                    @Override
-                    public void onSelectCountry(String name, String code, String calendarId) {
-                        holiday_search_textbox.setText(name);
-                        holidayCalendarId = calendarId;
-                        picker.dismiss();
+         if (isFirstLogin) {
+            rvSignupView.setVisibility(View.VISIBLE);
+            rlSideMenuView.setVisibility(View.GONE);
+             selectHolidayCalendarBasedOnCountry();
+
+         } else {
+            rvSignupView.setVisibility(View.GONE);
+            rlSideMenuView.setVisibility(View.VISIBLE);
+
+            new ProfileAsyncTask.HolidayFetchSyncTask(new ProfileAsyncTask.HolidayFetchSyncTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+
+                    try {
+                        if (response != null && response.getBoolean("success")) {
+
+                            Gson gson = new Gson();
+
+                            Type listType = new TypeToken<List<HolidayCalendar>>() {}.getType();
+                            List<HolidayCalendar> calendars = new Gson().fromJson(response.getJSONArray("data").toString(), listType);
+
+                            if (calendars != null && calendars.size() > 0) {
+                                holidayCalendar = calendars.get(0);
+                                holidayCalendarId = CountryUtils.getCountryCalendarIdMap().get(holidayCalendar.getCountryName());
+                                tempHolidayCalendarId = CountryUtils.getCountryCalendarIdMap().get(holidayCalendar.getCountryName());
+                                tvSidemenuSelectedCountry.setText(holidayCalendar.getCountryName());
+                                rivCountryFlag.setImageResource(getActivity().getResources()
+                                        .getIdentifier("flag_" + holidayCalendar.getCountryCode().toLowerCase(), "drawable",
+                                                getActivity().getPackageName()));
+
+                            } else {
+                                rivCountryFlag.setImageResource(R.drawable.holiday_globe);
+                                tvSidemenuSelectedCountry.setText("No Calendar Selected");
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                });
-            }
-        });
+                }
+            }).execute();
 
-        isFirstLogin = ((CenesActivity) getActivity()).sharedPrefs.getBoolean("isFirstLogin", true);
-
-        if (isFirstLogin) {
-            rlHeader.setVisibility(View.GONE);
-        } else {
-            rlHeader.setVisibility(View.VISIBLE);
             user = userManager.getUser();
+
+            if (user != null && !CenesUtils.isEmpty(user.getPicture())) {
+                // DownloadImageTask(homePageProfilePic).execute(user.getPicture());
+                Glide.with(HolidaySyncFragment.this).load(user.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.default_profile_icon)).into(homeProfilePic);
+            }
+            /*user = userManager.getUser();
             if (user != null && user.getPicture() != null && user.getPicture() != "null") {
                 RequestOptions requestOptions = new RequestOptions();
                 requestOptions.circleCrop();
                 requestOptions.placeholder(R.drawable.default_profile_icon);
                 Glide.with(getActivity()).load(user.getPicture()).apply(requestOptions).into(ivProfile);
-            }
-
-            tvSave.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    nextClickListener();
-                }
-            });
-
-            ivProfile.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getActivity().onBackPressed();
-                }
-            });
+            }*/
         }
+
+        //Click Listeners
+        instabugReport.setOnClickListener(onClickListener);
+        btnChangeCountry.setOnClickListener(onClickListener);
+        ivHolidayForward.setOnClickListener(onClickListener);
+        homeIcon.setOnClickListener(onClickListener);
+        homeProfilePic.setOnClickListener(onClickListener);
+        btnSidemenuSaveCountry.setOnClickListener(onClickListener);
+        btnSidemenuChangeCountry.setOnClickListener(onClickListener);
 
         return v;
     }
+
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            switch (v.getId()) {
+                case R.id.instabug_report:
+                    new InstabugService().invokeBugReporting();
+                    break;
+                case R.id.btn_change_country:
+                    final CountryPicker picker = CountryPicker.newInstance("Select Holiday Calendar");
+                    //deviceManager.showKeyBoard(picker.getSearchEditText(),HolidaySyncActivity.this);
+                    picker.show(getCenesActivity().getSupportFragmentManager(), "COUNTRY_PICKER");
+                    picker.setListener(new CountryPickerListener() {
+                        @Override
+                        public void onSelectCountry(String name, String code, String calendarId) {
+
+                            try {
+                                tvSignupSelectedCountry.setText(name);
+                                holidayCalendarId = calendarId;
+
+                                if (holidayCalendar == null) {
+                                    holidayCalendar = new HolidayCalendar();
+                                }
+                                holidayCalendar.setCountryCalendarId(holidayCalendarId);
+                                holidayCalendar.setCountryName(name);
+                                holidayCalendar.setCountryCode(code.toLowerCase());
+                                holidayCalendar.setUserId(loggedInUser.getUserId());
+                                System.out.println(holidayCalendar.toString());
+                                picker.dismiss();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+                    break;
+
+                case R.id.iv_holiday_forward:
+                        nextClickListener();
+                    break;
+
+                case R.id.home_icon:
+                    ((CenesBaseActivity)getActivity()).clearBackStackInclusive(null);
+                    ((CenesBaseActivity)getActivity()).replaceFragment(new HomeFragment(), null);
+                    break;
+
+                case R.id.home_profile_pic:
+                    if (getActivity() instanceof CenesBaseActivity) {
+                        ((CenesBaseActivity)getActivity()).mDrawerLayout.openDrawer(GravityCompat.START);
+                    }
+                    break;
+
+                case R.id.btn_sidemenu_change_country:
+                    final CountryPicker sidemenuCountryPicker = CountryPicker.newInstance("Select Holiday Calendar");
+                    //deviceManager.showKeyBoard(picker.getSearchEditText(),HolidaySyncActivity.this);
+                    sidemenuCountryPicker.show(getCenesActivity().getSupportFragmentManager(), "COUNTRY_PICKER");
+                    sidemenuCountryPicker.setListener(new CountryPickerListener() {
+                        @Override
+                        public void onSelectCountry(String name, String code, String calendarId) {
+                            tvSidemenuSelectedCountry.setText(name);
+                            holidayCalendarId = calendarId;
+                            if (tempHolidayCalendarId != null && tempHolidayCalendarId.equals(holidayCalendarId)) {
+                                btnSidemenuSaveCountry.setVisibility(View.GONE);
+                            } else {
+                                btnSidemenuSaveCountry.setVisibility(View.VISIBLE);
+                            }
+
+                            if (holidayCalendar == null) {
+                                holidayCalendar = new HolidayCalendar();
+                            }
+                            holidayCalendar.setCountryCalendarId(holidayCalendarId);
+                            holidayCalendar.setCountryName(name);
+                            holidayCalendar.setCountryCode(code.toLowerCase());
+                            holidayCalendar.setUserId(loggedInUser.getUserId());
+
+                            rivCountryFlag.setImageResource(getActivity().getResources()
+                                    .getIdentifier("flag_" + code, "drawable",
+                                            getActivity().getPackageName()));
+                            sidemenuCountryPicker.dismiss();
+                        }
+                    });
+                    break;
+                case R.id.btn_sidemenu_save_country:
+
+                    new ProfileAsyncTask.HolidaySyncTask(new ProfileAsyncTask.HolidaySyncTask.AsyncResponse() {
+                        @Override
+                        public void processFinish(JSONObject response) {
+                            btnSidemenuSaveCountry.setVisibility(View.GONE);
+                            Toast.makeText(getActivity(), "Holidays Synced", Toast.LENGTH_SHORT).show();
+                        }
+                    }).execute(holidayCalendar);
+                    break;
+            }
+        }
+    };
 
     public void selectHolidayCalendarBasedOnCountry() {
 
@@ -148,8 +305,35 @@ public class HolidaySyncFragment extends CenesFragment {
         }
 
         if (countryName != null) {
-            holiday_search_textbox.setText(countryName);
             holidayCalendarId = CountryUtils.getCountryCalendarIdMap().get(countryName);
+            tempHolidayCalendarId = CountryUtils.getCountryCalendarIdMap().get(countryName);
+            if (isFirstLogin) {
+
+                if (holidayCalendarId == null) {
+                    tvSignupSelectedCountry.setText(countryName);
+                } else {
+                    tvSignupSelectedCountry.setText(countryName);
+
+                    holidayCalendar = new HolidayCalendar();
+                    holidayCalendar.setCountryCalendarId(holidayCalendarId);
+                    holidayCalendar.setCountryName(countryName);
+                    holidayCalendar.setCountryCode(userCountryCode.toLowerCase());
+                    holidayCalendar.setUserId(loggedInUser.getUserId());
+                }
+
+
+            } else {
+                tvSidemenuSelectedCountry.setText(countryName);
+                rivCountryFlag.setImageResource(getActivity().getResources()
+                        .getIdentifier("flag_" + userCountryCode.toLowerCase(), "drawable",
+                                getActivity().getPackageName()));
+
+
+                //Glide.with(HolidaySyncFragment.this).load(getActivity().getResources()
+                 //       .getIdentifier("flag_" + userCountryCode.toLowerCase(), "drawable",
+                  //              getActivity().getPackageName())).apply(RequestOptions.placeholderOf(R.drawable.holiday_globe)).into(rivCountryFlag);
+
+            }
         }
     }
 
@@ -175,41 +359,15 @@ public class HolidaySyncFragment extends CenesFragment {
 
     public void nextClickListener() {
         if (holidayCalendarId != null) {
-            new HolidaySyncTask().execute(holidayCalendarId);
-        }
-    }
-
-    class HolidaySyncTask extends AsyncTask<String, String, String> {
-
-        ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(getCenesActivity());
-            progressDialog.setMessage("Syncing....");
-            progressDialog.setIndeterminate(false);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            String calendarId = strings[0];
-            User user = userManager.getUser();
-            user.setApiUrl(urlManager.getApiUrl("dev"));
-            String queryStr = "?calendar_id=" + URLEncoder.encode(calendarId) + "&user_id=" + user.getUserId();
-            apiManager.syncHolidayCalendar(user, queryStr, getCenesActivity());
-            return "success";
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.hide();
-            }
-            Toast.makeText(getCenesActivity(), "Holiday Calendar Synced!!", Toast.LENGTH_LONG);
+            new ProfileAsyncTask.HolidaySyncTask(new ProfileAsyncTask.HolidaySyncTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+                    System.out.println(response);
+                    if (getActivity() instanceof GuestActivity) {
+                        ((GuestActivity)getActivity()).replaceFragment(new CalenderSyncFragment(), null);
+                    }
+                }
+            }).execute(holidayCalendar);
         }
     }
 }

@@ -1,12 +1,12 @@
-package com.deploy.AsyncTasks;
+package com.cenes.AsyncTasks;
 
 import android.os.AsyncTask;
 
-import com.deploy.application.CenesApplication;
-import com.deploy.backendManager.LocationApiManager;
-import com.deploy.bo.Location;
-import com.deploy.coremanager.CoreManager;
-import com.deploy.database.manager.UserManager;
+import com.cenes.application.CenesApplication;
+import com.cenes.backendManager.LocationApiManager;
+import com.cenes.bo.Location;
+import com.cenes.coremanager.CoreManager;
+import com.cenes.database.manager.UserManager;
 
 import java.util.List;
 

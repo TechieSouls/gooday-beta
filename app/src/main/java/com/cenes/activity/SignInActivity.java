@@ -1,52 +1,19 @@
 package com.cenes.activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.cenes.Manager.AlertManager;
-import com.cenes.Manager.ApiManager;
-import com.cenes.Manager.DeviceManager;
-import com.cenes.Manager.InternetManager;
-import com.cenes.Manager.UrlManager;
-import com.cenes.Manager.ValidationManager;
 import com.cenes.R;
-import com.cenes.application.CenesApplication;
-import com.cenes.bo.User;
-import com.cenes.coremanager.CoreManager;
-import com.cenes.database.manager.UserManager;
-import com.cenes.fragment.guest.GuestFragment;
 import com.cenes.fragment.guest.SigninFragment;
-import com.cenes.util.CenesUtils;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.cenes.service.InstabugService;
 
-import org.json.JSONObject;
-
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by puneet on 11/8/17.
@@ -63,6 +30,9 @@ public class SignInActivity extends CenesActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_signin);
+
+
+        new InstabugService().initiateInstabug(getApplication());
 
         buttonSignup = (Button) findViewById(R.id.signup_btn);
         buttonSignup.setText(Html.fromHtml("Don't have an Account? <b>Sign Up Now</b>"));

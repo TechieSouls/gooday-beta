@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,10 +26,11 @@ import com.cenes.application.CenesApplication;
 import com.cenes.backendManager.UserApiManager;
 import com.cenes.coremanager.CoreManager;
 import com.cenes.fragment.CenesFragment;
+import com.cenes.service.AuthenticateService;
+import com.cenes.service.InstabugService;
+import com.cenes.util.CenesUtils;
 
 import org.json.JSONObject;
-
-import java.util.Locale;
 
 /**
  * Created by mandeep on 18/9/18.
@@ -43,6 +45,7 @@ public class SignupStep1Fragment extends CenesFragment {
     private Button btAlreadyLogin, btSignupStep1Continue;
     private EditText etPhoneNumber;
     TextView tvDropdownCountryCode;
+    private ImageView ivBugReport;
 
     private CenesApplication cenesApplication;
     private CoreManager coreManager;
@@ -51,11 +54,12 @@ public class SignupStep1Fragment extends CenesFragment {
     private AuthenticateService authenticateService;
     private String etPhoneNumberStr;
     private String countryCode = "0";
+    private String countryCodeStr = "";
     private Boolean isCountrySelected = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_guest_input_phone, container, false);
+        View v = inflater.inflate(R.layout.fragment_signup_input_phone, container, false);
 
         //llSignupStep1Back = (LinearLayout) v.findViewById(R.id.ll_signup_step1_back);
         llCountryCodeDropdown = (LinearLayout) v.findViewById(R.id.ll_country_code_dropdown);
@@ -65,20 +69,24 @@ public class SignupStep1Fragment extends CenesFragment {
         btSignupStep1Continue = (Button) v.findViewById(R.id.bt_signup_step1_continue);
         etPhoneNumber = (EditText) v.findViewById(R.id.et_phone_number);
         tvDropdownCountryCode = (TextView) v.findViewById(R.id.tv_dropdown_country_code);
+        ivBugReport = (ImageView) v.findViewById(R.id.iv_bug_report);
 
         btAlreadyLogin.setOnClickListener(onClickListener);
         //llSignupStep1Back.setOnClickListener(onClickListener);
         llCountryCodeDropdown.setOnClickListener(onClickListener);
         btSignupStep1Continue.setOnClickListener(onClickListener);
         etPhoneNumber.addTextChangedListener(phoneNumberWatcher);
+        ivBugReport.setOnClickListener(onClickListener);
 
         initializeVariables();
 
         //Setting country code based on the country selected in mobile.
        // String androidCountryCode = CenesUtils.getDeviceCountryCode();
         if (isCountrySelected == false) {
-            String androidCountryCode = CenesUtils.getDeviceCountryCode(getContext());
-            countryCode = "+"+authenticateService.getPhoneCodeByCountryCode(androidCountryCode.toUpperCase());
+            isCountrySelected = true;
+            System.out.println("Country Code Selected : "+isCountrySelected);
+            countryCodeStr = CenesUtils.getDeviceCountryCode(getContext());
+            countryCode = "+"+authenticateService.getPhoneCodeByCountryCode(countryCodeStr.toUpperCase());
             tvDropdownCountryCode.setText(countryCode);
         }
         return v;
@@ -140,7 +148,10 @@ public class SignupStep1Fragment extends CenesFragment {
                 case R.id.ll_country_code_dropdown:
                     SignupCountryListFragment scls = new SignupCountryListFragment();
                     scls.setTargetFragment(SignupStep1Fragment.this, 1001);
-                    ((GuestActivity) getActivity()).replaceFragment(scls, "SignupCountryListFragment");
+                    ((GuestActivity) getActivity()).replaceFragment(scls, SignupCountryListFragment.TAG);
+                    break;
+                case R.id.iv_bug_report:
+                    new InstabugService().invokeBugReporting();
                     break;
             }
         }
@@ -151,6 +162,9 @@ public class SignupStep1Fragment extends CenesFragment {
         if (requestCode==1001 && resultCode==Activity.RESULT_OK) {
             final String cc = data.getStringExtra("countryCode");
             countryCode = cc;
+
+            countryCodeStr = authenticateService.getCountryFromCountryCode(countryCode.replaceAll("\\+", ""));
+            System.out.println("Country from country code : "+countryCodeStr);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -192,13 +206,16 @@ public class SignupStep1Fragment extends CenesFragment {
             sendCodeDialog = null;
             try {
                 if (jsonObject.getBoolean("success")) {
+                    System.out.println("countryCodeStr : "+countryCodeStr);
+
                     SignupStep2Fragment ss2Fragment = new SignupStep2Fragment();
                     Bundle bundle = new Bundle();
+                    bundle.putString("countryCodeStr", countryCodeStr);
                     bundle.putString("countryCode", countryCode);
                     bundle.putString("phoneNumber", etPhoneNumberStr.replaceAll("\\s","").replaceAll("-",""));
                     ss2Fragment.setArguments(bundle);
 
-                    ((GuestActivity) getActivity()).replaceFragment(ss2Fragment, "SignupStep2Fragment");
+                    ((GuestActivity) getActivity()).replaceFragment(ss2Fragment, null);
 
                 } else {
                     alertManager.getAlert((GuestActivity)getActivity(), jsonObject.getString("message"), "Alert", null, false, "OK");

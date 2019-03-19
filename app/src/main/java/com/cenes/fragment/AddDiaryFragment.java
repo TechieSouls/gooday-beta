@@ -12,7 +12,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -52,7 +51,6 @@ import com.cenes.coremanager.CoreManager;
 import com.cenes.database.manager.UserManager;
 import com.cenes.util.CenesUtils;
 import com.cenes.util.ImageUtils;
-import com.cenes.util.RoundedDrawable;
 import com.cenes.util.RoundedImageView;
 import com.soundcloud.android.crop.Crop;
 

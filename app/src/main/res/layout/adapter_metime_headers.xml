@@ -29,7 +29,7 @@
         android:layout_height="match_parent"
         android:layout_marginEnd="20dp"
         android:background="@color/white"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/me_time_days"

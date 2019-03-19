@@ -1,4 +1,4 @@
-package com.deploy.bo;
+package com.cenes.bo;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -14,6 +14,12 @@ public class Location {
     @SerializedName("photo")
     private String photo;
 
+    private String latitude;
+
+    private String longitude;
+
+    private String placeId;
+
     public String getLocation() {
         return location;
     }
@@ -28,5 +34,29 @@ public class Location {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
     }
 }
