@@ -79,10 +79,34 @@
             android:paddingStart="20dp"
             android:scrollbars="none"/>
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/cenes_noncenes_select_bar"
+        android:layout_below="@+id/rl_selected_friends_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <TextView
+            android:id="@+id/tv_select_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:textColor="@color/black"/>
+        
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:src="@drawable/grey_arrow_icon"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="40dp"
+            />
+    </RelativeLayout>
     <ListView
         android:id="@+id/gath_search_friend_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/rl_selected_friends_recycler_view"></ListView>
+        android:layout_below="@+id/cenes_noncenes_select_bar"
+        ></ListView>
 </RelativeLayout>

@@ -84,7 +84,7 @@
                     android:background="@drawable/host_gradient_circle_small"
                     android:padding="2.8dp">
 
-                    <com.cenes.util.RoundedImageView
+                    <com.cenesbeta.util.RoundedImageView
                         android:id="@+id/iv_owner"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
@@ -101,7 +101,7 @@
                 android:orientation="vertical"
                 android:padding="5dp">
 
-                <com.cenes.util.CenesTextView
+                <com.cenesbeta.util.CenesTextView
                     android:id="@+id/event_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -113,7 +113,7 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <com.cenes.util.CenesTextView
+                <com.cenesbeta.util.CenesTextView
                     android:id="@+id/event_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -156,7 +156,7 @@
                     android:layout_gravity="center"
                     android:background="@drawable/xml_circle_light_grey"
                     android:padding="3dp">
-                    <com.cenes.util.RoundedImageView
+                    <com.cenesbeta.util.RoundedImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp" />
                 </RelativeLayout>
@@ -170,7 +170,7 @@
                 android:orientation="vertical"
                 android:padding="5dp">
 
-                <com.cenes.util.CenesTextView
+                <com.cenesbeta.util.CenesTextView
                     android:id="@+id/tv_tp_event_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -181,7 +181,7 @@
                     android:textColor="#FF9B9B9B"
                     android:textSize="16sp" />
 
-                <com.cenes.util.CenesTextView
+                <com.cenesbeta.util.CenesTextView
                     android:id="@+id/tv_tp_source"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -230,7 +230,7 @@
         android:visibility="gone"
         android:orientation="horizontal">
 
-        <com.cenes.util.CenesTextView
+        <com.cenesbeta.util.CenesTextView
             android:id="@+id/tv_reminder_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -246,7 +246,7 @@
             android:textSize="17sp"
             app:fontName="@string/font_lato_regular" />
 
-        <com.cenes.util.CenesTextView
+        <com.cenesbeta.util.CenesTextView
             android:id="@+id/tv_reminder_time"
             android:layout_width="0dp"
             android:layout_height="30dp"

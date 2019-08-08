@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:padding="5dp">
 
-        <com.cenes.util.RoundedImageView
+        <com.cenesbeta.util.RoundedImageView
             android:id="@+id/iv_friend_image"
             android:layout_width="40dp"
             android:layout_height="40dp"

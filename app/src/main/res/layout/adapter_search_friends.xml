@@ -2,60 +2,68 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/invite_friend_item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:padding="10dp">
-
-    <com.cenes.util.RoundedImageView
-        android:id="@+id/invite_friend_picture"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/cenes_user_no_image"
-        android:visibility="visible"/>
-
-    <RelativeLayout
-        android:id="@+id/rv_non_cenes_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"></RelativeLayout>
+    android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/ll_invite_frnd_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="5.2">
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        >
+
+        <com.cenesbeta.util.RoundedImageView
+            android:id="@+id/invite_friend_picture"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/cenes_user_no_image"
+            android:visibility="visible"/>
+
+        <RelativeLayout
+            android:id="@+id/rv_non_cenes_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"></RelativeLayout>
 
         <LinearLayout
-            android:layout_weight="5"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/invite_friend_name"
-                android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="5.2">
+
+            <LinearLayout
+                android:layout_weight="5"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="asdfghjk"
-                android:textSize="20sp" />
-            <TextView
-                android:id="@+id/invite_friend_name_cenes_user_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="I am using CENES"
-                android:visibility="gone"
-                android:textSize="12sp" />
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/invite_friend_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="asdfghjk"
+                    android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/invite_friend_name_cenes_user_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="I am using CENES"
+                    android:visibility="gone"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/iv_cenes_member_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:button="@drawable/circle_unselected"
+                android:layout_weight="1"
+                />
         </LinearLayout>
 
-        <CheckBox
-            android:id="@+id/iv_cenes_member_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:button="@drawable/circle_unselected"
-            android:layout_weight="1"
-            />
     </LinearLayout>
 
 </LinearLayout>

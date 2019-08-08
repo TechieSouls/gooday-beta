@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Cenes</string>
-    <string name="about_us_version_text">Version 1.2.5</string>
+    <string name="about_us_version_text">Version 1.2.7</string>
     <string name="title_1">Welcome to CENES\nYour personal in-synced\ncalendar</string>
     <string name="title_2">Time Prediction\nwith no conflicts</string>
 <!--
@@ -50,7 +50,7 @@ time for everyone to meet.\n\n\nNo more back and forth messaging.\nNo more time 
     <string name="forgot_password_hint">EMAIL</string>
     <string name="login_btn_text"><p>Already Have an Account? </p><b>Log In</b></string>
     <string name="signup_btn_text"><p>Dont have an Account? </p><b>Sign Up Now</b></string>
-    <string name="tandc_text"><p>This is a BETA version. By signing up, you have read and\nagree to the &lt;a href="https://www.cenesgroup.com/legal/terms-and-conditions"><font color='#FF4A90E2'>terms and conditions</font>&lt;/a> as well as the  &lt;a href="https://www.cenesgroup.com/legal/nda">non-disclosure agreement&lt;/a> </p></string>
+    <string name="tandc_text"><p>By signing up, you have read and\nagree to the &lt;a href="https://www.cenesgroup.com/legal/terms-and-conditions"><font color='#FF4A90E2'>terms and conditions</font>&lt;/a> as well as the  &lt;a href="https://www.cenesgroup.com/app/privacyPolicy">privacy policy&lt;/a> </p></string>
     <string name="fp_knoyourpassword"><p>Know Your Password? <b>Log In</b> </p></string>
 
     <!--<string name="facebook_app_id">150590745521474</string>-->

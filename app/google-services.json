@@ -15,6 +15,30 @@
       },
       "oauth_client": [
         {
+          "client_id": "212716305349-e2mmqc1iunkh4a82reicr0btdue78n0t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cenes",
+            "certificate_hash": "9761c1b4dd39f8693a1f6e81c8e72a2bfe70b713"
+          }
+        },
+        {
+          "client_id": "212716305349-i43lebiudfva365a3kdj1eh57cp7kff5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cenes",
+            "certificate_hash": "0e658fcee8420f1d58f72f443c450aa7081ee1c6"
+          }
+        },
+        {
+          "client_id": "212716305349-4dp3adhnb8jat1sonf6on0ctea2rr81i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cenes",
+            "certificate_hash": "763057e29dc4adfacde8959a45cb525fe3a8db0b"
+          }
+        },
+        {
           "client_id": "212716305349-qqqivqr05q7moonjcpct30am1e72vgtf.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -33,20 +57,108 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "212716305349-dqqjgf3njkqt9s3ucied3bit42po3m39.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "212716305349-ep3u9dm1pgrk1eof023rrtms0e0b4l2j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.optima.cenesApp"
+              }
             }
           ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:212716305349:android:ad2691bec9c6c957",
+        "android_client_info": {
+          "package_name": "com.cenesbeta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "212716305349-73cq65q13vnm1a3ejd7olg7oa71nsn1v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cenesbeta",
+            "certificate_hash": "0e658fcee8420f1d58f72f443c450aa7081ee1c6"
+          }
         },
-        "ads_service": {
-          "status": 2
+        {
+          "client_id": "212716305349-dqqjgf3njkqt9s3ucied3bit42po3m39.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQhxBB8JXznyH4NUfWDivuCG6HP3sLj8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "212716305349-dqqjgf3njkqt9s3ucied3bit42po3m39.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "212716305349-ep3u9dm1pgrk1eof023rrtms0e0b4l2j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.optima.cenesApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:212716305349:android:9619769e4ec9de21",
+        "android_client_info": {
+          "package_name": "com.deploy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "212716305349-vdbaf0mf6gbppp2bsj9eu4hbsokpuddd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.deploy",
+            "certificate_hash": "0e658fcee8420f1d58f72f443c450aa7081ee1c6"
+          }
+        },
+        {
+          "client_id": "212716305349-dqqjgf3njkqt9s3ucied3bit42po3m39.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQhxBB8JXznyH4NUfWDivuCG6HP3sLj8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "212716305349-dqqjgf3njkqt9s3ucied3bit42po3m39.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "212716305349-ep3u9dm1pgrk1eof023rrtms0e0b4l2j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.optima.cenesApp"
+              }
+            }
+          ]
         }
       }
     }

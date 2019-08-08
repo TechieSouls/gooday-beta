@@ -10,7 +10,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp">
 
-        <com.cenes.util.CurvedImageView
+        <com.cenesbeta.util.CurvedImageView
             android:id="@+id/iv_image_thumbnail"
             android:layout_width="150dp"
             android:layout_height="150dp"

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
-    package="com.cenes" >
+    package="com.cenesbeta" >
 
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
    <!-- <uses-permission android:name="android.permission.GET_ACCOUNTS" />-->
@@ -20,7 +19,7 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
 
     <application
-        android:name=".application.CenesApplication"
+        android:name="com.cenesbeta.application.CenesApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_ceneslogos"
         android:label="@string/app_name"
@@ -28,7 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.SplashActivity"
+            android:name="com.cenesbeta.activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,57 +36,57 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MainActivity"
+            android:name="com.cenesbeta.activity.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.WalkthroughActivity"
+            android:name="com.cenesbeta.activity.WalkthroughActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.WelcomeActivity"
+            android:name="com.cenesbeta.activity.WelcomeActivity"
             android:screenOrientation="portrait" />
 	<activity
-            android:name="com.cenes.activity.CenesBaseActivity"
+            android:name="com.cenesbeta.activity.CenesBaseActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.GuestActivity"
+            android:name="com.cenesbeta.activity.GuestActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.ChoiceActivity"
+            android:name="com.cenesbeta.activity.ChoiceActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.SignInActivity"
+            android:name="com.cenesbeta.activity.SignInActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.SignUpActivity"
+            android:name="com.cenesbeta.activity.SignUpActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.CompleteYourProfileActivity"
+            android:name="com.cenesbeta.activity.CompleteYourProfileActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.HomeScreenActivity"
+            android:name="com.cenesbeta.activity.HomeScreenActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.SearchFriendActivity"
+            android:name="com.cenesbeta.activity.SearchFriendActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.SearchLocationActivity"
+            android:name="com.cenesbeta.activity.SearchLocationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.ReminderActivity"
+            android:name="com.cenesbeta.activity.ReminderActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name=".activity.CreateReminderActivity"
+            android:name="com.cenesbeta.activity.CreateReminderActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing"/>
         <activity
-            android:name=".activity.GatheringScreenActivity"
+            android:name="com.cenesbeta.activity.GatheringScreenActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.AlarmActivity"
+            android:name="com.cenesbeta.activity.AlarmActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.DiaryActivity"
+            android:name="com.cenesbeta.activity.DiaryActivity"
             android:screenOrientation="portrait" />
         <activity
             tools:replace="android:theme"
@@ -110,22 +109,22 @@
             android:name="io.fabric.ApiKey"
             android:value="8d5ed83a144251c4e4003000b2db9cfb29e680db" />
 
-        <service android:name=".service.CenesFirebaseInstanceIdService">
+        <service android:name="com.cenesbeta.service.CenesFirebaseInstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".service.CenesFirebaseMessagingService">
+        <service android:name="com.cenesbeta.service.CenesFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".service.ContactWatchService"
+            android:name="com.cenesbeta.service.ContactWatchService"
             android:enabled="true"
             android:exported="false" />
-        <receiver android:name=".service.AlarmReceiver" />
-        <receiver android:name=".service.NetworkChangeReceiver" >
+        <receiver android:name="com.cenesbeta.service.AlarmReceiver" />
+        <receiver android:name="com.cenesbeta.service.NetworkChangeReceiver" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>

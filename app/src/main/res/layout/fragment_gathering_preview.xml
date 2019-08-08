@@ -103,7 +103,7 @@
                             android:layout_height="145dp"
                             android:background="@drawable/host_gradient_circle">
 
-                            <com.cenes.util.RoundedImageView
+                            <com.cenesbeta.util.RoundedImageView
                                 android:id="@+id/riv_owner_image"
                                 android:layout_width="135dp"
                                 android:layout_height="135dp"

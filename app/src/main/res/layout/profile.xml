@@ -31,7 +31,7 @@
                 android:orientation="vertical">
 
 
-                <com.cenes.util.RoundedImageView
+                <com.cenesbeta.util.RoundedImageView
                     android:id="@+id/ivProfile"
                     android:layout_width="100dp"
                     android:layout_height="100dp"

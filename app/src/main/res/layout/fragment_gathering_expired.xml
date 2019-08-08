@@ -11,7 +11,7 @@
         android:layout_height="80dp"
         android:layout_alignParentTop="true">
 
-        <com.cenes.util.RoundedImageView
+        <com.cenesbeta.util.RoundedImageView
             android:id="@+id/home_profile_pic"
             android:layout_width="@dimen/header_profile_pic_width"
             android:layout_height="@dimen/header_profile_pic_height"
@@ -41,11 +41,9 @@
 
     <LinearLayout
         android:id="@+id/ll_center_content_section"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginLeft="100dp"
-        android:layout_marginRight="100dp"
         android:orientation="vertical"
         android:gravity="center"
         >
@@ -86,6 +84,7 @@
         android:layout_height="wrap_content"
         android:padding="20dp"
         android:text="Create New Gathering"
+        android:textAlignment="center"
         android:textColor="@color/cenes_blue"
         android:background="@drawable/xml_round_rect_whitebg"
         android:textSize="18sp"

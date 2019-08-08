@@ -23,15 +23,14 @@
             android:orientation="horizontal">
 
             <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:gravity="center">
 
                 <ImageView
                     android:id="@+id/ivProfile"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/cenes_user_no_image" />
             </RelativeLayout>
@@ -63,15 +62,16 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:orientation="horizontal"
             android:weightSum="5">
 
             <ImageView
                 android:layout_width="21dp"
-                android:layout_height="match_parent"
+                android:layout_height="21dp"
                 android:layout_margin="10dp"
-                android:src="@drawable/notification_icon" />
+                android:src="@drawable/notification_icon"
+                android:layout_gravity="center_vertical"/>
 
             <TextView
                 android:id="@+id/tvNotifications"
@@ -93,15 +93,16 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:orientation="horizontal"
             android:weightSum="5">
 
             <ImageView
                 android:layout_width="21dp"
-                android:layout_height="match_parent"
+                android:layout_height="18dp"
                 android:layout_margin="10dp"
-                android:src="@drawable/calendar_sync_icon" />
+                android:src="@drawable/calendar_sync_icon"
+                android:layout_gravity="center_vertical" />
 
             <TextView
                 android:id="@+id/tvCalendarSync"
@@ -122,15 +123,16 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:orientation="horizontal"
             android:weightSum="5">
 
             <ImageView
                 android:layout_width="21dp"
-                android:layout_height="match_parent"
+                android:layout_height="18dp"
                 android:layout_margin="10dp"
-                android:src="@drawable/holiday_calendar_icon" />
+                android:src="@drawable/holiday_calendar_icon"
+                android:layout_gravity="center_vertical" />
 
             <TextView
             android:id="@+id/tvHolidayCalendar"
@@ -158,9 +160,10 @@
 
             <ImageView
                 android:layout_width="21dp"
-                android:layout_height="match_parent"
+                android:layout_height="25dp"
                 android:layout_margin="10dp"
-                android:src="@drawable/about_icon" />
+                android:src="@drawable/about_icon"
+                android:layout_gravity="center_vertical" />
 
             <TextView
             android:id="@+id/tvAbout"
@@ -187,9 +190,10 @@
 
             <ImageView
                 android:layout_width="21dp"
-                android:layout_height="match_parent"
+                android:layout_height="18dp"
                 android:layout_margin="10dp"
-                android:src="@drawable/help_feedback_icon" />
+                android:src="@drawable/help_feedback_icon"
+                android:layout_gravity="center_vertical"/>
 
             <TextView
             android:id="@+id/tvHelpAndFeedback"
@@ -219,7 +223,8 @@
                 android:layout_width="21dp"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
-                android:src="@drawable/delete_account_icon" />
+                android:src="@drawable/delete_account_icon"
+                android:layout_gravity="center_vertical" />
 
             <TextView
             android:id="@+id/tvDeleteAccount"

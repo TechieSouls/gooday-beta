@@ -328,7 +328,7 @@
 
                         </LinearLayout>
 
-                        <com.cenes.materialcalendarview.MaterialCalendarView
+                        <com.cenesbeta.materialcalendarview.MaterialCalendarView
                             android:id="@+id/material_calendar_view"
                             android:layout_width="match_parent"
                             android:layout_height="300dp"
