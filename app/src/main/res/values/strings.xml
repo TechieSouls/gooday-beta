@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Cenes</string>
-    <string name="about_us_version_text">Version 1.2.7</string>
+    <string name="app_name">Cenes 1.2.12</string>
+    <string name="about_us_version_text">Version 1.2.12</string>
     <string name="title_1">Welcome to CENES\nYour personal in-synced\ncalendar</string>
     <string name="title_2">Time Prediction\nwith no conflicts</string>
 <!--
@@ -114,7 +114,7 @@ time for everyone to meet.\n\n\nNo more back and forth messaging.\nNo more time 
     <string name="sync_your_mail_box_desc"><![CDATA[Sync your mail box to better help you manage your appointments & invites]]></string>
 
     <!-- Side Menu Screens Text  -->
-    <string name="about_us_version_update_link">http://www.cenesgroup.com</string>
+    <string name="about_us_version_update_link">https://play.google.com/store/apps/details?id=com.cenesbeta</string>
 
 
     <!-- Cenes Constants  -->

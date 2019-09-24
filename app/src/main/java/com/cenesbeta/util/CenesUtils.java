@@ -205,7 +205,7 @@ public class CenesUtils {
         Calendar pastCal = Calendar.getInstance();
         pastCal.setTimeInMillis(pastDateInMillis);
 
-        int days = currentCal.get(Calendar.DAY_OF_MONTH) - pastCal.get(Calendar.DAY_OF_MONTH);
+        int days =  Math.abs((int)(currentDateInMillis - pastDateInMillis)/(1000 * 3600 * 24));
 
         return days;
     }

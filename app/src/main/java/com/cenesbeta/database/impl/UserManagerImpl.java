@@ -75,7 +75,7 @@ public class UserManagerImpl implements UserManager {
             user.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
             user.setAuthToken(cursor.getString(cursor.getColumnIndex("tocken")));
 
-            //user.setUserId(18);
+            //user.setUserId(7);
             //user.setAuthToken("1552477453360eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2ZXJnaWwudGFuMTU1MjM5MTA1MzM2MCJ9.IDL53gmPa3vHfNKFDUms6y9qOxbHvRUrtDUR709xF_0dONXucZG-_xt2S5IvjaJuRIaGrypmxts9-RDMvJ9lMA");
             user.setEmail(cursor.getString(cursor.getColumnIndex("email")));
             user.setPassword(cursor.getString(cursor.getColumnIndex("password")));

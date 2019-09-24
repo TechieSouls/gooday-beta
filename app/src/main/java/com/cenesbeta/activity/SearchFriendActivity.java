@@ -153,11 +153,11 @@ public class SearchFriendActivity extends CenesActivity {
 
                     if (cenesFriendsSelected == false) {
                         cenesFriendsSelected = true;
-                        tvSelectBarTitle.setText("Cenes Contacts ("+cenesFriends.length()+")");
+                        tvSelectBarTitle.setText("All Contacts ("+allfriends.length()+")");
                         searchFriendAdapter = new SearchFriendAdapter(SearchFriendActivity.this,cenesFriends);
                     } else {
                         cenesFriendsSelected = false;
-                        tvSelectBarTitle.setText("All Contacts ("+allfriends.length()+")");
+                        tvSelectBarTitle.setText("Cenes Contacts ("+cenesFriends.length()+")");
                         searchFriendAdapter = new SearchFriendAdapter(SearchFriendActivity.this,allfriends);
                     }
                     gathSearchFriendListView.setAdapter(searchFriendAdapter);
@@ -268,11 +268,11 @@ public class SearchFriendActivity extends CenesActivity {
             cenesFriends = getCenesContacts(allfriends);
             if (cenesFriends.length() > 0) {
                 cenesFriendsSelected = true;
-                tvSelectBarTitle.setText("Cenes Contacts ("+cenesFriends.length()+")");
+                tvSelectBarTitle.setText("All Contacts ("+allfriends.length()+")");
                 searchFriendAdapter = new SearchFriendAdapter(SearchFriendActivity.this,cenesFriends);
             } else {
                 cenesFriendsSelected = false;
-                tvSelectBarTitle.setText("All Contacts ("+allfriends.length()+")");
+                tvSelectBarTitle.setText("Cenes Contacts ("+cenesFriends.length()+")");
                 searchFriendAdapter = new SearchFriendAdapter(SearchFriendActivity.this,allfriends);
             }
             gathSearchFriendListView.setAdapter(searchFriendAdapter);

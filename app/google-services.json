@@ -60,7 +60,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "212716305349-dqqjgf3njkqt9s3ucied3bit42po3m39.apps.googleusercontent.com",
+              "client_id": "212716305349-d3ush39t826lnq284ib1hees2879pdh7.apps.googleusercontent.com",
               "client_type": 3
             },
             {
@@ -83,11 +83,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "212716305349-73cq65q13vnm1a3ejd7olg7oa71nsn1v.apps.googleusercontent.com",
+          "client_id": "212716305349-5hmvqs00hf2vui5878o7nfcb2k45vkfu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.cenesbeta",
             "certificate_hash": "0e658fcee8420f1d58f72f443c450aa7081ee1c6"
+          }
+        },
+        {
+          "client_id": "212716305349-7v7aem8ov8ek0ckovqn4vrtujmlcrtuu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cenesbeta",
+            "certificate_hash": "3384fd4a1f03df6006600c568f0a9c0e3d1599c7"
           }
         },
         {
@@ -104,7 +112,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "212716305349-dqqjgf3njkqt9s3ucied3bit42po3m39.apps.googleusercontent.com",
+              "client_id": "212716305349-d3ush39t826lnq284ib1hees2879pdh7.apps.googleusercontent.com",
               "client_type": 3
             },
             {
@@ -148,7 +156,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "212716305349-dqqjgf3njkqt9s3ucied3bit42po3m39.apps.googleusercontent.com",
+              "client_id": "212716305349-d3ush39t826lnq284ib1hees2879pdh7.apps.googleusercontent.com",
               "client_type": 3
             },
             {
