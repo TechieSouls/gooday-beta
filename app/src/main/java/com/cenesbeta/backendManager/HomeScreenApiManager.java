@@ -3,6 +3,7 @@ package com.cenesbeta.backendManager;
 import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.JsonParsing;
 import com.cenesbeta.api.HomeScreenAPI;
+import com.cenesbeta.api.UserAPI;
 import com.cenesbeta.application.CenesApplication;
 
 import org.json.JSONObject;
@@ -30,4 +31,12 @@ public class HomeScreenApiManager {
         JsonParsing jsonParsing = new JsonParsing();
         return jsonParsing.httpGetJsonObject(url, authToken);
     }
+
+
+    public JSONObject getHomescreenEvents(String params, String authToken) {
+        String url = UrlManagerImpl.prodAPIUrl+ HomeScreenAPI.get_homescreen_events+"?"+params;
+        JsonParsing jsonParsing = new JsonParsing();
+        return jsonParsing.httpGetJsonObject(url, authToken);
+    }
+
 }

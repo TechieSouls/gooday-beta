@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.cenesbeta.R;
+import com.cenesbeta.fragment.WalkthroughFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +70,7 @@ public class WalkthroughActivity extends FragmentActivity {
 
     public void finishActivity() {
         WalkthroughActivity.this.setResult(RESULT_OK);
-        startActivity(new Intent(WalkthroughActivity.this,ChoiceActivity.class));
+        //startActivity(new Intent(WalkthroughActivity.this,ChoiceActivity.class));
         finish();
     }
 

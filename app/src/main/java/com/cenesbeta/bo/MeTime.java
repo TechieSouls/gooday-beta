@@ -1,5 +1,7 @@
 package com.cenesbeta.bo;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -8,14 +10,25 @@ import java.util.List;
 
 public class MeTime {
 
+    private Long recurringEventId;
     String title;
+
+    @SerializedName("recurringPatterns")
     List<MeTimeItem> items;
-    String userId;
+    private Long userId;
     String timezone;
     private String photo;
     private Long startTime;
     private Long endTime;
     private String days;
+
+    public Long getRecurringEventId() {
+        return recurringEventId;
+    }
+
+    public void setRecurringEventId(Long recurringEventId) {
+        this.recurringEventId = recurringEventId;
+    }
 
     public String getTitle() {
         return title;
@@ -33,11 +46,11 @@ public class MeTime {
         this.items = items;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

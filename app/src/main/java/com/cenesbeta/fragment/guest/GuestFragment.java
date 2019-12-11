@@ -3,19 +3,20 @@ package com.cenesbeta.fragment.guest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.cenesbeta.R;
+import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.activity.GuestActivity;
 import com.cenesbeta.activity.SignInActivity;
 import com.cenesbeta.application.CenesApplication;
+import com.cenesbeta.fragment.CalenderSyncFragment;
 import com.cenesbeta.fragment.CenesFragment;
+import com.cenesbeta.fragment.HolidaySyncFragment;
 
 /**
  * Created by mandeep on 18/9/18.
@@ -27,7 +28,6 @@ public class GuestFragment extends CenesFragment {
 
     Button btSignupMobile, btAlreadyLogin;
     RelativeLayout rlAlreadyLogin;
-    TextView termsAndConds;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,17 +40,12 @@ public class GuestFragment extends CenesFragment {
         btSignupMobile = (Button) v.findViewById(R.id.bt_signup_mobile);
         btAlreadyLogin = (Button) v.findViewById(R.id.bt_already_login);
         rlAlreadyLogin = (RelativeLayout) v.findViewById(R.id.rl_already_login);
-        termsAndConds = (TextView) v.findViewById(R.id.tv_tandc);
 
         btSignupMobile.setOnClickListener(onClickListener);
         btAlreadyLogin.setOnClickListener(onClickListener);
         rlAlreadyLogin.setOnClickListener(onClickListener);
 
         btAlreadyLogin.setText(Html.fromHtml("Already Have an Account? <b>Log In</b>"));
-
-        termsAndConds.setMovementMethod(LinkMovementMethod.getInstance());
-        termsAndConds.setText(Html.fromHtml(getResources().getString(R.string.tandc_text)));
-
 
         return v;
     }
@@ -61,7 +56,7 @@ public class GuestFragment extends CenesFragment {
 
             switch (view.getId()) {
                 case R.id.bt_signup_mobile:
-                    ((GuestActivity) getActivity()).replaceFragment(new SignupStep1Fragment(), SignupStep1Fragment.TAG);
+                    ((GuestActivity) getActivity()).replaceFragment(new SignupStep1Fragment(), GuestFragment.TAG);
                     //((GuestActivity) getActivity()).replaceFragment(new SignupStepSuccessFragment(), null);
                    // ((GuestActivity) getActivity()).replaceFragment(new CalenderSyncFragment(), HolidaySyncFragment.TAG);
                     break;

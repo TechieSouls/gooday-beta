@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,15 +15,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cenesbeta.AsyncTasks.CenesCommonAsyncTask;
+import com.cenesbeta.AsyncTasks.GatheringAsyncTask;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.application.CenesApplication;
-import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.NotificationCountData;
+import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.fragment.NavigationFragment;
 import com.cenesbeta.fragment.NotificationFragment;
 import com.cenesbeta.fragment.dashboard.HomeFragment;
+import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
 import com.cenesbeta.fragment.gathering.GatheringsFragment;
 import com.cenesbeta.fragment.metime.MeTimeCardFragment;
 import com.cenesbeta.fragment.metime.MeTimeFragment;
@@ -101,6 +104,57 @@ public class CenesBaseActivity extends CenesActivity {
 
             }
         });
+
+        String data = getIntent().getDataString();
+        System.out.println(data);
+        if (data != null) {
+
+            try {
+                    String params = "";
+                    if (data.indexOf("https://betaweb.cenesgroup.com/event/invitation") != -1) {
+                        params = data.substring(data.lastIndexOf("/"), data.length());
+                    } else if (data.indexOf("https://dev.cenesgroup.com/app/signupOptions") != -1) {
+                        String parameters = data.split("\\?")[1];
+                        if (parameters != null && parameters.split("=").length > 1) {
+                            params = parameters.split("=")[1];
+                        }
+                    }
+                    if (params != null) {
+
+                        new GatheringAsyncTask(cenesApplication, this);
+                        new GatheringAsyncTask.GatheringByKeyTask(new GatheringAsyncTask.GatheringByKeyTask.AsyncResponse() {
+                            @Override
+                            public void processFinish(JSONObject response) {
+
+                                try {
+
+                                    boolean success = response.getBoolean("success");
+
+                                    if (success == true) {
+
+                                        Gson gson = new Gson();
+                                        Event event = gson.fromJson(response.getJSONObject("data").toString(), Event.class);
+                                        GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
+                                        gatheringPreviewFragment.event = event;
+                                        replaceFragment(gatheringPreviewFragment, HomeFragment.TAG);
+
+                                    }
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).execute(params);
+
+                    }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+
+        }
     }
 
 
@@ -171,6 +225,24 @@ public class CenesBaseActivity extends CenesActivity {
         }
     }
 
+
+    public void hideAndreplaceFragment(Fragment currentFragment, Fragment fragment , String tag) {
+
+        try {
+            fragmentTransaction = fragmentManager.beginTransaction();
+            if (tag != null) {
+                fragmentTransaction.replace(R.id.fragment_container, fragment, tag);
+                fragmentTransaction.addToBackStack(tag);
+                fragmentTransaction.hide(currentFragment);
+            } else {
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+            }
+            fragmentTransaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void activateFooterIcon(String tag) {
 
         if (tag.equals(HomeFragment.TAG)) {
@@ -217,6 +289,14 @@ public class CenesBaseActivity extends CenesActivity {
         getSupportFragmentManager().popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
+    public void clearAllFragmentsInBackstack() {
+        FragmentManager fm = getSupportFragmentManager(); // or 'getSupportFragmentManager();'
+        int count = fm.getBackStackEntryCount();
+        for(int i = 0; i < count; ++i) {
+            fm.popBackStack();
+        }
+
+    }
     public void notificationCountCall() {
         if (internetManager.isInternetConnection(CenesBaseActivity.this)) {
             new CenesCommonAsyncTask(getCenesApplication(), this);

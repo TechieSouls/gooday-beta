@@ -9,11 +9,14 @@ import java.util.List;
  */
 
 public class Event {
+
+    public enum EventDisplayScreen {HOME, ACCEPTED, PENDING, DECLINED};
+
     private Long eventId;
     private String logo;
     private String title;
-    private String startTime;
-    private String endTime;
+    private Long startTime;
+    private Long endTime;
     private String eventDate;
     private String location;
     private String eventPicture;
@@ -30,7 +33,7 @@ public class Event {
     private Boolean isFullDay;
     private String sender;
     private String description;
-    private Long createdById;
+    private Integer createdById;
     private String eventImageURI;
     private boolean isOwner;
     private String placeId;
@@ -41,6 +44,8 @@ public class Event {
     private Boolean isPredictiveOn = false;
     private String timezone;
     private String fullDayStartTime;
+    private String displayAtScreen;
+    private boolean isEditMode;
 
     @SerializedName("expired")
     private Boolean isExpired;
@@ -69,11 +74,11 @@ public class Event {
         this.title = title;
     }
 
-    public String getStartTime() {
+    public Long getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(Long startTime) {
         this.startTime = startTime;
     }
 
@@ -189,19 +194,19 @@ public class Event {
         this.endTimeInMillis = endTimeInMillis;
     }
 
-    public Long getCreatedById() {
+    public Integer getCreatedById() {
         return createdById;
     }
 
-    public void setCreatedById(Long createdById) {
+    public void setCreatedById(Integer createdById) {
         this.createdById = createdById;
     }
 
-    public String getEndTime() {
+    public Long getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(Long endTime) {
         this.endTime = endTime;
     }
 
@@ -315,6 +320,22 @@ public class Event {
 
     public void setExpired(Boolean expired) {
         isExpired = expired;
+    }
+
+    public boolean isEditMode() {
+        return isEditMode;
+    }
+
+    public void setEditMode(boolean editMode) {
+        isEditMode = editMode;
+    }
+
+    public String getDisplayAtScreen() {
+        return displayAtScreen;
+    }
+
+    public void setDisplayAtScreen(String displayAtScreen) {
+        this.displayAtScreen = displayAtScreen;
     }
 
     @Override

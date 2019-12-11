@@ -9,15 +9,15 @@
         android:layout_height="50dp"
         android:gravity="center_vertical">
 
-        <ImageView
+        <Button
             android:id="@+id/close_search_friends_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_margin="10dp"
-            android:padding="5dp"
+            android:text="Cancel"
+            android:background="@color/transparent"
+            android:textColor="@color/cenes_blue"
+            android:layout_alignParentLeft="true"/>
 
-            android:src="@drawable/back_arrow_ios" />
 
         <TextView
             android:id="@+id/invite_friend_title"
@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:text="PEOPLE"
+            android:text="Invite Guests"
             android:textAlignment="center"
             android:gravity="center_vertical"
             android:textStyle="bold"
@@ -35,7 +35,7 @@
             android:id="@+id/btn_done_invite_friend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DONE"
+            android:text="Done"
             android:background="@color/transparent"
             android:textColor="@color/cenes_blue"
             android:layout_alignParentRight="true"/>
@@ -43,14 +43,14 @@
     <RelativeLayout
         android:id="@+id/gath_search_friend_sub_header"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_marginTop="20px"
         android:layout_below="@+id/gath_search_friend_header">
 
         <EditText
             android:id="@+id/invite_friend_edit_text"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="40dp"
             android:layout_marginLeft="35dp"
             android:layout_marginRight="35dp"
             android:background="@drawable/curved_search_edit_text_greybg"
@@ -58,6 +58,8 @@
             android:paddingLeft="10dp"
             android:singleLine="true"
             android:imeOptions="actionDone"
+            android:hint="Search Contacts"
+            android:textSize="14dp"
             />
 
     </RelativeLayout>
@@ -79,6 +81,8 @@
             android:paddingStart="20dp"
             android:scrollbars="none"/>
     </RelativeLayout>
+
+    <!-- CENES & NON Cenes Tappable Bar STARTS -->
     <RelativeLayout
         android:id="@+id/cenes_noncenes_select_bar"
         android:layout_below="@+id/rl_selected_friends_recycler_view"
@@ -92,7 +96,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="40dp"
             android:textColor="@color/black"/>
-        
+
         <ImageView
             android:layout_width="14dp"
             android:layout_height="14dp"
@@ -102,11 +106,23 @@
             android:layout_marginRight="40dp"
             />
     </RelativeLayout>
+    <!-- CENES & NON Cenes Tappable Bar ENDS -->
+
     <ListView
         android:id="@+id/gath_search_friend_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_below="@+id/cenes_noncenes_select_bar"
+        android:visibility="gone"
         ></ListView>
+
+    <ExpandableListView
+        android:id="@+id/elv_friend_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/cenes_noncenes_select_bar"
+        android:groupIndicator="@android:color/transparent"
+        ></ExpandableListView>
 </RelativeLayout>

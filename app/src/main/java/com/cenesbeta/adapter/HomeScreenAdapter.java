@@ -26,13 +26,21 @@ import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
+import com.cenesbeta.database.impl.EventManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
+import com.cenesbeta.fragment.dashboard.HomeFragment;
 import com.cenesbeta.fragment.gathering.GatheringExpiredFragment;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
+import com.cenesbeta.fragment.gathering.GatheringPreviewFragmentBkup;
+import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -100,10 +108,6 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
             viewHolder.tvTpEventTitle = (TextView) convertView.findViewById(R.id.tv_tp_event_title);
             viewHolder.tvTpSource = (TextView) convertView.findViewById(R.id.tv_tp_source);
             viewHolder.tvTpStartTime = (TextView) convertView.findViewById(R.id.tv_tp_start_time);
-            //viewHolder.homeEventMemberImages = (LinearLayout) convertView.findViewById(R.id.home_adapter_event_member_images);
-            ////viewHolder.memberImagesContainer = (LinearLayout) convertView.findViewById(R.id.ll_member_images_container);
-            //viewHolder.homeEventMemberImagesCount = (TextView) convertView.findViewById(R.id.tv_event_member_images_count);
-            //viewHolder.homeAdapterHorizontalImageScrollView = (HorizontalScrollView) convertView.findViewById(R.id.home_adapter_horizontal_scroll_view);
             viewHolder.tvReminderTitle = (TextView) convertView.findViewById(R.id.tv_reminder_title);
             viewHolder.trash = (TextView) convertView.findViewById(R.id.trash);
             viewHolder.tvDecline = (TextView) convertView.findViewById(R.id.tv_decline);
@@ -121,17 +125,33 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
         } else {
             viewHolder.divider.setVisibility(View.VISIBLE);
         }
-        if(child.getType().equalsIgnoreCase("Reminder")) {
-            viewHolder.llEventRowItem.setVisibility(View.GONE);
-            viewHolder.llReminderRowItem.setVisibility(View.VISIBLE);
-            viewHolder.tvReminderTitle.setText(child.getTitle());
-            viewHolder.reminderTime.setText(child.getStartTime());
-            if(child.getStartTimeMillis() != null && child.getStartTimeMillis() < System.currentTimeMillis()) {
-                viewHolder.tvReminderTitle.setTextColor(Color.RED);
-            } else {
-                viewHolder.tvReminderTitle.setTextColor(context.getResources().getColor(R.color.cenes_dark_gray));
+
+        EventMember owner = null;
+        if (child.getEventMembers() != null) {
+
+            for (EventMember ownerMember: child.getEventMembers()) {
+
+                if (ownerMember.getUserId() != null && ownerMember.getUserId().equals(child.getCreatedById())) {
+                    owner = ownerMember;
+                    break;
+                }
             }
-        } else {
+            if (owner != null) {
+
+                if (owner.getUser() != null && !CenesUtils.isEmpty(owner.getUser().getPicture())) {
+
+                    RequestOptions requestOptions = new RequestOptions();
+                    requestOptions.placeholder(R.drawable.profile_pic_no_image);
+                    requestOptions.circleCrop();
+                    Glide.with(context).load(owner.getUser().getPicture()).apply(requestOptions).into(viewHolder.ivOwnerImage);
+
+                } else {
+                    viewHolder.ivOwnerImage.setImageResource(R.drawable.profile_pic_no_image);
+                }
+            }
+
+        }
+
             viewHolder.llEventRowItem.setVisibility(View.VISIBLE);
             viewHolder.llReminderRowItem.setVisibility(View.GONE);
             viewHolder.scheduleAs = child.getScheduleAs();
@@ -151,10 +171,10 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                     viewHolder.eventLocation.setVisibility(View.VISIBLE);
                     viewHolder.eventLocation.setText(child.getLocation());
                 }
-                viewHolder.startTime.setText(child.getStartTime());
+                viewHolder.startTime.setText(CenesUtils.hhmmaa.format(new Date(child.getStartTime())));
 
                 if (child.getOwner() != null && child.getOwner().getUser() != null) {
-                    Glide.with(context).load(child.getOwner().getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.cenes_user_no_image)).into(viewHolder.ivOwnerImage);
+                    Glide.with(context).load(child.getOwner().getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(viewHolder.ivOwnerImage);
                 }
 
             } else if (child.getScheduleAs().equals("Holiday")) { //holidays
@@ -164,7 +184,7 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                 viewHolder.llHolidayEvents.setVisibility(View.VISIBLE);
 
                 viewHolder.tvHolidayTitle.setText(child.getTitle());
-                viewHolder.startTime.setText(child.getStartTime());
+                viewHolder.startTime.setText(CenesUtils.hhmmaa.format(new Date(child.getStartTime())));
 
             } else if (child.getScheduleAs().equals("Event")) { //third party events
 
@@ -177,7 +197,7 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                 if (child.getIsFullDay() != null && child.getIsFullDay()) {
                     viewHolder.tvTpStartTime.setText("00:00AM");
                 } else {
-                    viewHolder.tvTpStartTime.setText(child.getStartTime());
+                    viewHolder.tvTpStartTime.setText(CenesUtils.hhmmaa.format(new Date(child.getStartTime())));
                 }
             }
 
@@ -189,88 +209,10 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                 viewHolder.trash.setVisibility(View.GONE);
             }
 
-
-
-            /*String eventType = child.getSource();
-
-            if(eventType.equalsIgnoreCase("cenes")) {
-                viewHolder.eventBar.setBackgroundColor(context.getResources().getColor(R.color.cenes_new_orange));
-            } else if(eventType.equalsIgnoreCase("google")) {
-                if(child.getScheduleAs().equalsIgnoreCase("holiday")) {
-                    viewHolder.eventBar.setBackgroundColor(context.getResources().getColor(R.color.cenes_teal));
-                } else if (child.getScheduleAs().equalsIgnoreCase("parentEvent")) {
-                    viewHolder.eventBar.setBackgroundColor(context.getResources().getColor(R.color.google_plus_red));
-                }
-            } else if(eventType.equalsIgnoreCase("facebook")) {
-                viewHolder.eventBar.setBackgroundColor(context.getResources().getColor(R.color.facebook_blue));
-            } else if(eventType.equalsIgnoreCase("outlook")) {
-                viewHolder.eventBar.setBackgroundColor(context.getResources().getColor(R.color.outlook_blue));
-            } else if(eventType.equalsIgnoreCase("apple")) {
-                viewHolder.eventBar.setBackgroundColor(context.getResources().getColor(R.color.apple_gray));
-            }*/
-
-            /*if (child.getIsFullDay()) {
-                viewHolder.eventTime.setText("00:00 AM");
-            } else {
-                viewHolder.eventTime.setText(child.getStartTime());
-            }*/
-            /*viewHolder.homeEventMemberImagesCount.setVisibility(View.GONE);
-
-            if (child.getEventMembers() != null && child.getEventMembers().size() > 0) {
-                viewHolder.homeEventMemberImages.removeAllViews();
-                viewHolder.homeAdapterHorizontalImageScrollView.setVisibility(View.VISIBLE);
-
-                for (int i = 0; i < child.getEventMembers().size(); i++) {
-                    EventMember em = child.getEventMembers().get(i);
-                    if (i > 2) {
-                        viewHolder.homeEventMemberImagesCount.setVisibility(View.VISIBLE);
-                        viewHolder.homeEventMemberImagesCount.setText("+" + (child.getEventMembers().size() - 3));
-                    } else {
-                        RelativeLayout rlRoot = new RelativeLayout(context);
-                        rlRoot.setLayoutParams(new RelativeLayout.LayoutParams(CenesUtils.dpToPx(60), CenesUtils.dpToPx(60)));
-
-                        RelativeLayout.LayoutParams profileParams = new RelativeLayout.LayoutParams(CenesUtils.dpToPx(50), CenesUtils.dpToPx(50));
-                        profileParams.setMargins(CenesUtils.dpToPx(10), CenesUtils.dpToPx(10), CenesUtils.dpToPx(10), CenesUtils.dpToPx(10));
-
-                        RoundedImageView roundedImageView = new RoundedImageView(context, null);
-                        roundedImageView.setLayoutParams(profileParams);
-                        roundedImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-                        RelativeLayout.LayoutParams starParams = new RelativeLayout.LayoutParams(CenesUtils.dpToPx(30), CenesUtils.dpToPx(30));
-                        starParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                        starParams.addRule(RelativeLayout.ALIGN_PARENT_END);
-
-                        ImageView ivStar = new ImageView(context);
-                        ivStar.setLayoutParams(starParams);
-                        ivStar.setPadding(CenesUtils.dpToPx(4), CenesUtils.dpToPx(4), CenesUtils.dpToPx(8), CenesUtils.dpToPx(8));
-                        ivStar.setImageResource(R.drawable.star);
-
-                        rlRoot.addView(roundedImageView);
-
-                        try {
-                            if(em.isOwner()) {
-                                rlRoot.addView(ivStar);
-                            }
-                        } catch(Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        if (em.getPicture() != null && em.getPicture() != "null")
-                            Glide.with(context).load(em.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.default_profile_icon)).into(roundedImageView);
-                        else
-                            roundedImageView.setImageResource(R.drawable.default_profile_icon);
-
-                        viewHolder.homeEventMemberImages.addView(rlRoot);
-                    }
-                }
-            } else {
-                viewHolder.homeAdapterHorizontalImageScrollView.setVisibility(View.GONE);
-            }
-            */
-
             viewHolder.llEventRowItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    System.out.println(child.toString());
                     if (viewHolder.scheduleAs.equals("Gathering")) {
                         /*Intent data = new Intent(context, GatheringScreenActivity.class);
                         data.putExtra("dataFrom", "list");
@@ -278,17 +220,21 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                         //context.startActivityForResult(data, GATHERING_SUMMARY_RESULT_CODE);
                         context.startActivity(data);*/
 
-                        if (child.getExpired() == true) {
-                            GatheringExpiredFragment gatheringExpiredFragment = new GatheringExpiredFragment();
-                            context.replaceFragment(gatheringExpiredFragment, GatheringExpiredFragment.TAG);
-                        } else {
-                            Bundle bundle = new Bundle();
+                        //if (child.getExpired()) {
+                          //  GatheringExpiredFragment gatheringExpiredFragment = new GatheringExpiredFragment();
+                            //context.replaceFragment(gatheringExpiredFragment, GatheringExpiredFragment.TAG);
+                        //} else {
+                           /* Bundle bundle = new Bundle();
                             bundle.putString("dataFrom", "list");
                             bundle.putLong("eventId", viewHolder.eventId);
+                            GatheringPreviewFragmentBkup gatheringPreviewFragmentBkup = new GatheringPreviewFragmentBkup();
+                            gatheringPreviewFragmentBkup.setArguments(bundle);
+                            context.replaceFragment(gatheringPreviewFragmentBkup, GatheringPreviewFragmentBkup.TAG);*/
+
                             GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
-                            gatheringPreviewFragment.setArguments(bundle);
-                            context.replaceFragment(gatheringPreviewFragment, GatheringPreviewFragment.TAG);
-                        }
+                            gatheringPreviewFragment.event = child;
+                            context.replaceFragment(gatheringPreviewFragment, HomeFragment.TAG);
+                        //}
 
 
                     }
@@ -318,8 +264,6 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
 
-
-
                     String declineQueryStr = "eventId=" +viewHolder.eventId+ "&userId="+loggedInUser.getUserId() + "&status=NotGoing";
                     new GatheringAsyncTask(context.getCenesApplication(), context);
                     new GatheringAsyncTask.UpdateStatusActionTask(new GatheringAsyncTask.UpdateStatusActionTask.AsyncResponse() {
@@ -337,7 +281,7 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                 }
             });
 
-        }
+        //}
 
         return convertView;
     }
@@ -378,10 +322,30 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
         }
 
         String headerTitle = (String) getGroup(groupPosition);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            holder.lblListHeader.setText(Html.fromHtml(headerTitle, Html.FROM_HTML_MODE_COMPACT));
-        } else {
-            holder.lblListHeader.setText(Html.fromHtml(headerTitle));
+
+        try {
+            String dateKey = CenesUtils.ddMMM.format(CenesUtils.yyyyMMdd.parse(headerTitle)).toUpperCase() + "<b>"+CenesUtils.EEEE.format(CenesUtils.yyyyMMdd.parse(headerTitle)).toUpperCase()+"</b>";
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+            //String dateKey = calCategory.format(startDate) + CenesUtils.getDateSuffix(startDate.getDate());
+            if (sdf.format(CenesUtils.yyyyMMdd.parse(headerTitle)).equals(sdf.format(new Date()))) {
+                dateKey = "TODAY ";
+            }
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.add(Calendar.DATE, 1);
+            if (sdf.format(CenesUtils.yyyyMMdd.parse(headerTitle)).equals(sdf.format(cal.getTime()))) {
+                dateKey = "TOMORROW";
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                holder.lblListHeader.setText(Html.fromHtml(dateKey, Html.FROM_HTML_MODE_COMPACT));
+            } else {
+                holder.lblListHeader.setText(Html.fromHtml(dateKey));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return convertView;
     }

@@ -30,13 +30,17 @@
     <color name="cenes_markread_color">#FF9B9B9B</color>
 
     <!-- Material View Calendar Highlight Colors-->
-    <color name="cenes_mcv_red">#FFED2939</color>
+    <color name="cenes_mcv_red">#FFED2838</color>
     <color name="cenes_mcv_orange">#FFAA4E</color>
     <color name="cenes_mcv_pink">#FFFA7268</color>
-    <color name="cenes_mcv_yellow">#FFFADA5E</color>
+    <color name="cenes_mcv_yellow">#FFF9D85E</color>
     <color name="cenes_mcv_lime">#B3FF4E</color>
-    <color name="cenes_mcv_green">#FF50C878</color>
+    <color name="cenes_mcv_green">#FF4FC677</color>
     <color name="cenes_mcv_white">#ffffff</color>
+    <color name="cenes_mcv_darkgrey">#434343</color>
+    <color name="cenes_mcv_lightgrey">#DBDDDD</color>
+
+
 
 
     <!-- onBoarding Colors -->

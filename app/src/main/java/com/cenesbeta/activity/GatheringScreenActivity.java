@@ -19,6 +19,7 @@ import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.gathering.CreateGatheringFragment;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
+import com.cenesbeta.fragment.gathering.GatheringPreviewFragmentBkup;
 import com.cenesbeta.fragment.gathering.GatheringsFragment;
 import com.cenesbeta.fragment.NavigationFragment;
 
@@ -93,9 +94,9 @@ public class GatheringScreenActivity extends CenesActivity {
 
             /*GatheringsFragment gatheringsFragment = new GatheringsFragment();
             gatheringsFragment.setArguments(bundle);*/
-            GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
-            gatheringPreviewFragment.setArguments(bundle);
-            replaceFragment(gatheringPreviewFragment, null);
+            GatheringPreviewFragmentBkup gatheringPreviewFragmentBkup = new GatheringPreviewFragmentBkup();
+            gatheringPreviewFragmentBkup.setArguments(bundle);
+            replaceFragment(gatheringPreviewFragmentBkup, null);
         } else if (intent != null && intent.getStringExtra("dataFrom") != null && intent.getStringExtra("dataFrom").equals("list")) {
             Bundle bundle = new Bundle();
             bundle.putString("dataFrom", "list");
@@ -105,9 +106,9 @@ public class GatheringScreenActivity extends CenesActivity {
             createGatheringFragment.setArguments(bundle);
 
             replaceFragment(createGatheringFragment, null);*/
-            GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
-            gatheringPreviewFragment.setArguments(bundle);
-            replaceFragment(gatheringPreviewFragment, null);
+            GatheringPreviewFragmentBkup gatheringPreviewFragmentBkup = new GatheringPreviewFragmentBkup();
+            gatheringPreviewFragmentBkup.setArguments(bundle);
+            replaceFragment(gatheringPreviewFragmentBkup, null);
         } else if (intent != null && intent.getStringExtra("dataFrom") != null && intent.getStringExtra("dataFrom").equals("fabButton")) {
             replaceFragment(new CreateGatheringFragment(), null);
         } else {
@@ -138,18 +139,7 @@ public class GatheringScreenActivity extends CenesActivity {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                case R.id.footer_home_icon:
-                    startActivity(new Intent(GatheringScreenActivity.this, HomeScreenActivity.class));
-                    finish();
-                    break;
-                case R.id.footer_reminder_icon:
-                    startActivity(new Intent(GatheringScreenActivity.this, ReminderActivity.class));
-                    finish();
-                    break;
-                case R.id.footer_alarm_icon:
-                    startActivity(new Intent(GatheringScreenActivity.this, AlarmActivity.class));
-                    finish();
-                    break;
+
                 case R.id.footer_diary_icon:
                     startActivity(new Intent(GatheringScreenActivity.this, DiaryActivity.class));
                     finish();

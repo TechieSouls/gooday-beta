@@ -27,6 +27,9 @@ import com.cenesbeta.util.RoundedImageView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
+import org.w3c.dom.Text;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -164,7 +167,7 @@ public class InviteesFragment extends CenesFragment {
                 RoundedImageView profileImage = new RoundedImageView(getActivity());
                 profileImage.setLayoutParams(roundedImageViewParams);
 
-                Glide.with(this).load(eventMember.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.cenes_user_no_image)).into(profileImage);
+                Glide.with(this).load(eventMember.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(profileImage);
                 guestLinearLayout.addView(profileImage);
             }
             LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -226,7 +229,7 @@ public class InviteesFragment extends CenesFragment {
                 RoundedImageView profileImage = new RoundedImageView(getActivity());
                 profileImage.setLayoutParams(roundedImageViewParams);
 
-                Glide.with(this).load(eventMember.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.cenes_user_no_image)).into(profileImage);
+                Glide.with(this).load(eventMember.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(profileImage);
                 guestLinearLayout.addView(profileImage);
             }
             LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -288,7 +291,7 @@ public class InviteesFragment extends CenesFragment {
                 RoundedImageView profileImage = new RoundedImageView(getActivity());
                 profileImage.setLayoutParams(roundedImageViewParams);
 
-                Glide.with(this).load(eventMember.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.cenes_user_no_image)).into(profileImage);
+                Glide.with(this).load(eventMember.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(profileImage);
                 guestLinearLayout.addView(profileImage);
             }
             LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);

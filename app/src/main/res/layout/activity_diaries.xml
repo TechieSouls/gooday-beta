@@ -26,8 +26,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="20dp"
             android:textColor="@color/white"
-            android:layout_alignParentLeft="true"
-            android:background="@drawable/badge_notify_icon" />
+            android:layout_alignParentLeft="true" />
         <TextView
             android:id="@+id/tv_notification_count_pic"
             android:layout_width="wrap_content"
@@ -55,8 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_margin="5dp"
-            android:padding="5dp"
-            android:src="@drawable/add_item_icon" />
+            android:padding="5dp"/>
 
     </RelativeLayout>
 

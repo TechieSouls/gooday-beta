@@ -18,7 +18,7 @@
             android:layout_margin="5dp"
             android:gravity="center"
             android:scaleType="centerCrop"
-            android:src="@drawable/profile_icon"/>
+            android:src="@drawable/profile_pic_no_image"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

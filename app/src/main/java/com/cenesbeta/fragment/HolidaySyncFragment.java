@@ -18,13 +18,10 @@ import com.cenesbeta.Manager.ApiManager;
 import com.cenesbeta.Manager.DeviceManager;
 import com.cenesbeta.Manager.UrlManager;
 import com.cenesbeta.R;
-import com.cenesbeta.activity.AlarmActivity;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.activity.DiaryActivity;
 import com.cenesbeta.activity.GatheringScreenActivity;
 import com.cenesbeta.activity.GuestActivity;
-import com.cenesbeta.activity.HomeScreenActivity;
-import com.cenesbeta.activity.ReminderActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.HolidayCalendar;
 import com.cenesbeta.bo.User;
@@ -34,7 +31,6 @@ import com.cenesbeta.countrypicker.CountryPickerListener;
 import com.cenesbeta.countrypicker.CountryUtils;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.dashboard.HomeFragment;
-import com.cenesbeta.service.InstabugService;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
 import com.google.gson.Gson;
@@ -165,7 +161,7 @@ public class HolidaySyncFragment extends CenesFragment {
 
             if (user != null && !CenesUtils.isEmpty(user.getPicture())) {
                 // DownloadImageTask(homePageProfilePic).execute(user.getPicture());
-                Glide.with(HolidaySyncFragment.this).load(user.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.default_profile_icon)).into(homeProfilePic);
+                Glide.with(HolidaySyncFragment.this).load(user.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(homeProfilePic);
             }
             /*user = userManager.getUser();
             if (user != null && user.getPicture() != null && user.getPicture() != "null") {
@@ -194,7 +190,6 @@ public class HolidaySyncFragment extends CenesFragment {
 
             switch (v.getId()) {
                 case R.id.instabug_report:
-                    new InstabugService().invokeBugReporting();
                     break;
                 case R.id.btn_change_country:
                     final CountryPicker picker = CountryPicker.newInstance("Select Holiday Calendar");
@@ -338,17 +333,11 @@ public class HolidaySyncFragment extends CenesFragment {
     public void onResume() {
         super.onResume();
         try {
-            /*if (getActivity() instanceof HomeScreenActivity) {
-                ((HomeScreenActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof ReminderActivity) {
-                ((ReminderActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof GatheringScreenActivity) {
+            if (getActivity() instanceof GatheringScreenActivity) {
                 ((GatheringScreenActivity) getActivity()).hideFooter();
             } else if (getActivity() instanceof DiaryActivity) {
                 ((DiaryActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof AlarmActivity) {
-                ((AlarmActivity) getActivity()).hideFooter();
-            }*/
+            }
         } catch (Exception e) {
 
         }

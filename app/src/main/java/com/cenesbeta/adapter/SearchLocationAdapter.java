@@ -13,9 +13,13 @@ import android.widget.TextView;
 
 import com.cenesbeta.R;
 import com.cenesbeta.activity.SearchLocationActivity;
+import com.cenesbeta.bo.Location;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Created by mandeep on 6/9/17.
@@ -23,14 +27,14 @@ import org.json.JSONObject;
 
 public class SearchLocationAdapter extends BaseAdapter {
 
-    JSONArray locations;
+    List<Location> locations;
     LayoutInflater inflter;
     SearchLocationActivity mActivity;
     View screenView;
 
     LinearLayout linerLayout;
 
-    public SearchLocationAdapter(SearchLocationActivity context, JSONArray locations) {
+    public SearchLocationAdapter(SearchLocationActivity context, List<Location> locations) {
         this.locations = locations;
         this.mActivity = context;
         inflter = (LayoutInflater.from(context));
@@ -38,7 +42,7 @@ public class SearchLocationAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return locations.length();
+        return locations.size();
     }
 
     @Override
@@ -65,6 +69,7 @@ public class SearchLocationAdapter extends BaseAdapter {
             holder.linerLayout = (LinearLayout) view.findViewById(R.id.ll_loc_title_add);
             holder.locTitle = (TextView) view.findViewById(R.id.loc_title);
             holder.locAddress = (TextView) view.findViewById(R.id.loc_add);
+            holder.tvDistance = (TextView) view.findViewById(R.id.tv_distance);
             holder.placeId = "";
             view.setTag(holder);
         } else {
@@ -72,24 +77,32 @@ public class SearchLocationAdapter extends BaseAdapter {
         }
 
         try {
-            JSONObject locObj = this.locations.getJSONObject(i);
-            JSONObject joStructuredFormatting = locObj.getJSONObject("structured_formatting");
+            final Location location = this.locations.get(i);
+            //JSONObject joStructuredFormatting = locObj.getJSONObject("structured_formatting");
 
-            System.out.println(joStructuredFormatting.toString());
+            //System.out.println(joStructuredFormatting.toString());
 
-            holder.locTitle.setText(joStructuredFormatting.getString("main_text"));
-            holder.locAddress.setText(joStructuredFormatting.getString("main_text"));
-            holder.placeId = locObj.getString("place_id");
+            holder.locTitle.setText(location.getLocation());
+            holder.locAddress.setText(location.getAddress());
+            holder.placeId = location.getPlaceId();
 
+            if (location.getKilometers() == null) {
+                holder.tvDistance.setVisibility(View.GONE);
+            } else {
+                holder.tvDistance.setVisibility(View.VISIBLE);
+                holder.tvDistance.setText(location.getKilometers());
+            }
             holder.linerLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     hideKeyBoard(holder.linerLayout);
+
+                    Gson gson = new Gson();
+                    String locationStr = gson.toJson(location);
+
                     Intent intent = new Intent();
                     intent.putExtra("selection", "list");
-                    intent.putExtra("title", holder.locTitle.getText().toString());
-                    intent.putExtra("address", holder.locAddress.getText().toString());
-                    intent.putExtra("placeId", holder.placeId);
+                    intent.putExtra("location", locationStr);
                     mActivity.setResult(Activity.RESULT_OK, intent);
                     mActivity.finish();
                 }
@@ -105,6 +118,7 @@ public class SearchLocationAdapter extends BaseAdapter {
         TextView locAddress;
         LinearLayout linerLayout;
         String placeId;
+        TextView tvDistance;
     }
 
     public void hideKeyBoard(View view) {

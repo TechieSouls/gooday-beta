@@ -30,7 +30,6 @@ public class SplashActivity extends CenesActivity{
 
         setContentView(R.layout.activity_splash);
 
-
         cenesApplication = getCenesApplication();
         coreManager = cenesApplication.getCoreManager();
         userManager = coreManager.getUserManager();

@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cenesbeta.R;
-import com.cenesbeta.activity.ChoiceActivity;
 
 /**
  * Created by rohan on 9/8/17.
@@ -67,7 +66,7 @@ public class WalkthroughFragment extends Fragment {
             buttonGetStarted.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(getActivity(), ChoiceActivity.class));
+                    //startActivity(new Intent(getActivity(), ChoiceActivity.class));
                     getActivity().finish();
                 }
             });

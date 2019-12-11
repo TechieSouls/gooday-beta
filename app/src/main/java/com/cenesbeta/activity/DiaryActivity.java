@@ -63,20 +63,9 @@ public class DiaryActivity extends CenesActivity {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                case R.id.footer_home_icon:
-                    startActivity(new Intent(DiaryActivity.this, HomeScreenActivity.class));
-                    finish();
-                    break;
-                case R.id.footer_reminder_icon:
-                    startActivity(new Intent(DiaryActivity.this, ReminderActivity.class));
-                    finish();
-                    break;
+
                 case R.id.footer_gathering_icon:
                     startActivity(new Intent(DiaryActivity.this, GatheringScreenActivity.class));
-                    finish();
-                    break;
-                case R.id.footer_alarm_icon:
-                    startActivity(new Intent(DiaryActivity.this, AlarmActivity.class));
                     finish();
                     break;
             }

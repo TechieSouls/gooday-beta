@@ -38,7 +38,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="30dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/profile_icon" />
+                    android:src="@drawable/profile_pic_no_image" />
 
                 <TextView
                     android:id="@+id/tv_name"

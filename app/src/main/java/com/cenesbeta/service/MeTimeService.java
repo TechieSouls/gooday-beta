@@ -2,8 +2,11 @@ package com.cenesbeta.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -11,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
+import com.cenesbeta.activity.MeTimeActivity;
 import com.cenesbeta.bo.MeTime;
 import com.cenesbeta.util.CenesConstants;
 import com.cenesbeta.util.CenesUtils;
@@ -177,7 +181,7 @@ public class MeTimeService {
         metimeTile.setBackgroundResource(R.drawable.xml_round_rect_whitebg);
 
         //MeTimeImage
-        if (meTime.getPhoto() != null) {
+        if (meTime.getPhoto() != null && meTime.getPhoto().length() > 0) {
             RoundedImageView meTimeImage = new RoundedImageView(activity);
             LinearLayout.LayoutParams imageViewParams = new LinearLayout.LayoutParams(CenesUtils.dpToPx(50), CenesUtils.dpToPx(50));
             imageViewParams.gravity = Gravity.CENTER;
@@ -229,9 +233,11 @@ public class MeTimeService {
         }
 
 
-        if (meTime.getStartTime() != null) {
+        if (meTime.getStartTime() != null && meTime.getStartTime() != 0) {
             TextView metimeDays = new TextView(activity);
-            metimeDays.setText(meTime.getDays().replaceAll("-", ""));
+            if (meTime.getDays() != null && meTime.getDays().length() > 0) {
+                metimeDays.setText(meTime.getDays().replaceAll("-", ""));
+            }
             metimeDays.setTextColor(activity.getResources().getColor(R.color.cenes_new_orange));
             metimeDays.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             detailsLayout.addView(metimeDays);

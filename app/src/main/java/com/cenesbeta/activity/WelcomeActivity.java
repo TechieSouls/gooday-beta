@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +18,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.cenesbeta.R;
 import com.cenesbeta.service.PrefManager;
 import com.cenesbeta.util.CenesUtils;
+import com.cenesbeta.util.RoundedImageView;
 
 /**
  * Created by mandeep on 15/8/18.
@@ -60,6 +65,7 @@ public class WelcomeActivity extends AppCompatActivity {
         btnNext = (Button) findViewById(R.id.btn_next);
         btnGetStarted = (Button) findViewById(R.id.btn_get_started);
         getStartedSeparator = (View) findViewById(R.id.get_started_separator);
+
 
         // layouts of all welcome sliders
         // add few more layouts if you want
@@ -127,12 +133,12 @@ public class WelcomeActivity extends AppCompatActivity {
             viewParams.gravity = Gravity.CENTER;
             dots[i] = new View(this);
             dots[i].setLayoutParams(viewParams);
-            dots[i].setBackground(getResources().getDrawable(R.drawable.xml_circle_grey_dots));
+            dots[i].setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
             dotsLayout.addView(dots[i]);
         }
 
         if (dots.length > 0)
-            dots[currentPage].setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
+            dots[currentPage].setBackground(getResources().getDrawable(R.drawable.xml_circle_orange));
     }
 
     private int getItem(int i) {

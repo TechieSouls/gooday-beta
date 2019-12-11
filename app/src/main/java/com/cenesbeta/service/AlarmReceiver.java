@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 import com.cenesbeta.R;
-import com.cenesbeta.activity.AlarmActivity;
 
 /**
  * Created by rohan on 6/11/17.
@@ -29,7 +28,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Intent notificationIntent = new Intent(context, AlarmActivity.class);
+        Intent notificationIntent = null;//new Intent(context, AlarmActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri alarmSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);

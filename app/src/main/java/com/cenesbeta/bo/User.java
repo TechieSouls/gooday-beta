@@ -8,43 +8,36 @@ import com.google.gson.annotations.SerializedName;
 
 public class User {
 
-
-    public final String AUTHTYPE = "authType";
-    public final String EMAIL = "email";
-    public final String NAME = "name";
-    public final String PASSWORD = "password";
-    public final String USERID = "userId";
-    public final String USERNAME = "username";
-    public final String FACEBOOKID = "facebookID";
-    public final String FACEBOOKAUTHTOKEN = "facebookAuthToken";
-    public final String TOKEN = "token";
-    public final String PHOTO = "photo";
-    public final String PHONE = "phone";
-    public final String BIRTHDATE = "birthDate";
-
-
-
+    public enum AuthenticateType{
+        email,facebook, google
+    }
     private String name;
     private  String email;
     private String password;
     private String apiUrl;
+
+    @SerializedName("token")
     public String authToken;
-    private int userId;
+    private Integer userId;
     private String username;
-    private String facebookID;
+    private String facebookId;
 
     @SerializedName("photo")
     private String picture;
-    private String authType;
+
+    private AuthenticateType authType;
     private String gender;
     private String phone;
-    private Long birthDate;
+    private String birthDateStr;
+    private String googleId;
+    private String country;
+    private boolean isNew;
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -56,12 +49,12 @@ public class User {
         this.username = username;
     }
 
-    public String getFacebookID() {
-        return facebookID;
+    public String getFacebookId() {
+        return facebookId;
     }
 
-    public void setFacebookID(String facebookID) {
-        this.facebookID = facebookID;
+    public void setFacebookId(String facebookId) {
+        this.facebookId = facebookId;
     }
 
     public String getFacebookAuthToken() {
@@ -124,11 +117,11 @@ public class User {
         this.picture = picture;
     }
 
-    public String getAuthType() {
+    public AuthenticateType getAuthType() {
         return authType;
     }
 
-    public void setAuthType(String authType) {
+    public void setAuthType(AuthenticateType authType) {
         this.authType = authType;
     }
 
@@ -148,12 +141,36 @@ public class User {
         this.phone = phone;
     }
 
-    public Long getBirthDate() {
-        return birthDate;
+    public String getBirthDateStr() {
+        return birthDateStr;
     }
 
-    public void setBirthDate(Long birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthDateStr(String birthDateStr) {
+        this.birthDateStr = birthDateStr;
+    }
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
     }
 
     @Override
@@ -166,12 +183,12 @@ public class User {
                 ", authToken='" + authToken + '\'' +
                 ", userId=" + userId +
                 ", username='" + username + '\'' +
-                ", facebookID='" + facebookID + '\'' +
+                ", facebookId='" + facebookId + '\'' +
                 ", picture='" + picture + '\'' +
                 ", authType='" + authType + '\'' +
                 ", gender='" + gender + '\'' +
                 ", phone='" + phone + '\'' +
-                ", birthDate='" + birthDate + '\'' +
+                ", birthDateStr='" + birthDateStr + '\'' +
                 ", facebookAuthToken='" + facebookAuthToken + '\'' +
                 '}';
     }

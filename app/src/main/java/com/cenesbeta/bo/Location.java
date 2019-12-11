@@ -20,6 +20,10 @@ public class Location {
 
     private String placeId;
 
+    private String address;
+
+    private String kilometers;
+
     public String getLocation() {
         return location;
     }
@@ -58,5 +62,21 @@ public class Location {
 
     public void setPlaceId(String placeId) {
         this.placeId = placeId;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getKilometers() {
+        return kilometers;
+    }
+
+    public void setKilometers(String kilometers) {
+        this.kilometers = kilometers;
     }
 }

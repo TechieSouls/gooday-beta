@@ -1,468 +1,425 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ScrollView
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-        android:layout_above="@+id/ll_accept_decline"
-        >
-
-
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/rv_gath_preview_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                >
-
-                <RelativeLayout
-                    android:id="@+id/rl_header"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_alignParentTop="true">
-
-                    <ImageView
-                        android:id="@+id/tv_back_preview"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:src="@drawable/profile_back_icon"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"/>
-
-                    <TextView
-                        android:id="@+id/tv_gath_preview_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/header_title_margin_left"
-                        android:layout_marginRight="@dimen/header_title_margin_right"
-                        android:gravity="center"
-                        android:text="Preview Gathering"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/header_title_font"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/save_gathering_btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="20dp"
-                        android:gravity="center_vertical"
-                        android:padding="5dp"
-                        android:text="Send"
-                        android:textColor="@color/cenes_blue"
-                        android:visibility="gone"/>
-                    <ImageView
-                        android:id="@+id/edit_gathering_icon"
-                        android:layout_width="10dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="20dp"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/gathering_edit_icon"
-                        android:textSize="18sp"
-                        android:padding="2dp"
-                        android:textColor="@color/cenes_blue"
-                        android:visibility="gone"
-                        android:layout_centerInParent="true"/>
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_event_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/rl_header"
-                    android:background="@color/theme_color"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/iv_gathering_img"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:adjustViewBounds="true"
-                        android:src="@drawable/gath_upload_img"
-                        android:scaleType="centerCrop"/>
-
-
-                    <LinearLayout
-                        android:id="@+id/ll_owner_section"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="-73dp"
-                        android:layout_marginRight="20dp"
-                        android:orientation="horizontal"
-                        android:padding="2dp"
-                        >
-
-                        <RelativeLayout
-                            android:layout_width="145dp"
-                            android:layout_height="145dp"
-                            android:background="@drawable/host_gradient_circle">
-
-                            <com.cenesbeta.util.RoundedImageView
-                                android:id="@+id/riv_owner_image"
-                                android:layout_width="135dp"
-                                android:layout_height="135dp"
-                                android:layout_centerInParent="true"
-                                android:src="@drawable/default_profile_icon" />
-                        </RelativeLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:layout_margin="10dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/tv_owner_name"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:maxLines="1"
-                                android:text=""
-                                android:textColor="#FF9B9B9B"
-                                android:textSize="20sp"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="invites you to"
-                                android:textColor="@color/black"
-                                android:textSize="18dp" />
-
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="50dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginRight="50dp"
-                        android:text=""
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="28sp"
-                        android:textStyle="bold"
-                        />
-
-
-                    <TextView
-                        android:id="@+id/description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="50dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginRight="50dp"
-                        android:text=""
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:background="@color/white"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:id="@+id/ll_event_date"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="10dp">
-
-                            <ImageView
-                                android:id="@+id/iv_gathering_date"
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"
-                                android:layout_gravity="center_vertical"
-                                android:src="@drawable/gathering_seelcted_date_icon"
-                                />
-
-                            <TextView
-                                android:id="@+id/eDate"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:text=""
-                                android:textColor="@color/cenes_textfield_color"
-                                android:textSize="20sp"/>
-                        </LinearLayout>
-                        <View
-                            android:id="@+id/view_event_date_border"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginLeft="70dp"
-                            android:alpha="0.2"
-                            android:background="#FF979797"/>
-                        <LinearLayout
-                            android:id="@+id/ll_event_time"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="10dp">
-
-                            <ImageView
-                                android:id="@+id/iv_gathering_time"
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"
-                                android:layout_gravity="center_vertical"
-                                android:src="@drawable/gathering_selected_time_icon"/>
-
-
-                            <TextView
-                                android:id="@+id/eTime"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:text=""
-                                android:textColor="@color/cenes_textfield_color"
-                                android:textSize="20sp" />
-                        </LinearLayout>
-                        <View
-                            android:id="@+id/view_event_time_border"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginLeft="70dp"
-                            android:alpha="0.2"
-                            android:background="#FF979797"/>
-                        <LinearLayout
-                            android:id="@+id/ll_event_location"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="10dp">
-
-                            <ImageView
-                                android:id="@+id/iv_gathering_location"
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"
-                                android:layout_gravity="center_vertical"
-                                android:src="@drawable/gathering_selected_location_icon"/>
-
-                            <TextView
-                                android:id="@+id/location"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:text=""
-                                android:textColor="@color/cenes_textfield_color"
-                                android:textSize="20sp"
-                                android:ellipsize="end"
-                                android:maxLines="1"/>
-                        </LinearLayout>
-                        <View
-                            android:id="@+id/view_event_location_border"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginLeft="70dp"
-                            android:alpha="0.2"
-                            android:background="#FF979797"/>
-
-                        <LinearLayout
-                            android:id="@+id/ll_event_members"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="10dp">
-
-                            <ImageView
-                                android:id="@+id/iv_gathering_guests"
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"
-                                android:layout_gravity="center_vertical"
-                                android:src="@drawable/gathering__selcetd_people_icon"/>
-
-                            <TextView
-                                android:id="@+id/tv_rsvp_list_con"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:text="View Guest List"
-                                android:textColor="@color/cenes_textfield_color"
-                                android:textSize="20sp"/>
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="10dp"
-                            android:background="@color/white"/>
-                    </LinearLayout>
-
-                </LinearLayout>
-            </RelativeLayout>
-
-
-
-</ScrollView>
-    <LinearLayout
-        android:id="@+id/ll_accept_decline"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/cenes_blue"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        android:layout_alignParentBottom="true"
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/btn_accept"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/transparent"
-            android:text="ACCEPT"
-            android:textColor="@color/white"
-            android:textSize="18dp"
-            android:textStyle="bold"
-
-            />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            />
-        <Button
-            android:id="@+id/btn_decline"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/transparent"
-            android:text="DECLINE"
-            android:textColor="@color/white"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            />
-    </LinearLayout>
-    <View
-        android:id="@+id/rv_edit_gath_stylesheet"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#80000000"
-        android:visibility="gone"
-        ></View>
+    android:layout_height="match_parent"
+    android:background="#F0F0F0">
 
 
     <RelativeLayout
-        android:id="@+id/ll_style_sheet_items"
+        android:id="@+id/rl_parent_vew"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:visibility="gone"
-        android:background="#80FFFFFF"
+        android:layout_height="match_parent"
         >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp">
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="50dp"
+            android:layout_alignParentLeft="true">
 
-            <Button
-                android:id="@+id/edit_gathering_btn"
+            <ImageView
+                android:id="@+id/iv_accept_icon"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:text="Edit"
-                android:textColor="#FF007AFF"
-                android:layout_gravity="center"
-                android:background="#CCFCFCFC"
-                android:textSize="16sp"/>
+                android:layout_height="match_parent"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="#FF4D4D4D"></View>
-            <Button
-                android:id="@+id/btn_gath_stylesheet_share"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:text="Share to..."
-                android:textColor="#FF007AFF"
-                android:layout_gravity="center"
-                android:background="#CCFCFCFC"
-                android:textSize="16sp"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="#FF4D4D4D"></View>
-            <Button
-                android:id="@+id/btn_gath_stylesheet_clipboard"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:text="Copy Link"
-                android:textColor="#FF007AFF"
-                android:layout_gravity="center"
-                android:background="#CCFCFCFC"
-                android:textSize="16sp"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="#FF4D4D4D"></View>
-            <Button
-                android:id="@+id/btn_gath_stylesheet_decline"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:text="Decline Event"
-                android:textColor="#FFFF3B30"
-                android:layout_gravity="center"
-                android:background="#CCFCFCFC"
-                android:textSize="16sp"/>
+        </RelativeLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="#FF4D4D4D"></View>
-            <Button
-                android:id="@+id/btn_gath_stylesheet_delete"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:text="Delete Event"
-                android:textColor="#FFFF3B30"
-                android:layout_gravity="center"
-                android:background="#CCFCFCFC"
-                android:textSize="16sp"/>
+        <RelativeLayout
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="50dp"
+            android:layout_alignParentLeft="true">
 
-            <View
+            <ImageView
+                android:id="@+id/iv_invitation_accept_spinner"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@color/transparent"
+                android:layout_height="match_parent"
+                android:src="@drawable/invitation_loader_spinner"
+
                 />
+        </RelativeLayout>
 
-            <Button
-                android:id="@+id/btn_edit_gath_stylesheet_cancel"
+
+        <RelativeLayout
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_alignParentRight="true">
+
+            <ImageView
+                android:id="@+id/iv_edit_reject_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/invitation_edit_button"
+                android:layout_marginRight="20dp"
+                android:layout_alignParentRight="true"/>
+
+            <ImageView
+                android:id="@+id/iv_delete_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/invitation_delete_button"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="70dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="45dp"
+            android:layout_alignParentRight="true">
+
+            <ImageView
+                android:id="@+id/iv_invitation_decline_spinner"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:text="Cancel"
-                android:textColor="#FF007AFF"
-                android:layout_gravity="center"
-                android:background="@drawable/xml_round_rect_whitebg"
-                android:textSize="16sp"/>
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:src="@drawable/invitation_loader_spinner"
+                />
+        </RelativeLayout>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/tinderCardView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rl_invitation_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_event_picture"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/invitation_default"
+                android:scaleType="centerCrop"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#20000000"/>
+
+            <LinearLayout
+                android:id="@+id/ll_event_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="50dp">
+
+                <RelativeLayout
+                    android:layout_width="53dp"
+                    android:layout_height="53dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/host_gradient_circle_small"/>
+                    <com.cenesbeta.util.RoundedImageView
+                        android:id="@+id/iv_profile_pic"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/profile_pic_no_image"/>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    >
+                    <TextView
+                        android:id="@+id/tv_event_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:text="Event title"
+                        android:textSize="18sp"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        />
+                       <TextView
+                           android:id="@+id/tv_event_date"
+                           android:layout_width="match_parent"
+                           android:layout_height="20dp"
+                           android:textColor="@color/white"
+                           android:text="Sat June 15, 2:30PM-6:00PM"
+                           android:textSize="15sp"
+                           />
+                </LinearLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rv_event_description_dialog"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="150dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/xml_curved_corner_white"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="30dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_event_description_dialog_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="I rented out a private patio. Best to take an Uber."
+                        android:textSize="15dp"
+                        android:textColor="@color/black"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/xml_circle_trans_white_border">
+
+                    <ImageView
+                        android:id="@+id/iv_desc_profile_pic"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerInParent="true"
+                        />
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_bottom_buttons"
+                android:layout_width="290dp"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:weightSum="4"
+                android:orientation="horizontal"
+                android:layout_marginBottom="60dp"
+                android:layout_centerHorizontal="true"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/rl_guest_list_bubble"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/xml_circle_black_faded"
+                        android:alpha="0.3"></RelativeLayout>
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/guest_list_icon"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="50dp"/>
+                <RelativeLayout
+                    android:id="@+id/rl_location_bubble"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/xml_circle_black_faded"
+                        android:alpha="0.3"></RelativeLayout>
+
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/location_off_icon"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="50dp"/>
+
+                <RelativeLayout
+                    android:id="@+id/rl_description_bubble"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp">
+                    <RelativeLayout
+                        android:id="@+id/rl_description_bubble_background"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/xml_circle_black_faded"
+                        android:alpha="0.3"></RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/iv_description_bubble_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/message_off_icon"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="50dp"/>
+
+                <RelativeLayout
+                    android:id="@+id/rl_share_bubble"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/xml_circle_black_faded"
+                        android:alpha="0.3"></RelativeLayout>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/share_icon"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+     <!-- Welcome Invitation Card STARTS  -->
+            <RelativeLayout
+                android:id="@+id/rl_welcome_invitation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="WELCOME TO"
+                        android:textColor="@color/black"
+                        android:textSize="36dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="CENES!"
+                        android:textColor="@color/black"
+                        android:textSize="36dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Create &amp; preview your first invite."
+                        android:textColor="@color/black"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Refine or blast your invite with swipe gestures."
+                        android:textColor="@color/black"
+                        android:textSize="12dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginTop="170dp"
+                    android:layout_above="@id/ll_invitation_footer">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Swipe letf or right to interact"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:textSize="12dp"
+                        android:layout_gravity="center"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/welcome_swipe_images"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ll_invitation_footer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="5dp"
+                        android:src="@drawable/welcome_swipe_up_arrow" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="swipe up to close"
+                        android:textColor="@color/black"
+                        android:textSize="12dp" />
+                </LinearLayout>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <RelativeLayout
+            android:id="@+id/rl_skip_text"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:padding="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            >
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/card_up_arrow"
+                android:layout_centerInParent="true"
+                />
+        </RelativeLayout>
 
     </RelativeLayout>
-
 </RelativeLayout>

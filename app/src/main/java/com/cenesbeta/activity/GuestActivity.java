@@ -1,16 +1,24 @@
 package com.cenesbeta.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.cenesbeta.R;
+import com.cenesbeta.application.CenesApplication;
+import com.cenesbeta.bo.User;
+import com.cenesbeta.coremanager.CoreManager;
+import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.guest.GuestFragment;
-import com.cenesbeta.service.InstabugService;
+import com.cenesbeta.fragment.guest.SignupOptionsFragment;
+import com.cenesbeta.fragment.guest.SignupStep1Fragment;
+import com.cenesbeta.util.CenesUtils;
 
 import java.util.List;
 
@@ -20,6 +28,10 @@ import java.util.List;
 
 public class GuestActivity extends CenesActivity {
 
+    private CenesApplication cenesApplication;
+    private CoreManager coreManager;
+    private UserManager userManager;
+
     public FragmentTransaction fragmentTransaction;
     public FragmentManager fragmentManager;
 
@@ -27,11 +39,20 @@ public class GuestActivity extends CenesActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest);
-
-        new InstabugService().initiateInstabug(getApplication());
-
         fragmentManager = getSupportFragmentManager();
-        replaceFragment(new GuestFragment(), null);
+
+        cenesApplication = getCenesApplication();
+        coreManager = cenesApplication.getCoreManager();
+        userManager = coreManager.getUserManager();
+        User user = userManager.getUser();
+
+        /*if (user == null) {
+            replaceFragment(new GuestFragment(), null);
+        } else */if (user == null) {
+            replaceFragment(new SignupStep1Fragment(), null);
+        } else {
+            replaceFragment(new SignupOptionsFragment(), null);
+        }
         fragmentManager.beginTransaction().commit();
 
         ActivityCompat.requestPermissions(GuestActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, 101);
@@ -74,10 +95,10 @@ public class GuestActivity extends CenesActivity {
         return null;
     }
 
-    @Override
-    public void onBackPressed() {
-        this.moveTaskToBack(true);
-    }
+    //@Override
+    //public void onBackPressed() {
+      //  this.moveTaskToBack(true);
+    //}
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

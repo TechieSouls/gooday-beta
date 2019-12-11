@@ -26,7 +26,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="12dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/profile_icon"/>
+                android:src="@drawable/profile_pic_no_image"/>
 
             <TextView
                 android:id="@+id/notification_mesasge"

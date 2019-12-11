@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.cenesbeta.R;
-import com.cenesbeta.fragment.AddAlarmFragment;
 import com.cenesbeta.fragment.NavigationFragment;
 import com.cenesbeta.fragment.metime.MeTimeCardFragment;
 import com.cenesbeta.fragment.metime.MeTimeFragment;
@@ -96,7 +95,7 @@ public class MeTimeActivity extends CenesActivity {
         List<Fragment> fragments = fragmentManager.getFragments();
         if (fragments != null) {
             for (Fragment fragment : fragments) {
-                if (fragment != null && !(fragment instanceof NavigationFragment) && fragment instanceof AddAlarmFragment)
+                if (fragment != null && !(fragment instanceof NavigationFragment))
                     return fragment;
             }
         }

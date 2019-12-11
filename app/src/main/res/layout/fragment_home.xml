@@ -25,7 +25,7 @@
                 android:layout_margin="5dp"
                 android:gravity="center"
                 android:scaleType="centerCrop"
-                android:src="@drawable/profile_icon"/>
+                android:src="@drawable/profile_pic_no_image"/>
 
             <com.cenesbeta.util.CenesTextView
                 android:id="@+id/tv_selected_date"
@@ -182,7 +182,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:src="@drawable/fab_alarm_clock_white"
                     app:backgroundTint="@color/white"
                     app:fabSize="mini" />
             </LinearLayout>
@@ -211,7 +210,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:src="@drawable/fab_reminder_icon_white"
                     app:backgroundTint="@color/white"
                     app:fabSize="mini" />
             </LinearLayout>

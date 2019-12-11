@@ -3,14 +3,24 @@ package com.cenesbeta.AsyncTasks;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.view.View;
 
+import com.cenesbeta.adapter.NotificationAdapter;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.backendManager.NotificationAPiManager;
+import com.cenesbeta.backendManager.UserApiManager;
+import com.cenesbeta.bo.Notification;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 public class NotificationAsyncTask {
 
@@ -26,14 +36,14 @@ public class NotificationAsyncTask {
 
         private CoreManager coreManager = cenesApplication.getCoreManager();
 
-        ProgressDialog processDialog;
+        //ProgressDialog processDialog;
 
         // you may separate this or combined to caller class.
         public interface AsyncResponse {
             void processFinish(JSONObject response);
         }
         public AsyncResponse delegate = null;
-        ProgressDialog progressDialog;
+        //ProgressDialog progressDialog;
 
         public NotificationListTask(AsyncResponse delegate) {
             this.delegate = delegate;
@@ -41,12 +51,12 @@ public class NotificationAsyncTask {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(activity);
+            /*progressDialog = new ProgressDialog(activity);
             progressDialog.setMessage("Loading...");
             progressDialog.setIndeterminate(false);
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setCancelable(false);
-            progressDialog.show();
+            progressDialog.show();*/
         }
 
         @Override
@@ -62,10 +72,10 @@ public class NotificationAsyncTask {
         @Override
         protected void onPostExecute(JSONObject response) {
             super.onPostExecute(response);
-            if (progressDialog != null) {
+            /*if (progressDialog != null) {
                 progressDialog.dismiss();
                 progressDialog = null;
-            }
+            }*/
             delegate.processFinish(response);
         }
 

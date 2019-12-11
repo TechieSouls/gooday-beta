@@ -26,14 +26,11 @@ import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.Manager.UrlManager;
 import com.cenesbeta.Manager.ValidationManager;
 import com.cenesbeta.R;
-import com.cenesbeta.activity.AlarmActivity;
 import com.cenesbeta.activity.CenesActivity;
 import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.activity.ChoiceActivity;
 import com.cenesbeta.activity.DiaryActivity;
 import com.cenesbeta.activity.GatheringScreenActivity;
 import com.cenesbeta.activity.GuestActivity;
-import com.cenesbeta.activity.HomeScreenActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
@@ -114,9 +111,10 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
 
         isFirstLogin = ((CenesActivity) getActivity()).sharedPrefs.getBoolean("isFirstLogin", true);
 
-        if (getActivity() instanceof ChoiceActivity) {
-            isFirstLogin = ((ChoiceActivity) getActivity()).sharedPrefs.getBoolean("isFirstLogin", true);
-        } else if (getActivity() instanceof CenesBaseActivity) {
+        //if (getActivity() instanceof ChoiceActivity) {
+          //  isFirstLogin = ((ChoiceActivity) getActivity()).sharedPrefs.getBoolean("isFirstLogin", true);
+        //} else
+            if (getActivity() instanceof CenesBaseActivity) {
             isFirstLogin = ((CenesBaseActivity) getActivity()).sharedPrefs.getBoolean("isFirstLogin", true);
         } else if (getActivity() instanceof GuestActivity) {
             isFirstLogin = ((GuestActivity) getActivity()).sharedPrefs.getBoolean("isFirstLogin", true);
@@ -126,7 +124,6 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
 
         CenesUtils.logEntries(loggedInUser, "Landing at Calendar Sync Screen", getCenesActivity().getApplicationContext());
 
-        System.out.println(CenesConstants.OutlookClientId);
         mAuthClient = new LiveAuthClient(getCenesActivity(), CenesConstants.OutlookClientId);
 
         btnSignIn.setOnClickListener(onClickListener);
@@ -139,14 +136,10 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
     public void onResume() {
         super.onResume();
         try {
-            if (getActivity() instanceof HomeScreenActivity) {
-                ((HomeScreenActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof GatheringScreenActivity) {
+            if (getActivity() instanceof GatheringScreenActivity) {
                 ((GatheringScreenActivity) getActivity()).hideFooter();
             } else if (getActivity() instanceof DiaryActivity) {
                 ((DiaryActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof AlarmActivity) {
-                ((AlarmActivity) getActivity()).hideFooter();
             }
         } catch (Exception e) {
 
@@ -267,16 +260,14 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
             if (loggedInUser != null && loggedInUser.getPicture() != null && loggedInUser.getPicture() != "null") {
                 RequestOptions requestOptions = new RequestOptions();
                 requestOptions.circleCrop();
-                requestOptions.placeholder(R.drawable.default_profile_icon);
+                requestOptions.placeholder(R.drawable.profile_pic_no_image);
                 Glide.with(getActivity()).load(loggedInUser.getPicture()).apply(requestOptions).into(ivProfile);
             }
 
             ivProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getActivity() instanceof HomeScreenActivity) {
-                        HomeScreenActivity.mDrawerLayout.openDrawer(GravityCompat.START);
-                    } else if (getActivity() instanceof CenesBaseActivity) {
+                    if (getActivity() instanceof CenesBaseActivity) {
                         ((CenesBaseActivity)getActivity()).mDrawerLayout.openDrawer(GravityCompat.START);
                     }
                 }

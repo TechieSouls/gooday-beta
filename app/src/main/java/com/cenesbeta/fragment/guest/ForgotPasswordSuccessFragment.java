@@ -1,13 +1,17 @@
 package com.cenesbeta.fragment.guest;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
 import com.cenesbeta.Manager.AlertManager;
 import com.cenesbeta.Manager.ApiManager;
 import com.cenesbeta.Manager.DeviceManager;
@@ -21,6 +25,8 @@ import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
+
+import org.json.JSONObject;
 
 /**
  * Created by mandeep on 7/10/18.
@@ -40,8 +46,9 @@ public class ForgotPasswordSuccessFragment  extends CenesFragment {
     DeviceManager deviceManager;
     ApiManager apiManager;
 
-    TextView tvForgetPassowrdSuccessMsg;
-    Button btnFbBack;
+    EditText etPassword, etConfirmPassword;
+    Button forgetPasswordResetButton;
+    String email;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,19 +58,14 @@ public class ForgotPasswordSuccessFragment  extends CenesFragment {
 
         View v = inflater.inflate(R.layout.fragment_forget_password_success, container, false);
 
-        tvForgetPassowrdSuccessMsg = (TextView) v.findViewById(R.id.tv_forget_passowrd_success_msg);
-        btnFbBack = (Button) v.findViewById(R.id.btn_fp_back);
+        etPassword = (EditText) v.findViewById(R.id.et_fp_password);
+        etConfirmPassword = (EditText) v.findViewById(R.id.et_fp_confirm_passwword);
+        forgetPasswordResetButton = (Button) v.findViewById(R.id.bt_fp_submit);
 
-        String userData = getArguments().getString("email");
-        try {
-            String fpSuccess = "Reset link has been sent to "+userData+". Please go to your mailbox to complete the request.";
-            tvForgetPassowrdSuccessMsg.setText(fpSuccess);
+        email = getArguments().getString("email");
+        forgetPasswordResetButton.setOnClickListener(onClickListener);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        btnFbBack.setOnClickListener(onClickListener);
+        init();
         return v;
     }
 
@@ -84,9 +86,64 @@ public class ForgotPasswordSuccessFragment  extends CenesFragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.btn_fp_back:
-                    startActivity(new Intent((SignInActivity)getActivity(), GuestActivity.class));
-                    getActivity().finish();
+                case R.id.bt_fp_submit:
+
+                    if (etPassword.getText().toString().length() == 0) {
+                        showAlert("Alert", "Password canot be left empty");
+                    } else if (!etPassword.getText().toString().equals(etConfirmPassword.getText().toString())) {
+                        showAlert("Alert", "Passwords Donot Match");
+                    } else if (etPassword.getText().length() < 8 || etConfirmPassword.getText().length() > 16) {
+                        showAlert("Alert", "Check Password \nRequirements");
+                    } else {
+
+
+                        try {
+                            JSONObject postData = new JSONObject();
+                            postData.put("email", email);
+                            postData.put("password", etPassword.getText().toString());
+                            postData.put("requestFrom", "App");
+
+                            new ProfileAsyncTask(cenesApplication, getActivity());
+                            new ProfileAsyncTask.UpdatePasswordTask(new ProfileAsyncTask.UpdatePasswordTask.AsyncResponse() {
+                                @Override
+                                public void processFinish(JSONObject response) {
+
+                                    try {
+
+                                        boolean success = response.getBoolean("success");
+                                        if (success == true) {
+
+                                            new AlertDialog.Builder(getActivity())
+                                                    .setTitle("Reset Successful")
+                                                    .setMessage("")
+                                                    .setCancelable(false)
+                                                    .setPositiveButton("LOGIN", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+
+                                                            startActivity(new Intent((GuestActivity)getActivity(), GuestActivity.class));
+                                                            getActivity().finish();
+
+                                                        }
+                                                    }).show();
+
+
+                                        } else {
+
+                                            showAlert("Alert", response.getString("message"));
+                                        }
+
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }).execute(postData);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                     break;
             }
         }

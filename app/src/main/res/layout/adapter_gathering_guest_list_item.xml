@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+
+
+        <com.cenesbeta.util.RoundedImageView
+            android:id="@+id/iv_profile_pic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/profile_pic_no_image"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginLeft="15dp">
+
+
+            <TextView
+                android:id="@+id/tv_cenes_name"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:text="Mandeep"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/tv_phonebook_name"
+                android:layout_width="match_parent"
+                android:layout_height="21dp"
+                android:text=""
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dip"
+                android:layout_marginTop="10dp"
+                android:background="#CCC"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -14,7 +14,7 @@
             android:id="@+id/home_profile_pic"
             android:layout_width="@dimen/header_profile_pic_width"
             android:layout_height="@dimen/header_profile_pic_height"
-            android:src="@drawable/cenes_user_no_image"
+            android:src="@drawable/profile_pic_no_image"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"/>
         <TextView

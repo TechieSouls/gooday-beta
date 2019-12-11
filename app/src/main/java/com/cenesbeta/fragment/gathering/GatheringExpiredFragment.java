@@ -19,6 +19,7 @@ import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
+import com.cenesbeta.fragment.HelpFeedbackFragment;
 import com.cenesbeta.fragment.dashboard.HomeFragment;
 import com.cenesbeta.util.RoundedImageView;
 
@@ -51,7 +52,7 @@ public class GatheringExpiredFragment extends CenesFragment {
         user = userManager.getUser();
 
         if (user != null && user.getPicture() != null && user.getPicture() != "null") {
-            Glide.with(this).load(user.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.default_profile_icon)).into(homeProfilePic);
+            Glide.with(this).load(user.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(homeProfilePic);
         }
 
         homeProfilePic.setOnClickListener(onClickListener);

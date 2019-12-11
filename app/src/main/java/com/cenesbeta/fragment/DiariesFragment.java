@@ -79,7 +79,7 @@ public class DiariesFragment extends CenesFragment {
         init(view);
         user = userManager.getUser();
         if (user != null && user.getPicture() != null && user.getPicture() != "null") {
-            Glide.with(this).load(user.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.default_profile_icon)).into(userProfilePic);
+            Glide.with(this).load(user.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(userProfilePic);
         }
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         sectionedExpandableLayoutHelper = new SectionedExpandableLayoutHelper(getActivity().getApplicationContext(), mRecyclerView, 2);

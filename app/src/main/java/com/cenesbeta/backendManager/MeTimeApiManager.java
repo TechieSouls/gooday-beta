@@ -1,5 +1,7 @@
 package com.cenesbeta.backendManager;
 
+import android.support.v7.app.AppCompatActivity;
+
 import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.JsonParsing;
 import com.cenesbeta.api.MeTimeAPI;
@@ -59,7 +61,7 @@ public class MeTimeApiManager {
 
     public JSONObject uploadMeTimePhoto(String queryStr,String authToken, File file) {
         try {
-            String apiUrl = UrlManagerImpl.prodAPIUrl+MeTimeAPI.post_metimePhoto;
+            String apiUrl = UrlManagerImpl.prodImageApiDomain+MeTimeAPI.post_metimePhoto;
             JsonParsing jsonParsing = new JsonParsing();
             Map<String, String> formFields = new HashMap<>();
             for (String queryStrArray : queryStr.split("&")) {

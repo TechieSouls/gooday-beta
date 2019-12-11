@@ -10,6 +10,7 @@ import android.widget.Button;
 
 
 import com.cenesbeta.R;
+import com.cenesbeta.fragment.GetStartedFragment;
 
 import java.util.ArrayList;
 import java.util.List;

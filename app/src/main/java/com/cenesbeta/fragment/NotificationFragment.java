@@ -13,17 +13,17 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.AsyncTasks.NotificationAsyncTask;
+import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
-import com.cenesbeta.activity.AlarmActivity;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.activity.DiaryActivity;
 import com.cenesbeta.activity.GatheringScreenActivity;
-import com.cenesbeta.activity.ReminderActivity;
 import com.cenesbeta.adapter.NotificationAdapter;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Notification;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
+import com.cenesbeta.database.impl.NotificationManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.dashboard.HomeFragment;
 import com.cenesbeta.util.RoundedImageView;
@@ -52,52 +52,70 @@ public class NotificationFragment extends CenesFragment {
     private ImageView homeIcon;
 
     private TextView noNotificationsText;
-
-    final int MILLI_TO_HOUR = 1000 * 60 * 60;
+    private View fragmentView;
 
     private CenesApplication cenesApplication;
     private CoreManager coreManager;
     private UserManager userManager;
-
+    public InternetManager internetManager;
     private User loggedInUser;
+    public NotificationManagerImpl notificationManagerImpl;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_notifications, container, false);
-        init(v);
-        if (loggedInUser != null && loggedInUser.getPicture() != null && loggedInUser.getPicture() != "null") {
-            // DownloadImageTask(homePageProfilePic).execute(user.getPicture());
-            Glide.with(NotificationFragment.this).load(loggedInUser.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.default_profile_icon)).into(homeProfilePic);
+
+        if (fragmentView != null) {
+
+            return fragmentView;
         }
 
-        new NotificationAsyncTask(cenesApplication, getActivity());
-        new NotificationAsyncTask.NotificationListTask(new NotificationAsyncTask.NotificationListTask.AsyncResponse() {
-            @Override
-            public void processFinish(JSONObject response) {
-                try {
-                    JSONObject notificationResponse = response;
-                    if (notificationResponse != null && notificationResponse.getBoolean("success")) {
-                        JSONArray notificationArray = notificationResponse.getJSONArray("data");
-                        if (notificationArray.length() == 0) {
-                            noNotificationsText.setVisibility(View.VISIBLE);
-                        } else {
-                            noNotificationsText.setVisibility(View.GONE);
+        View v = inflater.inflate(R.layout.activity_notifications, container, false);
+        fragmentView = v;
+        init(v);
 
-                            Gson gson = new Gson();
+        if (loggedInUser != null && loggedInUser.getPicture() != null && loggedInUser.getPicture() != "null") {
+            // DownloadImageTask(homePageProfilePic).execute(user.getPicture());
+            Glide.with(NotificationFragment.this).load(loggedInUser.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(homeProfilePic);
+        }
 
-                            Type listType = new TypeToken<List<Notification>>() {}.getType();
-                            List<Notification> notifications = new Gson().fromJson(response.getJSONArray("data").toString(), listType);
-                            notificationAdapter = new NotificationAdapter(getActivity(), notifications);
-                            notificationExpandablelv.setAdapter(notificationAdapter);
+        notificationManagerImpl = new NotificationManagerImpl(cenesApplication);
+
+        //Fetching All Offline notifications and showing them.
+        List<Notification> notifications = notificationManagerImpl.fetchAllNotifications();
+        notificationAdapter = new NotificationAdapter(this, notifications);
+        notificationExpandablelv.setAdapter(notificationAdapter);
+
+        if (internetManager.isInternetConnection(getCenesActivity())) {
+
+            new NotificationAsyncTask(cenesApplication, getActivity());
+            new NotificationAsyncTask.NotificationListTask(new NotificationAsyncTask.NotificationListTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+                    try {
+                        JSONObject notificationResponse = response;
+                        if (notificationResponse != null && notificationResponse.getBoolean("success")) {
+                            JSONArray notificationArray = notificationResponse.getJSONArray("data");
+                            if (notificationArray.length() == 0) {
+                                noNotificationsText.setVisibility(View.VISIBLE);
+                            } else {
+                                noNotificationsText.setVisibility(View.GONE);
+
+                                Type listType = new TypeToken<List<Notification>>() {}.getType();
+                                List<Notification> notificationsTemp = new Gson().fromJson(response.getJSONArray("data").toString(), listType);
+                                notificationManagerImpl.deleteAllNotifications();
+                                notificationManagerImpl.addNotification(notificationsTemp);
+                                notificationAdapter = new NotificationAdapter(NotificationFragment.this, notificationsTemp);
+                                notificationExpandablelv.setAdapter(notificationAdapter);
+                            }
                         }
-                    }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        }).execute();
+            }).execute();
+        }
 
         ((CenesBaseActivity)getActivity()).ivNotificationFloatingIcon.setVisibility(View.GONE);
         return v;
@@ -109,14 +127,10 @@ public class NotificationFragment extends CenesFragment {
         try {
             if (getActivity() instanceof CenesBaseActivity) {
                 ((CenesBaseActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof ReminderActivity) {
-                ((ReminderActivity) getActivity()).hideFooter();
             } else if (getActivity() instanceof GatheringScreenActivity) {
                 ((GatheringScreenActivity) getActivity()).hideFooter();
             } else if (getActivity() instanceof DiaryActivity) {
                 ((DiaryActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof AlarmActivity) {
-                ((AlarmActivity) getActivity()).hideFooter();
             }
         } catch (Exception e) {
 
@@ -127,6 +141,7 @@ public class NotificationFragment extends CenesFragment {
         cenesApplication = getCenesActivity().getCenesApplication();
         coreManager = cenesApplication.getCoreManager();
         userManager = coreManager.getUserManager();
+        internetManager = coreManager.getInternetManager();
 
         loggedInUser = userManager.getUser();
 

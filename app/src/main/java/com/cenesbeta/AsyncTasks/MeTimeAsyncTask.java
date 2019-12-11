@@ -1,20 +1,27 @@
 package com.cenesbeta.AsyncTasks;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.backendManager.MeTimeApiManager;
 import com.cenesbeta.bo.User;
+import com.cenesbeta.bo.Location;
+import com.cenesbeta.bo.MeTimeItem;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.service.MeTimeService;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**

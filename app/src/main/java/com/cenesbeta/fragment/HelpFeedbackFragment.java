@@ -15,13 +15,9 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.R;
-import com.cenesbeta.activity.AlarmActivity;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.activity.DiaryActivity;
 import com.cenesbeta.activity.GatheringScreenActivity;
-import com.cenesbeta.activity.HomeScreenActivity;
-import com.cenesbeta.activity.MeTimeActivity;
-import com.cenesbeta.activity.ReminderActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
@@ -76,17 +72,7 @@ public class HelpFeedbackFragment  extends CenesFragment {
         homeProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (getActivity() instanceof HomeScreenActivity) {
-                    HomeScreenActivity.mDrawerLayout.openDrawer(GravityCompat.START);
-                } else if (getActivity() instanceof ReminderActivity) {
-                    ReminderActivity.mDrawerLayout.openDrawer(GravityCompat.START);
-                } else if (getActivity() instanceof GatheringScreenActivity) {
-                    GatheringScreenActivity.mDrawerLayout.openDrawer(GravityCompat.START);
-                } else if (getActivity() instanceof MeTimeActivity) {
-                    MeTimeActivity.mDrawerLayout.openDrawer(GravityCompat.START);
-                } else if (getActivity() instanceof AlarmActivity) {
-                    ((AlarmActivity) getActivity()).hideFooter();
-                } else if (getActivity() instanceof CenesBaseActivity) {
+                if (getActivity() instanceof CenesBaseActivity) {
                     ((CenesBaseActivity)getActivity()).mDrawerLayout.openDrawer(GravityCompat.START);
                 }
             }
@@ -102,21 +88,17 @@ public class HelpFeedbackFragment  extends CenesFragment {
         btnReportaProblem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Instabug.enable();
-                BugReporting.setAttachmentTypesEnabled(false, true, true, true);
-                BugReporting.setPromptOptionsEnabled(PromptOption.BUG,PromptOption.FEEDBACK);
-                BugReporting.invoke();*/
+                //new InstabugService().invokeBugReporting();
 
                 Intent intent=new Intent(Intent.ACTION_SEND);
                 String[] recipients={"support@cenesgroup.com"};
                 intent.putExtra(Intent.EXTRA_EMAIL, recipients);
 
-                String phoneDetails = "Device : "+ CenesUtils.getDeviceManufacturer()+" "+CenesUtils.getDeviceModel()+" "+CenesUtils.getDeviceVersion()+"\n\n";
+                String phoneDetails = "Device : "+CenesUtils.getDeviceManufacturer()+" "+CenesUtils.getDeviceModel()+" "+CenesUtils.getDeviceVersion()+"\n";
 
                 intent.putExtra(Intent.EXTRA_TEXT,phoneDetails);
                 intent.setType("text/html");
                 startActivity(Intent.createChooser(intent, "Send mail"));
-
             }
         });
 
@@ -128,7 +110,7 @@ public class HelpFeedbackFragment  extends CenesFragment {
 
         if (loggedInUser != null && loggedInUser.getPicture() != null && loggedInUser.getPicture() != "null") {
             // DownloadImageTask(homePageProfilePic).execute(user.getPicture());
-            Glide.with(HelpFeedbackFragment.this).load(loggedInUser.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.default_profile_icon)).into(homeProfilePic);
+            Glide.with(HelpFeedbackFragment.this).load(loggedInUser.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(homeProfilePic);
         }
 
 
@@ -139,16 +121,10 @@ public class HelpFeedbackFragment  extends CenesFragment {
     public void onResume() {
         super.onResume();
         try {
-            if (getActivity() instanceof HomeScreenActivity) {
-                ((HomeScreenActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof ReminderActivity) {
-                ((ReminderActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof GatheringScreenActivity) {
+            if (getActivity() instanceof GatheringScreenActivity) {
                 ((GatheringScreenActivity) getActivity()).hideFooter();
             } else if (getActivity() instanceof DiaryActivity) {
                 ((DiaryActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof AlarmActivity) {
-                ((AlarmActivity) getActivity()).hideFooter();
             }
         } catch (Exception e) {
 
@@ -170,16 +146,10 @@ public class HelpFeedbackFragment  extends CenesFragment {
     }
 
     public void setFragmentManager() {
-        if (getActivity() instanceof HomeScreenActivity) {
-            fragmentManager = ((HomeScreenActivity) getActivity()).fragmentManager;
-        } else if (getActivity() instanceof ReminderActivity) {
-            fragmentManager = ((ReminderActivity) getActivity()).fragmentManager;
-        } else if (getActivity() instanceof GatheringScreenActivity) {
+         if (getActivity() instanceof GatheringScreenActivity) {
             fragmentManager = ((GatheringScreenActivity) getActivity()).fragmentManager;
         } else if (getActivity() instanceof DiaryActivity) {
             fragmentManager = ((DiaryActivity) getActivity()).fragmentManager;
-        } else if (getActivity() instanceof AlarmActivity) {
-            fragmentManager = ((AlarmActivity) getActivity()).fragmentManager;
         }
     }
 

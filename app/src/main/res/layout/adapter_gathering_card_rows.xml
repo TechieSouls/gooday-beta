@@ -74,7 +74,7 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/cenes_user_no_image" />
+                        android:src="@drawable/profile_pic_no_image" />
                 </RelativeLayout>
 
 
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:lines="1"
-                    android:text="Ryan Somar is hosting"
+                    android:text=""
                     android:textColor="@color/cenes_dark_gray"
                     android:textSize="18sp" />
 
@@ -112,7 +112,7 @@
                     android:drawablePadding="10dp"
                     android:ellipsize="end"
                     android:lines="1"
-                    android:text="Seahawks at Rams"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -125,7 +125,7 @@
                     android:drawableStart="@drawable/location_pin"
                     android:ellipsize="end"
                     android:lines="1"
-                    android:text="Seahawks at Rams"
+                    android:text=""
                     android:textColor="#FF9B9B9B"
                     android:textSize="16sp"/>
 

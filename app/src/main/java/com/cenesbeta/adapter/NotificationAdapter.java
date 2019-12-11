@@ -16,7 +16,10 @@ import com.cenesbeta.AsyncTasks.NotificationAsyncTask;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.bo.Notification;
+import com.cenesbeta.fragment.NotificationFragment;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
+import com.cenesbeta.fragment.gathering.GatheringPreviewFragmentBkup;
+import com.cenesbeta.fragment.gathering.GatheringsFragment;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
 
@@ -28,13 +31,13 @@ import java.util.List;
 public class NotificationAdapter extends BaseAdapter {
 
     private List<Notification> notifications;
-    private Activity activity;
+    private NotificationFragment notificationFragment;
     private LayoutInflater inflter;
 
-    public NotificationAdapter(Activity activity, List<Notification> notifications) {
-        this.activity = activity;
+    public NotificationAdapter(NotificationFragment notificationFragment, List<Notification> notifications) {
+        this.notificationFragment = notificationFragment;
         this.notifications = notifications;
-        this.inflter = (LayoutInflater.from(activity));
+        this.inflter = (LayoutInflater.from(notificationFragment.getActivity()));
     }
 
     @Override
@@ -71,7 +74,11 @@ public class NotificationAdapter extends BaseAdapter {
         final Notification notification = (Notification) notifications.get(position);
 
         System.out.println(notification.toString());
-        holder.notificationMessage.setText(Html.fromHtml(notification.getMessage() + " <b>" + notification.getTitle() + "</b>"));
+        String notificationText = notification.getMessage();
+        if (!(notification.getType() != null && notification.getType().equals("Welcome"))) {
+            notificationText = notificationText +  " <b>" + notification.getTitle() + "</b>";
+        }
+        holder.notificationMessage.setText(Html.fromHtml( notificationText));
         holder.notificationTime.setText(CenesUtils.ddMMM.format(notification.getNotificationTime()).toUpperCase());
 
         //if (notification.getSenderImage() != null && notification.getSenderImage() != "" && notification.getSenderImage() != "null") {
@@ -81,20 +88,40 @@ public class NotificationAdapter extends BaseAdapter {
         //}
 
         try {
-            Glide.with(activity).load(notification.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.default_profile_icon)).into(holder.senderPic);
+
+            if (notification.getType() != null && notification.getType().equals("Welcome")) {
+
+                holder.senderPic.setImageResource(R.drawable.notification_alert_icon);
+
+            } else {
+
+                if (notification.getUser() != null && notification.getUser().getPicture() != null && notification.getUser().getPicture().length() != 0) {
+                    Glide.with(notificationFragment.getActivity()).load(notification.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(holder.senderPic);
+                } else {
+                    holder.senderPic.setImageResource(R.drawable.profile_pic_no_image);
+                }
+
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         long daysDiff  = (new Date().getTime() - notification.getNotificationTime())/(1000*3600*24);
-        System.out.println("Diffrent in Days : "+daysDiff/(1000*3600*24)+"   -----   "+daysDiff);
+        System.out.println("Different in Days : "+daysDiff/(1000*3600*24)+"   -----   "+daysDiff);
         if (daysDiff > 0) {
             holder.notificationDay.setText(daysDiff +" Days Ago");
         } else {
 
-            int hours = CenesUtils.differenceInHours(notification.getNotificationTime(), new Date().getTime());
+            //int hours = CenesUtils.differenceInHours(notification.getNotificationTime(), new Date().getTime());
+            int hours = Math.round((new Date().getTime() - notification.getNotificationTime())/(1000*3600));
             System.out.println("Hours Diff : "+hours);
             if (hours == 0) {
-                holder.notificationDay.setText("Just Now");
+
+                int minutes = Math.round((new Date().getTime() - notification.getNotificationTime())/(1000*60));
+                if (minutes == 0) {
+                    holder.notificationDay.setText("Just Now");
+                } else {
+                    holder.notificationDay.setText(minutes+" Minutes Ago");
+                }
             } else if (hours == 1) {
                 holder.notificationDay.setText(hours+" Hour Ago");
             } else {
@@ -102,23 +129,39 @@ public class NotificationAdapter extends BaseAdapter {
             }
         }
         if (notification.getReadStatus().equals("Read")) {
-            holder.llContainer.setBackground(activity.getResources().getDrawable(R.drawable.xml_curved_corner_markread_fill));
-            holder.notificationTime.setTextColor(activity.getResources().getColor(R.color.cenes_markread_color));
-            holder.notificationDay.setTextColor(activity.getResources().getColor(R.color.cenes_markread_color));
+            holder.llContainer.setBackground(notificationFragment.getActivity().getResources().getDrawable(R.drawable.xml_curved_corner_markread_fill));
+            holder.notificationTime.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_markread_color));
+            holder.notificationDay.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_markread_color));
             holder.notifcationReadStatus.setVisibility(View.VISIBLE);
         } else {
-            holder.llContainer.setBackground(activity.getResources().getDrawable(R.drawable.xml_curved_corner_blue_fill));
-            holder.notificationTime.setTextColor(activity.getResources().getColor(R.color.cenes_selectedText_color));
-            holder.notificationDay.setTextColor(activity.getResources().getColor(R.color.cenes_selectedText_color));
+            holder.llContainer.setBackground(notificationFragment.getActivity().getResources().getDrawable(R.drawable.xml_curved_corner_blue_fill));
+            holder.notificationTime.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_selectedText_color));
+            holder.notificationDay.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_selectedText_color));
             holder.notifcationReadStatus.setVisibility(View.GONE);
         }
-
-
 
         holder.llContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (notification.getType().equals("Gathering")) {
+
+                notificationFragment.notificationManagerImpl.updateNotificationReadStatus(notification);
+                if (notificationFragment.internetManager.isInternetConnection(notificationFragment.getCenesActivity())) {
+
+                    new NotificationAsyncTask(((CenesBaseActivity)notificationFragment.getActivity()).getCenesApplication(), notificationFragment.getActivity());
+                    new NotificationAsyncTask.MarkNotificationReadTask(new NotificationAsyncTask.MarkNotificationReadTask.AsyncResponse() {
+                        @Override
+                        public void processFinish(JSONObject response) {
+                            System.out.println(response);
+                        }
+                    }).execute(notification.getNotificationTypeId());
+
+                }
+
+                GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
+                gatheringPreviewFragment.event = notification.getEvent();
+                ((CenesBaseActivity)notificationFragment.getActivity()).replaceFragment(gatheringPreviewFragment, NotificationFragment.TAG);
+
+               /* if (notification.getType().equals("Gathering")) {
 
                     Bundle bundle = new Bundle();
                     bundle.putString("dataFrom", "notification");
@@ -126,13 +169,6 @@ public class NotificationAdapter extends BaseAdapter {
                     bundle.putString("message", "Your have been invited to...");
                     bundle.putString("title", notification.getTitle());
 
-                    /*Intent intent = new Intent(getActivity(), GatheringScreenActivity.class);
-                    intent.putExtra("dataFrom", "push");
-                    intent.putExtra("eventId", child.getNotificationTypeId());
-                    intent.putExtra("message", "Your have been invited to...");
-                    intent.putExtra("title", child.getTitle());
-                    startActivity(intent);
-                    getActivity().finish();*/
 
                     new NotificationAsyncTask(((CenesBaseActivity)activity).getCenesApplication(), activity);
                     new NotificationAsyncTask.MarkNotificationReadTask(new NotificationAsyncTask.MarkNotificationReadTask.AsyncResponse() {
@@ -142,22 +178,22 @@ public class NotificationAdapter extends BaseAdapter {
                         }
                     }).execute(notification.getNotificationTypeId());
 
-                    GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
-                    gatheringPreviewFragment.setArguments(bundle);
+                    GatheringPreviewFragmentBkup gatheringPreviewFragmentBkup = new GatheringPreviewFragmentBkup();
+                    gatheringPreviewFragmentBkup.setArguments(bundle);
 
-                    ((CenesBaseActivity)activity).replaceFragment(gatheringPreviewFragment, GatheringPreviewFragment.TAG);
-                } /*else if (notification.getType().equals("Gathering") && notification.getNotificationTypeStatus().equalsIgnoreCase("old")) {
+                    ((CenesBaseActivity)activity).replaceFragment(gatheringPreviewFragmentBkup, GatheringPreviewFragmentBkup.TAG);
+                }*/ /*else if (notification.getType().equals("Gathering") && notification.getNotificationTypeStatus().equalsIgnoreCase("old")) {
 
                     Bundle bundle = new Bundle();
                     bundle.putString("dataFrom", "list");
                     bundle.putLong("eventId",notification.getNotificationTypeId());
 
 
-                    GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
+                    GatheringPreviewFragmentBkup gatheringPreviewFragment = new GatheringPreviewFragmentBkup();
                     gatheringPreviewFragment.setArguments(bundle);
 
 
-                    ((CenesBaseActivity)activity).replaceFragment(gatheringPreviewFragment, GatheringPreviewFragment.TAG);
+                    ((CenesBaseActivity)activity).replaceFragment(gatheringPreviewFragment, GatheringPreviewFragmentBkup.TAG);
 
                 }*/ /*else if (child.getType().equals("Reminder")) {
                     startActivity(new Intent(getActivity(), ReminderActivity.class));

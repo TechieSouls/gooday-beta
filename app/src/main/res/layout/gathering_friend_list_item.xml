@@ -10,36 +10,84 @@
         android:gravity="center"
         android:orientation="vertical"
         android:padding="5dp">
-
-        <com.cenesbeta.util.RoundedImageView
-            android:id="@+id/iv_friend_image"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/cenes_user_no_image" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/transparent"/>
 
         <RelativeLayout
-            android:id="@+id/rv_non_cenes_mem_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"></RelativeLayout>
+            android:id="@+id/rv_cenes_layout"
+            android:layout_width="50dp"
+            android:layout_height="50dp">
+            <ImageView
+                android:id="@+id/iv_host_circle_member"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/host_gradient_circle_small"
+                android:visibility="visible"/>
+
+
+            <com.cenesbeta.util.RoundedImageView
+                android:id="@+id/iv_friend_image"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile_pic_no_image"
+                android:visibility="visible"
+                android:layout_centerInParent="true"/>
+
+            <ImageView
+                android:id="@+id/ib_delete_member"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/delete_friend_icon"
+                android:layout_alignParentRight="true"
+                android:visibility="visible" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rv_non_cenes_layout"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:visibility="visible"
+            android:background="@drawable/xml_circle_grey_white_border">
+
+            <ImageView
+                android:id="@+id/iv_host_circle"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/host_gradient_circle_small"
+                android:visibility="visible"/>
+
+            <TextView
+                android:id="@+id/tv_non_cenes_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AS"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true"
+                />
+            <ImageView
+                android:id="@+id/ib_delete_nonmember"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/delete_friend_icon"
+                android:layout_alignParentRight="true"
+                android:visibility="visible" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_friend_name"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal|top"
-            android:lines="2"
-            android:textSize="15sp" />
+            android:lines="1"
+            android:textSize="13dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@color/transparent"/>
     </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/ib_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:background="@color/transparent"
-        android:src="@drawable/cancel"
-        android:visibility="gone" />
 
 </RelativeLayout>

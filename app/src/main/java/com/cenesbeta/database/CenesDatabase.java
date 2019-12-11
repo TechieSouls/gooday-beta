@@ -5,6 +5,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.cenesbeta.application.CenesApplication;
+import com.cenesbeta.database.impl.CenesUserManagerImpl;
+import com.cenesbeta.database.impl.EventManagerImpl;
+import com.cenesbeta.database.impl.EventMemberManagerImpl;
+import com.cenesbeta.database.impl.MeTimeManagerImpl;
+import com.cenesbeta.database.impl.MeTimePatternManagerImpl;
+import com.cenesbeta.database.impl.NotificationManagerImpl;
+import com.cenesbeta.database.impl.UserContactManagerImpl;
+import com.cenesbeta.database.impl.UserManagerImpl;
 
 /**
  * Created by puneet on 11/8/17.
@@ -40,9 +48,15 @@ public class CenesDatabase {
         @Override
         public void onCreate(SQLiteDatabase db) {
             // TODO Auto-generated method stub
-            db.execSQL("CREATE TABLE IF NOT EXISTS user_record (user_id LONG, email TEXT, facebook_auth_token TEXT, facebook_id TEXT,name TEXT, password TEXT, tocken TEXT, api_url TEXT, picture TEXT, gender TEXT, phone TEXT, birth_date LONG)");
-            db.execSQL("CREATE TABLE alarms (alarm_id INTEGER PRIMARY KEY AUTOINCREMENT, label TEXT, repeat TEXT, sound TEXT,alarm_time LONG, is_on INTEGER)");
-            //db.execSQL("CREATE TABLE reminders (reminder_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT,reminder_time LONG, location TEXT,created_by_id LONG, status TEXT)");
+            db.execSQL(UserManagerImpl.CreateTableQuery);
+            db.execSQL(EventManagerImpl.createTableQuery);
+            db.execSQL(EventMemberManagerImpl.createTableQuery);
+            db.execSQL(CenesUserManagerImpl.createTableQuery);
+            db.execSQL(UserContactManagerImpl.createUserContactTableQuery);
+            db.execSQL(NotificationManagerImpl.CreateTableQuery);
+            db.execSQL(MeTimeManagerImpl.CreateTableQuery);
+            db.execSQL(MeTimePatternManagerImpl.CreateTableQuery);
+
         }
 
         @Override

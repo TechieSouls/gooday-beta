@@ -26,6 +26,8 @@ import com.cenesbeta.util.CenesMessages;
 
 import org.json.JSONObject;
 
+import java.util.Map;
+
 public class ChangePasswordFragment extends CenesFragment {
 
     public final static String TAG = "ChangePasswordFragment";

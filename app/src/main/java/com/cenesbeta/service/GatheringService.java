@@ -66,27 +66,34 @@ public class GatheringService {
                 todayCalendar.setTime(new Date());
 
                 Calendar cal = Calendar.getInstance();
-                cal.setTimeInMillis(job.getLong("date"));
-                System.out.println("Calendar Day Of Month : "+Calendar.DAY_OF_MONTH+" ------  Today Calendar "+Calendar.DAY_OF_MONTH);
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 Date readableDate = sdf.parse(job.getString("readableDate"));
+
+                Calendar predictiveDateCal = Calendar.getInstance();
+                predictiveDateCal.setTimeInMillis(job.getLong("date"));
+
                 /*if (cal.get(Calendar.DAY_OF_MONTH) < todayCalendar.get(Calendar.DAY_OF_MONTH) && cal.getTimeInMillis() < todayCalendar.getTimeInMillis()) {
                     continue;
                 }*/
-                if (readableDate.getMonth() < cal.get(Calendar.MONTH) || readableDate.getMonth() > cal.get(Calendar.MONTH)) {
+                //if (predictiveDateCal.get(Calendar.MONTH) < cal.get(Calendar.MONTH) || predictiveDateCal.get(Calendar.MONTH) > cal.get(Calendar.MONTH)) {
+                //    continue;
+                //}
+
+                if (predictiveDateCal.get(Calendar.DAY_OF_MONTH) < todayCalendar.get(Calendar.DAY_OF_MONTH) &&
+                        predictiveDateCal.get(Calendar.MONTH) <= todayCalendar.get(Calendar.MONTH) &&
+                        predictiveDateCal.get(Calendar.YEAR) <= todayCalendar.get(Calendar.YEAR)) {
                     continue;
                 }
 
-                /*if (cal.get(Calendar.DAY_OF_MONTH) == todayCalendar.get(Calendar.DAY_OF_MONTH) &&
-                        cal.get(Calendar.MONTH) == todayCalendar.get(Calendar.MONTH) &&
-                        cal.get(Calendar.YEAR) == todayCalendar.get(Calendar.YEAR)) {
+                if (predictiveDateCal.get(Calendar.DAY_OF_MONTH) >= todayCalendar.get(Calendar.DAY_OF_MONTH) &&
+                        predictiveDateCal.get(Calendar.MONTH) < todayCalendar.get(Calendar.MONTH) &&
+                        predictiveDateCal.get(Calendar.YEAR) <= todayCalendar.get(Calendar.YEAR)) {
                     continue;
-                }*/
-                CalendarDay calDay = new CalendarDay(cal);
+                }
 
-                Set<CalendarDay> calSet = new HashSet<>();
-                //calSet.add(calDay);
+                CalendarDay calDay = new CalendarDay(predictiveDateCal);
+                System.out.println("Day : "+calDay.getDay()+", Month : "+calDay.getMonth()+", Year : "+calDay.getYear()+", Percentage : "+job.getInt("predictivePercentage"));
 
                 //if (job.getInt("predictivePercentage") == 0 && job.getInt("predictivePercentage") <= 24) {
                 if (job.getInt("predictivePercentage") == 0) {

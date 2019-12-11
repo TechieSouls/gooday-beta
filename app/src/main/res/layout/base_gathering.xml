@@ -41,7 +41,6 @@
             android:layout_height="30dp"
             android:layout_weight="1"
             android:drawablePadding="5dp"
-            android:src="@drawable/remineder_icon"
             android:visibility="gone"/>
 
         <ImageView
@@ -68,7 +67,6 @@
             android:layout_weight="1"
             android:drawablePadding="5dp"
             android:gravity="center"
-            android:src="@drawable/alarm_icon"
             android:visibility="gone"/>
 
         <ImageView

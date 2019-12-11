@@ -6,59 +6,43 @@
     <RelativeLayout
         android:id="@+id/gath_search_location_header"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/border_square">
+        android:layout_height="60dp">
 
         <ImageView
             android:id="@+id/close_search_location_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentLeft="true"
-            android:layout_margin="10dp"
             android:padding="5dp"
-            android:src="@drawable/back_arrow_ios" />
+            android:src="@drawable/abondan_event_icon"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"/>
 
-        <TextView
-            android:id="@+id/tv_search_location_title"
+        <EditText
+            android:id="@+id/search_location_edit_text"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:text="LOCATION"
-            android:textAlignment="center"
-            android:gravity="center_vertical"
-            android:textStyle="bold"
-            android:textColor="#FF000000"/>
-        <Button
-            android:id="@+id/btn_custom_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="DONE"
-            android:background="@color/transparent"
-            android:textColor="@color/cenes_blue"
-            android:layout_alignParentRight="true"/>
+            android:layout_height="45dp"
+            android:background="@drawable/curved_search_edit_text_whitebg"
+            android:drawableLeft="@drawable/search_icon"
+            android:paddingLeft="10dp"
+            android:drawablePadding="5dp"
+            android:singleLine="true"
+            android:hint="Search Location"
+            android:layout_marginLeft="50dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            />
     </RelativeLayout>
-    <RelativeLayout
+    <!-- <RelativeLayout
         android:id="@+id/gath_search_location_sub_header"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="20px"
         android:layout_below="@+id/gath_search_location_header">
 
-        <EditText
-            android:id="@+id/search_location_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/curved_search_edit_text_whitebg"
-            android:drawableLeft="@drawable/search_icon"
-            android:paddingLeft="10dp"
-            android:singleLine="true"
-            />
-
     </RelativeLayout>
 
-
-    <LinearLayout
+     <LinearLayout
         android:id="@+id/ll_suggested_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -117,11 +101,46 @@
             android:layout_marginTop="10dp"
             android:scrollbars="none"/>
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/gath_search_location_list_view"
+-->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_recent_recycler_view"
-        android:visibility="gone"></ListView>
+        android:orientation="vertical"
+        android:layout_below="@+id/gath_search_location_header"
+        >
+
+        <TextView
+            android:id="@+id/tv_previous_search_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Previous Searches"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:layout_marginLeft="15dp"
+            android:visibility="gone"/>
+        <ListView
+            android:id="@+id/gath_search_location_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@color/transparent"></ListView>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_custom_location"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:text="Create Custom Location [CL]"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:textSize="15sp"
+        android:textColor="#0096FF"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@drawable/xml_curved_corner_white_skyblue_border">
+
+
+    </Button>
 </RelativeLayout>

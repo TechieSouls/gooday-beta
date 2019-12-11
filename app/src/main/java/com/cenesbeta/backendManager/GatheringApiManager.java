@@ -1,10 +1,14 @@
 package com.cenesbeta.backendManager;
 
+import android.support.v7.app.AppCompatActivity;
+
 import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.JsonParsing;
 import com.cenesbeta.api.GatheringAPI;
 import com.cenesbeta.application.CenesApplication;
+import com.cenesbeta.bo.User;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -59,13 +63,25 @@ public class GatheringApiManager {
 
     public JSONObject uploadEventPhoto(String queryStr,String authToken, File file) {
         try {
-            String apiUrl = UrlManagerImpl.prodAPIUrl+GatheringAPI.post_upload_image;
+            String apiUrl = UrlManagerImpl.prodImageApiDomain+GatheringAPI.post_upload_image;
             JsonParsing jsonParsing = new JsonParsing();
             Map<String, String> formFields = new HashMap<>();
             for (String queryStrArray : queryStr.split("&")) {
                 formFields.put(queryStrArray.split("=")[0], queryStrArray.split("=")[1]);
             }
             return jsonParsing.httpPostMultipartWithFormData(apiUrl,formFields, file, authToken);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public JSONObject uploadOnlyPhoto(String authToken, File file) {
+        try {
+            String apiUrl = UrlManagerImpl.prodImageApiDomain+GatheringAPI.post_upload_image_v2;
+            JsonParsing jsonParsing = new JsonParsing();
+            return jsonParsing.httpPostMultipartOnlyGeneric(apiUrl, authToken, file);
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -93,4 +109,28 @@ public class GatheringApiManager {
         }
         return null;
     }
+
+    public JSONArray predictiveDataUserId(String queryStr, String authToken) {
+        try {
+            JsonParsing jsonParsing = new JsonParsing();
+            String apiUrl = UrlManagerImpl.prodAPIUrl+ GatheringAPI.get_predictive_calendar_api+"?"+queryStr;
+            return jsonParsing.httpGet(apiUrl,authToken);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public JSONObject getGatheringByPrivateKet(String pathVariable, String authToken) {
+        try {
+            JsonParsing jsonParsing = new JsonParsing();
+            String apiUrl = UrlManagerImpl.prodAPIUrl+ GatheringAPI.get_gathering_by_key_api+"/"+pathVariable;
+            return jsonParsing.httpGetJsonObject(apiUrl,authToken);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

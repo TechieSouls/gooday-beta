@@ -20,8 +20,7 @@
             android:background="@color/transparent"
             android:paddingBottom="10dp"
             android:paddingEnd="10dp"
-            android:paddingTop="10dp"
-            android:src="@drawable/reminder_unchecked" />
+            android:paddingTop="10dp" />
 
         <com.deploy.util.CenesTextView
             android:id="@+id/tv_title"

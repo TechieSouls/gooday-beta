@@ -1,17 +1,25 @@
 package com.cenesbeta.AsyncTasks;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
 
+import com.cenesbeta.activity.GuestActivity;
+import com.cenesbeta.activity.SignInActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.backendManager.UserApiManager;
 import com.cenesbeta.bo.HolidayCalendar;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
+import com.cenesbeta.fragment.CalenderSyncFragment;
+import com.cenesbeta.fragment.guest.ForgotPasswordSuccessFragment;
 import com.google.gson.Gson;
 
 import org.apache.http.util.ByteArrayBuffer;
@@ -23,6 +31,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 
 public class ProfileAsyncTask {
 
@@ -296,6 +305,152 @@ public class ProfileAsyncTask {
         }
     }
 
+    public static class SignupStepOneSuccessTask extends AsyncTask<JSONObject, JSONObject, JSONObject> {
+
+        private CoreManager coreManager = cenesApplication.getCoreManager();
+
+        ProgressDialog scanSuccessDialog;
+
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+        public AsyncResponse delegate = null;
+
+        public SignupStepOneSuccessTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            scanSuccessDialog = new ProgressDialog(activity);
+            scanSuccessDialog.setMessage("Signing Up..");
+            scanSuccessDialog.setIndeterminate(false);
+            scanSuccessDialog.setCanceledOnTouchOutside(false);
+            scanSuccessDialog.setCancelable(false);
+            scanSuccessDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(JSONObject... jsonObjects) {
+
+            UserManager userManager = coreManager.getUserManager();
+            UserApiManager userApiManager = coreManager.getUserAppiManager();
+            User user = userManager.getUser();
+
+            JSONObject postSignupData = jsonObjects[0];
+            return userApiManager.emailSignupStep1(postSignupData);
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            super.onPostExecute(jsonObject);
+            if (scanSuccessDialog != null) {
+                scanSuccessDialog.dismiss();
+            }
+            scanSuccessDialog = null;
+            delegate.processFinish(jsonObject);
+        }
+    }
+
+    public static class SignupStepTwoSuccessTask extends AsyncTask<JSONObject, JSONObject, JSONObject> {
+
+        private CoreManager coreManager = cenesApplication.getCoreManager();
+
+        ProgressDialog scanSuccessDialog;
+
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+        public AsyncResponse delegate = null;
+
+        public SignupStepTwoSuccessTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            scanSuccessDialog = new ProgressDialog(activity);
+            scanSuccessDialog.setMessage("Updating..");
+            scanSuccessDialog.setIndeterminate(false);
+            scanSuccessDialog.setCanceledOnTouchOutside(false);
+            scanSuccessDialog.setCancelable(false);
+            scanSuccessDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(JSONObject... jsonObjects) {
+
+            UserManager userManager = coreManager.getUserManager();
+            UserApiManager userApiManager = coreManager.getUserAppiManager();
+            User user = userManager.getUser();
+
+            JSONObject postSignupData = jsonObjects[0];
+            return userApiManager.emailSignupSignupStep2(postSignupData);
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            super.onPostExecute(jsonObject);
+            if (scanSuccessDialog != null) {
+                scanSuccessDialog.dismiss();
+            }
+            scanSuccessDialog = null;
+            delegate.processFinish(jsonObject);
+        }
+    }
+
+    public static class SignupProfileUpdateTask extends AsyncTask<JSONObject, JSONObject, JSONObject> {
+
+        private CoreManager coreManager = cenesApplication.getCoreManager();
+
+        ProgressDialog scanSuccessDialog;
+
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+        public AsyncResponse delegate = null;
+
+        public SignupProfileUpdateTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            scanSuccessDialog = new ProgressDialog(activity);
+            scanSuccessDialog.setMessage("Updating..");
+            scanSuccessDialog.setIndeterminate(false);
+            scanSuccessDialog.setCanceledOnTouchOutside(false);
+            scanSuccessDialog.setCancelable(false);
+            scanSuccessDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(JSONObject... jsonObjects) {
+
+            UserManager userManager = coreManager.getUserManager();
+            UserApiManager userApiManager = coreManager.getUserAppiManager();
+            User user = userManager.getUser();
+
+            JSONObject postSignupData = jsonObjects[0];
+            return userApiManager.emailPostUserDetails(postSignupData, user.getAuthToken());
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            super.onPostExecute(jsonObject);
+            if (scanSuccessDialog != null) {
+                scanSuccessDialog.dismiss();
+            }
+            scanSuccessDialog = null;
+            delegate.processFinish(jsonObject);
+        }
+    }
     public static class HolidaySyncTask extends AsyncTask<HolidayCalendar, JSONObject, JSONObject> {
 
         private CoreManager coreManager = cenesApplication.getCoreManager();
@@ -498,4 +653,319 @@ public class ProfileAsyncTask {
         }
     }
 
+    public static class ForgotPasswordSendEmailRequest extends AsyncTask<String,JSONObject,JSONObject> {
+        ProgressDialog progressDialog;
+        private CoreManager coreManager = cenesApplication.getCoreManager();
+
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+        public AsyncResponse delegate = null;
+
+        public ForgotPasswordSendEmailRequest(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = new ProgressDialog(activity);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setCancelable(false);
+            progressDialog.setMessage("Loading...");
+            progressDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... strings) {
+            String email = strings[0];
+
+            UserApiManager userApiManager = coreManager.getUserAppiManager();
+
+
+            String queryStr = "email="+email;
+            JSONObject userResp = userApiManager.sendForgetPasswordEmail(queryStr);
+            return userResp;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject response) {
+            super.onPostExecute(response);
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+
+            delegate.processFinish(response);
+        }
+    }
+
+    public static class SendVerrificationTask extends AsyncTask<JSONObject, JSONObject, JSONObject> {
+
+        private CoreManager coreManager = cenesApplication.getCoreManager();
+
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+        public AsyncResponse delegate = null;
+
+        public SendVerrificationTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        ProgressDialog sendCodeDialog;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            sendCodeDialog = new ProgressDialog(activity);
+            sendCodeDialog.setMessage("Sending Verification Code");
+            sendCodeDialog.setIndeterminate(false);
+            sendCodeDialog.setCanceledOnTouchOutside(false);
+            sendCodeDialog.setCancelable(false);
+            sendCodeDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(JSONObject... jsons) {
+
+            JSONObject postDta = jsons[0];
+            UserApiManager userApiManager = coreManager.getUserAppiManager();
+            return userApiManager.sentVerificationCode(postDta);
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            super.onPostExecute(jsonObject);
+            sendCodeDialog.dismiss();
+            sendCodeDialog = null;
+
+            delegate.processFinish(jsonObject);
+        }
+    }
+
+    public static class EmailoginTask extends AsyncTask<JSONObject, JSONObject, JSONObject> {
+
+        private CoreManager coreManager = cenesApplication.getCoreManager();
+
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+        public AsyncResponse delegate = null;
+
+        public EmailoginTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        ProgressDialog sendCodeDialog;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            sendCodeDialog = new ProgressDialog(activity);
+            sendCodeDialog.setMessage("Loading...");
+            sendCodeDialog.setIndeterminate(false);
+            sendCodeDialog.setCanceledOnTouchOutside(false);
+            sendCodeDialog.setCancelable(false);
+            sendCodeDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(JSONObject... jsons) {
+
+            JSONObject postDta = jsons[0];
+            UserApiManager userApiManager = coreManager.getUserAppiManager();
+            return userApiManager.emailLogin(postDta);
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            super.onPostExecute(jsonObject);
+            sendCodeDialog.dismiss();
+            sendCodeDialog = null;
+
+            delegate.processFinish(jsonObject);
+        }
+    }
+
+    public static class DeviceTokenSyncTask extends AsyncTask<JSONObject, JSONObject, JSONObject> {
+
+        private CoreManager coreManager = cenesApplication.getCoreManager();
+
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+        public AsyncResponse delegate = null;
+
+        public DeviceTokenSyncTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected JSONObject doInBackground(JSONObject... jsons) {
+
+            JSONObject postDta = jsons[0];
+            UserApiManager userApiManager = coreManager.getUserAppiManager();
+            UserManager  userManager = coreManager.getUserManager();
+            User user = userManager.getUser();
+            return userApiManager.syncDeviceToken(postDta, user.getAuthToken());
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+            super.onPostExecute(jsonObject);
+            delegate.processFinish(jsonObject);
+        }
+    }
+
+    public static class CheckVerificationCodeTask extends AsyncTask<JSONObject, JSONObject, JSONObject> {
+        ProgressDialog verifyCodeDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            verifyCodeDialog = new ProgressDialog(activity);
+            verifyCodeDialog.setMessage("Verifying Code");
+            verifyCodeDialog.setIndeterminate(false);
+            verifyCodeDialog.setCanceledOnTouchOutside(false);
+            verifyCodeDialog.setCancelable(false);
+            verifyCodeDialog.show();
+        }
+
+        private CoreManager coreManager = cenesApplication.getCoreManager();
+
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+        public AsyncResponse delegate = null;
+
+        public CheckVerificationCodeTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected JSONObject doInBackground(JSONObject... jsons) {
+
+            JSONObject popstData = jsons[0];
+            UserApiManager userApiManager = coreManager.getUserAppiManager();
+            return userApiManager.checkVerificationCode(popstData);
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject response) {
+            super.onPostExecute(response);
+            verifyCodeDialog.dismiss();
+            verifyCodeDialog = null;
+
+            delegate.processFinish(response);
+        }
+    }
+
+    public static class UpdatePasswordTask extends AsyncTask<JSONObject, JSONObject, JSONObject> {
+
+        private CoreManager coreManager = cenesApplication.getCoreManager();
+
+        ProgressDialog processDialog;
+
+        // you may separate this or combined to caller class.
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+        public AsyncResponse delegate = null;
+
+        public UpdatePasswordTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            processDialog = new ProgressDialog(activity);
+            processDialog.setMessage("Updating..");
+            processDialog.setIndeterminate(false);
+            processDialog.setCanceledOnTouchOutside(false);
+            processDialog.setCancelable(false);
+            processDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(JSONObject... objects) {
+
+            UserApiManager userApiManager = coreManager.getUserAppiManager();
+            UserManager userManager = coreManager.getUserManager();
+            User user = userManager.getUser();
+
+            JSONObject postDataObj = objects[0];
+            JSONObject response = userApiManager.updatePassword(postDataObj, user.getAuthToken());
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject stringObjectMap) {
+            super.onPostExecute(stringObjectMap);
+            if (processDialog != null) {
+                processDialog.dismiss();
+                processDialog = null;
+            }
+            delegate.processFinish(stringObjectMap);
+        }
+    }
+
+
+    public static class DeleteAccountTask extends AsyncTask<JSONObject, JSONObject, JSONObject> {
+
+        private CoreManager coreManager = cenesApplication.getCoreManager();
+
+        ProgressDialog processDialog;
+
+        // you may separate this or combined to caller class.
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+        public AsyncResponse delegate = null;
+
+        public DeleteAccountTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            processDialog = new ProgressDialog(activity);
+            processDialog.setMessage("Deleting..");
+            processDialog.setIndeterminate(false);
+            processDialog.setCanceledOnTouchOutside(false);
+            processDialog.setCancelable(false);
+            processDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(JSONObject... objects) {
+
+            UserApiManager userApiManager = coreManager.getUserAppiManager();
+            UserManager userManager = coreManager.getUserManager();
+            User user = userManager.getUser();
+
+            JSONObject postDataObj = objects[0];
+            JSONObject response = userApiManager.deleteAccountRequest(postDataObj, user.getAuthToken());
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject stringObjectMap) {
+            super.onPostExecute(stringObjectMap);
+            if (processDialog != null) {
+                processDialog.dismiss();
+                processDialog = null;
+            }
+            delegate.processFinish(stringObjectMap);
+        }
+    }
 }

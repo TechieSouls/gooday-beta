@@ -22,13 +22,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.Manager.ApiManager;
 import com.cenesbeta.Manager.UrlManager;
 import com.cenesbeta.R;
-import com.cenesbeta.activity.AlarmActivity;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.activity.DiaryActivity;
 import com.cenesbeta.activity.GatheringScreenActivity;
 import com.cenesbeta.activity.GuestActivity;
-import com.cenesbeta.activity.HomeScreenActivity;
-import com.cenesbeta.activity.ReminderActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Alarm;
 import com.cenesbeta.bo.User;
@@ -36,6 +33,7 @@ import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.AlarmManager;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.metime.MeTimeFragment;
+import com.cenesbeta.fragment.profile.DeleteAccountFragment;
 import com.cenesbeta.fragment.profile.ProfileFragment;
 import com.cenesbeta.service.AlarmReceiver;
 import com.facebook.login.LoginManager;
@@ -57,7 +55,7 @@ public class NavigationFragment extends CenesFragment {
 
     ImageView ivProfile;
     TextView tvUsername, tvNotifications, tvCalendarSync, tvHolidayCalendar,
-            tvHelpAndFeedback, tvAbout;
+            tvHelpAndFeedback, tvAbout, tvAppSettings;
     LinearLayout llProfileSection;
 
     private User user;
@@ -92,6 +90,7 @@ public class NavigationFragment extends CenesFragment {
         tvHolidayCalendar = (TextView) v.findViewById(R.id.tvHolidayCalendar);
         tvHelpAndFeedback = (TextView) v.findViewById(R.id.tvHelpAndFeedback);
         tvAbout = (TextView) v.findViewById(R.id.tvAbout);
+        tvAppSettings = (TextView) v.findViewById(R.id.tvAppSettings);
 
         tvNotifications.setOnClickListener(itemClickListener);
         llProfileSection.setOnClickListener(itemClickListener);
@@ -99,51 +98,35 @@ public class NavigationFragment extends CenesFragment {
         tvHolidayCalendar.setOnClickListener(itemClickListener);
         tvHelpAndFeedback.setOnClickListener(itemClickListener);
         tvAbout.setOnClickListener(itemClickListener);
+        tvAppSettings.setOnClickListener(itemClickListener);
+
         refreshUserInfo(user);
 
     }
 
     public void setFragmentManager() {
-        if (getActivity() instanceof HomeScreenActivity) {
-            fragmentManager = ((HomeScreenActivity) getActivity()).fragmentManager;
-        } else if (getActivity() instanceof ReminderActivity) {
-            fragmentManager = ((ReminderActivity) getActivity()).fragmentManager;
-        } else if (getActivity() instanceof GatheringScreenActivity) {
+        if (getActivity() instanceof GatheringScreenActivity) {
             fragmentManager = ((GatheringScreenActivity) getActivity()).fragmentManager;
         } else if (getActivity() instanceof DiaryActivity) {
             fragmentManager = ((DiaryActivity) getActivity()).fragmentManager;
-        } else if (getActivity() instanceof AlarmActivity) {
-            fragmentManager = ((AlarmActivity) getActivity()).fragmentManager;
         }
     }
 
     public void closeDrawer() {
-        if (getActivity() instanceof HomeScreenActivity) {
-            HomeScreenActivity.mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else if (getActivity() instanceof ReminderActivity) {
-            ReminderActivity.mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else if (getActivity() instanceof GatheringScreenActivity) {
+        if (getActivity() instanceof GatheringScreenActivity) {
             GatheringScreenActivity.mDrawerLayout.closeDrawer(GravityCompat.START);
         } else if (getActivity() instanceof DiaryActivity) {
             DiaryActivity.mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else if (getActivity() instanceof AlarmActivity) {
-            AlarmActivity.mDrawerLayout.closeDrawer(GravityCompat.START);
-        }else if (getActivity() instanceof CenesBaseActivity) {
+        } else if (getActivity() instanceof CenesBaseActivity) {
             ((CenesBaseActivity)getActivity()).mDrawerLayout.closeDrawer(GravityCompat.START);
         }
     }
 
     public void replaceFragment(Fragment fragment, String tag) {
-        if (getActivity() instanceof HomeScreenActivity) {
-            ((HomeScreenActivity) getActivity()).replaceFragment(fragment, tag);
-        } else if (getActivity() instanceof ReminderActivity) {
-            ((ReminderActivity) getActivity()).replaceFragment(fragment, tag);
-        } else if (getActivity() instanceof GatheringScreenActivity) {
+        if (getActivity() instanceof GatheringScreenActivity) {
             ((GatheringScreenActivity) getActivity()).replaceFragment(fragment, tag);
         } else if (getActivity() instanceof DiaryActivity) {
             ((DiaryActivity) getActivity()).replaceFragment(fragment, tag);
-        } else if (getActivity() instanceof AlarmActivity) {
-            ((AlarmActivity) getActivity()).replaceFragment(fragment, tag);
         } else if (getActivity() instanceof CenesBaseActivity) {
             ((CenesBaseActivity) getActivity()).replaceFragment(fragment, tag);
         }
@@ -160,7 +143,7 @@ public class NavigationFragment extends CenesFragment {
         if (user != null && user.getPicture() != null && user.getPicture() != "null") {
             RequestOptions requestOptions = new RequestOptions();
             requestOptions.circleCrop();
-            requestOptions.placeholder(R.drawable.default_profile_icon);
+            requestOptions.placeholder(R.drawable.profile_pic_no_image);
             Glide.with(getActivity()).load(user.getPicture()).apply(requestOptions).into(ivProfile);
         }
         tvUsername.setText(user.getName());
@@ -202,6 +185,11 @@ public class NavigationFragment extends CenesFragment {
                     getFragmentManager().popBackStack();
                     replaceFragment(new AboutUsFragment(), AboutUsFragment.TAG);
                     break;
+                case R.id.tvAppSettings:
+                    getFragmentManager().popBackStack();
+                    replaceFragment(new DeleteAccountFragment(), DeleteAccountFragment.TAG);
+                    break;
+
             }
         }
     };

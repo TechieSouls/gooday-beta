@@ -18,12 +18,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.R;
-import com.cenesbeta.activity.AlarmActivity;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.activity.DiaryActivity;
 import com.cenesbeta.activity.GatheringScreenActivity;
-import com.cenesbeta.activity.HomeScreenActivity;
-import com.cenesbeta.activity.ReminderActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
@@ -76,7 +73,7 @@ public class AboutUsFragment  extends CenesFragment {
         if (user != null && user.getPicture() != null && user.getPicture() != "null") {
             RequestOptions requestOptions = new RequestOptions();
             requestOptions.circleCrop();
-            requestOptions.placeholder(R.drawable.default_profile_icon);
+            requestOptions.placeholder(R.drawable.profile_pic_no_image);
             Glide.with(getActivity()).load(user.getPicture()).apply(requestOptions).into(homeProfilePic);
         }
 
@@ -130,16 +127,10 @@ public class AboutUsFragment  extends CenesFragment {
     public void onResume() {
         super.onResume();
         try {
-            if (getActivity() instanceof HomeScreenActivity) {
-                ((HomeScreenActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof ReminderActivity) {
-                ((ReminderActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof GatheringScreenActivity) {
+            if (getActivity() instanceof GatheringScreenActivity) {
                 ((GatheringScreenActivity) getActivity()).hideFooter();
             } else if (getActivity() instanceof DiaryActivity) {
                 ((DiaryActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof AlarmActivity) {
-                ((AlarmActivity) getActivity()).hideFooter();
             }
         } catch (Exception e) {
 
@@ -161,16 +152,10 @@ public class AboutUsFragment  extends CenesFragment {
     }
 
     public void setFragmentManager() {
-        if (getActivity() instanceof HomeScreenActivity) {
-            fragmentManager = ((HomeScreenActivity) getActivity()).fragmentManager;
-        } else if (getActivity() instanceof ReminderActivity) {
-            fragmentManager = ((ReminderActivity) getActivity()).fragmentManager;
-        } else if (getActivity() instanceof GatheringScreenActivity) {
+        if (getActivity() instanceof GatheringScreenActivity) {
             fragmentManager = ((GatheringScreenActivity) getActivity()).fragmentManager;
         } else if (getActivity() instanceof DiaryActivity) {
             fragmentManager = ((DiaryActivity) getActivity()).fragmentManager;
-        } else if (getActivity() instanceof AlarmActivity) {
-            fragmentManager = ((AlarmActivity) getActivity()).fragmentManager;
         }
     }
 }

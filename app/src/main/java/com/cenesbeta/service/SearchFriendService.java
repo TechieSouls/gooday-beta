@@ -1,9 +1,13 @@
 package com.cenesbeta.service;
 
+import com.cenesbeta.bo.EventMember;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -32,4 +36,29 @@ public class SearchFriendService {
         }
         return  mapList;
     }
+
+    public static List<String> allAphabets() {
+
+        String alphabets[] ={"#", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+
+        List<String> alphabetsList = Arrays.asList(alphabets);
+
+        return  alphabetsList;
+    }
+
+    public static List<EventMember> getCenesContacts (List<EventMember> allContacts) {
+        List<EventMember> cenesContacts = new ArrayList<>();
+        for (EventMember eventMember: allContacts) {
+            try {
+
+                if ("yes".equals(eventMember.getCenesMember())) {
+                    cenesContacts.add(eventMember);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return cenesContacts;
+    }
+
 }

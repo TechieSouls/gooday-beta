@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <uses-permission
         android:name="android.permission.SEND_SMS"
         tools:node="remove" />
@@ -48,17 +49,31 @@
             android:name="com.cenesbeta.activity.WalkthroughActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.cenesbeta.activity.CenesBaseActivity"
+            android:screenOrientation="portrait">
+            <intent-filter android:label="Cenes">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "example://gizmos” -->
+                <data android:scheme="cenes"
+                    android:host="event" />
+            </intent-filter>
+            <intent-filter android:label="Cenes">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "example://gizmos” -->
+                <data android:scheme="https"
+                    android:host="betaweb.cenesgroup.com" />
+            </intent-filter>
+
+        </activity>
+        <activity
             android:name="com.cenesbeta.activity.WelcomeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.cenesbeta.activity.CenesBaseActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name="com.cenesbeta.activity.GuestActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.cenesbeta.activity.ChoiceActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.cenesbeta.activity.SignInActivity"
@@ -69,28 +84,12 @@
         <activity
             android:name="com.cenesbeta.activity.CompleteYourProfileActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name="com.cenesbeta.activity.HomeScreenActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.cenesbeta.activity.SearchFriendActivity"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name="com.cenesbeta.activity.SearchLocationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.cenesbeta.activity.ReminderActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustNothing" />
-        <activity
-            android:name="com.cenesbeta.activity.CreateReminderActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustNothing" />
-        <activity
             android:name="com.cenesbeta.activity.GatheringScreenActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.cenesbeta.activity.AlarmActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.cenesbeta.activity.DiaryActivity"
@@ -101,10 +100,14 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
             android:name="com.soundcloud.android.crop.CropImageActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

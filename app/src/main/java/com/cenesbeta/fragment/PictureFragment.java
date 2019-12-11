@@ -238,7 +238,7 @@ public class PictureFragment extends CenesFragment {
             //new DownloadImageTask(ivAttachment).execute(user.getPicture());
             RequestOptions requestOptions = new RequestOptions();
             requestOptions.circleCrop();
-            requestOptions.placeholder(R.drawable.default_profile_icon);
+            requestOptions.placeholder(R.drawable.profile_pic_no_image);
             Glide.with(getCenesActivity()).load(loggedInUser.getPicture()).apply(requestOptions).into(ivAttachment);
         }
     }

@@ -43,7 +43,6 @@ import com.cenesbeta.Manager.UrlManager;
 import com.cenesbeta.Manager.ValidationManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.DiaryActivity;
-import com.cenesbeta.activity.SearchFriendActivity;
 import com.cenesbeta.activity.SearchLocationActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.User;
@@ -282,7 +281,7 @@ public class AddDiaryFragment extends CenesFragment implements View.OnFocusChang
 
                 case R.id.tv_invite_frnds_btn:
                 case R.id.iv_add_more_friends:
-                    startActivityForResult(new Intent(getActivity(), SearchFriendActivity.class), SEARCH_FRIEND_RESULT_CODE);
+                    //startActivityForResult(new Intent(getActivity(), SearchFriendActivity.class), SEARCH_FRIEND_RESULT_CODE);
                     break;
 
                 case R.id.tv_search_location_button:
@@ -618,11 +617,11 @@ public class AddDiaryFragment extends CenesFragment implements View.OnFocusChang
             try {
                 final Map<String, String> invFrn = jsonObjectArrayList.get(position);
                 holder.tvName.setText(invFrn.get("name"));
-                holder.ivFriend.setImageResource(R.drawable.default_profile_icon);
+                holder.ivFriend.setImageResource(R.drawable.profile_pic_no_image);
                 if (invFrn.get("picture") != null && invFrn.get("picture") != "null") {
-                    Glide.with(getActivity()).load(invFrn.get("picture")).apply(RequestOptions.placeholderOf(R.drawable.default_profile_icon)).into(holder.ivFriend);
+                    Glide.with(getActivity()).load(invFrn.get("picture")).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(holder.ivFriend);
                 } else {
-                    holder.ivFriend.setImageResource(R.drawable.default_profile_icon);
+                    holder.ivFriend.setImageResource(R.drawable.profile_pic_no_image);
                 }
                 holder.container.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override

@@ -125,7 +125,8 @@
             android:layout_height="30dp"
             android:layout_marginTop="60px"
             android:background="@color/transparent"
-            android:textColor="@color/cenes_mcv_orange"/>
+            android:textColor="@color/cenes_mcv_orange"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 </RelativeLayout>

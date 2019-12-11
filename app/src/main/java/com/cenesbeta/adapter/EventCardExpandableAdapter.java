@@ -22,12 +22,17 @@ import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventMember;
+import com.cenesbeta.fragment.dashboard.HomeFragment;
 import com.cenesbeta.fragment.gathering.CreateGatheringFragment;
 import com.cenesbeta.fragment.gathering.GatheringExpiredFragment;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
+import com.cenesbeta.fragment.gathering.GatheringPreviewFragmentBkup;
+import com.cenesbeta.fragment.gathering.GatheringsFragment;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -103,14 +108,13 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
         EventMember owner = null;
         try {
             for (EventMember ownerMember: child.getEventMembers()) {
-                if (ownerMember.getUserId() != null &&  ownerMember.getUserId().equals(child.getCreatedById())) {
+                if (ownerMember.getUserId() != null && ownerMember.getUserId() != 0 && ownerMember.getUserId().equals(child.getCreatedById())) {
                     owner = ownerMember;
                 }
             }
 
-            System.out.println(owner.toString());
             if (owner != null && owner.getUser() != null) {
-                Glide.with(context).load(owner.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.cenes_user_no_image)).into(viewHolder.ivOwnerImage);
+                Glide.with(context).load(owner.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(viewHolder.ivOwnerImage);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     viewHolder.eventOwnerName.setText(Html.fromHtml("<b>"+owner.getUser().getName()+"</b> is hosting", Html.FROM_HTML_MODE_COMPACT));
@@ -125,7 +129,6 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
         if (child.getIsFullDay() != null && child.getIsFullDay()) {
             viewHolder.startTime.setText("00:00AM");
         } else {
-            viewHolder.startTime.setText(child.getStartTime());
         }
 
         //System.out.println(child.getTitle()+","+child.getEventMembers().size());
@@ -133,19 +136,32 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
             viewHolder.homeEventMemberImages.removeAllViews();
             viewHolder.homeAdapterHorizontalImageScrollView.setVisibility(View.VISIBLE);
 
+            List<EventMember> eventMembersToShow = new ArrayList<>();
             for (int i = 0; i < child.getEventMembers().size(); i++) {
-                EventMember em = child.getEventMembers().get(i);
 
+                EventMember em = child.getEventMembers().get(i);
+                if(em.getUserId() != null && em.getUserId() != 0 && em.getUserId().equals(child.getCreatedById())) {
+                    continue;
+                }
+                if(em.getUserId() == null) {
+                    continue;
+                }
+                eventMembersToShow.add(em);
+            }
+
+            for (int i = 0; i < eventMembersToShow.size(); i++) {
+
+                EventMember em = eventMembersToShow.get(i);
                 System.out.println(em.toString());
                 if (i > 3) {
+
                     viewHolder.homeEventMemberImagesCount.setVisibility(View.VISIBLE);
-                    viewHolder.homeEventMemberImagesCount.setText("+" + (child.getEventMembers().size() - 4));//3 Members and One owner
+                    viewHolder.homeEventMemberImagesCount.setText("+" + (eventMembersToShow.size() - 4));//3 Members and One owner
+
                 } else {
+
                     viewHolder.homeEventMemberImagesCount.setVisibility(View.GONE);
 
-                    if(em.isOwner()) {
-                        continue;
-                    }
                     RelativeLayout rlRoot = new RelativeLayout(context);
                     rlRoot.setLayoutParams(new RelativeLayout.LayoutParams(CenesUtils.dpToPx(60), CenesUtils.dpToPx(60)));
 
@@ -156,8 +172,9 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
                     roundedImageView.setLayoutParams(profileParams);
                     roundedImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     //roundedImageView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.xml_gradient_border_transparentbg));
+                    rlRoot.addView(roundedImageView);
 
-                    RelativeLayout.LayoutParams starParams = new RelativeLayout.LayoutParams(CenesUtils.dpToPx(30), CenesUtils.dpToPx(30));
+                    /*RelativeLayout.LayoutParams starParams = new RelativeLayout.LayoutParams(CenesUtils.dpToPx(30), CenesUtils.dpToPx(30));
                     starParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                     starParams.addRule(RelativeLayout.ALIGN_PARENT_END);
 
@@ -166,7 +183,6 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
                     ivStar.setPadding(CenesUtils.dpToPx(4), CenesUtils.dpToPx(4), CenesUtils.dpToPx(8), CenesUtils.dpToPx(8));
                     ivStar.setImageResource(R.drawable.star);
 
-                    rlRoot.addView(roundedImageView);
 
                     try {
                         if(em.isOwner()) {
@@ -174,18 +190,19 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
                         }
                     } catch(Exception e) {
                         e.printStackTrace();
-                    }
+                    }*/
 
                     try {
-                            Glide.with(context).load(em.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.cenes_user_no_image)).into(roundedImageView);
-
-
+                        if (em.getUser() != null && !CenesUtils.isEmpty(em.getUser().getPicture())) {
+                            Glide.with(context).load(em.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(roundedImageView);
+                        } else {
+                            roundedImageView.setImageResource(R.drawable.profile_pic_no_image);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-
                     viewHolder.homeEventMemberImages.addView(rlRoot);
+
                 }
             }
         } else {
@@ -201,46 +218,88 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
 
                 fragmentManager = context.getSupportFragmentManager();
 
-                if (child.getExpired() == true) {
+                /*if (child.getExpired() == true) {
                     GatheringExpiredFragment gatheringExpiredFragment = new GatheringExpiredFragment();
                     context.replaceFragment(gatheringExpiredFragment, GatheringExpiredFragment.TAG);
                 } else {
                     if (isInvitation) {
-                    /*context.hideFooter();
-                    InvitationFragment ifFragment = new InvitationFragment();
-
-                    Bundle bundle = new Bundle();
-                    //bundle.putString("dataFrom", "GatheringsFragment");
-                    bundle.putLong("eventId", viewHolder.eventId);
-                    ifFragment.setArguments(bundle);
-                    context.replaceFragment(ifFragment, "ifFragment");*/
                         Bundle bundle = new Bundle();
                         bundle.putString("dataFrom", "notification");
                         bundle.putLong("eventId", viewHolder.eventId);
-                        GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
-                        gatheringPreviewFragment.setArguments(bundle);
-                        context.replaceFragment(gatheringPreviewFragment, GatheringPreviewFragment.TAG);
+                        GatheringPreviewFragmentBkup gatheringPreviewFragmentBkup = new GatheringPreviewFragmentBkup();
+                        gatheringPreviewFragmentBkup.setArguments(bundle);
+                        context.replaceFragment(gatheringPreviewFragmentBkup, GatheringPreviewFragmentBkup.TAG);
 
 
                     } else {
                         CreateGatheringFragment cgFragment = new CreateGatheringFragment();
 
-                    /*Bundle bundle = new Bundle();
-                    bundle.putString("dataFrom", "list");
-                    bundle.putLong("eventId", viewHolder.eventId);
-                    cgFragment.setArguments(bundle);
-                    ((GatheringScreenActivity) context).replaceFragment(cgFragment, "cgFragment");*/
-
                         Bundle bundle = new Bundle();
                         bundle.putString("dataFrom", "list");
                         bundle.putLong("eventId", viewHolder.eventId);
-                        GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
-                        gatheringPreviewFragment.setArguments(bundle);
-                        context.replaceFragment(gatheringPreviewFragment, GatheringPreviewFragment.TAG);
+                        GatheringPreviewFragmentBkup gatheringPreviewFragmentBkup = new GatheringPreviewFragmentBkup();
+                        gatheringPreviewFragmentBkup.setArguments(bundle);
+                        context.replaceFragment(gatheringPreviewFragmentBkup, GatheringPreviewFragmentBkup.TAG);
 
                     }
-                }
+                }*/
+                System.out.println(child.toString());
+                GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
+                if (isInvitation) {
+                    List<Event> events = new ArrayList<>();
+                    events.add(child);
 
+                    List<Event> eventsBeforeSelection = new ArrayList<>();
+                    List<Long> previousEventsId = new ArrayList<>();
+
+                    List<Event> eventsAfterSelection = null;
+
+                    boolean previuosEventsTracked = false;
+                    for (Map.Entry<String, List<Event>> eventsMapSet: eventsMap.entrySet()) {
+
+                        if (!previuosEventsTracked) {
+
+                            for (Event event: eventsMapSet.getValue()) {
+                                if (child.getEventId().equals(event.getEventId())) {
+                                    previuosEventsTracked = true;
+                                    break;
+                                }
+                                eventsBeforeSelection.add(event);
+                                previousEventsId.add(event.getEventId());
+                            }
+
+                        }
+                    }
+
+                    for (Map.Entry<String, List<Event>> eventsMapSet: eventsMap.entrySet()) {
+
+                        for (Event event: eventsMapSet.getValue()) {
+
+                            if (previousEventsId.contains(event.getEventId())) {
+                                continue;
+                            }
+                            if (child.getEventId().equals(event.getEventId())) {
+                                eventsAfterSelection = new ArrayList<>();
+                                continue;
+                            }
+                            if (eventsAfterSelection != null) {
+                                eventsAfterSelection.add(event);
+                            }
+
+                        }
+                    }
+                    for (Event event : eventsAfterSelection) {
+                        events.add(event);
+                    }
+                    for (Event event : eventsBeforeSelection) {
+                        events.add(event);
+                    }
+
+                    gatheringPreviewFragment.pendingEvents = events;
+                } else {
+                    gatheringPreviewFragment.event = child;
+                }
+                context.replaceFragment(gatheringPreviewFragment, GatheringsFragment.TAG);
             }
         });
 
@@ -275,6 +334,9 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
                 //DeleteGatheringTask().execute(viewHolder.eventId);
             }
         });
+
+
+        System.out.println("Childddddd : "+child.getEventMembers().size());
         return convertView;
     }
 

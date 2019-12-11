@@ -43,6 +43,10 @@ public class CenesUtils {
     public static SimpleDateFormat EEEEMMdd = new SimpleDateFormat("EEEE, MM dd"); //Saturday, 10 16
     public static SimpleDateFormat EEEEMMMdd = new SimpleDateFormat("EEEE, MMM dd"); //Saturday, Mar 16
     public static SimpleDateFormat EEEEMMMMdd = new SimpleDateFormat("EEEE, MMMM dd"); //Saturday, March 16
+
+    public static SimpleDateFormat EEEMMMMdd = new SimpleDateFormat("EEE MMMM dd"); //Sat March 16
+    public static SimpleDateFormat EEEMMMMddcmyyyy = new SimpleDateFormat("EEE MMMM dd, yyyy"); //Sat March 16, 2019
+
     public static SimpleDateFormat ddMMMYYYY = new SimpleDateFormat("dd MMM yyyy"); //7 Mar 1967
     public static SimpleDateFormat EEEE = new SimpleDateFormat("EEEE"); //THHURSDAY
     public static SimpleDateFormat ddMMM = new SimpleDateFormat("ddMMM");
@@ -205,7 +209,7 @@ public class CenesUtils {
         Calendar pastCal = Calendar.getInstance();
         pastCal.setTimeInMillis(pastDateInMillis);
 
-        int days =  Math.abs((int)(currentDateInMillis - pastDateInMillis)/(1000 * 3600 * 24));
+        int days = currentCal.get(Calendar.DAY_OF_MONTH) - pastCal.get(Calendar.DAY_OF_MONTH);
 
         return days;
     }

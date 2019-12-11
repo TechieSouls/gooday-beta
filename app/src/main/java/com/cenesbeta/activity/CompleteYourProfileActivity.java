@@ -7,12 +7,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.cenesbeta.R;
 import com.cenesbeta.fragment.CalenderSyncFragment;
 import com.cenesbeta.fragment.HolidaySyncFragment;
+import com.cenesbeta.fragment.PictureFragment;
 import com.cenesbeta.fragment.guest.SignupStepSuccessFragment;
 
 import java.util.ArrayList;

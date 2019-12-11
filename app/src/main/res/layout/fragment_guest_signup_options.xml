@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/about_us_logo"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"/>
+
+
+    <LinearLayout
+        android:layout_width="285dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="100dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/colored_separator"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp">
+
+            <RelativeLayout
+                android:id="@+id/rl_facebook_btn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/xml_circle_facebook_blue"
+                >
+
+                <ImageView
+                    android:layout_width="13dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/facebook_icon"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/bt_fb_join"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="facebook"
+                android:visibility="gone" />
+
+            <View
+                android:layout_width="50dp"
+                android:layout_height="50dp"/>
+            <RelativeLayout
+                android:id="@+id/rl_google_btn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/xml_circle_google_red">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/google_icon"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="50dp"
+                android:layout_height="50dp"/>
+            <RelativeLayout
+                android:id="@+id/rl_email_btn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/xml_circle_email_pirple">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/email_icon"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_tandc_text"
+            android:linksClickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_marginTop="20dp"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -98,6 +98,31 @@ public class JsonParsing {
         return null;
     }
 
+    public JSONObject httpPostMultipartOnlyGeneric(String url, String authToken, File file) {
+        String charset = "UTF-8";
+        try {
+            MultipartUtility multipart = new MultipartUtility(url,charset,authToken);
+
+
+            multipart.addFilePart("uploadfile",file);
+
+            List<String> response = multipart.finish();
+
+            System.out.println("SERVER REPLIED:");
+            StringBuffer responseBuffer = new StringBuffer();
+            for (String line : response) {
+                //Log.e("File Output : ",line);
+                responseBuffer.append(line);
+            }
+            JSONObject jObj = new JSONObject(responseBuffer.toString());
+            return jObj;
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     public JSONObject httpPostMultipartWithFormData(String url, Map<String, String> formFields, File file, String authToken) {
         String charset = "UTF-8";
         try {

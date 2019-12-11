@@ -182,7 +182,7 @@ public class SignUpActivity extends CenesActivity{
             user.setEmail(email);
             user.setName(name);
             user.setPassword(password);
-            user.setAuthType("email");
+            user.setAuthType(User.AuthenticateType.email);
             user.setPhone(phone);
             user.setApiUrl(urlManager.getApiUrl(name));
             new SignUpProcess().execute();
@@ -306,15 +306,6 @@ public class SignUpActivity extends CenesActivity{
                 if(jsonObject.has("errorCode") ){
                     try{
                         if(jsonObject.getInt("errorCode") == 0){
-                            if(jsonObject.has(user.USERID)){
-                                user.setUserId(jsonObject.getInt(user.USERID));
-                            }
-                            if(jsonObject.has(user.USERNAME)){
-                                user.setUsername(jsonObject.getString(user.USERNAME));
-                            }
-                            if(jsonObject.has(user.TOKEN)){
-                                user.setAuthToken(jsonObject.getString(user.TOKEN));
-                            }
                             userManager.addUser(user);
 
                             SharedPreferences prefs = getSharedPreferences("deviceToken", MODE_PRIVATE);
@@ -367,7 +358,7 @@ public class SignUpActivity extends CenesActivity{
             JSONObject deviceTokenInfo = objects[0];
             User user = userManager.getUser();
             user.setApiUrl(urlManager.getApiUrl("dev"));
-            apiManager.syncDeviceToekn(user,deviceTokenInfo,SignUpActivity.this);
+            //apiManager.syncDeviceToekn(user,deviceTokenInfo,SignUpActivity.this);
             return null;
         }
     }

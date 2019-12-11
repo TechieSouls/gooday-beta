@@ -1,9 +1,12 @@
 package com.cenesbeta.backendManager;
 
+import android.support.v7.app.AppCompatActivity;
+
 import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.JsonParsing;
 import com.cenesbeta.api.NotificationAPI;
 import com.cenesbeta.application.CenesApplication;
+import com.cenesbeta.bo.User;
 
 import org.json.JSONObject;
 

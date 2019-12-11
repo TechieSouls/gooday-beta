@@ -12,8 +12,11 @@ import com.cenesbeta.Manager.Impl.ValidatioManagerImpl;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.Manager.UrlManager;
 import com.cenesbeta.Manager.ValidationManager;
+import com.cenesbeta.api.CenesCommonAPI;
+import com.cenesbeta.api.GatheringAPI;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.backendManager.CenesCommonAPIManager;
+import com.cenesbeta.backendManager.FriendApiManager;
 import com.cenesbeta.backendManager.GatheringApiManager;
 import com.cenesbeta.backendManager.HomeScreenApiManager;
 import com.cenesbeta.backendManager.LocationApiManager;
@@ -47,6 +50,7 @@ public class CoreManager {
     public NotificationAPiManager notificationAPiManager = null;
     public MeTimeApiManager meTimeApiManager = null;
     public CenesCommonAPIManager cenesCommonAPIManager = null;
+    public FriendApiManager friendAPIManager = null;
 
     public CoreManager(CenesApplication cenesApplication){
         this.cenesApplication = cenesApplication;
@@ -65,6 +69,7 @@ public class CoreManager {
         this.notificationAPiManager = new NotificationAPiManager(cenesApplication);
         this.meTimeApiManager = new MeTimeApiManager(cenesApplication);
         this.cenesCommonAPIManager = new CenesCommonAPIManager(cenesApplication);
+        this.friendAPIManager = new FriendApiManager(cenesApplication);
     }
 
     public UserManager getUserManager(){
@@ -125,4 +130,6 @@ public class CoreManager {
     public CenesCommonAPIManager getCenesCommonAPIManager() {
         return this.cenesCommonAPIManager;
     }
+
+    public FriendApiManager getFriendAPIManager() {return this.friendAPIManager; }
 }

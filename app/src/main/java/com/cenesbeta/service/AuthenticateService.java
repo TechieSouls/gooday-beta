@@ -27,8 +27,85 @@ public class AuthenticateService {
                 return countryPhoneCodeMapSet.getKey();
             }
         }
-
         return "US";
     }
 
+    public String getCountryNameFromCountryCode(String countryCode) {
+        Map<String, String> countryPhoneCodeMap = new HashMap<>();
+        countryPhoneCodeMap.put("AF","Afghanistan");countryPhoneCodeMap.put("AL","Albania");countryPhoneCodeMap.put("DZ","Algeria");
+        countryPhoneCodeMap.put("AD","Andorra");countryPhoneCodeMap.put("AO","Angola");countryPhoneCodeMap.put("AQ","Antarctica");
+        countryPhoneCodeMap.put("AR","Argentina");countryPhoneCodeMap.put("AM","Armenia");countryPhoneCodeMap.put("AW","Aruba");
+        countryPhoneCodeMap.put("AU","Australia");countryPhoneCodeMap.put("AT","Austria");countryPhoneCodeMap.put("AZ","Azerbaijan");
+        countryPhoneCodeMap.put("BH","Bahrain");countryPhoneCodeMap.put("BD","Bangladesh");countryPhoneCodeMap.put("BY","Belarus");
+        countryPhoneCodeMap.put("BE","Belgium");countryPhoneCodeMap.put("BZ","Belize");countryPhoneCodeMap.put("BJ","Benin");
+        countryPhoneCodeMap.put("BT","Bhutan");countryPhoneCodeMap.put("BO","Bolivia");countryPhoneCodeMap.put("BA","Bosnia and Herzegovina");
+        countryPhoneCodeMap.put("BW","Botswana");countryPhoneCodeMap.put("BR","Brazil");countryPhoneCodeMap.put("BN","Brunei");
+        countryPhoneCodeMap.put("BG","Bulgaria");countryPhoneCodeMap.put("BF","Burkina Faso");countryPhoneCodeMap.put("MM","Myanmar");
+        countryPhoneCodeMap.put("BI","Burundi");countryPhoneCodeMap.put("KH","Cambodia");countryPhoneCodeMap.put("CM","Cameroon");
+        countryPhoneCodeMap.put("CA","Canada");countryPhoneCodeMap.put("CV","Cape Verde");countryPhoneCodeMap.put("CF","Central African Republic");
+        countryPhoneCodeMap.put("TD","Chad");countryPhoneCodeMap.put("CL","Chile");countryPhoneCodeMap.put("CN","China");
+        countryPhoneCodeMap.put("CX","Christmas Island");countryPhoneCodeMap.put("CC","Cocos (Keeling) Islands");countryPhoneCodeMap.put("CO","Colombia");
+        countryPhoneCodeMap.put("KM","Comoros");countryPhoneCodeMap.put("CG","Republic of the Congo");countryPhoneCodeMap.put("CD","Democratic Republic of the Congo");
+        countryPhoneCodeMap.put("CK","Cook Islands");countryPhoneCodeMap.put("CR","Costa Rica");countryPhoneCodeMap.put("HR","Croatia");
+        countryPhoneCodeMap.put("CU","Cuba");countryPhoneCodeMap.put("CY","Cyprus");countryPhoneCodeMap.put("CZ","Czech Republic");
+        countryPhoneCodeMap.put("DK","Denmark");countryPhoneCodeMap.put("DJ","Djibouti");countryPhoneCodeMap.put("TL","Northern Mariana Islands");
+        countryPhoneCodeMap.put("EC","Ecuador");countryPhoneCodeMap.put("EG","Egypt");countryPhoneCodeMap.put("SV","El Salvador");
+        countryPhoneCodeMap.put("GQ","Equatorial Guinea");countryPhoneCodeMap.put("ER","Eritrea");countryPhoneCodeMap.put("EE","Estonia");
+        countryPhoneCodeMap.put("ET","Ethiopia");countryPhoneCodeMap.put("FK","Falkland Islands");countryPhoneCodeMap.put("FO","The Faroe Islands");
+        countryPhoneCodeMap.put("FJ","Fiji");countryPhoneCodeMap.put("FI","Finland");countryPhoneCodeMap.put("FR","France");
+        countryPhoneCodeMap.put("PF","French Polynesia");countryPhoneCodeMap.put("GA","Gabon");countryPhoneCodeMap.put("GM","The Gambia");
+        countryPhoneCodeMap.put("GE","Georgia");countryPhoneCodeMap.put("DE","Germany");countryPhoneCodeMap.put("GH","Ghana");
+        countryPhoneCodeMap.put("GI","Gibraltar");countryPhoneCodeMap.put("GR","Greece");countryPhoneCodeMap.put("GL","Greenland");
+        countryPhoneCodeMap.put("GT","Guatemala");countryPhoneCodeMap.put("GN","Guinea");countryPhoneCodeMap.put("GW","Guinea-Bissau");
+        countryPhoneCodeMap.put("GY","Guyana");countryPhoneCodeMap.put("HT","Haiti");countryPhoneCodeMap.put("HN","Honduras");
+        countryPhoneCodeMap.put("HK","Hong Kong");countryPhoneCodeMap.put("HU","Hungary");countryPhoneCodeMap.put("IN","India");
+        countryPhoneCodeMap.put("ID","Indonesia");countryPhoneCodeMap.put("IR","Iran");countryPhoneCodeMap.put("IQ","Iraq");
+        countryPhoneCodeMap.put("IE","Ireland");countryPhoneCodeMap.put("IM","Isle of Man");countryPhoneCodeMap.put("IL","Israel");
+        countryPhoneCodeMap.put("IT","Italy");countryPhoneCodeMap.put("CI","Ivory Coast");countryPhoneCodeMap.put("JP","Japan");
+        countryPhoneCodeMap.put("JO","Jordan");countryPhoneCodeMap.put("KZ","Kazakhstan");countryPhoneCodeMap.put("KE","Kenya");
+        countryPhoneCodeMap.put("KI","Kiribati");countryPhoneCodeMap.put("KW","Kuwait");countryPhoneCodeMap.put("KG","Kyrgyzstan");
+        countryPhoneCodeMap.put("LA","Laos");countryPhoneCodeMap.put("LV","Latvia");countryPhoneCodeMap.put("LB","Lebanon");
+        countryPhoneCodeMap.put("LS","Lesotho");countryPhoneCodeMap.put("LR","Liberia");countryPhoneCodeMap.put("LY","Libya");
+        countryPhoneCodeMap.put("LI","Liechtenstein");countryPhoneCodeMap.put("LT","Lithuania");countryPhoneCodeMap.put("LU","Luxembourg");
+        countryPhoneCodeMap.put("MO","Macao");countryPhoneCodeMap.put("MK","North Macedonia");countryPhoneCodeMap.put("MG","Madagascar");
+        countryPhoneCodeMap.put("MW","Malawi");countryPhoneCodeMap.put("MY","Malaysia");countryPhoneCodeMap.put("MV","Maldives");
+        countryPhoneCodeMap.put("ML","Mali");countryPhoneCodeMap.put("MT","Malta");countryPhoneCodeMap.put("MH","The Marshall Islands");
+        countryPhoneCodeMap.put("MR","Mauritania");countryPhoneCodeMap.put("MU","Mauritius");countryPhoneCodeMap.put("YT","Mayotte");
+        countryPhoneCodeMap.put("MX","Mexico");countryPhoneCodeMap.put("FM","Federated States of Micronesia");countryPhoneCodeMap.put("MD","Moldova");
+        countryPhoneCodeMap.put("MC","Monaco");countryPhoneCodeMap.put("MN","Mongolia");countryPhoneCodeMap.put("ME","Montenegro");
+        countryPhoneCodeMap.put("MA","Morocco");countryPhoneCodeMap.put("MZ","Mozambique");countryPhoneCodeMap.put("NA","Namibia");
+        countryPhoneCodeMap.put("NR","Nauru");countryPhoneCodeMap.put("NP","Nepal");countryPhoneCodeMap.put("NL","Netherlands");
+        countryPhoneCodeMap.put("AN","Netherlands Antilles");countryPhoneCodeMap.put("NC","New Caledonia");countryPhoneCodeMap.put("NZ","New Zealand");
+        countryPhoneCodeMap.put("NI","Nicaragua");countryPhoneCodeMap.put("NE","Niger");countryPhoneCodeMap.put("NG","Nigeria");
+        countryPhoneCodeMap.put("NU","Niue");countryPhoneCodeMap.put("KP","North Korea");countryPhoneCodeMap.put("NO","Norway");
+        countryPhoneCodeMap.put("OM","Oman");countryPhoneCodeMap.put("PK","Pakistan");countryPhoneCodeMap.put("PW","Palau");
+        countryPhoneCodeMap.put("PA","Panama");countryPhoneCodeMap.put("PG","Papua New Guinea");countryPhoneCodeMap.put("PY","Paraguay");
+        countryPhoneCodeMap.put("PE","Peru");countryPhoneCodeMap.put("PH","Philippines");countryPhoneCodeMap.put("PN","Pitcairn Islands");
+        countryPhoneCodeMap.put("PL","Poland");countryPhoneCodeMap.put("PT","Portugal");countryPhoneCodeMap.put("PR","Puerto Rico");
+        countryPhoneCodeMap.put("QA","Qatar");countryPhoneCodeMap.put("RO","Romania");countryPhoneCodeMap.put("RU","Russia");
+        countryPhoneCodeMap.put("RW","Rwanda");countryPhoneCodeMap.put("BL","Saint Barthélemy");countryPhoneCodeMap.put("WS","Samoa");
+        countryPhoneCodeMap.put("SM","San Marino");countryPhoneCodeMap.put("ST","São Tomé and Príncipe");countryPhoneCodeMap.put("SA","South Africa");
+        countryPhoneCodeMap.put("SN","Senegal");countryPhoneCodeMap.put("RS","Serbia");countryPhoneCodeMap.put("SC","Seychelles");
+        countryPhoneCodeMap.put("SL","Sierra Leone");countryPhoneCodeMap.put("SG","Singapore");countryPhoneCodeMap.put("SK","Slovakia");
+        countryPhoneCodeMap.put("SI","Slovenia");countryPhoneCodeMap.put("SB","Solomon Islands");countryPhoneCodeMap.put("SO","Somalia");
+        countryPhoneCodeMap.put("ZA","South Africa");countryPhoneCodeMap.put("KR","South Korea");countryPhoneCodeMap.put("ES","Spain");
+        countryPhoneCodeMap.put("LK","Sri Lanka");countryPhoneCodeMap.put("SH","Saint Helena, Ascension and Tristan da Cunha");
+        countryPhoneCodeMap.put("PM","Saint Pierre and Miquelon");countryPhoneCodeMap.put("SD","Sudan");countryPhoneCodeMap.put("SR","Suriname");
+        countryPhoneCodeMap.put("SZ","Eswatini");countryPhoneCodeMap.put("SE","Sweden");countryPhoneCodeMap.put("CH","Switzerland");
+        countryPhoneCodeMap.put("SY","Syria");countryPhoneCodeMap.put("TW","Taiwan");countryPhoneCodeMap.put("TJ","Tajikistan");
+        countryPhoneCodeMap.put("TZ","Tanzania");countryPhoneCodeMap.put("TH","Thailand");countryPhoneCodeMap.put("TG","Togo");
+        countryPhoneCodeMap.put("TK","Tokelau");countryPhoneCodeMap.put("TO","Tonga");countryPhoneCodeMap.put("TN","Tunisia");
+        countryPhoneCodeMap.put("TR","Turkey");countryPhoneCodeMap.put("TM","Turkmenistan");countryPhoneCodeMap.put("TV","Tuvalu");
+        countryPhoneCodeMap.put("AE","United Arab Emirates");countryPhoneCodeMap.put("UG","Uganda");countryPhoneCodeMap.put("GB","United Kingdom");
+        countryPhoneCodeMap.put("UA","Ukraine");countryPhoneCodeMap.put("UY","Uruguay");countryPhoneCodeMap.put("US","United States");
+        countryPhoneCodeMap.put("UZ","Uzbekistan");countryPhoneCodeMap.put("VU","Vanuatu");countryPhoneCodeMap.put("VA","Vatican City");
+        countryPhoneCodeMap.put("VE","Venezuela");countryPhoneCodeMap.put("VN","Vietnam");countryPhoneCodeMap.put("WF","Wallis and Futuna");
+        countryPhoneCodeMap.put("YE","Yemen");countryPhoneCodeMap.put("ZM","Zambia");countryPhoneCodeMap.put("ZW","Zimbabwe");
+
+        String countryName = countryPhoneCodeMap.get(countryCode);
+        if (countryName != null) {
+            return countryName;
+        }
+        return "";
+    }
 }

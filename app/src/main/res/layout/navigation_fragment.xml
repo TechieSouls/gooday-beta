@@ -32,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/cenes_user_no_image" />
+                    android:src="@drawable/profile_pic_no_image" />
             </RelativeLayout>
 
 
@@ -67,8 +67,8 @@
             android:weightSum="5">
 
             <ImageView
-                android:layout_width="21dp"
-                android:layout_height="21dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/notification_icon"
                 android:layout_gravity="center_vertical"/>
@@ -98,7 +98,7 @@
             android:weightSum="5">
 
             <ImageView
-                android:layout_width="21dp"
+                android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/calendar_sync_icon"
@@ -128,7 +128,7 @@
             android:weightSum="5">
 
             <ImageView
-                android:layout_width="21dp"
+                android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/holiday_calendar_icon"
@@ -159,8 +159,8 @@
             android:weightSum="5">
 
             <ImageView
-                android:layout_width="21dp"
-                android:layout_height="25dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/about_icon"
                 android:layout_gravity="center_vertical" />
@@ -177,6 +177,35 @@
         </LinearLayout>
 
         <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="50dp"
+        android:background="#FF9B9B9B" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="5">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/help_feedback_icon"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/tvHelpAndFeedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:padding="15dp"
+                android:text="@string/help_feedback"
+                android:textColor="#FF4A4A4A"
+                android:textSize="18sp" />
+        </LinearLayout>
+        <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="50dp"
@@ -189,21 +218,22 @@
             android:weightSum="5">
 
             <ImageView
-                android:layout_width="21dp"
+                android:layout_width="18dp"
                 android:layout_height="18dp"
+                android:layout_gravity="center_vertical"
                 android:layout_margin="10dp"
-                android:src="@drawable/help_feedback_icon"
-                android:layout_gravity="center_vertical"/>
+                android:src="@drawable/account_setting" />
 
             <TextView
-            android:id="@+id/tvHelpAndFeedback"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            android:padding="15dp"
-            android:text="@string/help_feedback"
-            android:textColor="#FF4A4A4A"
-            android:textSize="18sp" />
+                android:id="@+id/tvAppSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:padding="15dp"
+                android:text="@string/app_settings_text"
+                android:textColor="#FF4A4A4A"
+                android:textSize="18sp"
+                android:gravity="center_vertical"/>
         </LinearLayout>
         <View
             android:layout_width="match_parent"

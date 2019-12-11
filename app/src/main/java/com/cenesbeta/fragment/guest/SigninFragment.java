@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
 import com.cenesbeta.Manager.AlertManager;
 import com.cenesbeta.Manager.ApiManager;
 import com.cenesbeta.Manager.DeviceManager;
@@ -28,9 +29,9 @@ import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
-import com.cenesbeta.service.InstabugService;
 import com.cenesbeta.util.CenesUtils;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -53,13 +54,10 @@ public class SigninFragment  extends CenesFragment {
 
     User user = null;
 
-    LinearLayout llSigningBackBtn;
     EditText editTextEmail, editTextPassword;
     Button buttonLogin;
     TextView tvForgotpasswordLink;
     ImageView ivBugReport;
-    //Button buttonFbLogin;
-    //LoginButton facebookLoginBtn;
     ImageView signinBackArrow;
 
     String email, password;
@@ -70,6 +68,7 @@ public class SigninFragment  extends CenesFragment {
         CenesApplication application = (CenesApplication) getActivity().getApplication();
 
         View v = inflater.inflate(R.layout.fragment_signin, container, false);
+
         //FacebookSdk.sdkInitialize(getApplicationContext());
         //callbackManager = CallbackManager.Factory.create();
 
@@ -80,8 +79,6 @@ public class SigninFragment  extends CenesFragment {
     }
 
     public void initilizeComponents(View view) {
-
-        llSigningBackBtn = (LinearLayout) view.findViewById(R.id.ll_signin_back);
 
         editTextEmail = (EditText) view.findViewById(R.id.et_email);
         editTextPassword = (EditText) view.findViewById(R.id.et_password);
@@ -95,8 +92,8 @@ public class SigninFragment  extends CenesFragment {
         tvForgotpasswordLink.setOnClickListener(onClickListener);
 
         ivBugReport.setOnClickListener(onClickListener);
-        //signinBackArrow = (ImageView) findViewById(R.id.signin_back_arrow);
-        //signinBackArrow.setOnClickListener(onClickListener);
+        signinBackArrow = (ImageView) view.findViewById(R.id.iv_back_button);
+        signinBackArrow.setOnClickListener(onClickListener);
 
         //buttonFbLogin = (Button) findViewById(R.id.bt_fb_login);
         //buttonFbLogin.setOnClickListener(onClickListener);
@@ -129,53 +126,15 @@ public class SigninFragment  extends CenesFragment {
                 case R.id.bt_login:
                     startSignInProcess();
                     break;
-                case R.id.ll_signin_back:
-                    startActivity(new Intent((SignInActivity)getActivity(),GuestActivity.class));
-                    getActivity().finish();
-                    break;
+
                 case R.id.iv_bug_report:
-                    //new InstabugService().invokeBugReporting();
-                    Intent intent=new Intent(Intent.ACTION_SEND);
-                    String[] recipients={"support@cenesgroup.com"};
-                    intent.putExtra(Intent.EXTRA_EMAIL, recipients);
-
-                    String phoneDetails = "Device : "+ CenesUtils.getDeviceManufacturer()+" "+CenesUtils.getDeviceModel()+" "+CenesUtils.getDeviceVersion()+"\n\n";
-
-                    intent.putExtra(Intent.EXTRA_TEXT,phoneDetails);
-                    intent.setType("text/html");
-                    startActivity(Intent.createChooser(intent, "Send mail"));
-
                     break;
-                /*case R.id.bt_fb_join:
-                    facebookLoginBtn.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-                        @Override
-                        public void onSuccess(LoginResult loginResult) {
-                            Log.e("Fb status : ", "Facebook Id : " + loginResult.getAccessToken().getUserId() + ",Access Token : " + loginResult.getAccessToken().getToken());
-                            user = new User();
-                            user.setAuthType("facebook");
-                            user.setFacebookID(loginResult.getAccessToken().getUserId());
-                            user.setFacebookAuthToken(loginResult.getAccessToken().getToken());
-                            user.setApiUrl(urlManager.getApiUrl("dev"));
-                            new CenesFacebookLogin().execute(user);
-                        }
 
-                        @Override
-                        public void onCancel() {
-                            Log.e("Cancelled", "User cancelled dialog");
-                        }
-
-                        @Override
-                        public void onError(FacebookException e) {
-                            Log.e("Error : ", e.getMessage());
-                        }
-
-                    });
+                case R.id.iv_back_button:
+                    ((GuestActivity)getActivity()).onBackPressed();
                     break;
-                case R.id.bt_fb_login:
-                    facebookLoginBtn.performClick();
-                    break;*/
                 case R.id.tv_forget_password:
-                    ((SignInActivity) getActivity()).replaceFragment(new ForgotPasswordFragment(), "ForgotPasswordFragment");
+                    ((GuestActivity) getActivity()).replaceFragment(new ForgotPasswordFragment(), SigninFragment.TAG);
                     break;
             }
 
@@ -187,7 +146,7 @@ public class SigninFragment  extends CenesFragment {
          callbackManager.onActivityResult(requestCode, resultCode, data);
      }*/
     public void startSignInProcess() {
-        deviceManager.hideKeyBoard(editTextEmail, (SignInActivity)getActivity());
+        deviceManager.hideKeyBoard(editTextEmail, (GuestActivity)getActivity());
         user = null;
         user = new User();
         email = editTextEmail.getText().toString();
@@ -199,17 +158,17 @@ public class SigninFragment  extends CenesFragment {
 
         boolean isValid = true;
 
-        if (isValid && validationManager.isFieldBlank(email) && validationManager.isFieldBlank(password)) {
-            alertManager.getAlert((SignInActivity)getActivity(), "Please Enter the Email", "Info", null, false, "OK");
+        if (isValid && validationManager.isFieldBlank(email)) {
+            alertManager.getAlert((GuestActivity)getActivity(), "Please Enter the Email", "Info", null, false, "OK");
             isValid = false;
         }
         if (isValid && validationManager.isFieldBlank(email)) {
-            alertManager.getAlert((SignInActivity)getActivity(), "Please Enter the Email", "Info", null, false, "OK");
+            alertManager.getAlert((GuestActivity)getActivity(), "Please Enter the Email", "Info", null, false, "OK");
             isValid = false;
         }
 
         if (isValid && validationManager.isFieldBlank(password)) {
-            alertManager.getAlert((SignInActivity)getActivity(), "Please Enter the Password", "Info", null, false, "OK");
+            alertManager.getAlert((GuestActivity)getActivity(), "Please Enter the Password", "Info", null, false, "OK");
             isValid = false;
         }
         if (isValid) {
@@ -218,286 +177,66 @@ public class SigninFragment  extends CenesFragment {
     }
 
     public void networkProcess() {
-        if (internetManager.isInternetConnection((SignInActivity)getActivity())) {
+        if (internetManager.isInternetConnection((GuestActivity)getActivity())) {
             user.setEmail(email);
             user.setPassword(password);
             user.setApiUrl(urlManager.getApiUrl(email));
-
-            new SignInProcess().execute();
-        } else {
-            alertManager.getAlert((SignInActivity)getActivity(), "No Internet Connection!", "Info", null, false, "OK");
-        }
-    }
-
-
-    public class SignInProcess extends AsyncTask<Object, Object, Object> {
-
-        ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-            super.onPreExecute();
-            progressDialog = new ProgressDialog((SignInActivity)getActivity());
-            progressDialog.setCancelable(false);
-            progressDialog.setMessage("Loading...");
-            progressDialog.show();
-        }
-
-        @Override
-        protected Object doInBackground(Object... params) {
-            // TODO Auto-generated method stub
-
-            JSONObject jsonObject = apiManager.logIn(user, (SignInActivity)getActivity());
-
-            return jsonObject;
-        }
-
-        @Override
-        protected void onPostExecute(Object object) {
-            super.onPostExecute(object);
-            progressDialog.cancel();
-            progressDialog.dismiss();
-            progressDialog = null;
-
-//            {"createdAt":1503071853185,"updateAt":1503071853185,"errorCode":0,"errorDetail":null,"userId":5,"username":"abc1503071853181","email":"abc@abc.com","password":"cc4e7ba92ea0b1fc56e6ac67f682f3ea","facebookID":null,"authType":"email","facebookAuthToken":null,"name":"abc","photo":null,"token":"1503158253181eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhYmMxNTAzMDcxODUzMTgxIn0.HBBidMMaE3aiH7KLb3hiZuSNxIUElKcd1OFyRM0TTIg7BG1d9r7qYLntupwtqyEQCdsd8m1ZkNGs9oW9zXXw7g"}
-            if (object != null) {
-                JSONObject jsonObject = (JSONObject) object;
-                if (jsonObject.has("errorCode")) {
-                    try {
-                        if (jsonObject.getInt("errorCode") == 0) {
-                            User user = new User();
-                            Boolean isUserExistsInDb = true;
-                            if (jsonObject.has(user.USERID)) {
-                                user = userManager.findUserByUserId(jsonObject.getLong(user.USERID));
-                                if (user == null) {
-                                    user = new User();
-                                    isUserExistsInDb = false;
-                                }
-                                user.setUserId(jsonObject.getInt(user.USERID));
-                            }
-                            if (jsonObject.has(user.USERNAME)) {
-                                user.setUsername(jsonObject.getString(user.USERNAME));
-                            }
-                            if (jsonObject.has(user.TOKEN)) {
-                                user.setAuthToken(jsonObject.getString(user.TOKEN));
-                            }
-                            if (jsonObject.has(user.PHONE)) {
-                                user.setPhone(jsonObject.getString(user.PHONE));
-                            }
-                            if (jsonObject.has(user.EMAIL)) {
-                                user.setEmail(jsonObject.getString(user.EMAIL));
-                            }
-                            if (jsonObject.has(user.PHOTO)) {
-                                user.setPicture(jsonObject.getString(user.PHOTO));
-                            }
-                            if (jsonObject.has(user.NAME)) {
-                                user.setName(jsonObject.getString(user.NAME));
-                            }
-
-                            if (jsonObject.has("birthDate") && jsonObject.getString("birthDate") != "null") {
-                                user.setBirthDate(Long.valueOf(jsonObject.getString("birthDate")));
-                            }
-                            if (jsonObject.has("gender") && !CenesUtils.isEmpty(jsonObject.getString("gender")) ) {
-                                user.setGender(jsonObject.getString("gender"));
-                            }
-
-                            if (isUserExistsInDb) {
-                                userManager.updateUser(user);
-                            } else {
-                                userManager.addUser(user);
-                            }
-
-                            if (token != null) {
-                                JSONObject registerDeviceObj = new JSONObject();
-                                registerDeviceObj.put("deviceToken",token);
-                                registerDeviceObj.put("deviceType","android");
-                                registerDeviceObj.put("userId",user.getUserId());
-                                registerDeviceObj.put("model", CenesUtils.getDeviceModel());
-                                registerDeviceObj.put("manufacturer", CenesUtils.getDeviceManufacturer());
-                                registerDeviceObj.put("version", CenesUtils.getDeviceVersion());
-                                new DeviceTokenSync().execute(registerDeviceObj);
-                            }
-
-                            //startActivity(new Intent((SignInActivity)getActivity(), HomeScreenActivity.class));
-                            //startActivity(new Intent(SignInActivity.this, PictureActivity.class));
-                            //startActivity(new Intent(SignInActivity.this, CompleteYourProfileActivity.class));
-                            //getActivity().finish();
-                            startActivity(new Intent((SignInActivity)getActivity(), CenesBaseActivity.class));
-                            getActivity().finish();
-                        } else {
-                            if (jsonObject.has("errorDetail")) {
-                                alertManager.getAlert((SignInActivity)getActivity(), jsonObject.getString("errorDetail"), "Error", null, false, "OK");
-                            } else {
-                                alertManager.getAlert((SignInActivity)getActivity(), "Some thing is going wrong", "Error", null, false, "OK");
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    progressDialog.cancel();
-                    alertManager.getAlert((SignInActivity)getActivity(), "Server Error", "Error", null, false, "OK");
-                }
-
-            } else {
-                getCenesActivity().showRequestTimeoutDialog();
-            }
-        }
-
-    }
-
-
-/*
-    class CenesFacebookLogin extends AsyncTask<Object, Object, Object> {
-
-        @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(SignInActivity.this);
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setCancelable(false);
-            progressDialog.setMessage("Loading...");
-            progressDialog.show();
-        }
-
-        @Override
-        protected Object doInBackground(Object... params) {
-            // TODO Auto-generated method stub
-            User user = (User)params[0];
-            JSONObject jsonObject = apiManager.signUpByEmail(user, SignInActivity.this);
+            user.setAuthType(User.AuthenticateType.email);
+            JSONObject postData = null;
             try {
-                if (jsonObject != null && jsonObject.has("errorCode") && jsonObject.getInt("errorCode") == 0) {
-                    if (jsonObject.has(user.TOKEN)) {
-                        user.setAuthToken(jsonObject.getString(user.TOKEN));
+
+                Gson gson = new Gson();
+                postData = new JSONObject(gson.toJson(user));
+                new ProfileAsyncTask(cenesApplication, getActivity());
+                new ProfileAsyncTask.EmailoginTask(new ProfileAsyncTask.EmailoginTask.AsyncResponse() {
+                    @Override
+                    public void processFinish(JSONObject response) {
+
+                        try {
+
+                            Gson loginGson = new Gson();
+                            user = loginGson.fromJson(response.toString(), User.class);
+                            if (user.getUserId() != null) {
+
+                                userManager.deleteAll();
+                                userManager.addUser(user);
+
+                                if (token != null) {
+                                    JSONObject registerDeviceObj = new JSONObject();
+                                    registerDeviceObj.put("deviceToken",token);
+                                    registerDeviceObj.put("deviceType","android");
+                                    registerDeviceObj.put("userId",user.getUserId());
+                                    registerDeviceObj.put("model", CenesUtils.getDeviceModel());
+                                    registerDeviceObj.put("manufacturer", CenesUtils.getDeviceManufacturer());
+                                    registerDeviceObj.put("version", CenesUtils.getDeviceVersion());
+                                    new ProfileAsyncTask.DeviceTokenSyncTask(new ProfileAsyncTask.DeviceTokenSyncTask.AsyncResponse() {
+                                        @Override
+                                        public void processFinish(JSONObject response) {
+
+                                        }
+                                    }).execute(registerDeviceObj);
+
+                                }
+                                startActivity(new Intent((GuestActivity)getActivity(), CenesBaseActivity.class));
+                                getActivity().finish();
+                            } else {
+                                if (response.has("errorDetail")) {
+                                    alertManager.getAlert((GuestActivity)getActivity(), response.getString("errorDetail"), "Error", null, false, "OK");
+                                } else {
+                                    alertManager.getAlert((GuestActivity)getActivity(), "Some thing is going wrong", "Error", null, false, "OK");
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                    if (jsonObject.has(user.FACEBOOKID)) {
-                        user.setFacebookID(jsonObject.getString(user.FACEBOOKID));
-                    }
-                    if (jsonObject.has(user.FACEBOOKAUTHTOKEN)) {
-                        user.setFacebookAuthToken(jsonObject.getString(user.FACEBOOKAUTHTOKEN));
-                    }
-                    user.setApiUrl(urlManager.getApiUrl("dev"));
-                    apiManager.syncFacebookEvents(user, SignInActivity.this);
-                }
+                }).execute(postData);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return jsonObject;
-        }
-
-        @Override
-        protected void onPostExecute(Object object) {
-            super.onPostExecute(object);
-
-//            {"createdAt":1503071853185,"updateAt":1503071853185,"errorCode":0,"errorDetail":null,"userId":5,"username":"abc1503071853181","email":"abc@abc.com","password":"cc4e7ba92ea0b1fc56e6ac67f682f3ea","facebookID":null,"authType":"email","facebookAuthToken":null,"name":"abc","photo":null,"token":"1503158253181eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhYmMxNTAzMDcxODUzMTgxIn0.HBBidMMaE3aiH7KLb3hiZuSNxIUElKcd1OFyRM0TTIg7BG1d9r7qYLntupwtqyEQCdsd8m1ZkNGs9oW9zXXw7g"}
-            if (object != null) {
-                JSONObject jsonObject = (JSONObject) object;
-                if (jsonObject.has("errorCode")) {
-
-                    try {
-                        User user = new User();
-                        Boolean isUserExistsInDb = true;
-                        if (jsonObject.has(user.USERID)) {
-                            user = userManager.findUserByUserId(jsonObject.getLong(user.USERID));
-                            if (user == null) {
-                                user = new User();
-                                isUserExistsInDb = false;
-                            }
-                            user.setUserId(jsonObject.getInt(user.USERID));
-                        }
-                        if (jsonObject.getInt("errorCode") == 0) {
-                            if (jsonObject.has(user.USERID)) {
-                                user.setUserId(jsonObject.getInt(user.USERID));
-                            }
-                            if (jsonObject.has(user.NAME)) {
-                                user.setName(jsonObject.getString(user.NAME));
-                            }
-                            if (jsonObject.has(user.USERNAME)) {
-                                user.setUsername(jsonObject.getString(user.USERNAME));
-                            }
-                            if (jsonObject.has(user.TOKEN)) {
-                                user.setAuthToken(jsonObject.getString(user.TOKEN));
-                            }
-                            if (jsonObject.has(user.FACEBOOKID)) {
-                                user.setFacebookID(jsonObject.getString(user.FACEBOOKID));
-                            }
-                            if (jsonObject.has(user.FACEBOOKAUTHTOKEN)) {
-                                user.setFacebookAuthToken(jsonObject.getString(user.FACEBOOKAUTHTOKEN));
-                            }
-                            if (jsonObject.has(user.PHOTO)) {
-                                user.setPicture(jsonObject.getString(user.PHOTO));
-                            }
-                            if (jsonObject.has(user.EMAIL)) {
-                                user.setEmail(jsonObject.getString(user.EMAIL));
-                            }
-                            if (jsonObject.has("gender") && !CenesUtils.isEmpty(jsonObject.getString("gender")) ) {
-                                user.setGender(jsonObject.getString("gender"));
-                            }
-
-                            if (isUserExistsInDb) {
-                                userManager.updateUser(user);
-                            } else {
-                                userManager.addUser(user);
-                            }
-                            progressDialog.hide();
-                            progressDialog.cancel();
-                            progressDialog.dismiss();
-                            progressDialog = null;
-                            */
-/*if (jsonObject.has("isNew") && !jsonObject.getBoolean("isNew")) {
-                                startActivity(new Intent(SignInActivity.this, HomeScreenActivity.class));
-                                finish();
-                            } else {*//*
-
-                            if (token != null && token.length() != 0) {
-                                JSONObject registerDeviceObj = new JSONObject();
-                                registerDeviceObj.put("deviceToken",token);
-                                registerDeviceObj.put("deviceType","android");
-                                registerDeviceObj.put("userId",user.getUserId());
-                                new DeviceTokenSync().execute(registerDeviceObj);
-                            }
-
-                            startActivity(new Intent(SignInActivity.this, HomeScreenActivity.class));
-                            finish();
-                            //}
-                        } else {
-                            progressDialog.hide();
-                            if (jsonObject.has("errorDetail")) {
-                                alertManager.getAlert(SignInActivity.this, jsonObject.getString("errorDetail"), "Error", null, false, "OK");
-                            } else {
-                                alertManager.getAlert(SignInActivity.this, "Some thing is going wrong", "Error", null, false, "OK");
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    progressDialog.hide();
-                    alertManager.getAlert(SignInActivity.this, "Server Error", "Error", null, false, "OK");
-                }
-
-            } else {
-                showRequestTimeoutDialog();
-            }
-        }
-    }
-*/
-
-    class DeviceTokenSync extends AsyncTask<JSONObject,Object,Object>{
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Object doInBackground(JSONObject... objects) {
-            JSONObject deviceTokenInfo = objects[0];
-            User user = userManager.getUser();
-            user.setApiUrl(urlManager.getApiUrl("dev"));
-            apiManager.syncDeviceToekn(user,deviceTokenInfo,(SignInActivity)getActivity());
-            return null;
+        } else {
+            alertManager.getAlert((GuestActivity)getActivity(), "No Internet Connection!", "Info", null, false, "OK");
         }
     }
 
@@ -515,7 +254,5 @@ public class SigninFragment  extends CenesFragment {
         }
 
         System.out.println("SignInActivity FCM Token: " + token);
-
-        //CenesUtils.logEntries(null, "SignInActivity FCM Token: " + token, SignInActivity.this);
     }
 }

@@ -37,12 +37,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
 import com.cenesbeta.Manager.DeviceManager;
 import com.cenesbeta.R;
-import com.cenesbeta.activity.AlarmActivity;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.activity.DiaryActivity;
 import com.cenesbeta.activity.GatheringScreenActivity;
-import com.cenesbeta.activity.HomeScreenActivity;
-import com.cenesbeta.activity.ReminderActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
@@ -123,16 +120,10 @@ public class ProfileFragment extends CenesFragment {
     public void onResume() {
         super.onResume();
         try {
-            if (getActivity() instanceof HomeScreenActivity) {
-                ((HomeScreenActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof ReminderActivity) {
-                ((ReminderActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof GatheringScreenActivity) {
+            if (getActivity() instanceof GatheringScreenActivity) {
                 ((GatheringScreenActivity) getActivity()).hideFooter();
             } else if (getActivity() instanceof DiaryActivity) {
                 ((DiaryActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof AlarmActivity) {
-                ((AlarmActivity) getActivity()).hideFooter();
             }
         } catch (Exception e) {
 
@@ -165,7 +156,7 @@ public class ProfileFragment extends CenesFragment {
 
         if (loggedInUser != null && !CenesUtils.isEmpty(loggedInUser.getPicture())) {
             RequestOptions requestOptions = new RequestOptions();
-            requestOptions.placeholder(R.drawable.default_profile_icon);
+            requestOptions.placeholder(R.drawable.profile_pic_no_image);
             requestOptions.circleCrop();
 
             Glide.with(getActivity()).load(loggedInUser.getPicture()).apply(requestOptions).into(ivProfile);
@@ -174,13 +165,14 @@ public class ProfileFragment extends CenesFragment {
         tvName.setText(loggedInUser.getName());
         tvEmail.setText(loggedInUser.getEmail());
         tvPhone.setText(loggedInUser.getPhone());
-        if (loggedInUser.getBirthDate() ==  null || loggedInUser.getBirthDate() == 0l) {
+        if (CenesUtils.isEmpty(loggedInUser.getBirthDateStr())) {
             tvBirthday.setText("Choose BirthDate");
         } else {
-            Calendar yesCalendar = Calendar.getInstance();
-            yesCalendar.setTimeInMillis(loggedInUser.getBirthDate());
-            String birthDateStr = CenesUtils.ddMMMYYYY.format(yesCalendar.getTime());
-            tvBirthday.setText(birthDateStr);
+
+            //Calendar yesCalendar = Calendar.getInstance();
+            //yesCalendar.setTimeInMillis(loggedInUser.getBirthDateStr());
+            //String birthDateStr = CenesUtils.ddMMMYYYY.format(yesCalendar.getTime());
+            tvBirthday.setText(loggedInUser.getBirthDateStr());
 
         }
 
@@ -228,16 +220,10 @@ public class ProfileFragment extends CenesFragment {
             switch (v.getId()) {
                 case R.id.ll_change_password:
                     ChangePasswordFragment changePasswordFragment = new ChangePasswordFragment();
-                    if (getActivity() instanceof HomeScreenActivity) {
-                        ((HomeScreenActivity) getActivity()).replaceFragment(changePasswordFragment, ChangePasswordFragment.TAG);
-                    } else if (getActivity() instanceof ReminderActivity) {
-                        ((ReminderActivity) getActivity()).replaceFragment(changePasswordFragment, ChangePasswordFragment.TAG);
-                    } else if (getActivity() instanceof GatheringScreenActivity) {
+                    if (getActivity() instanceof GatheringScreenActivity) {
                         ((GatheringScreenActivity) getActivity()).replaceFragment(changePasswordFragment, ChangePasswordFragment.TAG);
                     } else if (getActivity() instanceof DiaryActivity) {
                         ((DiaryActivity) getActivity()).replaceFragment(changePasswordFragment, ChangePasswordFragment.TAG);
-                    } else if (getActivity() instanceof AlarmActivity) {
-                        ((AlarmActivity) getActivity()).replaceFragment(changePasswordFragment, ChangePasswordFragment.TAG);
                     }
                 break;
                 case R.id.iv_profile_back:
@@ -254,7 +240,7 @@ public class ProfileFragment extends CenesFragment {
                         @Override
                         public void onSuccess(LoginResult loginResult) {
                             Log.e("Fb status : ", "Facebook Id : " + loginResult.getAccessToken().getUserId() + ",Access Token : " + loginResult.getAccessToken().getToken());
-                            loggedInUser.setFacebookID(loginResult.getAccessToken().getUserId());
+                            loggedInUser.setFacebookId(loginResult.getAccessToken().getUserId());
                             loggedInUser.setFacebookAuthToken(loginResult.getAccessToken().getToken());
 
                             GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
@@ -327,8 +313,16 @@ public class ProfileFragment extends CenesFragment {
 
                         // TODO Auto-generated method stub
                         Calendar birthCal = Calendar.getInstance();
-                        if (loggedInUser.getBirthDate() != null) {
-                            birthCal.setTimeInMillis(loggedInUser.getBirthDate());
+                        if (!CenesUtils.isEmpty(loggedInUser.getBirthDateStr())) {
+
+                            try {
+
+                                Date birthDate = CenesUtils.ddMMMYYYY.parse(loggedInUser.getBirthDateStr());
+                                birthCal.setTimeInMillis(birthDate.getTime());
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
 
                         new DatePickerDialog(getActivity(), datePickerListener, birthCal
@@ -462,8 +456,9 @@ public class ProfileFragment extends CenesFragment {
             yesCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             yesCalendar.set(Calendar.MONTH, monthOfYear);
             yesCalendar.set(Calendar.YEAR, year);
-            loggedInUser.setBirthDate(yesCalendar.getTimeInMillis());
+
             String birthDateStr = CenesUtils.ddMMMYYYY.format(yesCalendar.getTime());
+            loggedInUser.setBirthDateStr(birthDateStr);
             tvBirthday.setText(birthDateStr);
 
             if (btnProfileDone.getVisibility() == View.GONE) {

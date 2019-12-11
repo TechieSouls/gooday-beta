@@ -104,7 +104,6 @@ public class SignupCountryListFragment  extends CenesFragment {
             tempCodeList = filteredCountryList;
         }
 
-
         for (CountryCode countryCode : tempCodeList) {
 
             if (!headers.contains(String.valueOf(countryCode.getName().charAt(0)).toUpperCase())) {

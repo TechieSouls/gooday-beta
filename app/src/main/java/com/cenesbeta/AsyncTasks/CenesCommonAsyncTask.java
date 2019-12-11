@@ -3,6 +3,8 @@ package com.cenesbeta.AsyncTasks;
 import android.app.Activity;
 import android.os.AsyncTask;
 
+import com.cenesbeta.activity.CenesBaseActivity;
+import com.cenesbeta.api.CenesCommonAPI;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.backendManager.CenesCommonAPIManager;
 import com.cenesbeta.bo.User;
@@ -10,6 +12,8 @@ import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
 
 import org.json.JSONObject;
+
+import java.util.Map;
 
 public class CenesCommonAsyncTask {
 
@@ -42,9 +46,20 @@ public class CenesCommonAsyncTask {
             UserManager userManager = coreManager.getUserManager();
             User user = userManager.getUser();
             CenesCommonAPIManager cenesCommonAPIManager = coreManager.getCenesCommonAPIManager();
+            int userId = 0;
+            String token = "";
 
-            String queryStr = "userId="+user.getUserId();
-            return  cenesCommonAPIManager.getBadgeCounts(queryStr, user.getAuthToken());
+            if (user != null) {
+                if (user.getUserId() != null) {
+                    userId = user.getUserId();
+                }
+                if (user.getAuthToken() != null) {
+                    token = user.getAuthToken();
+                }
+            }
+
+            String queryStr = "userId="+userId;
+            return  cenesCommonAPIManager.getBadgeCounts(queryStr, token);
         }
 
         @Override

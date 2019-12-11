@@ -19,6 +19,7 @@ import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.Manager.UrlManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
+import com.cenesbeta.activity.GatheringScreenActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
@@ -81,7 +82,7 @@ public class InvitationFragment extends CenesFragment{
         user = userManager.getUser();
         if (user != null && user.getPicture() != null && user.getPicture() != "null") {
             // DownloadImageTask(homePageProfilePic).execute(user.getPicture());
-            Glide.with(this).load(user.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.default_profile_icon)).into(userProfilePic);
+            Glide.with(this).load(user.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(userProfilePic);
         }
 
         Bundle bundle = this.getArguments();
