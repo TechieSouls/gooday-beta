@@ -57,7 +57,7 @@ public class NotificationAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = inflter.inflate(R.layout.adapter_notifications, null);
             holder = new ViewHolder();
@@ -143,6 +143,18 @@ public class NotificationAdapter extends BaseAdapter {
         holder.llContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                notification.setReadStatus("Read");
+                if (notification.getReadStatus().equals("Read")) {
+                    holder.llContainer.setBackground(notificationFragment.getActivity().getResources().getDrawable(R.drawable.xml_curved_corner_markread_fill));
+                    holder.notificationTime.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_markread_color));
+                    holder.notificationDay.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_markread_color));
+                    holder.notifcationReadStatus.setVisibility(View.VISIBLE);
+                } else {
+                    holder.llContainer.setBackground(notificationFragment.getActivity().getResources().getDrawable(R.drawable.xml_curved_corner_blue_fill));
+                    holder.notificationTime.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_selectedText_color));
+                    holder.notificationDay.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_selectedText_color));
+                    holder.notifcationReadStatus.setVisibility(View.GONE);
+                }
 
                 notificationFragment.notificationManagerImpl.updateNotificationReadStatus(notification);
                 if (notificationFragment.internetManager.isInternetConnection(notificationFragment.getCenesActivity())) {

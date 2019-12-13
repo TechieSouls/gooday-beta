@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.text.style.ForegroundColorSpan;
 
+import com.cenesbeta.R;
 import com.cenesbeta.materialcalendarview.CalendarDay;
 import com.cenesbeta.materialcalendarview.DayViewDecorator;
 import com.cenesbeta.materialcalendarview.DayViewFacade;
@@ -50,6 +51,6 @@ public class BackgroundDecorator implements DayViewDecorator {
         if (highlight)
             view.addSpan(new ForegroundColorSpan(Color.WHITE));
         else
-            view.addSpan(new ForegroundColorSpan(Color.GRAY));
+            view.addSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.cenes_mcv_lightergrey)));
     }
 }

@@ -14,75 +14,76 @@
         >
 
         <RelativeLayout
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="30dp"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="30dp"
             android:layout_alignParentLeft="true">
 
-            <ImageView
-                android:id="@+id/iv_accept_icon"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_accept_icon"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_centerInParent="true"/>
+
+                <ImageView
+                    android:id="@+id/iv_invitation_accept_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/invitation_loader_spinner"
+
+                    />
+            </RelativeLayout>
+
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="50dp"
-            android:layout_alignParentLeft="true">
-
-            <ImageView
-                android:id="@+id/iv_invitation_accept_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/invitation_loader_spinner"
-
-                />
-        </RelativeLayout>
 
 
         <RelativeLayout
             android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_height="200dp"
             android:layout_marginTop="30dp"
             android:layout_marginRight="30dp"
             android:layout_alignParentRight="true">
 
-            <ImageView
-                android:id="@+id/iv_edit_reject_icon"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/invitation_edit_button"
-                android:layout_marginRight="20dp"
-                android:layout_alignParentRight="true"/>
+            <RelativeLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp">
+
+                <ImageView
+                    android:id="@+id/iv_invitation_decline_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/invitation_loader_spinner"
+                    />
+
+
+                <ImageView
+                    android:id="@+id/iv_edit_reject_icon"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/invitation_edit_button"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
 
             <ImageView
                 android:id="@+id/iv_delete_icon"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:src="@drawable/invitation_delete_button"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="70dp"/>
+                android:layout_alignParentBottom="true"/>
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="45dp"
-            android:layout_alignParentRight="true">
-
-            <ImageView
-                android:id="@+id/iv_invitation_decline_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/invitation_loader_spinner"
-                />
-        </RelativeLayout>
 
         <android.support.v7.widget.CardView
             android:id="@+id/tinderCardView"
@@ -198,11 +199,12 @@
                     android:layout_alignParentBottom="true"
                     android:background="@drawable/xml_circle_trans_white_border">
 
-                    <ImageView
+                    <com.cenesbeta.util.RoundedImageView
                         android:id="@+id/iv_desc_profile_pic"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_centerInParent="true"
+                        android:src="@drawable/profile_pic_no_image"
                         />
 
                 </RelativeLayout>
@@ -414,6 +416,7 @@
             >
 
             <ImageView
+                android:id="@+id/iv_card_swipe_arrow"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@drawable/card_up_arrow"

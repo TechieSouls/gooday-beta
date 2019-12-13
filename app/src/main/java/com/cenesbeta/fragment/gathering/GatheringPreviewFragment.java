@@ -63,12 +63,13 @@ public class GatheringPreviewFragment extends CenesFragment {
     private int SMS_COMPOSE_RESULT_CODE = 1001;
 
     private View fragmentView;
-    private ImageView ivEventPicture, ivAcceptSendIcon, ivEditRejectIcon, ivDeleteIcon;
+    private ImageView ivEventPicture, ivAcceptSendIcon, ivEditRejectIcon, ivDeleteIcon, ivCardSwipeArrow;
     private TextView tvEventTitle, tvEventDate, tvEventDescriptionDialogText;
     private RelativeLayout rlGuestListBubble, rlLocationBubble, rlDescriptionBubble, rlShareBubble;
     private RelativeLayout rvEventDescriptionDialog;
     private RelativeLayout rlDescriptionBubbleBackground;
-    private ImageView ivDescriptionBubbleIcon, ivDescProfilePic;
+    private ImageView ivDescriptionBubbleIcon;
+    private RoundedImageView ivDescProfilePic;
     private CardView tinderCardView;
     private RelativeLayout rlParentVew, rlSkipText;
     private RelativeLayout rlInvitationView, rlWelcomeInvitation;
@@ -121,13 +122,14 @@ public class GatheringPreviewFragment extends CenesFragment {
         rvEventDescriptionDialog = (RelativeLayout) view.findViewById(R.id.rv_event_description_dialog);
         rlDescriptionBubbleBackground = (RelativeLayout) view.findViewById(R.id.rl_description_bubble_background);
         ivDescriptionBubbleIcon = (ImageView) view.findViewById(R.id.iv_description_bubble_icon);
-        ivDescProfilePic = (ImageView) view.findViewById(R.id.iv_desc_profile_pic);
+        ivDescProfilePic = (RoundedImageView) view.findViewById(R.id.iv_desc_profile_pic);
 
         ivAcceptSendIcon = (ImageView) view.findViewById(R.id.iv_accept_icon);
         ivEditRejectIcon = (ImageView) view.findViewById(R.id.iv_edit_reject_icon);
         ivDeleteIcon = (ImageView) view.findViewById(R.id.iv_delete_icon);
         invitationAcceptSpinner = (ImageView) view.findViewById(R.id.iv_invitation_accept_spinner);
         invitationRejectSpinner = (ImageView) view.findViewById(R.id.iv_invitation_decline_spinner);
+        ivCardSwipeArrow = (ImageView) view.findViewById(R.id.iv_card_swipe_arrow);
 
         tinderCardView = (CardView) view.findViewById(R.id.tinderCardView);
         rlParentVew = (RelativeLayout) view.findViewById(R.id.rl_parent_vew);
@@ -137,6 +139,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         llBottomButtons = (LinearLayout) view.findViewById(R.id.ll_bottom_buttons);
         llEventDetails = (LinearLayout) view.findViewById(R.id.ll_event_details);
 
+        ivCardSwipeArrow.setOnClickListener(onClickListener);
         rlGuestListBubble.setOnClickListener(onClickListener);
         rlLocationBubble.setOnClickListener(onClickListener);
         rlDescriptionBubble.setOnClickListener(onClickListener);
@@ -259,7 +262,6 @@ public class GatheringPreviewFragment extends CenesFragment {
                             RequestOptions requestOptions = new RequestOptions();
                             requestOptions.circleCrop();
                             requestOptions.placeholder(R.drawable.profile_pic_no_image);
-                            Glide.with(getContext()).load("").apply(requestOptions).into(ivDescProfilePic);
                             if (eventOwner.getUser() != null) {
                                 Glide.with(getContext()).load(eventOwner.getUser().getPicture()).apply(requestOptions).into(ivDescProfilePic);
                             }
@@ -322,6 +324,61 @@ public class GatheringPreviewFragment extends CenesFragment {
                     ((CenesBaseActivity)getActivity()).replaceFragment(createGatheringFragment, null);
                     break;
 
+                case R.id.iv_card_swipe_arrow:
+
+                    if ((GatheringPreviewFragment.this).event.getScheduleAs() != null && (GatheringPreviewFragment.this).event.getScheduleAs().equals("Notification")) {
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
+                            }
+                        }, 500);
+                    } else {
+
+                        if (!isLoggedInUserExistsInMemberList) {
+
+                            if (GatheringPreviewFragment.this.event != null && GatheringPreviewFragment.this.event.getEventId() != null && loggedInUser.getUserId() != null) {
+
+                                String queryStr = "eventId="+GatheringPreviewFragment.this.event.getEventId()+"&userId="+loggedInUser.getUserId()+"&status=pending";
+                                updateAttendingStatus(queryStr);
+
+                            }
+
+                        }
+
+                        if (pendingEvents != null && pendingEvents.size() > 0 && pendingEventIndex < pendingEvents.size()) {
+
+                            (GatheringPreviewFragment.this).event = pendingEvents.get(pendingEventIndex);
+                            pendingEventIndex++;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    cardSwipedToExtent = false;
+                                    tinderCardView.setX(0);
+                                    tinderCardView.setY(0);
+                                    tinderCardView.setRotation(0.0f);
+                                    populateInvitationCard((GatheringPreviewFragment.this).event);
+                                }
+                            }, 500);
+
+                        } else {
+
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (getActivity() != null) {
+                                        ((CenesBaseActivity) getActivity()).onBackPressed();
+                                        tinderCardView.setY(0);
+
+                                    }
+                                }
+                            }, 500);
+
+                        }
+                    }
+
+                    break;
                     default:
                         System.out.println("Heyyy you did it.");
             }
@@ -458,7 +515,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                         //ifSwipedRightToLeft = false;
                         ifSwipedUp = false;
                         tinderCardView.setRotation(0);
-                        tinderCardView.setY(-300);
+                        tinderCardView.setY(-500);
 
                         if (cardSwipedToExtent) {
 
@@ -466,11 +523,11 @@ public class GatheringPreviewFragment extends CenesFragment {
                                 @Override
                                 public void run() {
                                     tinderCardView.setX(0);
-                                    tinderCardView.setY(-windowHeight + 400);
+                                    //tinderCardView.setY(-windowHeight + 400);
                                 }
                             }, 500);
 
-                            if (pendingEvents != null && pendingEvents.size() > 0) {
+                            /*if (pendingEvents != null && pendingEvents.size() > 0) {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -480,7 +537,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                                         populateInvitationCard((GatheringPreviewFragment.this).event);
                                     }
                                 }, 500);
-                            }
+                            }*/
 
                         } else {
 
@@ -774,12 +831,14 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                     }
                     if ((yCord - y) < -300) {
-                        //ivAcceptSendIcon.setAlpha(0.0f);
-                        //rlSkipText.setAlpha(1.0f)
+
+
                         Log.e("Skip Text : ", "SWipppppeedddddd uuppppppppppppppp "+rlSkipText.getScaleX()+"");
                         ifSwipedUp = true;
                         if (!cardSwipedToExtent) {
                             cardSwipedToExtent = true;
+                            tinderCardView.setY(-300);
+                           /*
 
                             if ((GatheringPreviewFragment.this).event.getScheduleAs() != null && (GatheringPreviewFragment.this).event.getScheduleAs().equals("Notification")) {
 
@@ -822,12 +881,10 @@ public class GatheringPreviewFragment extends CenesFragment {
                                 }
                             }
 
+                        */}
 
-                        }
 
                     } else {
-                        //ifSwipedUp = false;
-                        //rlSkipText.setAlpha(0.0f);
                     }
 
                     break;

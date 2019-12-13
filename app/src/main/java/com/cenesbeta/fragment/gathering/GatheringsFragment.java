@@ -260,7 +260,7 @@ public class GatheringsFragment extends CenesFragment {
 
                     List<Event> pendingEvents = eventManagerImpl.fetchAllEventsByScreen(Event.EventDisplayScreen.PENDING.toString());
                     Map<String, Object> parsedPendingResponse = processGatheringApiResult(pendingEvents);
-                    updateUIAfterGatheringAsyncTask(parsedPendingResponse, false, Event.EventDisplayScreen.PENDING.toString());
+                    updateUIAfterGatheringAsyncTask(parsedPendingResponse, true, Event.EventDisplayScreen.PENDING.toString());
 
                     if (internetManager.isInternetConnection(getCenesActivity())) {
                         new GatheringAsyncTask.GatheringsTask(new GatheringAsyncTask.GatheringsTask.AsyncResponse() {
@@ -277,7 +277,7 @@ public class GatheringsFragment extends CenesFragment {
                                     eventManagerImpl.addEvent(events, Event.EventDisplayScreen.PENDING.toString());
 
                                     Map<String, Object> parsedResponse = processGatheringApiResult(events);
-                                    updateUIAfterGatheringAsyncTask(parsedResponse, false, Event.EventDisplayScreen.PENDING.toString());
+                                    updateUIAfterGatheringAsyncTask(parsedResponse, true, Event.EventDisplayScreen.PENDING.toString());
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

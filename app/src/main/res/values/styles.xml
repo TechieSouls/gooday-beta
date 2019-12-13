@@ -12,47 +12,48 @@
     <!-- Base application theme. -->
 
     <style name="TextAppearance.MaterialCalendarWidget.Header" parent="android:TextAppearance.Small">
-        <item name="android:textColor">@color/cenes_teal</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#595757</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="TextAppearance.MaterialCalendarWidget.Header.Orange" parent="android:TextAppearance.Small">
-        <item name="android:textColor">@color/cenes_new_orange</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#595757</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="TextAppearance.MaterialCalendarWidget.Header.DarkGrey" parent="android:TextAppearance.Small">
-        <item name="android:textColor">@color/cenes_mcv_darkgrey</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#595757</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="TextAppearance.MaterialCalendarWidget.Header.Large.DarkGrey" parent="android:TextAppearance.Large">
-        <item name="android:textColor">@color/cenes_mcv_darkgrey</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#595757</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
 
     <style name="TextAppearance.MaterialCalendarWidget.Date" parent="android:TextAppearance.Small">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/cenes_dark_gray</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/cenes_mcv_lightergrey</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.MaterialCalendarWidget.WeekDay" parent="android:TextAppearance.Small">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/cenes_dark_gray</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#595757</item>
     </style>
 
     <style name="TextAppearance.MaterialCalendarWidget.WeekDay.Orange" parent="android:TextAppearance.Small">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/cenes_new_orange</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#595757</item>
     </style>
     <style name="TextAppearance.MaterialCalendarWidget.WeekDay.DarkGrey" parent="android:TextAppearance.Small">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/cenes_mcv_darkgrey</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#595757</item>
     </style>
     <style name="TextAppearance.MaterialCalendarWidget.WeekDay.Large.DarkGrey" parent="android:TextAppearance.Large">
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/cenes_mcv_darkgrey</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#595757</item>
     </style>
 
     <style name="keyboard_button">

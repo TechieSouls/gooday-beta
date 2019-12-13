@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
-    android:insetBottom="1dp"
-    android:insetLeft="1dp"
-    android:insetRight="1dp"
-    android:insetTop="1dp">
+    android:insetBottom="5dp"
+    android:insetLeft="5dp"
+    android:insetRight="5dp"
+    android:insetTop="5dp">
 
-    <shape android:shape="oval">
-        <stroke
-            android:width="1.5dp"
-            android:color="@color/cenes_mcv_lightgrey" />
-        <size
-            android:width="10dp"
-            android:height="10dp" />
+    <shape android:shape="rectangle">
+        <corners android:radius="12dp" />
         <solid android:color="@color/cenes_mcv_lightgrey" />
     </shape>
 

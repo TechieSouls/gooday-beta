@@ -34,10 +34,13 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -77,6 +80,7 @@ import com.cenesbeta.materialcalendarview.MaterialCalendarView;
 import com.cenesbeta.materialcalendarview.OnDateSelectedListener;
 import com.cenesbeta.materialcalendarview.decorators.BackgroundDecorator;
 import com.cenesbeta.materialcalendarview.decorators.OneDayDecorator;
+import com.cenesbeta.materialcalendarview.format.WeekDayFormatter;
 import com.cenesbeta.service.GatheringService;
 import com.cenesbeta.util.CenesConstants;
 import com.cenesbeta.util.CenesUtils;
@@ -106,7 +110,7 @@ import java.util.Set;
  * Created by mandeep on 2/11/17.
  */
 
-public class CreateGatheringFragment extends CenesFragment implements View.OnFocusChangeListener {
+public class CreateGatheringFragment extends CenesFragment {
 
     public static String TAG = "CreateGatheringFragment";
     private int SEACRH_LOCATION_RESULT_CODE = 1001, SEARCH_FRIEND_RESULT_CODE = 1002, GATHERING_SUMMARY_RESULT_CODE = 1003, MESSAGE_FRAGMENT_CODE = 1004;
@@ -233,7 +237,6 @@ public class CreateGatheringFragment extends CenesFragment implements View.OnFoc
         }
 
         materialCalendarView.setCurrentDate(predictedDateStartCal);
-
         currentMonth = predictedDateStartCal;
 
         CalendarDay calDay = new CalendarDay();
@@ -306,6 +309,9 @@ public class CreateGatheringFragment extends CenesFragment implements View.OnFoc
         materialCalendarView = (MaterialCalendarView) fragmentView.findViewById(R.id.material_calendar_view);
 
         materialCalendarView.setOnDateChangedListener(onDateSelectedListener);
+        gathEventTitleEditView.setOnFocusChangeListener(focusListener);
+        gathEventTitleEditView.setOnEditorActionListener(oneditorListener);
+        gathEventTitleEditView.setOnClickListener(onClickListener);
 
         context = this.getContext();
         createGatheringDto = new CreateGatheringDto();
@@ -349,14 +355,41 @@ public class CreateGatheringFragment extends CenesFragment implements View.OnFoc
         }
     };
 
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        if (hasFocus) {
-            ((EditText) v).setCompoundDrawablesRelativeWithIntrinsicBounds(((EditText) v).getCompoundDrawables()[DRAWABLE_LEFT], null, getResources().getDrawable(R.drawable.close), null);
-        } else {
-            ((EditText) v).setCompoundDrawablesRelativeWithIntrinsicBounds(((EditText) v).getCompoundDrawables()[DRAWABLE_LEFT], null, null, null);
+    private View.OnFocusChangeListener focusListener = new View.OnFocusChangeListener() {
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus){
+                rlPreviewInvitationButton.setVisibility(View.INVISIBLE);
+            } else {
+                rlPreviewInvitationButton.setVisibility(View.VISIBLE);
+            }
         }
-    }
+    };
+
+    TextView.OnEditorActionListener oneditorListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // do your stuff here
+                //rlPreviewInvitationButton.setVisibility(View.VISIBLE);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                            rlPreviewInvitationButton.setVisibility(View.VISIBLE);
+
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                        }
+                    }
+                }, 200);
+
+            }
+            return false;
+        }
+    };
 
     @Override
     public void onResume() {
@@ -371,6 +404,10 @@ public class CreateGatheringFragment extends CenesFragment implements View.OnFoc
         public void onClick(View v) {
             switch (v.getId()) {
 
+                case R.id.gath_event_title_et:
+
+                    rlPreviewInvitationButton.setVisibility(View.INVISIBLE);
+                    break;
                 case R.id.rl_start_bar:
 
                     Calendar predictedDateStartCal = Calendar.getInstance();
@@ -1185,7 +1222,7 @@ public class CreateGatheringFragment extends CenesFragment implements View.OnFoc
                     }
                     Set<CalendarDay> colorSet = null;
                     if (calEntrySet.getKey().equals("WHITE")) {
-                        BackgroundDecorator calBgDecorator = new BackgroundDecorator(getActivity(), R.drawable.mcv_lightgrey_color, calEntrySet.getValue(), false, true);
+                        BackgroundDecorator calBgDecorator = new BackgroundDecorator(getActivity(), R.drawable.mcv_lightgrey_color, calEntrySet.getValue(), true, true);
                         materialCalendarView.addDecorator(calBgDecorator);
                     } else if (calEntrySet.getKey().equals("YELLOW")) {
                         BackgroundDecorator calBgDecorator = new BackgroundDecorator(getActivity(), R.drawable.mcv_yellow_color, calEntrySet.getValue(), true, false);

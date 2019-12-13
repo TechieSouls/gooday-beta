@@ -353,7 +353,7 @@ public class MaterialCalendarView extends ViewGroup {
 
             CharSequence[] array = a.getTextArray(R.styleable.MaterialCalendarView_mcv_weekDayLabels);
             if (array != null) {
-                setWeekDayFormatter(new ArrayWeekDayFormatter(array));
+                //setWeekDayFormatter(new ArrayWeekDayFormatter(array));
             }
 
             array = a.getTextArray(R.styleable.MaterialCalendarView_mcv_monthLabels);
