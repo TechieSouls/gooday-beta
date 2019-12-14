@@ -79,7 +79,7 @@ public class CenesFirebaseMessagingService extends FirebaseMessagingService {
 
                     if (payloadObj.has("status") && payloadObj.getString("status").equals("AcceptAndDecline")) {
                         intent = new Intent(this, CenesBaseActivity.class);
-                    } else if (payloadObj.has("status") && !payloadObj.getString("status").equalsIgnoreCase("old")) {
+                    } else if (payloadObj.has("id")) {
                         intent = new Intent(this, CenesBaseActivity.class);
                         intent.putExtra("dataFrom", "push");
                         intent.putExtra("eventId", payloadObj.getLong("id"));

@@ -1,5 +1,6 @@
 package com.cenesbeta.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -108,7 +109,6 @@ public class CenesBaseActivity extends CenesActivity {
         String data = getIntent().getDataString();
         System.out.println(data);
         if (data != null) {
-
             try {
                     String params = "";
                     if (data.indexOf("https://betaweb.cenesgroup.com/event/invitation") != -1) {
@@ -151,12 +151,10 @@ public class CenesBaseActivity extends CenesActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
-
+        } else {
+            onNewIntent(getIntent());
         }
     }
-
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -326,7 +324,46 @@ public class CenesBaseActivity extends CenesActivity {
         } else {
             Toast.makeText(this, "Please check your internet connection", Toast.LENGTH_LONG).show();
         }
-
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        try {
+            Bundle bundle = getIntent().getExtras();
+            Long eventId = bundle.getLong("eventId");
+            if (eventId != null) {
+
+                new GatheringAsyncTask(cenesApplication, this);
+                new GatheringAsyncTask.EventInfoTask(new GatheringAsyncTask.EventInfoTask.AsyncResponse() {
+                    @Override
+                    public void processFinish(JSONObject response) {
+
+                        try {
+
+                            boolean success = response.getBoolean("success");
+
+                            if (success == true) {
+
+                                Gson gson = new Gson();
+                                Event event = gson.fromJson(response.getJSONObject("data").toString(), Event.class);
+                                GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
+                                gatheringPreviewFragment.event = event;
+                                replaceFragment(gatheringPreviewFragment, HomeFragment.TAG);
+
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).execute(eventId);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

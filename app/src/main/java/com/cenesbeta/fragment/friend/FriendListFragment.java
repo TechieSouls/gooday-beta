@@ -34,6 +34,7 @@ import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
+import com.cenesbeta.database.impl.EventManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.gathering.CreateGatheringFragment;
@@ -332,6 +333,15 @@ public class FriendListFragment  extends CenesFragment {
                         Gson gson = new GsonBuilder().create();
                         Type listType = new TypeToken<List<EventMember>>(){}.getType();
                         allFriends = gson.fromJson( response.getJSONArray("data").toString(), listType);
+
+                        List<EventMember> allFriendsTemp = new ArrayList<>();
+                        for (EventMember eventMember: allFriends) {
+                            if (eventMember.getFriendId() != null && !eventMember.getFriendId().equals(0) && eventMember.getFriendId().equals(loggedInUser.getUserId())) {
+                                continue;
+                            }
+                            allFriendsTemp.add(eventMember);
+                        }
+                        allFriends = allFriendsTemp;
                         cenesFriends = SearchFriendService.getCenesContacts(allFriends);
 
                         searchedFriends = cenesFriends;
