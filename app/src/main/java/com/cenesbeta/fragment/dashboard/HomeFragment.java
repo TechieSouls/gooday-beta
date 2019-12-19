@@ -576,7 +576,7 @@ public class HomeFragment extends CenesFragment {
                        }
 
                        Collections.sort(headers);
-                       listAdapter = new HomeScreenAdapter((CenesBaseActivity) getActivity(), headers, eventMap);
+                       listAdapter = new HomeScreenAdapter(HomeFragment.this, headers, eventMap);
 
                        if (events.size() == 0) {
                            homeScreenEventsList.setVisibility(View.GONE);
@@ -898,7 +898,7 @@ public class HomeFragment extends CenesFragment {
         }
 
         Collections.sort(headers);
-        listAdapter = new HomeScreenAdapter((CenesBaseActivity) getActivity(), headers, eventMap);
+        listAdapter = new HomeScreenAdapter(HomeFragment.this, headers, eventMap);
 
         if (events.size() == 0) {
             homeScreenEventsList.setVisibility(View.GONE);

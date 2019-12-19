@@ -28,6 +28,7 @@ import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.adapter.EventCardExpandableAdapter;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
+import com.cenesbeta.bo.Gathering;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.impl.EventManagerImpl;
@@ -60,6 +61,8 @@ import java.util.Map;
 public class GatheringsFragment extends CenesFragment {
 
     public final static String TAG = "GatheringsFragment";
+    public enum TabSeleted {Accepted, Pending, Declined};
+    private TabSeleted tabSeleted = TabSeleted.Accepted;
 
     private int CREATE_GATHERING_RESULT_CODE = 1001;
 
@@ -91,6 +94,9 @@ public class GatheringsFragment extends CenesFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
+        if (fragmentView != null) {
+            return fragmentView;
+        }
         View view = inflater.inflate(R.layout.fragment_gatherings, container, false);
         fragmentView = view;
         init(view);
@@ -202,7 +208,7 @@ public class GatheringsFragment extends CenesFragment {
             gatheringsEventsList.invalidate();
             List<String> headers = (List<String>) response.get("headers");
             Map<String, List<Event>> eventMap = (Map<String, List<Event>>) response.get("eventMap");
-            listAdapter = new EventCardExpandableAdapter((CenesBaseActivity)getActivity(), fragmentManager,  headers, eventMap, isInvitation);
+            listAdapter = new EventCardExpandableAdapter(GatheringsFragment.this, fragmentManager,  headers, eventMap, isInvitation);
 
             gatheringsEventsList.setVisibility(View.VISIBLE);
             gatheringsEventsList.setAdapter(listAdapter);
@@ -224,6 +230,7 @@ public class GatheringsFragment extends CenesFragment {
                     ((CenesBaseActivity)getActivity()).mDrawerLayout.openDrawer(GravityCompat.START);
                     break;
                 case R.id.confirmed_btn:
+                    tabSeleted = TabSeleted.Accepted;
                     selectTab(confirmedBtn);
                     gatheringsText.setText("Your Gatherings");
                     //new GatheringsTask().execute("Going");
@@ -254,6 +261,7 @@ public class GatheringsFragment extends CenesFragment {
 
                     break;
                 case R.id.maybe_btn:
+                    tabSeleted = TabSeleted.Pending;
                     selectTab(maybeBtn);
                     gatheringsText.setText("Your Invitations");
                     //new GatheringsTask().execute("pending");
@@ -286,6 +294,7 @@ public class GatheringsFragment extends CenesFragment {
                     }
                     break;
                 case R.id.declined_btn:
+                    tabSeleted = TabSeleted.Declined;
                     selectTab(declinedBtn);
                     gatheringsText.setText("Your Invitations");
                     //new GatheringsTask().execute("NotGoing");
@@ -345,6 +354,38 @@ public class GatheringsFragment extends CenesFragment {
         declinedBtn.setBackground(getResources().getDrawable(R.drawable.border_bottom_gray));
         declinedBtn.setTextColor(getResources().getColor(R.color.font_grey_color));
         declinedBtn.setTypeface(Typeface.DEFAULT);
+
+        selection.setBackground(getResources().getDrawable(R.drawable.border_bottom_orange));
+        selection.setTextColor(getResources().getColor(R.color.cenes_new_orange));
+        selection.setTypeface(Typeface.DEFAULT_BOLD);
+    }
+
+    public void refreshSelectedTabData() {
+        TextView selection = null;
+        confirmedBtn.setBackground(getResources().getDrawable(R.drawable.border_bottom_gray));
+        confirmedBtn.setTextColor(getResources().getColor(R.color.font_grey_color));
+        confirmedBtn.setTypeface(Typeface.DEFAULT);
+
+        maybeBtn.setBackground(getResources().getDrawable(R.drawable.border_bottom_gray));
+        maybeBtn.setTextColor(getResources().getColor(R.color.font_grey_color));
+        maybeBtn.setTypeface(Typeface.DEFAULT);
+
+        declinedBtn.setBackground(getResources().getDrawable(R.drawable.border_bottom_gray));
+        declinedBtn.setTextColor(getResources().getColor(R.color.font_grey_color));
+        declinedBtn.setTypeface(Typeface.DEFAULT);
+
+        if (tabSeleted.equals(TabSeleted.Accepted)) {
+            selection = confirmedBtn;
+            confirmedBtn.performClick();
+        } else if (tabSeleted.equals(TabSeleted.Pending)) {
+            selection = maybeBtn;
+            maybeBtn.performClick();
+
+        } else if (tabSeleted.equals(TabSeleted.Declined)) {
+            selection = declinedBtn;
+            declinedBtn.performClick();
+
+        }
 
         selection.setBackground(getResources().getDrawable(R.drawable.border_bottom_orange));
         selection.setTextColor(getResources().getColor(R.color.cenes_new_orange));

@@ -39,22 +39,20 @@ public class AllContactsExpandableAdapter extends BaseExpandableListAdapter {
 
     public AllContactsExpandableAdapter(FriendListFragment friendListFragment, List<String> headers, Map<String, List<EventMember>> eventMembersMap, boolean isCenesFriends) {
 
-        this.friendListFragment = friendListFragment;
-        this.inflter = (LayoutInflater.from(friendListFragment.getContext()));
-        this.headers = headers;
-        this.isCenesFriends = isCenesFriends;
+            this.friendListFragment = friendListFragment;
+            this.inflter = (LayoutInflater.from(friendListFragment.getContext()));
+            this.headers = headers;
+            this.isCenesFriends = isCenesFriends;
 
-        Collections.sort(this.headers, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o1.compareTo(o2);
-            }
-        });
-        this.eventMembersMap = eventMembersMap;
-        recyclerView = (RecyclerView) (this.friendListFragment).getView().findViewById(R.id.recycler_view);
-        recyclerView.setVisibility(View.VISIBLE);
-
-
+            Collections.sort(this.headers, new Comparator<String>() {
+                @Override
+                public int compare(String o1, String o2) {
+                    return o1.compareTo(o2);
+                }
+            });
+            this.eventMembersMap = eventMembersMap;
+            recyclerView = (RecyclerView) (this.friendListFragment).getView().findViewById(R.id.recycler_view);
+            recyclerView.setVisibility(View.VISIBLE);
     }
     @Override
     public int getGroupCount() {
@@ -230,10 +228,11 @@ public class AllContactsExpandableAdapter extends BaseExpandableListAdapter {
                             viewHolder.ivHostCircleMember.setVisibility(View.VISIBLE);
                         }
                     }
+                    friendListFragment.getAllContactsExpandableAdapter().notifyDataSetChanged();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                friendListFragment.searchFriendEditText.setText("");
+                //friendListFragment.searchFriendEditText.setText("");
                 if (friendListFragment.checkboxObjectHolder.size() > 0) {
                     friendListFragment.getView().findViewById(R.id.rl_selected_friends_recycler_view).setVisibility(View.VISIBLE);
                     friendListFragment.getActivity().runOnUiThread(new Thread(new Runnable() {
@@ -270,6 +269,7 @@ public class AllContactsExpandableAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
     }
+
 
     class HeaderViewHolder {
         TextView lblListHeader;

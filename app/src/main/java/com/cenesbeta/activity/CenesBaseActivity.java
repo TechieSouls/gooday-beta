@@ -52,6 +52,7 @@ public class CenesBaseActivity extends CenesActivity {
     private InternetManager internetManager;
 
     public Event parentEvent;
+    private Fragment initialFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,8 @@ public class CenesBaseActivity extends CenesActivity {
         internetManager = coreManager.getInternetManager();
 
         fragmentManager = getSupportFragmentManager();
-        replaceFragment(new HomeFragment(), null);
+        initialFragment = new HomeFragment();
+        replaceFragment(initialFragment, null);
 
         llFooter = (LinearLayout) findViewById(R.id.rl_footer);
         footerHomeIcon = (ImageView) findViewById(R.id.footer_home_icon);
@@ -350,6 +352,7 @@ public class CenesBaseActivity extends CenesActivity {
                                 Event event = gson.fromJson(response.getJSONObject("data").toString(), Event.class);
                                 GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
                                 gatheringPreviewFragment.event = event;
+                                gatheringPreviewFragment.sourceFragment = initialFragment;
                                 replaceFragment(gatheringPreviewFragment, HomeFragment.TAG);
 
                             }

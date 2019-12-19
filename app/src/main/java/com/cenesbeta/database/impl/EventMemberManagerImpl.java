@@ -40,121 +40,142 @@ public class EventMemberManagerImpl  {
     }
 
     public void addEventMember(List<EventMember> eventMembers) {
-
-        for (EventMember eventMember: eventMembers) {
-            addEventMember(eventMember);
+        try {
+            for (EventMember eventMember: eventMembers) {
+                addEventMember(eventMember);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
     public void addEventMember(EventMember eventMember){
 
-        this.db = cenesDatabase.getReadableDatabase();
-        if (CenesUtils.isEmpty(eventMember.getPicture())) {
-            eventMember.setPicture("");
-        }
-        if (CenesUtils.isEmpty(eventMember.getPhone())) {
-            eventMember.setPhone("");
-        }
-        if (CenesUtils.isEmpty(eventMember.getCenesMember())) {
-            eventMember.setCenesMember("");
-        }
-        String insertQuery = "insert into event_members values("+eventMember.getEventMemberId()+", "+eventMember.getEventId()+", '"+eventMember.getName()+"'," +
-                " '"+eventMember.getPicture()+"', '"+eventMember.getStatus()+"', "+eventMember.getUserId()+", '"+eventMember.getPhone()+"', " +
-                "'"+eventMember.getCenesMember()+"', "+eventMember.getUserContactId()+")";
-        db.execSQL(insertQuery);
-        db.close();
-        if (eventMember.getUser() != null) {
-            cenesUserManagerImpl.addUser(eventMember.getUser());
+        try {
+            this.db = cenesDatabase.getReadableDatabase();
+            if (CenesUtils.isEmpty(eventMember.getPicture())) {
+                eventMember.setPicture("");
+            }
+            if (CenesUtils.isEmpty(eventMember.getPhone())) {
+                eventMember.setPhone("");
+            }
+            if (CenesUtils.isEmpty(eventMember.getCenesMember())) {
+                eventMember.setCenesMember("");
+            }
+            String insertQuery = "insert into event_members values("+eventMember.getEventMemberId()+", "+eventMember.getEventId()+", '"+eventMember.getName()+"'," +
+                    " '"+eventMember.getPicture()+"', '"+eventMember.getStatus()+"', "+eventMember.getUserId()+", '"+eventMember.getPhone()+"', " +
+                    "'"+eventMember.getCenesMember()+"', "+eventMember.getUserContactId()+")";
+            db.execSQL(insertQuery);
+            db.close();
+            if (eventMember.getUser() != null) {
+                cenesUserManagerImpl.addUser(eventMember.getUser());
+            }
+
+            if (eventMember.getUserContact() != null) {
+                userContactManagerImpl.addUserContact(eventMember.getUserContact());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        if (eventMember.getUserContact() != null) {
-            userContactManagerImpl.addUserContact(eventMember.getUserContact());
-        }
     }
 
     public List<EventMember> fetchEventMembersByEventId(Long eventId) {
         this.db = cenesDatabase.getReadableDatabase();
         List<EventMember> eventMembers = new ArrayList<>();
 
-        String query = "select * from event_members where event_id = "+eventId;
-        Cursor cursor = db.rawQuery(query, null);
+        try {
+            String query = "select * from event_members where event_id = "+eventId;
+            Cursor cursor = db.rawQuery(query, null);
 
-        while (cursor.moveToNext()) {
+            while (cursor.moveToNext()) {
 
-            EventMember eventMember = new EventMember();
-            eventMember.setEventId(cursor.getLong(cursor.getColumnIndex("event_id")));
-            eventMember.setEventMemberId(cursor.getLong(cursor.getColumnIndex("event_member_id")));
-            eventMember.setName(cursor.getString(cursor.getColumnIndex("name")));
-            eventMember.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
-            eventMember.setUserContactId(cursor.getInt(cursor.getColumnIndex("user_contact_id")));
-            eventMember.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
+                EventMember eventMember = new EventMember();
+                eventMember.setEventId(cursor.getLong(cursor.getColumnIndex("event_id")));
+                eventMember.setEventMemberId(cursor.getLong(cursor.getColumnIndex("event_member_id")));
+                eventMember.setName(cursor.getString(cursor.getColumnIndex("name")));
+                eventMember.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
+                eventMember.setUserContactId(cursor.getInt(cursor.getColumnIndex("user_contact_id")));
+                eventMember.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
 
-            if (eventMember.getUserId() != null) {
-                User user = this.cenesUserManagerImpl.fetchCenesUserByUserId(eventMember.getUserId());
-                eventMember.setUser(user);
+                if (eventMember.getUserId() != null) {
+                    User user = this.cenesUserManagerImpl.fetchCenesUserByUserId(eventMember.getUserId());
+                    eventMember.setUser(user);
+                }
+
+                if (eventMember.getUserContactId() != null && !eventMember.getUserContactId().equals(0)) {
+                    UserContact userContact = this.userContactManagerImpl.fetchUserContactByUserContactId(eventMember.getUserContactId());
+                    eventMember.setUserContact(userContact);
+                }
+                eventMembers.add(eventMember);
             }
-
-            if (eventMember.getUserContactId() != null && !eventMember.getUserContactId().equals(0)) {
-                UserContact userContact = this.userContactManagerImpl.fetchUserContactByUserContactId(eventMember.getUserContactId());
-                eventMember.setUserContact(userContact);
-            }
-            eventMembers.add(eventMember);
+            cursor.close();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        cursor.close();
-        db.close();
         return eventMembers;
     }
 
     public List<EventMember> fetchEventMembersByEventAtScreen(String displayAtScreen) {
         this.db = cenesDatabase.getReadableDatabase();
         List<EventMember> eventMembers = new ArrayList<>();
+        try {
+            String query = "select * from event_members where event_id in (select event_id from events where display_at_screen = '"+displayAtScreen+"' )";
+            Cursor cursor = db.rawQuery(query, null);
 
-        String query = "select * from event_members where event_id in (select event_id from events where display_at_screen = '"+displayAtScreen+"' )";
-        Cursor cursor = db.rawQuery(query, null);
+            while (cursor.moveToNext()) {
 
-        while (cursor.moveToNext()) {
+                EventMember eventMember = new EventMember();
+                eventMember.setEventId(cursor.getLong(cursor.getColumnIndex("event_id")));
+                eventMember.setEventMemberId(cursor.getLong(cursor.getColumnIndex("event_member_id")));
+                eventMember.setName(cursor.getString(cursor.getColumnIndex("name")));
+                eventMember.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
+                eventMember.setUserContactId(cursor.getInt(cursor.getColumnIndex("user_contact_id")));
+                eventMember.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
 
-            EventMember eventMember = new EventMember();
-            eventMember.setEventId(cursor.getLong(cursor.getColumnIndex("event_id")));
-            eventMember.setEventMemberId(cursor.getLong(cursor.getColumnIndex("event_member_id")));
-            eventMember.setName(cursor.getString(cursor.getColumnIndex("name")));
-            eventMember.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
-            eventMember.setUserContactId(cursor.getInt(cursor.getColumnIndex("user_contact_id")));
-            eventMember.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
+                if (eventMember.getUserId() != null) {
+                    User user = this.cenesUserManagerImpl.fetchCenesUserByUserId(eventMember.getUserId());
+                    eventMember.setUser(user);
+                }
 
-            if (eventMember.getUserId() != null) {
-                User user = this.cenesUserManagerImpl.fetchCenesUserByUserId(eventMember.getUserId());
-                eventMember.setUser(user);
+                if (eventMember.getUserContactId() != null && !eventMember.getUserContactId().equals(0)) {
+                    UserContact userContact = this.userContactManagerImpl.fetchUserContactByUserContactId(eventMember.getUserContactId());
+                    eventMember.setUserContact(userContact);
+                }
+
+                eventMembers.add(eventMember);
             }
-
-            if (eventMember.getUserContactId() != null && !eventMember.getUserContactId().equals(0)) {
-                UserContact userContact = this.userContactManagerImpl.fetchUserContactByUserContactId(eventMember.getUserContactId());
-                eventMember.setUserContact(userContact);
-            }
-
-            eventMembers.add(eventMember);
+            cursor.close();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        cursor.close();
-        db.close();
         return eventMembers;
     }
 
     public void deleteFromEventMembersByEventIdsIn(String eventIds) {
-
-        this.db = cenesDatabase.getReadableDatabase();
-        String deleteQuery = "delete from event_members where event_id in ("+eventIds+") ";
-        System.out.println("Delete Query : "+deleteQuery);
-        db.execSQL(deleteQuery);
-        db.close();
-        cenesUserManagerImpl.deleteAllUsers();
+        try {
+            this.db = cenesDatabase.getReadableDatabase();
+            String deleteQuery = "delete from event_members where event_id in ("+eventIds+") ";
+            System.out.println("Delete Query : "+deleteQuery);
+            db.execSQL(deleteQuery);
+            db.close();
+            cenesUserManagerImpl.deleteAllUsers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
     public void deleteAllFromEventMembers() {
-
-        this.db = cenesDatabase.getReadableDatabase();
-        String deleteQuery = "delete from event_members";
-        db.execSQL(deleteQuery);
-        db.close();
-        cenesUserManagerImpl.deleteAllUsers();
+        try {
+            this.db = cenesDatabase.getReadableDatabase();
+            String deleteQuery = "delete from event_members";
+            db.execSQL(deleteQuery);
+            db.close();
+            cenesUserManagerImpl.deleteAllUsers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

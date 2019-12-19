@@ -89,6 +89,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.soundcloud.android.crop.Crop;
 import com.yalantis.ucrop.UCrop;
 
@@ -455,9 +456,18 @@ public class CreateGatheringFragment extends CenesFragment {
                             .setPositiveButton("Leave", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    //((CenesBaseActivity)getActivity()).fragmentManager.popBackStack();
-                                    ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                                    ((CenesBaseActivity) getActivity()).replaceFragment(new GatheringsFragment(), null);
+
+                                    if (event.getEventId() != null && event.getEventId() != 0) {
+
+                                        ((CenesBaseActivity)getActivity()).clearAllFragmentsInBackstack();
+                                        ((CenesBaseActivity)getActivity()).replaceFragment(new HomeFragment(), null);
+
+                                    } else {
+
+                                        ((CenesBaseActivity)getActivity()).clearAllFragmentsInBackstack();
+                                        ((CenesBaseActivity)getActivity()).replaceFragment(new GatheringsFragment(), null);
+
+                                    }
 
                                 }
                             }).setNegativeButton("Stay", new DialogInterface.OnClickListener() {
@@ -516,6 +526,20 @@ public class CreateGatheringFragment extends CenesFragment {
                         event.setCreatedById(loggedInUser.getUserId());
                         Log.v("Event Memebrs Size : ",event.getEventMembers().size()+"");
                         event.setTitle(gathEventTitleEditView.getText().toString());
+
+                        MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                        try {
+                            JSONObject props = new JSONObject();
+                            props.put("Action","Create Gathering Begins");
+                            props.put("Title",event.getTitle());
+                            props.put("UserEmail",loggedInUser.getEmail());
+                            props.put("UserName",loggedInUser.getName());
+                            mixpanel.track("Gathering", props);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                         GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
                         gatheringPreviewFragment.event = event;
                         ((CenesBaseActivity) getActivity()).replaceFragment( gatheringPreviewFragment, CreateGatheringFragment.TAG);

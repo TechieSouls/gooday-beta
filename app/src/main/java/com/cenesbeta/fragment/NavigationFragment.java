@@ -36,6 +36,7 @@ import com.cenesbeta.fragment.metime.MeTimeFragment;
 import com.cenesbeta.fragment.profile.DeleteAccountFragment;
 import com.cenesbeta.fragment.profile.ProfileFragment;
 import com.cenesbeta.service.AlarmReceiver;
+import com.cenesbeta.util.RoundedImageView;
 import com.facebook.login.LoginManager;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class NavigationFragment extends CenesFragment {
     private ApiManager apiManager;
     private AlarmManager alarmManager;
 
-    ImageView ivProfile;
+    RoundedImageView ivProfile;
     TextView tvUsername, tvNotifications, tvCalendarSync, tvHolidayCalendar,
             tvHelpAndFeedback, tvAbout, tvAppSettings;
     LinearLayout llProfileSection;
@@ -82,7 +83,7 @@ public class NavigationFragment extends CenesFragment {
 
         setFragmentManager();
 
-        ivProfile = (ImageView) v.findViewById(R.id.ivProfile);
+        ivProfile = (RoundedImageView) v.findViewById(R.id.ivProfile);
         tvUsername = (TextView) v.findViewById(R.id.tvUsername);
         tvNotifications = (TextView) v.findViewById(R.id.tvNotifications);
         llProfileSection = (LinearLayout) v.findViewById(R.id.ll_profile_section);
@@ -140,12 +141,12 @@ public class NavigationFragment extends CenesFragment {
     }
 
     public void refreshUserInfo(User user) {
-        if (user != null && user.getPicture() != null && user.getPicture() != "null") {
+        //if (user != null && user.getPicture() != null && user.getPicture() != "null") {
             RequestOptions requestOptions = new RequestOptions();
             requestOptions.circleCrop();
             requestOptions.placeholder(R.drawable.profile_pic_no_image);
             Glide.with(getActivity()).load(user.getPicture()).apply(requestOptions).into(ivProfile);
-        }
+        //}
         tvUsername.setText(user.getName());
     }
 

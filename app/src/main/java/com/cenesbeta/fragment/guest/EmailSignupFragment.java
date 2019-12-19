@@ -25,6 +25,7 @@ import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.util.CenesUtils;
 import com.google.gson.Gson;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONObject;
 
@@ -110,6 +111,17 @@ public class EmailSignupFragment extends CenesFragment {
                         loggedInUser.setEmail(etEmailField.getText().toString());
                         loggedInUser.setPassword(etPasswordField.getText().toString());
 
+                        MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                        try {
+                            JSONObject props = new JSONObject();
+                            props.put("SignupType","Email");
+                            props.put("Action","Signup Begins");
+                            props.put("UserEmail",loggedInUser.getEmail());
+                            mixpanel.track("Signup", props);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         try {
                             Gson gson = new Gson();
                             JSONObject postData = new JSONObject(gson.toJson(loggedInUser));
@@ -151,6 +163,18 @@ public class EmailSignupFragment extends CenesFragment {
 
                                                     }
                                                 }).execute(registerDeviceObj);
+                                            }
+
+                                            MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                                            try {
+                                                JSONObject props = new JSONObject();
+                                                props.put("SignupType","Email");
+                                                props.put("Action","Signup Success");
+                                                props.put("UserEmail",loggedInUser.getEmail());
+                                                mixpanel.track("Signup", props);
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
                                             }
 
                                             SignupStepSuccessFragment signupStepSuccessFragment = new SignupStepSuccessFragment();

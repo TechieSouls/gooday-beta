@@ -53,6 +53,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -78,6 +79,7 @@ public class SignupOptionsFragment extends CenesFragment {
     private User loggedInUser;
     private CallbackManager callbackManager;
     private GoogleSignInClient mGoogleSignInClient;
+    private String signupType = "Facebook";
 
     @Nullable
     @Override
@@ -191,8 +193,9 @@ public class SignupOptionsFragment extends CenesFragment {
                             loggedInUser.setPicture(dataObj.getJSONObject("data").getString("url"));
                         }
 
-                        String email;
+                        String email = "";
                         if (object.has("email")) {
+                            email = object.getString("email");
                             loggedInUser.setEmail(object.getString("email"));
                         }
 
@@ -215,6 +218,19 @@ public class SignupOptionsFragment extends CenesFragment {
 
                         SignupStepSuccessFragment signupStepSuccessFragment = new SignupStepSuccessFragment();
                         ((GuestActivity)getActivity()).replaceFragment(signupStepSuccessFragment,  SignupOptionsFragment.TAG);*/
+                        signupType = "Facebook";
+                        MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                        try {
+                            JSONObject props = new JSONObject();
+                            props.put("SignupType","Facebook");
+                            props.put("Action","Signup Begins");
+                            props.put("UserEmail",email);
+                            mixpanel.track("Signup", props);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                         socialSignupRequest(loggedInUser);
                         Log.i("RESULTS : ", object.getString("email"));
                     }catch (Exception e){
@@ -288,6 +304,19 @@ public class SignupOptionsFragment extends CenesFragment {
                             }
 
                             if (user.isNew()) {
+
+                                MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                                try {
+                                    JSONObject props = new JSONObject();
+                                    props.put("SignupType",signupType);
+                                    props.put("Action","Signup Success");
+                                    props.put("UserEmail",loggedInUser.getEmail());
+                                    mixpanel.track("Signup", props);
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
                                 SignupStepSuccessFragment signupStepSuccessFragment = new SignupStepSuccessFragment();
                                 ((GuestActivity)getActivity()).clearFragmentsAndOpen(signupStepSuccessFragment);
                             } else {
@@ -444,6 +473,19 @@ public class SignupOptionsFragment extends CenesFragment {
             loggedInUser.setName(account.getDisplayName());
             loggedInUser.setEmail(account.getEmail());
             loggedInUser.setGoogleId(account.getId());
+
+            signupType = "Google";
+            MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+            try {
+                JSONObject props = new JSONObject();
+                props.put("SignupType","Google");
+                props.put("Action","Signup Begins");
+                props.put("UserEmail",loggedInUser.getEmail());
+                mixpanel.track("Signup", props);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             socialSignupRequest(loggedInUser);
 
         } catch (ApiException e) {

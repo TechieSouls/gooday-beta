@@ -35,6 +35,7 @@ import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
+import com.cenesbeta.fragment.dashboard.HomeFragment;
 import com.cenesbeta.livesdk.com.microsoft.live.LiveAuthClient;
 import com.cenesbeta.livesdk.com.microsoft.live.LiveAuthException;
 import com.cenesbeta.livesdk.com.microsoft.live.LiveAuthListener;
@@ -56,6 +57,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -276,7 +278,11 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
             homeIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    getActivity().onBackPressed();
+                    //getActivity().onBackPressed();
+
+                    ((CenesBaseActivity)getActivity()).clearAllFragmentsInBackstack();
+                    HomeFragment homeFragment = new HomeFragment();
+                    ((CenesBaseActivity)getActivity()).replaceFragment(homeFragment, null);
                 }
             });
 
@@ -312,6 +318,18 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
                 e.printStackTrace();
             }
 
+            MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+            try {
+                JSONObject props = new JSONObject();
+                props.put("CalendarType","Outlook");
+                props.put("Action","Sync Begins");
+                props.put("UserEmail",loggedInUser.getEmail());
+                props.put("UserName",loggedInUser.getName());
+                mixpanel.track("SyncCalendar", props);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             new OutlookEventsTask().execute(postJson);
         } else {
             //resultTextView.setText(R.string.auth_no);
@@ -362,7 +380,7 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
             googleEmail = acct.getEmail();
 
            Account account = new Account(googleEmail, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
-           String mScope="oauth2:server:client_id:212716305349-qqqivqr05q7moonjcpct30am1e72vgtf.apps.googleusercontent.com:api_scope:"+"https://www.googleapis.com/auth/userinfo.email";
+           String mScope="oauth2:server:client_id:"+CenesConstants.GoogleWebClientid+":api_scope:"+"https://www.googleapis.com/auth/userinfo.email";
 
            try {
                String refreshToken =  GoogleAuthUtil.getToken(getActivity(), account, mScope);
@@ -392,15 +410,28 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
             googleEmail = account.getEmail();
 
             try {
+                MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                try {
+                    JSONObject props = new JSONObject();
+                    props.put("CalendarType","Google");
+                    props.put("Action","Sync Begins");
+                    props.put("UserEmail",loggedInUser.getEmail());
+                    props.put("UserName",loggedInUser.getName());
+                    mixpanel.track("SyncCalendar", props);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 //googleAccessToken = acct.getIdToken();
                 new CalenderSyncTask().execute(authCode);
             } catch (Exception e) {
                 e.printStackTrace();
-
             }
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            e.printStackTrace();
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
         }
     }
@@ -559,6 +590,19 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
             if (param != null) {
                 Toast.makeText(getCenesActivity(), "Google Calendar Synced", Toast.LENGTH_LONG).show();
                 ivGoogleCheckmark.setImageResource(R.drawable.circle_selected);
+
+                MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                try {
+                    JSONObject props = new JSONObject();
+                    props.put("CalendarType","Google");
+                    props.put("Action","Sync Success");
+                    props.put("UserEmail",loggedInUser.getEmail());
+                    props.put("UserName",loggedInUser.getName());
+                    mixpanel.track("SyncCalendar", props);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
                 getCenesActivity().showRequestTimeoutDialog();
             }
@@ -619,6 +663,19 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
 
             Toast.makeText(getCenesActivity(), "Outlook Calendar Synced", Toast.LENGTH_LONG).show();
             ivOutlookCheckmark.setImageResource(R.drawable.circle_selected);
+
+            MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+            try {
+                JSONObject props = new JSONObject();
+                props.put("CalendarType","Outlook");
+                props.put("Action","Sync Success");
+                props.put("UserEmail",loggedInUser.getEmail());
+                props.put("UserName",loggedInUser.getName());
+                mixpanel.track("SyncCalendar", props);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
     }

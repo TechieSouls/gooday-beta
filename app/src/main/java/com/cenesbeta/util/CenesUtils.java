@@ -51,6 +51,7 @@ public class CenesUtils {
     public static SimpleDateFormat EEEE = new SimpleDateFormat("EEEE"); //THHURSDAY
     public static SimpleDateFormat ddMMM = new SimpleDateFormat("ddMMM");
     public static String[] facebookPermissions = {"public_profile", "email", "user_friends", "user_birthday"};
+    public static final String MIXPANEL_TOKEN = "255bc3dcb4ae26b7202f5e997a66e4d9";
 
 
     public static ProgressDialog showProcessing(Context context, String message) {

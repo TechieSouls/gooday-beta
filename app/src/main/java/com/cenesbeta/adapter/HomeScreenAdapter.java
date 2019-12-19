@@ -52,21 +52,21 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
 
     private int GATHERING_SUMMARY_RESULT_CODE = 1001, CREATE_GATHERING_RESULT_CODE = 1002;
 
-    CenesBaseActivity context;
+    HomeFragment homeFragment;
     List<String> headers;
     Map<String, List<Event>> eventsMap;
     LayoutInflater inflter;
     User loggedInUser;
 
-    public HomeScreenAdapter(CenesBaseActivity applicationContext, List<String> headers, Map<String, List<Event>> eventsMap) {
-        this.context = applicationContext;
+    public HomeScreenAdapter(HomeFragment homeFragment, List<String> headers, Map<String, List<Event>> eventsMap) {
+        this.homeFragment = homeFragment;
         this.headers = headers;
         this.eventsMap = eventsMap;
 
-        CoreManager coreManager = context.getCenesApplication().getCoreManager();
+        CoreManager coreManager = homeFragment.getCenesActivity().getCenesApplication().getCoreManager();
         loggedInUser = coreManager.getUserManager().getUser();
 
-        inflter = (LayoutInflater.from(applicationContext));
+        inflter = (LayoutInflater.from(homeFragment.getContext()));
     }
 
     @Override
@@ -143,7 +143,7 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                     RequestOptions requestOptions = new RequestOptions();
                     requestOptions.placeholder(R.drawable.profile_pic_no_image);
                     requestOptions.circleCrop();
-                    Glide.with(context).load(owner.getUser().getPicture()).apply(requestOptions).into(viewHolder.ivOwnerImage);
+                    Glide.with(homeFragment.getContext()).load(owner.getUser().getPicture()).apply(requestOptions).into(viewHolder.ivOwnerImage);
 
                 } else {
                     viewHolder.ivOwnerImage.setImageResource(R.drawable.profile_pic_no_image);
@@ -174,7 +174,7 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                 viewHolder.startTime.setText(CenesUtils.hhmmaa.format(new Date(child.getStartTime())));
 
                 if (child.getOwner() != null && child.getOwner().getUser() != null) {
-                    Glide.with(context).load(child.getOwner().getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(viewHolder.ivOwnerImage);
+                    Glide.with(homeFragment.getContext()).load(child.getOwner().getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(viewHolder.ivOwnerImage);
                 }
 
             } else if (child.getScheduleAs().equals("Holiday")) { //holidays
@@ -231,9 +231,10 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                             gatheringPreviewFragmentBkup.setArguments(bundle);
                             context.replaceFragment(gatheringPreviewFragmentBkup, GatheringPreviewFragmentBkup.TAG);*/
 
-                            GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
-                            gatheringPreviewFragment.event = child;
-                            context.replaceFragment(gatheringPreviewFragment, HomeFragment.TAG);
+                        GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
+                        gatheringPreviewFragment.event = child;
+                        gatheringPreviewFragment.sourceFragment = homeFragment;
+                        ((CenesBaseActivity) homeFragment.getCenesActivity()).replaceFragment(gatheringPreviewFragment, HomeFragment.TAG);
                         //}
 
 
@@ -265,13 +266,13 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                 public void onClick(View v) {
 
                     String declineQueryStr = "eventId=" +viewHolder.eventId+ "&userId="+loggedInUser.getUserId() + "&status=NotGoing";
-                    new GatheringAsyncTask(context.getCenesApplication(), context);
+                    new GatheringAsyncTask(homeFragment.getCenesActivity().getCenesApplication(), ((CenesBaseActivity) homeFragment.getActivity()));
                     new GatheringAsyncTask.UpdateStatusActionTask(new GatheringAsyncTask.UpdateStatusActionTask.AsyncResponse() {
                         @Override
                         public void processFinish(Boolean response) {
                             //((HomeFragment)context.getVisibleFragment()).initialSync();
-                            Fragment currentFragment = context.getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                            context.fragmentManager
+                            Fragment currentFragment = homeFragment.getCenesActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                            ((CenesBaseActivity)homeFragment.getCenesActivity()).fragmentManager
                                     .beginTransaction()
                                     .detach(currentFragment)
                                     .attach(currentFragment)
@@ -362,12 +363,12 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
 
 
     public int convertPpToDp(int pp) {
-        DisplayMetrics displayMetrics = this.context.getResources().getDisplayMetrics();
+        DisplayMetrics displayMetrics = homeFragment.getResources().getDisplayMetrics();
         return (int) (pp / displayMetrics.density);
     }
 
     public int convertDpToPp(int dp) {
-        DisplayMetrics displayMetrics = this.context.getResources().getDisplayMetrics();
+        DisplayMetrics displayMetrics = homeFragment.getResources().getDisplayMetrics();
         return (int) (dp * displayMetrics.density);
     }
 
@@ -415,7 +416,7 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            deleteGathDialog = new ProgressDialog(context);
+            deleteGathDialog = new ProgressDialog(homeFragment.getContext());
             deleteGathDialog.setMessage("Deleting..");
             deleteGathDialog.setIndeterminate(false);
             deleteGathDialog.setCanceledOnTouchOutside(false);
@@ -425,13 +426,13 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
 
         @Override
         protected JSONObject doInBackground(Long... longs) {
-            UserManager userManager = context.getCenesApplication().getCoreManager().userManager;
+            UserManager userManager = homeFragment.getCenesActivity().getCenesApplication().getCoreManager().userManager;
             User user = userManager.getUser();
 
             Long eventId = longs[0];
-            user.setApiUrl(context.getCenesApplication().getCoreManager().urlManager.getApiUrl("dev"));
+            user.setApiUrl(homeFragment.getCenesActivity().getCenesApplication().getCoreManager().urlManager.getApiUrl("dev"));
             String queryStr = "?event_id=" + eventId;
-            JSONObject response = context.getCenesApplication().getCoreManager().apiManager.deleteEventById(user, queryStr, context);
+            JSONObject response = homeFragment.getCenesActivity().getCenesApplication().getCoreManager().apiManager.deleteEventById(user, queryStr, homeFragment.getCenesActivity());
             return response;
         }
 
@@ -443,17 +444,17 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
             deleteGathDialog = null;
             try {
                 if (response.getBoolean("success")) {
-                    Toast.makeText(context, "Gathering Deleted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(homeFragment.getContext(), "Gathering Deleted", Toast.LENGTH_SHORT).show();
                     //((HomeFragment)context.getVisibleFragment()).initialSync();
-                    Fragment currentFragment = context.getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                    context.fragmentManager
+                    Fragment currentFragment = homeFragment.getCenesActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                    ((CenesBaseActivity)homeFragment.getCenesActivity()).fragmentManager
                             .beginTransaction()
                             .detach(currentFragment)
                             .attach(currentFragment)
                             .commit();
 
                 } else {
-                    Toast.makeText(context, "Gathering Not Deleted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(homeFragment.getContext(), "Gathering Not Deleted", Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

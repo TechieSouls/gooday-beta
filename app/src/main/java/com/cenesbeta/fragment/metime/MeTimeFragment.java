@@ -31,9 +31,11 @@ import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.NavigationFragment;
 import com.cenesbeta.service.MeTimeService;
+import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -81,6 +83,7 @@ public class MeTimeFragment extends CenesFragment {
     private List<MeTime> meTimes;
     private MeTimeManagerImpl meTimeManagerImpl;
     private InternetManager internetManager;
+    private User loggedInUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -104,12 +107,23 @@ public class MeTimeFragment extends CenesFragment {
 
         CoreManager coreManager = cenesApplication.getCoreManager();
         UserManager userManager = coreManager.getUserManager();
-        User user = userManager.getUser();
+        loggedInUser = userManager.getUser();
         internetManager = coreManager.getInternetManager();
         meTimeManagerImpl = new MeTimeManagerImpl(cenesApplication);
 
-        Glide.with(this).load(user.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(homeProfilePic);
+        Glide.with(this).load(loggedInUser.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(homeProfilePic);
 
+        MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+        try {
+            JSONObject props = new JSONObject();
+            props.put("Action","MetimeScreenOpened");
+            props.put("UserEmail",loggedInUser.getEmail());
+            props.put("UserName",loggedInUser.getName());
+            mixpanel.track("MeTime", props);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return v;
     }
 
@@ -345,7 +359,7 @@ public class MeTimeFragment extends CenesFragment {
                     String metimeStr = data.getStringExtra(SAVE_METIME_REQUEST_STRING);
                     try {
 
-                        MeTime meTimeBeforeSaving = new Gson().fromJson(metimeStr, MeTime.class);
+                        final MeTime meTimeBeforeSaving = new Gson().fromJson(metimeStr, MeTime.class);
                         JSONObject meTimeJSONObj = new JSONObject();
 
                         JSONArray meTimeEvents  = new JSONArray();
@@ -401,6 +415,19 @@ public class MeTimeFragment extends CenesFragment {
                             public void processFinish(JSONObject response) {
                                 try {
                                     if(response != null) {
+                                        MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                                        try {
+                                            JSONObject props = new JSONObject();
+                                            props.put("Action","MeTime Create Success");
+                                            props.put("Title",meTimeBeforeSaving.getTitle());
+                                            props.put("UserEmail",loggedInUser.getEmail());
+                                            props.put("UserName",loggedInUser.getName());
+                                            mixpanel.track("MeTime", props);
+
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
                                         if (metimePhotoFile != null) {
                                             JSONObject recurringEventJson = response.getJSONObject("recurringEvent");
                                             Map<String, Object> photoPostData = new HashMap<>();

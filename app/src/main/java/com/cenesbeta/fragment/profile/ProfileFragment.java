@@ -45,6 +45,7 @@ import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
+import com.cenesbeta.fragment.dashboard.HomeFragment;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.ImageUtils;
 import com.cenesbeta.util.RoundedDrawable;
@@ -220,14 +221,12 @@ public class ProfileFragment extends CenesFragment {
             switch (v.getId()) {
                 case R.id.ll_change_password:
                     ChangePasswordFragment changePasswordFragment = new ChangePasswordFragment();
-                    if (getActivity() instanceof GatheringScreenActivity) {
-                        ((GatheringScreenActivity) getActivity()).replaceFragment(changePasswordFragment, ChangePasswordFragment.TAG);
-                    } else if (getActivity() instanceof DiaryActivity) {
-                        ((DiaryActivity) getActivity()).replaceFragment(changePasswordFragment, ChangePasswordFragment.TAG);
-                    }
+
                 break;
                 case R.id.iv_profile_back:
-                    getActivity().onBackPressed();
+                    ((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
+                    ((CenesBaseActivity) getActivity()).replaceFragment(new HomeFragment(), null);
+
                     break;
                 case R.id.ll_facebook_sync:
                     disconnectFromFacebook();

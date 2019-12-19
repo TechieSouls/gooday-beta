@@ -125,6 +125,12 @@ public class FriendListFragment  extends CenesFragment {
         allFriends = new ArrayList<>();
         cenesFriends = new ArrayList<>();
 
+        expandableFriendListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                return true;
+            }
+        });
         addLoggedInUserAsMember(view);
         loadFriends();
         return view;
@@ -350,7 +356,7 @@ public class FriendListFragment  extends CenesFragment {
                         if (cenesFriends.size() > 0) {
                             cenesFriendsVisible = true;
                             //gathSearchFriendListView.setVisibility(View.VISIBLE);
-                            expandableFriendListView.setVisibility(View.VISIBLE);
+                            //expandableFriendListView.setVisibility(View.VISIBLE);
 
                             tvSelectBarTitle.setText("All Contacts (" + allFriends.size() + ")");
                             //searchFriendAdapter = new FriendListAdapter(FriendListFragment.this, searchedFriends);
@@ -362,7 +368,7 @@ public class FriendListFragment  extends CenesFragment {
                             cenesFriendsVisible = false;
 
                             //gathSearchFriendListView.setVisibility(View.GONE);
-                            expandableFriendListView.setVisibility(View.VISIBLE);
+                            //expandableFriendListView.setVisibility(View.VISIBLE);
 
                             tvSelectBarTitle.setText("Cenes Contacts (" + cenesFriends.size() + ")");
                             allContactsExpandableAdapter = new AllContactsExpandableAdapter(FriendListFragment.this, filteredErrors, headerFriendsMap, false);

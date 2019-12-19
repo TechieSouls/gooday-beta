@@ -43,19 +43,19 @@ import java.util.Map;
 public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
 
     private FragmentManager fragmentManager;
-    CenesBaseActivity context;
+    GatheringsFragment gatheringsFragment;
     List<String> headers;
     Map<String, List<Event>> eventsMap;
     LayoutInflater inflter;
     boolean isInvitation;
 
-    public EventCardExpandableAdapter(CenesBaseActivity applicationContext, FragmentManager fragmentManager, List<String> headers, Map<String, List<Event>> eventsMap, boolean isInvitation) {
-        this.context = applicationContext;
+    public EventCardExpandableAdapter(GatheringsFragment gatheringsFragment, FragmentManager fragmentManager, List<String> headers, Map<String, List<Event>> eventsMap, boolean isInvitation) {
+        this.gatheringsFragment = gatheringsFragment;
         this.headers = headers;
         this.eventsMap = eventsMap;
         this.isInvitation = isInvitation;
         this.fragmentManager = fragmentManager;
-        inflter = (LayoutInflater.from(this.context));
+        inflter = (LayoutInflater.from(gatheringsFragment.getContext()));
     }
 
     @Override
@@ -114,7 +114,7 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
             }
 
             if (owner != null && owner.getUser() != null) {
-                Glide.with(context).load(owner.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(viewHolder.ivOwnerImage);
+                Glide.with(gatheringsFragment.getContext()).load(owner.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(viewHolder.ivOwnerImage);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     viewHolder.eventOwnerName.setText(Html.fromHtml("<b>"+owner.getUser().getName()+"</b> is hosting", Html.FROM_HTML_MODE_COMPACT));
@@ -162,13 +162,13 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
 
                     viewHolder.homeEventMemberImagesCount.setVisibility(View.GONE);
 
-                    RelativeLayout rlRoot = new RelativeLayout(context);
+                    RelativeLayout rlRoot = new RelativeLayout(gatheringsFragment.getContext());
                     rlRoot.setLayoutParams(new RelativeLayout.LayoutParams(CenesUtils.dpToPx(60), CenesUtils.dpToPx(60)));
 
                     RelativeLayout.LayoutParams profileParams = new RelativeLayout.LayoutParams(CenesUtils.dpToPx(50), CenesUtils.dpToPx(50));
                     profileParams.setMargins(CenesUtils.dpToPx(10), CenesUtils.dpToPx(10), CenesUtils.dpToPx(10), CenesUtils.dpToPx(10));
 
-                    RoundedImageView roundedImageView = new RoundedImageView(context, null);
+                    RoundedImageView roundedImageView = new RoundedImageView(gatheringsFragment.getContext(), null);
                     roundedImageView.setLayoutParams(profileParams);
                     roundedImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     //roundedImageView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.xml_gradient_border_transparentbg));
@@ -194,7 +194,7 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
 
                     try {
                         if (em.getUser() != null && !CenesUtils.isEmpty(em.getUser().getPicture())) {
-                            Glide.with(context).load(em.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(roundedImageView);
+                            Glide.with(gatheringsFragment.getContext()).load(em.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(roundedImageView);
                         } else {
                             roundedImageView.setImageResource(R.drawable.profile_pic_no_image);
                         }
@@ -216,33 +216,8 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
             @Override
             public void onClick(View view) {
 
-                fragmentManager = context.getSupportFragmentManager();
+                fragmentManager = gatheringsFragment.getCenesActivity().getSupportFragmentManager();
 
-                /*if (child.getExpired() == true) {
-                    GatheringExpiredFragment gatheringExpiredFragment = new GatheringExpiredFragment();
-                    context.replaceFragment(gatheringExpiredFragment, GatheringExpiredFragment.TAG);
-                } else {
-                    if (isInvitation) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("dataFrom", "notification");
-                        bundle.putLong("eventId", viewHolder.eventId);
-                        GatheringPreviewFragmentBkup gatheringPreviewFragmentBkup = new GatheringPreviewFragmentBkup();
-                        gatheringPreviewFragmentBkup.setArguments(bundle);
-                        context.replaceFragment(gatheringPreviewFragmentBkup, GatheringPreviewFragmentBkup.TAG);
-
-
-                    } else {
-                        CreateGatheringFragment cgFragment = new CreateGatheringFragment();
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString("dataFrom", "list");
-                        bundle.putLong("eventId", viewHolder.eventId);
-                        GatheringPreviewFragmentBkup gatheringPreviewFragmentBkup = new GatheringPreviewFragmentBkup();
-                        gatheringPreviewFragmentBkup.setArguments(bundle);
-                        context.replaceFragment(gatheringPreviewFragmentBkup, GatheringPreviewFragmentBkup.TAG);
-
-                    }
-                }*/
                 System.out.println(child.toString());
                 GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
                 if (isInvitation) {
@@ -267,7 +242,6 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
                                 eventsBeforeSelection.add(event);
                                 previousEventsId.add(event.getEventId());
                             }
-
                         }
                     }
 
@@ -299,7 +273,9 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
                 } else {
                     gatheringPreviewFragment.event = child;
                 }
-                context.replaceFragment(gatheringPreviewFragment, GatheringsFragment.TAG);
+
+                gatheringPreviewFragment.sourceFragment = gatheringsFragment;
+                ((CenesBaseActivity)gatheringsFragment.getCenesActivity()).replaceFragment(gatheringPreviewFragment, GatheringsFragment.TAG);
             }
         });
 
@@ -401,12 +377,12 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
 
 
     public int convertPpToDp(int pp) {
-        DisplayMetrics displayMetrics = this.context.getResources().getDisplayMetrics();
+        DisplayMetrics displayMetrics = gatheringsFragment.getResources().getDisplayMetrics();
         return (int) (pp / displayMetrics.density);
     }
 
     public int convertDpToPp(int dp) {
-        DisplayMetrics displayMetrics = this.context.getResources().getDisplayMetrics();
+        DisplayMetrics displayMetrics = gatheringsFragment.getResources().getDisplayMetrics();
         return (int) (dp * displayMetrics.density);
     }
 

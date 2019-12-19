@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.provider.Telephony;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -47,6 +46,7 @@ import com.cenesbeta.util.CenesConstants;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
 import com.google.gson.Gson;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONObject;
 
@@ -77,6 +77,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     private ImageView invitationAcceptSpinner, invitationRejectSpinner;
     private LinearLayout llBottomButtons, llEventDetails;
 
+    public Fragment sourceFragment;
     private CenesApplication cenesApplication;
     private InternetManager internetManager;
     private VelocityTracker mVelocityTracker = null;
@@ -96,6 +97,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     boolean cardSwipedToExtent;
     boolean isLoggedInUserExistsInMemberList = false;
     private List<EventMember> nonCenesMember;
+    private boolean isNewEvent = false;
 
     @Nullable
     @Override
@@ -174,12 +176,22 @@ public class GatheringPreviewFragment extends CenesFragment {
 
             if (event.getEventId() == null || event.getEventId().equals(0l)) {
                 rlShareBubble.setVisibility(View.GONE);
+            } else {
+
+                MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                try {
+                    JSONObject props = new JSONObject();
+                    props.put("Action","View Invitation Card");
+                    props.put("Title",event.getTitle());
+                    props.put("UserEmail",loggedInUser.getEmail());
+                    props.put("UserName",loggedInUser.getName());
+                    mixpanel.track("Invitation", props);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             populateInvitationCard(event);
         }
-
-
-
         return view;
     }
 
@@ -292,6 +304,20 @@ public class GatheringPreviewFragment extends CenesFragment {
 
 
                     if (event.getEventId() != null) {
+
+                        MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                        try {
+                            JSONObject props = new JSONObject();
+                            props.put("Action","Share Invitation");
+                            props.put("Title",event.getTitle());
+                            props.put("UserEmail",loggedInUser.getEmail());
+                            props.put("UserName",loggedInUser.getName());
+                            mixpanel.track("Invitation", props);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
                         sendIntent.putExtra(Intent.EXTRA_TEXT, shrareUrl);
@@ -703,14 +729,11 @@ public class GatheringPreviewFragment extends CenesFragment {
                                             @Override
                                             public void run() {
 
-                                                ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                                ((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
                                                 ((CenesBaseActivity) getActivity()).replaceFragment(new HomeFragment(), null);
                                             }
                                         }, 1000);
                                     }
-
-
-
                                 }
                             } else {
 
@@ -735,6 +758,13 @@ public class GatheringPreviewFragment extends CenesFragment {
                                                 new Handler().postDelayed(new Runnable() {
                                                     @Override
                                                     public void run() {
+                                                        if (sourceFragment != null) {
+                                                            if (sourceFragment instanceof HomeFragment) {
+                                                                ((HomeFragment) sourceFragment).initialSync();
+                                                            } else if (sourceFragment instanceof GatheringsFragment) {
+                                                                ((GatheringsFragment) sourceFragment).refreshSelectedTabData();
+                                                            }
+                                                        }
                                                         ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
                                                     }
                                                 }, 500);
@@ -795,6 +825,13 @@ public class GatheringPreviewFragment extends CenesFragment {
                                             new Handler().postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
+                                                    if (sourceFragment != null) {
+                                                        if (sourceFragment instanceof HomeFragment) {
+                                                            ((HomeFragment) sourceFragment).initialSync();
+                                                        } else if (sourceFragment instanceof GatheringsFragment) {
+                                                            ((GatheringsFragment) sourceFragment).refreshSelectedTabData();
+                                                        }
+                                                    }
                                                     ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
                                                 }
                                             }, 500);
@@ -935,6 +972,20 @@ public class GatheringPreviewFragment extends CenesFragment {
                             JSONObject data = response.getJSONObject("data");
                             Event eve = new Gson().fromJson(data.toString(), Event.class);
 
+                            if (isNewEvent) {
+                                MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                                try {
+                                    JSONObject props = new JSONObject();
+                                    props.put("Action","Create Gathering Success");
+                                    props.put("Title",event.getTitle());
+                                    props.put("UserEmail",loggedInUser.getEmail());
+                                    props.put("UserName",loggedInUser.getName());
+                                    mixpanel.track("Gathering", props);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
                             if (nonCenesMember.size() > 0) {
                                 sendSmsToNonCenesMembers(nonCenesMember, eve);
                             }
@@ -1037,6 +1088,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                 ivAcceptSendIcon.setImageResource(R.drawable.invitation_accept_button);
             }
         } else {
+            isNewEvent = true;
             ivAcceptSendIcon.setImageResource(R.drawable.invitation_send_button);
         }
 
@@ -1161,7 +1213,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
         //Stopping Card from swipe cases
         //Case 1  - Offline
-        if (event.getEventId() != null && event.getEventId() != 0 && !internetManager.isInternetConnection(getCenesActivity())) {
+        if (getCenesActivity() != null && event.getEventId() != null && event.getEventId() != 0 && !internetManager.isInternetConnection(getCenesActivity())) {
             enableLeftToRightSwipe = false;
             enableRightToLeftSwipe = false;
         }
@@ -1177,7 +1229,6 @@ public class GatheringPreviewFragment extends CenesFragment {
             ivEditRejectIcon.setImageResource(R.drawable.invitation_decline_button);
             ivDeleteIcon.setVisibility(View.GONE);
             isNewOrEditMode = false;
-
         }
     }
 
