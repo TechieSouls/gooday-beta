@@ -455,13 +455,13 @@ public class GatheringAsyncTask {
         }
     }
 
-    public static class PredictiveCalendarTask extends AsyncTask<String, JSONArray, JSONArray> {
+    public static class PredictiveCalendarTask extends AsyncTask<String, JSONObject, JSONObject> {
 
         private CoreManager coreManager = cenesApplication.getCoreManager();
 
         // you may separate this or combined to caller class.
         public interface AsyncResponse {
-            void processFinish(JSONArray response);
+            void processFinish(JSONObject response);
         }
 
         public AsyncResponse delegate = null;
@@ -484,18 +484,18 @@ public class GatheringAsyncTask {
         }
 
         @Override
-        protected JSONArray doInBackground(String... queryStrs) {
+        protected JSONObject doInBackground(String... queryStrs) {
             UserManager userManager = coreManager.getUserManager();
             GatheringApiManager gatheringApiManager = coreManager.getGatheringApiManager();
             User user = userManager.getUser();
 
             String queryStr = queryStrs[0];
-            JSONArray response = gatheringApiManager.predictiveDataUserId(queryStr, user.getAuthToken());
+            JSONObject response = gatheringApiManager.predictiveDataUserId(queryStr, user.getAuthToken());
             return response;
         }
 
         @Override
-        protected void onPostExecute(JSONArray response) {
+        protected void onPostExecute(JSONObject response) {
             super.onPostExecute(response);
             if (predictiveGathDialog != null) {
                 predictiveGathDialog.dismiss();

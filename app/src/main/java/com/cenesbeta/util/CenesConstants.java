@@ -7,6 +7,7 @@ package com.cenesbeta.util;
 public class CenesConstants {
     public static String OutlookClientId = "063c17ad-741e-4c0c-aa11-e7ce6949d6c7";//It is the app id
     //public static String GoogleWebClientid = "212716305349-dqqjgf3njkqt9s3ucied3bit42po3m39.apps.googleusercontent.com";
+    public static String GoogleAppClientid = "54828242588-aegc2khr4usmup56rl9dgi3sdq78ca2u.apps.googleusercontent.com";
     public static String GoogleWebClientid = "54828242588-l9jhdupf5vl2l1p1bjuif94a2dme5kov.apps.googleusercontent.com";
     public static String AADRedirectUrl = "http://cenes.test2.redblink.net";
     public static String webDomain = "http://cenes-web.com.s3-website-us-east-1.amazonaws.com";

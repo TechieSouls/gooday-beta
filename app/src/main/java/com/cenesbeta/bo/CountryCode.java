@@ -6,6 +6,8 @@ import com.cenesbeta.R;
 
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -797,7 +799,15 @@ public class CountryCode implements Comparable<CountryCode>{
         countries.add(new CountryCode("yt", "+262", "Mayotte", DEFAULT_FLAG_RES));
         countries.add(new CountryCode("za", "+27", "South Africa", DEFAULT_FLAG_RES));
         countries.add(new CountryCode("zm", "+260", "Zambia", DEFAULT_FLAG_RES));
-        countries.add(new CountryCode("zw", "+263", "Zimbabwe", DEFAULT_FLAG_RES));        return countries;
+        countries.add(new CountryCode("zw", "+263", "Zimbabwe", DEFAULT_FLAG_RES));
+
+        Collections.sort(countries, new Comparator<CountryCode>() {
+            @Override
+            public int compare(CountryCode o1, CountryCode o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        return countries;
     }
 
     @Override

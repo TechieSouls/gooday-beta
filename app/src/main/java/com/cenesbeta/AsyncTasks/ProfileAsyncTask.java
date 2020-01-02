@@ -10,14 +10,17 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 
+import com.cenesbeta.Manager.JsonParsing;
 import com.cenesbeta.activity.GuestActivity;
 import com.cenesbeta.activity.SignInActivity;
+import com.cenesbeta.api.UserAPI;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.backendManager.UserApiManager;
 import com.cenesbeta.bo.HolidayCalendar;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
+import com.cenesbeta.dto.AsyncTaskDto;
 import com.cenesbeta.fragment.CalenderSyncFragment;
 import com.cenesbeta.fragment.guest.ForgotPasswordSuccessFragment;
 import com.google.gson.Gson;
@@ -968,4 +971,37 @@ public class ProfileAsyncTask {
             delegate.processFinish(stringObjectMap);
         }
     }
+
+    public static class CommonGetRequestTask extends AsyncTask<AsyncTaskDto, JSONObject, JSONObject> {
+
+        // you may separate this or combined to caller class.
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+        public AsyncResponse delegate = null;
+
+        public CommonGetRequestTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected JSONObject doInBackground(AsyncTaskDto... asyncTaskDtos) {
+
+            AsyncTaskDto asyncTaskDto = asyncTaskDtos[0];
+
+            JsonParsing jsonParsing = new JsonParsing();
+            String apiUrl = asyncTaskDto.getApiUrl();
+            if (asyncTaskDto.getQueryStr() != null) {
+                apiUrl = apiUrl +"?"+asyncTaskDto.getQueryStr();
+            }
+            return jsonParsing.httpGetJsonObject(apiUrl,null);
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject stringObjectMap) {
+            super.onPostExecute(stringObjectMap);
+            delegate.processFinish(stringObjectMap);
+        }
+    }
+
 }

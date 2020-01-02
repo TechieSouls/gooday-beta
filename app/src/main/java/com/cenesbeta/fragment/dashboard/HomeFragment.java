@@ -1,5 +1,9 @@
 package com.cenesbeta.fragment.dashboard;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -8,6 +12,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -20,6 +26,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -87,7 +94,7 @@ public class HomeFragment extends CenesFragment {
 
     public final static String TAG = "HomeFragment";
 
-    private int GATHERING_SUMMARY_RESULT_CODE = 1001, CREATE_GATHERING_RESULT_CODE = 1002, CREATE_REMINDER_RESULT_CODE = 1003, NOTIFICATION_RESULT_CODE = 1004;
+    private int GATHERING_SUMMARY_RESULT_CODE = 1001, CREATE_REMINDER_RESULT_CODE = 1003;
     // Array of strings...
     ExpandableListView homeScreenEventsList;
     RoundedImageView homePageProfilePic;
@@ -95,7 +102,6 @@ public class HomeFragment extends CenesFragment {
     TextView gatheringBtn, homeNoEvents, tvCalendarSwitcher;
     ImageView homeCalenderSearchViewIcon;
     MaterialCalendarView homeCalSearchView;
-    //private ImageView footerHomeIcon, footerGatheringIcon, footerReminderIcon, footerAlarmIcon, footerDiaryIcon, footerMeTimeIcon;
     private FloatingActionButton fab, closeFabMenuBtn, gatheringFabMenuBtn, reminderFabMenuBtn, alarmFabMenuBtn;
     HomeScreenAdapter listAdapter;
     RelativeLayout rlFabMenu;
@@ -118,7 +124,6 @@ public class HomeFragment extends CenesFragment {
 
     boolean calModeMonth;
 
-    private ProgressDialog mProgressDialog;
     private GatheringAsyncTask eventsTask;
     private HolidayCalendarTask holidayCalendarTask;
     private CurrentDateDecorator currentDateDecorator;
@@ -910,6 +915,7 @@ public class HomeFragment extends CenesFragment {
             homeScreenEventsList.setAdapter(listAdapter);
         }
     }
+
     private class ContactsSyncTask extends AsyncTask<String, Void, String> {
         private ProgressDialog pd;
 

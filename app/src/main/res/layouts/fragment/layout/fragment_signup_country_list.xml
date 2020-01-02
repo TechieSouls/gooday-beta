@@ -9,46 +9,38 @@
         android:layout_width="match_parent"
         android:layout_height="50dp">
 
-        <LinearLayout
-            android:id="@+id/ll_signup_cc_back"
-            android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="40dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/iv_back_button_img"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/abondan_event_icon"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="back"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-        </LinearLayout>
+        <EditText
+            android:id="@+id/et_search_cc"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="20dp"
+            android:hint="Choose Country"
+            android:background="@color/transparent"
+            android:layout_centerVertical="true"
+            />
     </RelativeLayout>
+    <ListView
+        android:id="@+id/lv_countries"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_header"
+        android:divider="@null"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/rl_header"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="70dp">
-            <EditText
-                android:id="@+id/et_search_cc"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:hint="Search"
-                android:drawableLeft="@drawable/search_icon"
-                android:drawablePadding="20dp"
-                android:paddingLeft="10dp"
-                android:textColor="@color/cenes_selectedText_color"
-                android:background="@drawable/xml_curved_corner_transparent_blue_border"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_centerVertical="true"
-                />
-        </RelativeLayout>
         <ExpandableListView
             android:id="@+id/ex_country_code_list"
             android:layout_width="match_parent"

@@ -26,7 +26,6 @@
                 android:src="@drawable/host_gradient_circle_small"
                 android:visibility="visible"/>
 
-
             <com.cenesbeta.util.RoundedImageView
                 android:id="@+id/iv_friend_image"
                 android:layout_width="45dp"
@@ -43,6 +42,14 @@
                 android:src="@drawable/delete_friend_icon"
                 android:layout_alignParentRight="true"
                 android:visibility="visible" />
+            <RelativeLayout
+                android:id="@+id/rl_user_availability_mark"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/xml_circle_green"
+                android:visibility="gone"/>
+
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/rv_non_cenes_layout"

@@ -72,6 +72,7 @@ import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.impl.EventManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.dto.CreateGatheringDto;
+import com.cenesbeta.dto.PredictiveData;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.dashboard.HomeFragment;
 import com.cenesbeta.fragment.friend.FriendListFragment;
@@ -98,7 +99,9 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -114,15 +117,13 @@ import java.util.Set;
 public class CreateGatheringFragment extends CenesFragment {
 
     public static String TAG = "CreateGatheringFragment";
-    private int SEACRH_LOCATION_RESULT_CODE = 1001, SEARCH_FRIEND_RESULT_CODE = 1002, GATHERING_SUMMARY_RESULT_CODE = 1003, MESSAGE_FRAGMENT_CODE = 1004;
+    private int SEACRH_LOCATION_RESULT_CODE = 1001, SEARCH_FRIEND_RESULT_CODE = 1002,
+            GATHERING_SUMMARY_RESULT_CODE = 1003, MESSAGE_FRAGMENT_CODE = 1004,
+            CLICK_IMAGE_REQUEST_CODE = 1005, UPLOAD_IMAGE_REQUEST_CODE = 1006;
 
+    private int CAMERA_PERMISSION_CODE = 2001;
     private View fragmentView;
 
-    private GatheringPreviewFragmentBkup gatheringPreviewFragmentBkup;
-    private FragmentTransaction fragmentTransaction;
-    private FragmentManager fragmentManager;
-
-    private boolean isPredictiveOn;
     private Calendar currentMonth;
 
     private EditText gathEventTitleEditView;
@@ -133,33 +134,32 @@ public class CreateGatheringFragment extends CenesFragment {
     private ProgressBar progressBar;
 
     private ImageView ivAbandonEvent, ivPredictiveInfo, gathInviteFrndsBtn, ivDateBarArrow;
-    private TextView tvLocationLabel, tvGatheringMessage, tvCoverImageStatus, tvEventDate;
+    private TextView tvLocationLabel, tvGatheringMessage, tvCoverImageStatus, tvEventDate, tvChooseLibrary, tvTakePhoto, tvPhotoCancel;
     private RelativeLayout rlStartBar, rlEndBar, rlDateBar;
     private RelativeLayout rlHeader, gathSearchLocationButton, rlGatheringMessageBar, rlCoverImageBar, rlSelectedFriendsRecyclerView;
-    private RelativeLayout rlPreviewInvitationButton;
+    private RelativeLayout rlPreviewInvitationButton, rlPhotoActionSheet;
 
     private LinearLayout llGatheringDateBars, llGatheringInfoBars;
     private LinearLayout llPredictiveCalCell, llPredictiveCalInfo;
     public static RecyclerView recyclerView;
     private FriendHorizontalScrollAdapter friendHorizontalScrollAdapter;
+    private Uri cameraFileUri;
 
     List<CalendarDay> enableDates;
 
     private File eventImageFile;
-
+    private String isTakeOrUpload = "Take";
     private CenesApplication cenesApplication;
     private CoreManager coreManager;
     private UserManager userManager;
-    private ApiManager apiManager;
-    private UrlManager urlManager;
-    private Context context;
     private Long eventId;
     private String placeId;
     public User loggedInUser;
     public Event event;
     public List<EventMember> membersSelected;
+    public List<PredictiveData> predictiveDataList;
+    public PredictiveData predictiveDataForDate;
     private CreateGatheringDto createGatheringDto;
-
     private MaterialCalendarView materialCalendarView;
 
     @Nullable
@@ -270,8 +270,6 @@ public class CreateGatheringFragment extends CenesFragment {
         cenesApplication = getCenesActivity().getCenesApplication();
         coreManager = cenesApplication.getCoreManager();
         userManager = coreManager.getUserManager();
-        apiManager = coreManager.getApiManager();
-        urlManager = coreManager.getUrlManager();
 
         progressBar = (ProgressBar) fragmentView.findViewById(R.id.progressBar);
 
@@ -287,6 +285,9 @@ public class CreateGatheringFragment extends CenesFragment {
         tvEventDate = (TextView) fragmentView.findViewById(R.id.tv_event_date);
         tvLocationLabel = (TextView) fragmentView.findViewById(R.id.tv_location_label);
         tvCoverImageStatus = (TextView) fragmentView.findViewById(R.id.tv_cover_image_status);
+        tvChooseLibrary = (TextView) fragmentView.findViewById(R.id.tv_choose_library);
+        tvTakePhoto = (TextView) fragmentView.findViewById(R.id.tv_take_photo);
+        tvPhotoCancel = (TextView) fragmentView.findViewById(R.id.tv_photo_cancel);
 
         gathSearchLocationButton = (RelativeLayout) fragmentView.findViewById(R.id.gath_search_location_button);
         rlCoverImageBar = (RelativeLayout) fragmentView.findViewById(R.id.rl_cover_image_bar);
@@ -297,6 +298,7 @@ public class CreateGatheringFragment extends CenesFragment {
         rlSelectedFriendsRecyclerView = (RelativeLayout) fragmentView.findViewById(R.id.rl_selected_friends_recycler_view);
         rlHeader = (RelativeLayout) fragmentView.findViewById(R.id.rl_header);
         rlPreviewInvitationButton = (RelativeLayout) fragmentView.findViewById(R.id.rl_preview_invitation_button);
+        rlPhotoActionSheet = (RelativeLayout) fragmentView.findViewById(R.id.rl_photo_action_sheet);
 
         llGatheringDateBars = (LinearLayout) fragmentView.findViewById(R.id.ll_gathering_date_bars);
         llGatheringInfoBars = (LinearLayout) fragmentView.findViewById(R.id.ll_gathering_info_bars);
@@ -314,7 +316,6 @@ public class CreateGatheringFragment extends CenesFragment {
         gathEventTitleEditView.setOnEditorActionListener(oneditorListener);
         gathEventTitleEditView.setOnClickListener(onClickListener);
 
-        context = this.getContext();
         createGatheringDto = new CreateGatheringDto();
     }
 
@@ -331,30 +332,12 @@ public class CreateGatheringFragment extends CenesFragment {
         rlEndBar.setOnClickListener(onClickListener);
         rlDateBar.setOnClickListener(onClickListener);
         rlPreviewInvitationButton.setOnClickListener(onClickListener);
-
+        rlPhotoActionSheet.setOnClickListener(onClickListener);
+        tvChooseLibrary.setOnClickListener(onClickListener);
+        tvTakePhoto.setOnClickListener(onClickListener);
+        tvPhotoCancel.setOnClickListener(onClickListener);
         predictiveCalSwitch.setOnCheckedChangeListener(onCheckedChangeListener);
     }
-
-
-
-    final int DRAWABLE_LEFT = 0;
-    final int DRAWABLE_TOP = 1;
-    final int DRAWABLE_RIGHT = 2;
-    final int DRAWABLE_BOTTOM = 3;
-
-    public View.OnTouchListener clearTextTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            EditText et = (EditText) v;
-            if (event.getAction() == MotionEvent.ACTION_UP && et.getCompoundDrawables()[DRAWABLE_RIGHT] != null) {
-                if (event.getRawX() >= (et.getRight() - et.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()) - 50) {
-                    et.setText("");
-                    return true;
-                }
-            }
-            return false;
-        }
-    };
 
     private View.OnFocusChangeListener focusListener = new View.OnFocusChangeListener() {
         public void onFocusChange(View v, boolean hasFocus) {
@@ -438,15 +421,22 @@ public class CreateGatheringFragment extends CenesFragment {
                     break;
 
                 case R.id.rl_cover_image_bar:
-                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        (CreateGatheringFragment.this).requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-                    } else {
-                        Intent browseIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                        browseIntent.setType("image/*");
-                        startActivityForResult(browseIntent, 100);
-                    }
+
+                    rlPhotoActionSheet.setVisibility(View.VISIBLE);
+
+                    break;
+                case R.id.tv_choose_library:
+                    isTakeOrUpload = "Upload";
+                    chooseFromGalleryPressed();
                     break;
 
+                case R.id.tv_take_photo:
+                    isTakeOrUpload = "Take";
+                    takePhotoPressed();
+                    break;
+                case R.id.tv_photo_cancel:
+                    rlPhotoActionSheet.setVisibility(View.GONE);
+                    break;
                 case R.id.iv_abandon_event:
 
                     new AlertDialog.Builder(getActivity())
@@ -699,7 +689,35 @@ public class CreateGatheringFragment extends CenesFragment {
             try {
 
                 System.out.println("Calendar Date Clicked.");
-                ivDateBarArrow.setImageResource(R.drawable.date_panel_right_arrow);
+                //ivDateBarArrow.setImageResource(R.drawable.date_panel_right_arrow);
+                if (event.getPredictiveOn()) {
+                    if (predictiveDataList != null) {
+                        for (PredictiveData predictiveData: predictiveDataList) {
+
+                            Calendar predictiveDateCal = Calendar.getInstance();
+                            predictiveDateCal.setTimeInMillis(predictiveData.getDate());
+                            if (predictiveDateCal.get(Calendar.DAY_OF_MONTH) == date.getDay() &&
+                                    predictiveDateCal.get(Calendar.MONTH) == date.getMonth() &&
+                                    predictiveDateCal.get(Calendar.YEAR) == date.getYear()) {
+
+
+                                predictiveDataForDate = predictiveData;
+                                break;
+                            }
+                        }
+
+                        //Refershing Membres Collection view to show dots
+                        friendHorizontalScrollAdapter = new FriendHorizontalScrollAdapter(CreateGatheringFragment.this, membersSelected);
+                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+                        recyclerView.setLayoutManager(mLayoutManager);
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        recyclerView.setAdapter(friendHorizontalScrollAdapter);
+                    }
+                } else {
+                    predictiveDataForDate = null;
+                }
+
+
 
                 Long selectedTime = date.getCalendar().getTimeInMillis();
 
@@ -762,14 +780,14 @@ public class CreateGatheringFragment extends CenesFragment {
                         e.printStackTrace();
                     }
 
-                    llPredictiveCalCell.setVisibility(View.GONE);
+                    //llPredictiveCalCell.setVisibility(View.GONE);
                     llPredictiveCalInfo.setVisibility(View.GONE);
 
                     llGatheringDateBars.setVisibility(View.VISIBLE);
-                    llGatheringInfoBars.setVisibility(View.VISIBLE);
+                    //llGatheringInfoBars.setVisibility(View.VISIBLE);
                     rlSelectedFriendsRecyclerView.setVisibility(View.VISIBLE);
                     rlHeader.setVisibility(View.VISIBLE);
-                    rlPreviewInvitationButton.setVisibility(View.VISIBLE);
+                    //rlPreviewInvitationButton.setVisibility(View.VISIBLE);
 
                     createGatheringDto.setDate(true);
                 } else {
@@ -795,6 +813,9 @@ public class CreateGatheringFragment extends CenesFragment {
                 startActivityForResult(browseIntent, 100);
 
             }
+        } else if (requestCode == CAMERA_PERMISSION_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                grantResults[1] == PackageManager.PERMISSION_GRANTED && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+            openCamera();
         }
     }
 
@@ -802,7 +823,7 @@ public class CreateGatheringFragment extends CenesFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if  (resultCode == Activity.RESULT_OK ) {
-            if (requestCode == 100) {
+            if (requestCode == UPLOAD_IMAGE_REQUEST_CODE) {
                 try {
 
                     String filePath = ImageUtils.getPath(getCenesActivity().getApplicationContext(), data.getData());
@@ -837,10 +858,24 @@ public class CreateGatheringFragment extends CenesFragment {
                 ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), rotatedBitmap), this, 1280, 512);*/
                     Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
                     UCrop.of(imageUri, resultUri)
-                            .withAspectRatio(3, 4)
-                            //.withMaxResultSize(maxWidth, maxHeight)
+                            //.withAspectRatio(3, 4)
+                            .withMaxResultSize(1600, 1000)
                             .start(getContext(), CreateGatheringFragment.this, UCrop.REQUEST_CROP);
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (requestCode == CLICK_IMAGE_REQUEST_CODE) {
+                try {
+                    try {
+                        Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
+                        UCrop.of(cameraFileUri, resultUri)
+                                //.withAspectRatio(3, 4)
+                                .withMaxResultSize(1600, 1000)
+                                .start(getContext(), CreateGatheringFragment.this, UCrop.REQUEST_CROP);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -987,6 +1022,9 @@ public class CreateGatheringFragment extends CenesFragment {
                 String selectedFriendsJsonArrayStr = data.getExtras().getString("selectedFriendJsonArray");
                 try {
 
+                    predictiveDataList = null;
+                    predictiveDataForDate = null;
+
                     Gson gson = new GsonBuilder().create();
                     Type listType = new TypeToken<List<EventMember>>(){}.getType();
                     membersSelected = gson.fromJson( selectedFriendsJsonArrayStr, listType);
@@ -1037,16 +1075,6 @@ public class CreateGatheringFragment extends CenesFragment {
         }
     }
 
-    String latitude = "";
-    String longitude = "";
-    String locationPhotoUrl = "";
-    String oldImageUrl = "";
-
-    public boolean isUserUploadedImage;
-
-
-    OneDayDecorator mOneDayDecorator;
-
     CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1065,6 +1093,15 @@ public class CreateGatheringFragment extends CenesFragment {
                 Set<CalendarDay> drawableDates = CenesUtils.getDrawableMonthDateList(currentMonth);
                 BackgroundDecorator calBgDecorator = new BackgroundDecorator(getContext(), R.drawable.mcv_white_color, drawableDates, false, false);
                 materialCalendarView.addDecorator(calBgDecorator);
+                //Refershing Membres Collection view to show dots
+
+                predictiveDataList = null;
+                predictiveDataForDate = null;
+                friendHorizontalScrollAdapter = new FriendHorizontalScrollAdapter(CreateGatheringFragment.this, membersSelected);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                recyclerView.setAdapter(friendHorizontalScrollAdapter);
             }
 
         }
@@ -1179,16 +1216,51 @@ public class CreateGatheringFragment extends CenesFragment {
         }
     };
 
-    public void shareEventLink() {
+    public void chooseFromGalleryPressed() {
 
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, CenesConstants.webDomainEventUrl+event.getKey());
-        sendIntent.setType("text/plain");
-        startActivity(sendIntent);
+        rlPhotoActionSheet.setVisibility(View.GONE);
+
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            (CreateGatheringFragment.this).requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        } else {
+            Intent browseIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            browseIntent.setType("image/*");
+            startActivityForResult(browseIntent, UPLOAD_IMAGE_REQUEST_CODE);
+        }
     }
 
+    public void takePhotoPressed() {
+        rlPhotoActionSheet.setVisibility(View.GONE);
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            (CreateGatheringFragment.this).requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_PERMISSION_CODE);
+        } else {
 
+            openCamera();
+        }
+    }
+
+    public void openCamera() {
+        final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Cenes";
+        File newdir = new File(dir);
+        newdir.mkdirs();
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File file = new File(dir + File.separator + "IMG_" + timeStamp + ".jpg");
+
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        cameraFileUri = null;
+        cameraFileUri = Uri.fromFile(file);
+
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraFileUri);
+        startActivityForResult(takePictureIntent, CLICK_IMAGE_REQUEST_CODE);
+    }
     public void uploadEventPicture(File file) {
 
         new GatheringAsyncTask.UploadOnlyImageTask(new GatheringAsyncTask.UploadOnlyImageTask.AsyncResponse() {
@@ -1204,10 +1276,14 @@ public class CreateGatheringFragment extends CenesFragment {
                         JSONObject data = response.getJSONObject("data");
                         event.setEventPicture(data.getString("large"));
                         event.setThumbnail(data.getString("thumbnail"));
+                    } else {
+                        //String message = response.getString("message");
+                        Toast.makeText(getContext(), "Error Uploading Image", Toast.LENGTH_LONG).show();
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         }).execute(file);
@@ -1215,7 +1291,7 @@ public class CreateGatheringFragment extends CenesFragment {
 
     public void callPredictiveCalendarTask(Long startTime, Long endTime) {
 
-        String queryStr = "userId=" + loggedInUser.getUserId() + "&start_time=" + startTime + "&end_time=" + endTime + "";
+        String queryStr = "userId=" + loggedInUser.getUserId() + "&startTime=" + startTime + "&endTime=" + endTime + "";
         try {
             if (membersSelected.size() > 0) {
                 String friends = "";
@@ -1236,31 +1312,42 @@ public class CreateGatheringFragment extends CenesFragment {
         System.out.println(queryStr);
         new GatheringAsyncTask.PredictiveCalendarTask(new GatheringAsyncTask.PredictiveCalendarTask.AsyncResponse() {
             @Override
-            public void processFinish(JSONArray response) {
+            public void processFinish(JSONObject response) {
 
-                Map<String, Set<CalendarDay>> calMap = GatheringService.parsePredictiveData(response);
-                for (Map.Entry<String, Set<CalendarDay>> calEntrySet : calMap.entrySet()) {
+                try {
 
-                    if (getActivity() == null) {
-                        return;
+                    JSONArray preditiveArr = response.getJSONArray("data");
+                    Gson gson = new GsonBuilder().create();
+                    Type listType = new TypeToken<List<PredictiveData>>(){}.getType();
+                    predictiveDataList = gson.fromJson(preditiveArr.toString(), listType);
+
+                    Map<String, Set<CalendarDay>> calMap = GatheringService.parsePredictiveData(preditiveArr);
+                    for (Map.Entry<String, Set<CalendarDay>> calEntrySet : calMap.entrySet()) {
+
+                        if (getActivity() == null) {
+                            return;
+                        }
+                        Set<CalendarDay> colorSet = null;
+                        if (calEntrySet.getKey().equals("WHITE")) {
+                            BackgroundDecorator calBgDecorator = new BackgroundDecorator(getActivity(), R.drawable.mcv_lightgrey_color, calEntrySet.getValue(), true, true);
+                            materialCalendarView.addDecorator(calBgDecorator);
+                        } else if (calEntrySet.getKey().equals("YELLOW")) {
+                            BackgroundDecorator calBgDecorator = new BackgroundDecorator(getActivity(), R.drawable.mcv_yellow_color, calEntrySet.getValue(), true, false);
+                            materialCalendarView.addDecorator(calBgDecorator);
+                        } else if (calEntrySet.getKey().equals("RED")) {
+                            BackgroundDecorator calBgDecorator = new BackgroundDecorator(getActivity(), R.drawable.mcv_red_color, calEntrySet.getValue(), true, false);
+                            materialCalendarView.addDecorator(calBgDecorator);
+                        } else if (calEntrySet.getKey().equals("PINK")) {
+                            BackgroundDecorator calBgDecorator = new BackgroundDecorator(getActivity(), R.drawable.mcv_ping_color, calEntrySet.getValue(), true, false);
+                            materialCalendarView.addDecorator(calBgDecorator);
+                        } else if (calEntrySet.getKey().equals("GREEN")) {
+                            BackgroundDecorator calBgDecorator = new BackgroundDecorator(getActivity(), R.drawable.mcv_green_color, calEntrySet.getValue(), true, false);
+                            materialCalendarView.addDecorator(calBgDecorator);                }
                     }
-                    Set<CalendarDay> colorSet = null;
-                    if (calEntrySet.getKey().equals("WHITE")) {
-                        BackgroundDecorator calBgDecorator = new BackgroundDecorator(getActivity(), R.drawable.mcv_lightgrey_color, calEntrySet.getValue(), true, true);
-                        materialCalendarView.addDecorator(calBgDecorator);
-                    } else if (calEntrySet.getKey().equals("YELLOW")) {
-                        BackgroundDecorator calBgDecorator = new BackgroundDecorator(getActivity(), R.drawable.mcv_yellow_color, calEntrySet.getValue(), true, false);
-                        materialCalendarView.addDecorator(calBgDecorator);
-                    } else if (calEntrySet.getKey().equals("RED")) {
-                        BackgroundDecorator calBgDecorator = new BackgroundDecorator(getActivity(), R.drawable.mcv_red_color, calEntrySet.getValue(), true, false);
-                        materialCalendarView.addDecorator(calBgDecorator);
-                    } else if (calEntrySet.getKey().equals("PINK")) {
-                        BackgroundDecorator calBgDecorator = new BackgroundDecorator(getActivity(), R.drawable.mcv_ping_color, calEntrySet.getValue(), true, false);
-                        materialCalendarView.addDecorator(calBgDecorator);
-                    } else if (calEntrySet.getKey().equals("GREEN")) {
-                        BackgroundDecorator calBgDecorator = new BackgroundDecorator(getActivity(), R.drawable.mcv_green_color, calEntrySet.getValue(), true, false);
-                        materialCalendarView.addDecorator(calBgDecorator);                }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+
 
             }
         }).execute(queryStr);
@@ -1351,32 +1438,14 @@ public class CreateGatheringFragment extends CenesFragment {
             }
 
             membersSelected = event.getEventMembers();
+
+            predictiveDataList = null;
+            predictiveDataForDate = null;
             populateFriendCollectionView();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void replaceFragment(Fragment fragment, String tag) {
-
-        try {
-            fragmentTransaction = fragmentManager.beginTransaction();
-            if (tag != null) {
-                fragmentTransaction.replace(R.id.fragment_container, fragment, tag);
-                fragmentTransaction.addToBackStack(tag);
-            } else {
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
-            }
-            fragmentTransaction.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void clearFragmentsAndOpen(Fragment fragment) {
-        getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        replaceFragment(fragment, null);
     }
 
     public Event getEvent() {

@@ -24,6 +24,9 @@ public class UserAPI {
     public static String post_delete_user_by_phone_password = "/api/deleteUserByPhonePassword";
 
     //GET
+    public static String get_user_ip = "https://api6.ipify.org/?format=json";
+    public static String get_country_by_ip_address = "/auth/getCountryByIpAddress";
+
     public static String get_holidayCalendarByUserId = "/api/user/holidayCalendarByUserId";
     public static String get_forget_password_api = "/auth/forgetPassword";
 

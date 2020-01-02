@@ -6,6 +6,10 @@
     <color name="red">#FF574E</color>
     <color name="transparent">#00000000</color>
     <color name="theme_color">#FFF7F7F7</color>
+    <color name="button_disable_color">#DCDDDD</color>
+    <color name="button_enable_color">#754A8FE3</color>
+    <color name="link_color">#4A90E2</color>
+
     <color name="cenes_dark_gray">#686868</color>
     <color name="cenes_light_gray">#B8B8B8</color>
     <color name="cenes_lighter_gray">#c7c7c7</color>

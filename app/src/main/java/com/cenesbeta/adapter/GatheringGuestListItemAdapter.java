@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.R;
+import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.fragment.gathering.GatheringGuestListFragment;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
@@ -64,7 +65,7 @@ public class GatheringGuestListItemAdapter extends BaseAdapter {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        EventMember eventMember = getItem(position);
+        final EventMember eventMember = getItem(position);
 
         System.out.println(eventMember.toString());
         String host = "";
@@ -100,22 +101,34 @@ public class GatheringGuestListItemAdapter extends BaseAdapter {
         //}
 
 
+        String profilePic = "";
         viewHolder.ivProfilePic.setImageDrawable(gatheringGuestListFragment.getResources().getDrawable(R.drawable.profile_pic_no_image));
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(R.drawable.profile_pic_no_image);
         requestOptions.circleCrop();
         if (!CenesUtils.isEmpty(eventMember.getPicture())) {
 
+            profilePic = eventMember.getPicture();
             Glide.with(gatheringGuestListFragment.getContext()).load(eventMember.getPicture()).apply(requestOptions).into(viewHolder.ivProfilePic);
 
         } else if (eventMember.getUser() != null && !CenesUtils.isEmpty(eventMember.getUser().getPicture())) {
 
+            profilePic = eventMember.getUser().getPicture();
             Glide.with(gatheringGuestListFragment.getContext()).load(eventMember.getUser().getPicture()).apply(requestOptions).into(viewHolder.ivProfilePic);
 
         } else {
 
             viewHolder.ivProfilePic.setImageDrawable(gatheringGuestListFragment.getResources().getDrawable(R.drawable.profile_pic_no_image));
         }
+
+        final String profilePicTemp = profilePic;
+        viewHolder.ivProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((CenesBaseActivity)gatheringGuestListFragment.getActivity()).zoomImageFromThumb(viewHolder.ivProfilePic, profilePicTemp);
+
+            }
+        });
 
 
         return convertView;

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -44,12 +45,13 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
@@ -350,8 +352,7 @@ public class SignupOptionsFragment extends CenesFragment {
     public void googleSignInCall() {
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail().
-                        requestServerAuthCode(CenesConstants.GoogleWebClientid, true).build();
+                .requestEmail().requestProfile().requestIdToken(CenesConstants.GoogleWebClientid).requestServerAuthCode(CenesConstants.GoogleWebClientid, true).requestScopes(new Scope(Scopes.PROFILE)).build();
 
         try {
             mGoogleSignInClient = GoogleSignIn.getClient(getCenesActivity(), gso);
@@ -466,9 +467,11 @@ public class SignupOptionsFragment extends CenesFragment {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
+            Uri photoUri = account.getPhotoUrl();
+            if (photoUri != null) {
+                loggedInUser.setPicture(account.getPhotoUrl().toString());
+            }
             // Signed in successfully, show authenticated UI.
-            System.out.println(account.getId());
-            System.out.println(account.getIdToken());
             loggedInUser.setAuthType(User.AuthenticateType.google);
             loggedInUser.setName(account.getDisplayName());
             loggedInUser.setEmail(account.getEmail());

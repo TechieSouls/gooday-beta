@@ -10,13 +10,10 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.cenesbeta.R;
-import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.activity.GuestActivity;
 import com.cenesbeta.activity.SignInActivity;
 import com.cenesbeta.application.CenesApplication;
-import com.cenesbeta.fragment.CalenderSyncFragment;
 import com.cenesbeta.fragment.CenesFragment;
-import com.cenesbeta.fragment.HolidaySyncFragment;
 
 /**
  * Created by mandeep on 18/9/18.
@@ -56,7 +53,7 @@ public class GuestFragment extends CenesFragment {
 
             switch (view.getId()) {
                 case R.id.bt_signup_mobile:
-                    ((GuestActivity) getActivity()).replaceFragment(new SignupStep1Fragment(), GuestFragment.TAG);
+                    ((GuestActivity) getActivity()).replaceFragment(new PhoneVerificationStep1Fragment(), GuestFragment.TAG);
                     //((GuestActivity) getActivity()).replaceFragment(new SignupStepSuccessFragment(), null);
                    // ((GuestActivity) getActivity()).replaceFragment(new CalenderSyncFragment(), HolidaySyncFragment.TAG);
                     break;

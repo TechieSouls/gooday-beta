@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.R;
 import com.cenesbeta.bo.EventMember;
+import com.cenesbeta.dto.PredictiveData;
 import com.cenesbeta.fragment.friend.FriendListFragment;
 import com.cenesbeta.fragment.gathering.CreateGatheringFragment;
 import com.cenesbeta.util.RoundedImageView;
@@ -26,7 +27,7 @@ public class FriendHorizontalScrollAdapter extends RecyclerView.Adapter<FriendHo
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public RoundedImageView ivFriend;
         RelativeLayout rvNonCenesLayout;
-        RelativeLayout rvCenesLayout;
+        RelativeLayout rvCenesLayout, rlUserAvailabilityMark;
         TextView tvName, tvNonCenesLabel;
         RelativeLayout container;
         ImageView ibDeleteMember, ivDeleteNonCenesMember;
@@ -43,6 +44,7 @@ public class FriendHorizontalScrollAdapter extends RecyclerView.Adapter<FriendHo
 
             rvNonCenesLayout = (RelativeLayout) view.findViewById(R.id.rv_non_cenes_layout);
             rvCenesLayout = (RelativeLayout) view.findViewById(R.id.rv_cenes_layout);
+            rlUserAvailabilityMark = (RelativeLayout) view.findViewById(R.id.rl_user_availability_mark);
 
             ivHostCircle = (ImageView) view.findViewById(R.id.iv_host_circle);
             ivHostCircleMmember = (ImageView) view.findViewById(R.id.iv_host_circle_member);
@@ -113,6 +115,31 @@ public class FriendHorizontalScrollAdapter extends RecyclerView.Adapter<FriendHo
                 }
             }
 
+
+            if (context.predictiveDataList != null) {
+                if (invFrn.getUserId() != null && invFrn.getUserId() != 0) {
+
+                    holder.rlUserAvailabilityMark.setVisibility(View.VISIBLE);
+
+                    boolean isUserAvailable = false;
+                    if (context.predictiveDataForDate.getAttendingFriendsList() != null && context.predictiveDataForDate.getAttendingFriendsList().length() > 0) {
+                        for (String userId : context.predictiveDataForDate.getAttendingFriendsList().split(",")) {
+                            if (Integer.valueOf(userId).equals(invFrn.getUserId())) {
+                                isUserAvailable = true;
+                                break;
+                            }
+                        }
+
+                    }
+                    if (isUserAvailable) {
+                        holder.rlUserAvailabilityMark.setBackgroundResource(R.drawable.xml_circle_green);
+                    } else {
+                        holder.rlUserAvailabilityMark.setBackgroundResource(R.drawable.xml_circle_red);
+                    }
+                }
+            } else {
+                holder.rlUserAvailabilityMark.setVisibility(View.GONE);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

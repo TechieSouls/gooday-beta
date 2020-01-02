@@ -1,10 +1,7 @@
 package com.cenesbeta.fragment.profile;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.os.Handler;
-import android.preference.PreferenceActivity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
@@ -34,7 +31,6 @@ import com.cenesbeta.database.impl.UserManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.guest.SignupCountryListFragment;
-import com.cenesbeta.fragment.guest.SignupStep1Fragment;
 import com.cenesbeta.service.AuthenticateService;
 import com.cenesbeta.util.CenesUtils;
 
@@ -160,7 +156,7 @@ public class DeleteAccountFragment extends CenesFragment {
             try {
                 JSONObject postData = new JSONObject();
                 postData.put("phone", countryCodeDigit+etPhoneNumber.getText().toString());
-
+                postData.put("userId", loggedInUser.getUserId());
                 if (!CenesUtils.isEmpty(loggedInUser.getPassword())) {
                     postData.put("password", etPassword.getText().toString());
                 }

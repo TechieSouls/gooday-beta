@@ -15,10 +15,9 @@ import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
-import com.cenesbeta.fragment.guest.GuestFragment;
 import com.cenesbeta.fragment.guest.SignupOptionsFragment;
-import com.cenesbeta.fragment.guest.SignupStep1Fragment;
-import com.cenesbeta.util.CenesUtils;
+import com.cenesbeta.fragment.guest.PhoneVerificationStep1Fragment;
+import com.cenesbeta.fragment.guest.SignupStepSuccessFragment;
 
 import java.util.List;
 
@@ -49,7 +48,7 @@ public class GuestActivity extends CenesActivity {
         /*if (user == null) {
             replaceFragment(new GuestFragment(), null);
         } else */if (user == null) {
-            replaceFragment(new SignupStep1Fragment(), null);
+            replaceFragment(new PhoneVerificationStep1Fragment() , null);
         } else {
             replaceFragment(new SignupOptionsFragment(), null);
         }

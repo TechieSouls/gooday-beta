@@ -583,4 +583,67 @@
             android:textStyle="bold"
             android:layout_marginTop="20dp"/>
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_photo_action_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#45000000"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_choose_library"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:text="Upload Photo"
+                    android:textAlignment="center"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/cenes_selectedText_color"
+                    android:layout_marginTop="0.5dp"
+                    android:layout_marginBottom="0.5dp"
+                    android:textSize="17sp"/>
+
+                <TextView
+                    android:id="@+id/tv_take_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:text="Take Photo"
+                    android:textAlignment="center"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/facebook_blue"
+                    android:textSize="17sp"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_photo_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/xml_curved_corner_white"
+                android:text="Cancel"
+                android:textAlignment="center"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:layout_marginTop="20dp"
+                android:textSize="17sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </RelativeLayout>
+
 </RelativeLayout>

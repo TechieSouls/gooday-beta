@@ -6,6 +6,7 @@
     android:fitsSystemWindows="true">
 
     <RelativeLayout
+        android:id="@+id/rl_home_fragment_contaner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/new_theme_grey_color">
@@ -256,6 +257,4 @@
             app:backgroundTint="@color/cenes_new_orange" />
 
     </RelativeLayout>
-
-
 </android.support.design.widget.CoordinatorLayout>

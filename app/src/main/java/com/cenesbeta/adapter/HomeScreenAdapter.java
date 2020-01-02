@@ -145,6 +145,13 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                     requestOptions.circleCrop();
                     Glide.with(homeFragment.getContext()).load(owner.getUser().getPicture()).apply(requestOptions).into(viewHolder.ivOwnerImage);
 
+                    final String ownerImage = owner.getUser().getPicture();
+                    viewHolder.ivOwnerImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ((CenesBaseActivity)homeFragment.getActivity()).zoomImageFromThumb(viewHolder.ivOwnerImage, ownerImage);
+                        }
+                    });
                 } else {
                     viewHolder.ivOwnerImage.setImageResource(R.drawable.profile_pic_no_image);
                 }

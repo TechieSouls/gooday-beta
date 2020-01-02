@@ -110,11 +110,11 @@ public class GatheringApiManager {
         return null;
     }
 
-    public JSONArray predictiveDataUserId(String queryStr, String authToken) {
+    public JSONObject predictiveDataUserId(String queryStr, String authToken) {
         try {
             JsonParsing jsonParsing = new JsonParsing();
             String apiUrl = UrlManagerImpl.prodAPIUrl+ GatheringAPI.get_predictive_calendar_api+"?"+queryStr;
-            return jsonParsing.httpGet(apiUrl,authToken);
+            return jsonParsing.httpGetJsonObject(apiUrl,authToken);
         } catch(Exception e) {
             e.printStackTrace();
         }

@@ -122,6 +122,14 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
                     viewHolder.eventOwnerName.setText(Html.fromHtml("<b>"+owner.getUser().getName()+"</b> is hosting"));
                 }
             }
+
+            final String profilePic = owner.getUser().getPicture();
+            viewHolder.ivOwnerImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((CenesBaseActivity)gatheringsFragment.getActivity()).zoomImageFromThumb(viewHolder.ivOwnerImage, profilePic);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -151,7 +159,7 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
 
             for (int i = 0; i < eventMembersToShow.size(); i++) {
 
-                EventMember em = eventMembersToShow.get(i);
+                final EventMember em = eventMembersToShow.get(i);
                 System.out.println(em.toString());
                 if (i > 3) {
 
@@ -168,9 +176,15 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
                     RelativeLayout.LayoutParams profileParams = new RelativeLayout.LayoutParams(CenesUtils.dpToPx(50), CenesUtils.dpToPx(50));
                     profileParams.setMargins(CenesUtils.dpToPx(10), CenesUtils.dpToPx(10), CenesUtils.dpToPx(10), CenesUtils.dpToPx(10));
 
-                    RoundedImageView roundedImageView = new RoundedImageView(gatheringsFragment.getContext(), null);
+                    final RoundedImageView roundedImageView = new RoundedImageView(gatheringsFragment.getContext(), null);
                     roundedImageView.setLayoutParams(profileParams);
                     roundedImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    roundedImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ((CenesBaseActivity)gatheringsFragment.getActivity()).zoomImageFromThumb(roundedImageView, em.getUser().getPicture());
+                        }
+                    });
                     //roundedImageView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.xml_gradient_border_transparentbg));
                     rlRoot.addView(roundedImageView);
 
@@ -242,6 +256,7 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
                                 eventsBeforeSelection.add(event);
                                 previousEventsId.add(event.getEventId());
                             }
+
                         }
                     }
 

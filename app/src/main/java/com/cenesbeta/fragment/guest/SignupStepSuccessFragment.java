@@ -76,7 +76,7 @@ public class SignupStepSuccessFragment extends CenesFragment {
     private static final int PICK_IMAGE = 12;
     private static final int CLICK_IMAGE = 13;
     // Request code for READ_CONTACTS. It can be any number > 0.
-    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1001, CAMERA_PERMISSION_CODE = 1002, UPLOAD_PERMISSION_CODE = 1003;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -256,9 +256,11 @@ public class SignupStepSuccessFragment extends CenesFragment {
 
                 case R.id.et_signup_success_birthday:
                     Calendar cal = Calendar.getInstance();
-                    new DatePickerDialog(getActivity(), datePickerListener, cal
+                    DatePickerDialog birthDatePicker = new DatePickerDialog(getActivity(), datePickerListener, cal
                             .get(Calendar.YEAR), cal.get(Calendar.MONTH),
-                            cal.get(Calendar.DAY_OF_MONTH)).show();
+                            cal.get(Calendar.DAY_OF_MONTH));
+                    birthDatePicker.getDatePicker().setMaxDate(new Date().getTime());
+                    birthDatePicker.show();
                     break;
 
                 case R.id.tv_signup_success_gender:
@@ -291,8 +293,8 @@ public class SignupStepSuccessFragment extends CenesFragment {
 
                 case R.id.tv_take_photo:
                     isTakeOrUpload = "take_picture";
-                    if (ContextCompat.checkSelfPermission(getCenesActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_PERMISSION_CODE);
                     } else {
                         firePictureIntent();
                     }
@@ -301,8 +303,8 @@ public class SignupStepSuccessFragment extends CenesFragment {
 
                 case R.id.tv_choose_library:
                     isTakeOrUpload = "upload_picture";
-                    if (ContextCompat.checkSelfPermission(getCenesActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, UPLOAD_PERMISSION_CODE);
                     } else {
                         firePictureIntent();
                     }
@@ -395,8 +397,14 @@ public class SignupStepSuccessFragment extends CenesFragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            firePictureIntent();
+        if (requestCode == UPLOAD_PERMISSION_CODE || requestCode == CAMERA_PERMISSION_CODE) {
+            try  {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    firePictureIntent();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission is granted

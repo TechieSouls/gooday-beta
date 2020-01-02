@@ -24,7 +24,8 @@
                 android:src="@drawable/instabug_report"
                 android:layout_marginLeft="30dp"
                 android:layout_centerInParent="true"
-                android:layout_alignParentLeft="true"/>
+                android:layout_alignParentLeft="true"
+                android:visibility="gone"/>
             <ImageView
                 android:id="@+id/iv_profile_forward_grey"
                 android:layout_width="30dp"

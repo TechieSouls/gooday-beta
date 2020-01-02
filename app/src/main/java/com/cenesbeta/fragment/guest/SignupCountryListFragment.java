@@ -1,5 +1,6 @@
 package com.cenesbeta.fragment.guest;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,10 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.cenesbeta.R;
 import com.cenesbeta.adapter.CountryCodeAdapter;
+import com.cenesbeta.adapter.CountryListItemAdapter;
 import com.cenesbeta.bo.CountryCode;
 import com.cenesbeta.fragment.CenesFragment;
 
@@ -31,9 +35,12 @@ public class SignupCountryListFragment  extends CenesFragment {
 
     private ExpandableListView exCountryCodeList;
     private CountryCodeAdapter expandableListAdapter;
-    private LinearLayout llSignupCcBack;
+    private CountryListItemAdapter countryListItemAdapter;
     private EditText etSearchCc;
+    private ListView lvCountries;
+    private ImageView ivBackButtonImg;
 
+    private List<CountryCode> countries;
     private List<String> headers = null;
     private Map<String, List<CountryCode>> countryListItem = null;
 
@@ -42,16 +49,19 @@ public class SignupCountryListFragment  extends CenesFragment {
         View v = inflater.inflate(R.layout.fragment_signup_country_list, container, false);
 
         exCountryCodeList = (ExpandableListView) v.findViewById(R.id.ex_country_code_list);
-        llSignupCcBack = (LinearLayout) v.findViewById(R.id.ll_signup_cc_back);
         etSearchCc = (EditText) v.findViewById(R.id.et_search_cc);
+        lvCountries = (ListView) v.findViewById(R.id.lv_countries);
+        ivBackButtonImg = (ImageView) v.findViewById(R.id.iv_back_button_img);
 
-        prepareListData(null);
-
-        llSignupCcBack.setOnClickListener(onClickListener);
+        //prepareListData(null);
+        onSearch(null);
+        ivBackButtonImg.setOnClickListener(onClickListener);
         etSearchCc.addTextChangedListener(searchTextWatcher);
 
-        expandableListAdapter = new CountryCodeAdapter(SignupCountryListFragment.this, this.headers, this.countryListItem);
-        exCountryCodeList.setAdapter(expandableListAdapter);
+        countryListItemAdapter = new CountryListItemAdapter(SignupCountryListFragment.this, countries);
+        lvCountries.setAdapter(countryListItemAdapter);
+        //expandableListAdapter = new CountryCodeAdapter(SignupCountryListFragment.this, this.headers, this.countryListItem);
+        //exCountryCodeList.setAdapter(expandableListAdapter);
 
         return v;
     }
@@ -60,7 +70,7 @@ public class SignupCountryListFragment  extends CenesFragment {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                case R.id.ll_signup_cc_back:
+                case R.id.iv_back_button_img:
                     getActivity().onBackPressed();
                     break;
 
@@ -81,11 +91,31 @@ public class SignupCountryListFragment  extends CenesFragment {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            prepareListData(editable.toString());
-            expandableListAdapter = new CountryCodeAdapter(SignupCountryListFragment.this, headers, countryListItem);
-            exCountryCodeList.setAdapter(expandableListAdapter);
+            onSearch(editable.toString());
+            countryListItemAdapter = new CountryListItemAdapter(SignupCountryListFragment.this, countries);
+            lvCountries.setAdapter(countryListItemAdapter);
+            //expandableListAdapter = new CountryCodeAdapter(SignupCountryListFragment.this, headers, countryListItem);
+            //exCountryCodeList.setAdapter(expandableListAdapter);
         }
     };
+
+    private void onSearch(String searchText) {
+
+        if (searchText != null && searchText.length() > 0) {
+            countries = new ArrayList<>();
+            List<CountryCode> countriesTemp = CountryCode.getLibraryMasterCountriesEnglish();
+            for (CountryCode countryCode : countriesTemp) {
+                if (countryCode.getName().toLowerCase().startsWith(searchText.toLowerCase())) {
+                    countries.add(countryCode);
+                }
+            }
+
+        } else {
+            countries = CountryCode.getLibraryMasterCountriesEnglish();
+        }
+
+    }
+
 
     private void prepareListData(String searchText) {
         headers = new ArrayList<>();
