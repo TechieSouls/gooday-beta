@@ -190,6 +190,13 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
         @Override
         public void afterTextChanged(Editable editable) {
             etPhoneNumberStr = editable.toString();
+            if (etPhoneNumberStr.length() > 5) {
+                btSignupStep1Continue.setEnabled(true);
+                rlPhoneVerificationStep1Continue.setBackgroundColor(getResources().getColor(R.color.button_enable_color));
+            } else {
+                btSignupStep1Continue.setEnabled(false);
+                rlPhoneVerificationStep1Continue.setBackgroundColor(getResources().getColor(R.color.button_disable_color));
+            }
         }
     };
 
@@ -198,7 +205,6 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btn_phone_verification_step1_continue:
-
                     if (isValid()) {
                         JSONObject postData = new JSONObject();
                         try {

@@ -183,22 +183,24 @@ public class PhoneVerificationStep2Fragment extends CenesFragment {
             public void run() {
                 while(counter > -1) {
                     try {
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                if (counter < 10) {
-                                    tvCounterDisplay.setText("00:0" + counter);
-                                } else {
-                                    tvCounterDisplay.setText("00:" + counter);
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    if (counter < 10) {
+                                        tvCounterDisplay.setText("00:0" + counter);
+                                    } else {
+                                        tvCounterDisplay.setText("00:" + counter);
+                                    }
+                                    if (counter == 0) {
+                                        btnResendCode.setEnabled(true);
+                                        btnResendCode.setTextColor(Color.parseColor("#F5A624"));
+                                    }
                                 }
-                                if (counter == 0) {
-                                    btnResendCode.setEnabled(true);
-                                    btnResendCode.setTextColor(Color.parseColor("#F5A624"));
-                                }
-                            }
-                        });
-                        sleep(1000);
-                        counter--;
-                    } catch (InterruptedException e) {
+                            });
+                            sleep(1000);
+                            counter--;
+                        }
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }

@@ -72,15 +72,10 @@ public class SignupStepSuccessFragment extends CenesFragment {
 
     public final static String TAG = "SignupStepSuccessFragment";
     // Storage Permissions
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static final int PICK_IMAGE = 12;
     private static final int CLICK_IMAGE = 13;
     // Request code for READ_CONTACTS. It can be any number > 0.
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1001, CAMERA_PERMISSION_CODE = 1002, UPLOAD_PERMISSION_CODE = 1003;
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
 
     private CenesApplication cenesApplication;
     private CoreManager coreManager;
@@ -256,10 +251,13 @@ public class SignupStepSuccessFragment extends CenesFragment {
 
                 case R.id.et_signup_success_birthday:
                     Calendar cal = Calendar.getInstance();
-                    DatePickerDialog birthDatePicker = new DatePickerDialog(getActivity(), datePickerListener, cal
-                            .get(Calendar.YEAR), cal.get(Calendar.MONTH),
-                            cal.get(Calendar.DAY_OF_MONTH));
-                    birthDatePicker.getDatePicker().setMaxDate(new Date().getTime());
+
+                    Calendar eligibleCal = Calendar.getInstance();
+                    eligibleCal.add(Calendar.YEAR, -13);
+                    DatePickerDialog birthDatePicker = new DatePickerDialog(getActivity(), datePickerListener, eligibleCal
+                            .get(Calendar.YEAR), eligibleCal.get(Calendar.MONTH),
+                            eligibleCal.get(Calendar.DAY_OF_MONTH));
+                    birthDatePicker.getDatePicker().setMaxDate(eligibleCal.getTime().getTime());
                     birthDatePicker.show();
                     break;
 
@@ -293,11 +291,12 @@ public class SignupStepSuccessFragment extends CenesFragment {
 
                 case R.id.tv_take_photo:
                     isTakeOrUpload = "take_picture";
-                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    /*if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_PERMISSION_CODE);
                     } else {
                         firePictureIntent();
-                    }
+                    }*/
+                    checkCameraPermissiosn();
                     rlPhotoActionSheet.setVisibility(View.GONE);
                     break;
 
@@ -397,7 +396,12 @@ public class SignupStepSuccessFragment extends CenesFragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == UPLOAD_PERMISSION_CODE || requestCode == CAMERA_PERMISSION_CODE) {
+
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkReadWritePermissiosn();
+            }
+        } else if (requestCode == UPLOAD_PERMISSION_CODE) {
             try  {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     firePictureIntent();
@@ -586,6 +590,22 @@ public class SignupStepSuccessFragment extends CenesFragment {
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
                 matrix, true);
+    }
+
+    public void checkCameraPermissiosn() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+        } else {
+            checkReadWritePermissiosn();
+        }
+    }
+
+    public void checkReadWritePermissiosn() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, UPLOAD_PERMISSION_CODE);
+        } else {
+            firePictureIntent();
+        }
     }
 
 }
