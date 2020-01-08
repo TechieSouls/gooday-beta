@@ -278,12 +278,14 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                         @Override
                         public void processFinish(Boolean response) {
                             //((HomeFragment)context.getVisibleFragment()).initialSync();
-                            Fragment currentFragment = homeFragment.getCenesActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                            ((CenesBaseActivity)homeFragment.getCenesActivity()).fragmentManager
-                                    .beginTransaction()
-                                    .detach(currentFragment)
-                                    .attach(currentFragment)
-                                    .commit();
+                            if (homeFragment.getCenesActivity() != null) {
+                                Fragment currentFragment = homeFragment.getCenesActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                                ((CenesBaseActivity)homeFragment.getCenesActivity()).fragmentManager
+                                        .beginTransaction()
+                                        .detach(currentFragment)
+                                        .attach(currentFragment)
+                                        .commit();
+                            }
                         }
                     }).execute(declineQueryStr);
                 }

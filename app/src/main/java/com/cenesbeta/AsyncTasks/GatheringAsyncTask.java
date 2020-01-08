@@ -177,7 +177,9 @@ public class GatheringAsyncTask {
 
         @Override
         protected void onPostExecute(JSONObject obj) {
-            Log.e("Gathering Obj ", obj.toString());
+            if (obj != null) {
+                Log.e("Gathering Obj ", obj.toString());
+            }
             /*if (processDialog != null) {
                 processDialog.dismiss();
                 processDialog = null;

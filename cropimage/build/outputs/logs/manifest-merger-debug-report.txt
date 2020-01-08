@@ -1,25 +1,25 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml:1:1-3:12
-INJECTED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml:1:1-3:12
-INJECTED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml:1:1-3:12
+ADDED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml:1:1-3:12
+INJECTED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml:1:1-3:12
+INJECTED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml:1:1-3:12
 	package
-		ADDED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml:1:71-108
-		INJECTED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml
-		INJECTED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml
+		ADDED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml:1:71-108
+		INJECTED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml
+		INJECTED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml
 	xmlns:android
-		ADDED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml:1:12-70
+		ADDED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml:1:12-70
 uses-sdk
-INJECTED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml
-INJECTED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml
-INJECTED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml
-INJECTED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml
+INJECTED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml
+INJECTED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml
+INJECTED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml
+INJECTED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml
-		ADDED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml
-		INJECTED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml
+		INJECTED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml
+		ADDED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml
+		INJECTED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml
-		ADDED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml
-		INJECTED from /Users/mandeepsingh/Desktop/Mandeep/apps/projects/cenes/android/gooday-beta/cropimage/src/main/AndroidManifest.xml
+		INJECTED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml
+		ADDED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml
+		INJECTED from /Users/cenes_dev/Desktop/Mandeep/projects/android/cenes/gooday-beta/cropimage/src/main/AndroidManifest.xml

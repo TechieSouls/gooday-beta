@@ -133,6 +133,15 @@ public class SignupOptionsFragment extends CenesFragment {
                 case R.id.rl_facebook_btn:
                     disconnectFromFacebook();
                     buttonJoinFB.performClick();
+
+                    /*User testUser = new User();
+                    testUser.setAuthType(User.AuthenticateType.facebook);
+                    testUser.setFacebookId("113285233031773134294");
+                    testUser.setEmail("jtd.dav@gmail.com");
+                    testUser.setPhone("+447878998932");
+                    testUser.setName("Jack Davies");
+                    testUser.setFacebookAuthToken("EAAIkmtJjwosBALuj0hl4cHWZBbNpRtK4zGB3CAoBtfddPAPvDD37dzvNzMgpOkSKKDk4LmznDjKExh5kX9ztO2lSh372C21YXkdUG3gKBXHZAmKZCZAw2OFFgbEplA7vujb2xIts6IqzQWWrUxwuhoj1CCcZCL6WrA1uh6SP5xlQli7ZAaaMZCY9oCZCXhdGpDx7H7VJHZBJLZB0giJIzHWKSIFkTZCSGs5vJcZD");
+                    socialSignupRequest(testUser);*/
                     break;
 
                 case R.id.rl_google_btn:
@@ -457,8 +466,12 @@ public class SignupOptionsFragment extends CenesFragment {
             public void processFinish(Object response) {
 
                 //((GuestActivity)getActivity()).replaceFragment(new HolidaySyncFragment(), null);
-                startActivity(new Intent((GuestActivity)getActivity(), CenesBaseActivity.class));
-                getActivity().finish();
+                try {
+                    startActivity(new Intent((GuestActivity)getActivity(), CenesBaseActivity.class));
+                    getActivity().finish();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }).execute(userContact);
     }
