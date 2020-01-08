@@ -119,7 +119,8 @@ public class CreateGatheringFragment extends CenesFragment {
     public static String TAG = "CreateGatheringFragment";
     private int SEACRH_LOCATION_RESULT_CODE = 1001, SEARCH_FRIEND_RESULT_CODE = 1002,
             GATHERING_SUMMARY_RESULT_CODE = 1003, MESSAGE_FRAGMENT_CODE = 1004,
-            CLICK_IMAGE_REQUEST_CODE = 1005, UPLOAD_IMAGE_REQUEST_CODE = 1006;
+            CLICK_IMAGE_REQUEST_CODE = 1005, UPLOAD_IMAGE_REQUEST_CODE = 1006,
+            UPLOAD_PERMISSION_CODE = 1007;
 
     private int CAMERA_PERMISSION_CODE = 2001;
     private View fragmentView;
@@ -432,7 +433,7 @@ public class CreateGatheringFragment extends CenesFragment {
 
                 case R.id.tv_take_photo:
                     isTakeOrUpload = "Take";
-                    takePhotoPressed();
+                    checkCameraPermissiosn();
                     break;
                 case R.id.tv_photo_cancel:
                     rlPhotoActionSheet.setVisibility(View.GONE);
@@ -801,21 +802,28 @@ public class CreateGatheringFragment extends CenesFragment {
         }
     };
 
+    public void firePictureIntent(){
+        if(isTakeOrUpload == "Upload"){
+            Intent browseIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            browseIntent.setType("image/*");
+            startActivityForResult(browseIntent, UPLOAD_IMAGE_REQUEST_CODE);
+
+        }else if(isTakeOrUpload == "Take"){
+            checkReadWritePermissiosn();
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 0) {
+        if (requestCode == UPLOAD_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                     && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            } else {
-
-                Intent browseIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                browseIntent.setType("image/*");
-                startActivityForResult(browseIntent, 100);
-
+                firePictureIntent();
             }
-        } else if (requestCode == CAMERA_PERMISSION_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                grantResults[1] == PackageManager.PERMISSION_GRANTED && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
-            openCamera();
+        } else if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                firePictureIntent();
+            }
         }
     }
 
@@ -1220,8 +1228,8 @@ public class CreateGatheringFragment extends CenesFragment {
 
         rlPhotoActionSheet.setVisibility(View.GONE);
 
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            (CreateGatheringFragment.this).requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, UPLOAD_PERMISSION_CODE);
         } else {
             Intent browseIntent = new Intent(Intent.ACTION_GET_CONTENT);
             browseIntent.setType("image/*");
@@ -1468,5 +1476,22 @@ public class CreateGatheringFragment extends CenesFragment {
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
+    }
+
+    public void checkCameraPermissiosn() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+        } else {
+            checkReadWritePermissiosn();
+        }
+    }
+
+    public void checkReadWritePermissiosn() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, UPLOAD_PERMISSION_CODE);
+        } else {
+            openCamera();
+
+        }
     }
 }

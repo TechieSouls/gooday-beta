@@ -197,10 +197,12 @@ public class ProfileAsyncTask {
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-
-            if (syncContactsDialog != null) {
-                syncContactsDialog.dismiss();
+            if (activity != null) {
+                if (syncContactsDialog != null) {
+                    syncContactsDialog.dismiss();
+                }
             }
+
             syncContactsDialog = null;
             delegate.processFinish(o);
         }
@@ -250,8 +252,10 @@ public class ProfileAsyncTask {
 
         @Override
         protected void onPostExecute(JSONObject response) {
-            if (doFileUploadDialog != null) {
-                doFileUploadDialog.dismiss();
+            if (activity != null) {
+                if (doFileUploadDialog != null) {
+                    doFileUploadDialog.dismiss();
+                }
             }
             doFileUploadDialog = null;
             delegate.processFinish(response);

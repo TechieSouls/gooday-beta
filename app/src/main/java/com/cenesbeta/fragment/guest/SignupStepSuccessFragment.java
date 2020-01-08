@@ -554,7 +554,9 @@ public class SignupStepSuccessFragment extends CenesFragment {
 
         JSONObject userContact = new JSONObject();
         try {
-            userContact.put("userId",loggedInUser.getUserId());
+            if(loggedInUser.getUserId() != null) {
+                userContact.put("userId", loggedInUser.getUserId());
+            }
             userContact.put("contacts",contactsArray);
         } catch (Exception e) {
             e.printStackTrace();

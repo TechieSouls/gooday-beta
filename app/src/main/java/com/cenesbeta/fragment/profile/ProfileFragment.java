@@ -92,6 +92,8 @@ public class ProfileFragment extends CenesFragment {
 
     private static final int PICK_IMAGE_GALLERY = 12;
     private static final int PICK_IMAGE_CAMERA = 13;
+    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1001, CAMERA_PERMISSION_CODE = 1002, UPLOAD_PERMISSION_CODE = 1003;
+
 
     String birthDayStr;
     ImageView ivProfile, ivProfileBack;
@@ -484,18 +486,20 @@ public class ProfileFragment extends CenesFragment {
                 @Override
                 public void onClick(DialogInterface dialog, int item) {
                     dialog.dismiss();
-
                     if (options[item].equals("Take Picture")) {
                         isTakeOrUpload = "take_picture";
+                        checkCameraPermissiosn();
+
                     } else if (options[item].equals("Choose From Gallery")) {
                         isTakeOrUpload = "upload_picture";
+                        if (ContextCompat.checkSelfPermission(getCenesActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+                        } else {
+                            firePictureIntent();
+                        }
                     }
 
-                    if (ContextCompat.checkSelfPermission(getCenesActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-                    } else {
-                        firePictureIntent();
-                    }
+
                 }
             });
             alert.show();
@@ -535,8 +539,21 @@ public class ProfileFragment extends CenesFragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        /*if (grantResults.length != 0 && requestCode == 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             firePictureIntent();
+        } */
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkReadWritePermissiosn();
+            }
+        } else if (requestCode == UPLOAD_PERMISSION_CODE) {
+            try  {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    firePictureIntent();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -665,4 +682,20 @@ public class ProfileFragment extends CenesFragment {
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
+    public void checkCameraPermissiosn() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+        } else {
+            checkReadWritePermissiosn();
+        }
+    }
+
+    public void checkReadWritePermissiosn() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, UPLOAD_PERMISSION_CODE);
+        } else {
+            firePictureIntent();
+        }
+    }
+
 }

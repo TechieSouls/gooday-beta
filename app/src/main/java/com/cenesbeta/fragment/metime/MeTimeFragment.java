@@ -329,13 +329,15 @@ public class MeTimeFragment extends CenesFragment {
                                 @Override
                                 public void processFinish(JSONObject response) {
 
-                                    ((CenesBaseActivity) getActivity()).runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            ((CenesBaseActivity)getActivity()).tvLoadingMsg.setText("Deleted.");
+                                    if (getActivity() != null){
+                                        ((CenesBaseActivity) getActivity()).runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                ((CenesBaseActivity) getActivity()).tvLoadingMsg.setText("Deleted.");
 
-                                        }
-                                    });
+                                            }
+                                        });
+                                }
                                     try {
                                         meTimeManagerImpl.deleteAllMeTimeRecurringEventsByRecurringEventId(meTimeJSONObj.getLong("recurringEventId"));
 

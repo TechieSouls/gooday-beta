@@ -357,7 +357,9 @@ public class GatheringPreviewFragment extends CenesFragment {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
+                                if (getActivity() != null) {
+                                    ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
+                                }
                             }
                         }, 500);
                     } else {
@@ -808,7 +810,9 @@ public class GatheringPreviewFragment extends CenesFragment {
                                         new Handler().postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
-                                                ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
+                                                if (getActivity() != null){
+                                                    ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
+                                            }
                                             }
                                         }, 500);
                                     } else {

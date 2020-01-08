@@ -312,12 +312,13 @@ public class CenesBaseActivity extends CenesActivity {
     }
 
     public void clearAllFragmentsInBackstack() {
-        FragmentManager fm = getSupportFragmentManager(); // or 'getSupportFragmentManager();'
-        int count = fm.getBackStackEntryCount();
-        for(int i = 0; i < count; ++i) {
-            fm.popBackStack();
+        if(getFragmentManager() != null) {
+            FragmentManager fm = getSupportFragmentManager(); // or 'getSupportFragmentManager();'
+            int count = fm.getBackStackEntryCount();
+            for (int i = 0; i < count; ++i) {
+                fm.popBackStack();
+            }
         }
-
     }
     public void notificationCountCall() {
         if (internetManager.isInternetConnection(CenesBaseActivity.this)) {
