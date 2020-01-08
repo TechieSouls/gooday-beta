@@ -59,7 +59,7 @@ public class CountryUtils {
     public static Map<String, String> getCountryCalendarIdMap() {
         Map<String, String> countryIdMap = new HashMap<>();
         countryIdMap.put("Australian Holidays","en.australian#holiday@group.v.calendar.google.com");
-        countryIdMap.put("countryIdMap.put(Austrian Holidays","en.austrian#holiday@group.v.calendar.google.com");
+        countryIdMap.put("Austrian Holidays","en.austrian#holiday@group.v.calendar.google.com");
         countryIdMap.put("Brazilian Holidays","en.brazilian#holiday@group.v.calendar.google.com");
         countryIdMap.put("Canadian Holidays","en.canadian#holiday@group.v.calendar.google.com");
         countryIdMap.put("China Holidays","en.china#holiday@group.v.calendar.google.com");
