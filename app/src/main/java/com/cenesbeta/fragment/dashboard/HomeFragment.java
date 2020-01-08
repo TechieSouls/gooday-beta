@@ -164,9 +164,10 @@ public class HomeFragment extends CenesFragment {
         eventsTask = new GatheringAsyncTask(cenesApplication, (CenesBaseActivity)getActivity());
         eventManagerImpl = new EventManagerImpl(cenesApplication);
 
-        getActivity().getSharedPreferences("CenesPrefs", getActivity().MODE_PRIVATE).edit().putString("userId", loggedInUser.getUserId()+"").apply();
-        getActivity().getSharedPreferences("CenesPrefs", getActivity().MODE_PRIVATE).edit().putString("authToken", loggedInUser.getAuthToken()).apply();
-
+        if(loggedInUser.getUserId() != null) {
+            getActivity().getSharedPreferences("CenesPrefs", getActivity().MODE_PRIVATE).edit().putString("userId", loggedInUser.getUserId() + "").apply();
+            getActivity().getSharedPreferences("CenesPrefs", getActivity().MODE_PRIVATE).edit().putString("authToken", loggedInUser.getAuthToken()).apply();
+        }
         CenesUtils.logEntries(loggedInUser, "User Lands On Home Screen Page", getActivity().getApplicationContext());
 
         pullToRefresh = (SwipeRefreshLayout)v.findViewById(R.id.pullToRefresh);
@@ -948,9 +949,11 @@ public class HomeFragment extends CenesFragment {
         // can hide progress dialog.
         @Override
         protected void onPostExecute(String result) {
-            pd.dismiss();
-            pd = null;
-            Toast.makeText(getActivity(), "Contacts Synced..!",Toast.LENGTH_SHORT).show();
+            if(getActivity() != null) {
+                pd.dismiss();
+                pd = null;
+                Toast.makeText(getActivity(), "Contacts Synced..!", Toast.LENGTH_SHORT).show();
+            }
             new GoogleCalendarSyncTask().execute();
         }
     }
