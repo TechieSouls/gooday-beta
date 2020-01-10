@@ -14,6 +14,7 @@
     <dimen name="desc_padding">40dp</dimen>
 
     <dimen name="header_title_font">18sp</dimen>
+    <dimen name="bold_header_title_font">20sp</dimen>
     <dimen name="header_title_margin_left">80dp</dimen>
     <dimen name="header_title_margin_right">80dp</dimen>
     <dimen name="header_profile_pic_height">40dp</dimen>

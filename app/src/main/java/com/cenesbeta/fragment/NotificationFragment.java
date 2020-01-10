@@ -6,6 +6,7 @@ import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.activity.DiaryActivity;
 import com.cenesbeta.activity.GatheringScreenActivity;
 import com.cenesbeta.adapter.NotificationAdapter;
+import com.cenesbeta.adapter.NotificationExpandableAdapter;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Notification;
 import com.cenesbeta.bo.User;
@@ -34,7 +36,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mandeep on 20/11/17.
@@ -47,6 +52,7 @@ public class NotificationFragment extends CenesFragment {
     private NotificationAdapter notificationAdapter;
 
     private ListView notificationExpandablelv;
+    private ExpandableListView elvNotificationList;
 
     private RoundedImageView homeProfilePic;
     private ImageView homeIcon;
@@ -60,6 +66,12 @@ public class NotificationFragment extends CenesFragment {
     public InternetManager internetManager;
     private User loggedInUser;
     public NotificationManagerImpl notificationManagerImpl;
+
+    private NotificationExpandableAdapter notificationExpandableAdapter;
+    private List<String> headers;
+    private Map<String, List<Notification>> notificationMapList;
+    private static String NEW_NOTIFICATION = "New";
+    private static String SEEN_NOTIFICATION = "Seen";
 
     @Nullable
     @Override
@@ -83,45 +95,20 @@ public class NotificationFragment extends CenesFragment {
 
         //Fetching All Offline notifications and showing them.
         List<Notification> notifications = notificationManagerImpl.fetchAllNotifications();
-        notificationAdapter = new NotificationAdapter(this, notifications);
-        notificationExpandablelv.setAdapter(notificationAdapter);
+       /* notificationAdapter = new NotificationAdapter(this, notifications);
+        notificationExpandablelv.setAdapter(notificationAdapter); */
 
-        if (internetManager.isInternetConnection(getCenesActivity())) {
-
-            new NotificationAsyncTask(cenesApplication, getActivity());
-            new NotificationAsyncTask.NotificationListTask(new NotificationAsyncTask.NotificationListTask.AsyncResponse() {
-                @Override
-                public void processFinish(JSONObject response) {
-                    try {
-                        JSONObject notificationResponse = response;
-                        if (notificationResponse != null && notificationResponse.getBoolean("success")) {
-                            JSONArray notificationArray = notificationResponse.getJSONArray("data");
-                            if (notificationArray.length() == 0) {
-                                noNotificationsText.setVisibility(View.VISIBLE);
-                            } else {
-                                noNotificationsText.setVisibility(View.GONE);
-
-                                Type listType = new TypeToken<List<Notification>>() {}.getType();
-                                List<Notification> notificationsTemp = new Gson().fromJson(response.getJSONArray("data").toString(), listType);
-                                notificationManagerImpl.deleteAllNotifications();
-                                notificationManagerImpl.addNotification(notificationsTemp);
-                                notificationAdapter = new NotificationAdapter(NotificationFragment.this, notificationsTemp);
-                                notificationExpandablelv.setAdapter(notificationAdapter);
-                            }
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).execute();
-        }
+       loadNotifications();
 
         ((CenesBaseActivity)getActivity()).ivNotificationFloatingIcon.setVisibility(View.GONE);
+
+        ((CenesBaseActivity) getActivity()).showFooter();
+        ((CenesBaseActivity)  getActivity()).activateFooterIcon(NotificationFragment.TAG);
+        headers = new ArrayList<>();
         return v;
     }
 
-    @Override
+   /* @Override
     public void onResume() {
         super.onResume();
         try {
@@ -135,7 +122,7 @@ public class NotificationFragment extends CenesFragment {
         } catch (Exception e) {
 
         }
-    }
+    } */
 
     public void init(View view) {
         cenesApplication = getCenesActivity().getCenesApplication();
@@ -145,7 +132,7 @@ public class NotificationFragment extends CenesFragment {
 
         loggedInUser = userManager.getUser();
 
-        notificationExpandablelv = (ListView) view.findViewById(R.id.notification_expandable_lv);
+        elvNotificationList = (ExpandableListView) view.findViewById(R.id.notification_expandable_lv);
         homeProfilePic = (RoundedImageView) view.findViewById(R.id.home_profile_pic);
         homeIcon = (ImageView) view.findViewById(R.id.home_icon);
         noNotificationsText = (TextView) view.findViewById(R.id.no_notifications_text);
@@ -172,4 +159,70 @@ public class NotificationFragment extends CenesFragment {
             }
         }
     };
+    public void loadNotifications(){
+
+        List<Notification> notifications = notificationManagerImpl.fetchAllNotifications();
+        filterNotification(notifications);
+
+        /****/
+        if (internetManager.isInternetConnection(getCenesActivity())) {
+
+            new NotificationAsyncTask(cenesApplication, getActivity());
+            new NotificationAsyncTask.NotificationListTask(new NotificationAsyncTask.NotificationListTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+                    try {
+                        JSONObject notificationResponse = response;
+                        if (notificationResponse != null && notificationResponse.getBoolean("success")) {
+                            JSONArray notificationArray = notificationResponse.getJSONArray("data");
+                            if (notificationArray.length() == 0) {
+                                noNotificationsText.setVisibility(View.VISIBLE);
+                            } else {
+                                noNotificationsText.setVisibility(View.GONE);
+
+                                Type listType = new TypeToken<List<Notification>>() {}.getType();
+                                List<Notification> notificationsTemp = new Gson().fromJson(response.getJSONArray("data").toString(), listType);
+                                notificationManagerImpl.deleteAllNotifications();
+                                notificationManagerImpl.addNotification(notificationsTemp);
+                                filterNotification(notificationsTemp);
+                            }
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).execute();
+        }
+
+    }
+    private void filterNotification(List<Notification> notifications){
+        notificationMapList = new HashMap<>();
+        headers = new ArrayList<>();
+        List<Notification> newNotifications = new ArrayList<>();
+        List<Notification> seenNotifications = new ArrayList<>();
+
+        for (Notification notification: notifications) {
+            //Seen notification
+            if (notification.getReadStatus().equals("Read")) {
+                seenNotifications.add(notification);
+            } else {
+                newNotifications.add(notification);
+            }
+        }
+
+        if (newNotifications.size() > 0) {
+            notificationMapList.put(NEW_NOTIFICATION, newNotifications);
+            headers.add(NEW_NOTIFICATION);
+        }
+
+        if (seenNotifications.size() > 0) {
+            notificationMapList.put(SEEN_NOTIFICATION, seenNotifications);
+            headers.add(SEEN_NOTIFICATION);
+        }
+
+
+        notificationExpandableAdapter = new NotificationExpandableAdapter(NotificationFragment.this, headers, notificationMapList);
+        elvNotificationList.setAdapter(notificationExpandableAdapter);
+    }
 }

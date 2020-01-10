@@ -1,13 +1,12 @@
 package com.cenesbeta.adapter;
 
-import android.app.Activity;
-import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -18,8 +17,6 @@ import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.bo.Notification;
 import com.cenesbeta.fragment.NotificationFragment;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
-import com.cenesbeta.fragment.gathering.GatheringPreviewFragmentBkup;
-import com.cenesbeta.fragment.gathering.GatheringsFragment;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
 
@@ -59,14 +56,16 @@ public class NotificationAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
-            convertView = inflter.inflate(R.layout.adapter_notifications, null);
+            convertView = inflter.inflate(R.layout.adapter_notification_group_item, null);
             holder = new ViewHolder();
             holder.notificationMessage = (TextView) convertView.findViewById(R.id.notification_mesasge);
+            holder.notificationTitle = (TextView) convertView.findViewById(R.id.notification_title);
             holder.notificationTime = (TextView) convertView.findViewById(R.id.notifcation_time);
             holder.notifcationReadStatus = (TextView) convertView.findViewById(R.id.notification_readstatus);
             holder.senderPic = (RoundedImageView) convertView.findViewById(R.id.notification_sender_profile_pic);
             holder.notificationDay = (TextView) convertView.findViewById(R.id.notification_day);
             holder.llContainer = (LinearLayout) convertView.findViewById(R.id.ll_container);
+            holder.rlUnreadDot = (RelativeLayout) convertView.findViewById(R.id.rl_unread_dot);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -75,11 +74,16 @@ public class NotificationAdapter extends BaseAdapter {
 
         System.out.println(notification.toString());
         String notificationText = notification.getMessage();
-        if (!(notification.getType() != null && notification.getType().equals("Welcome"))) {
-            notificationText = notificationText +  " <b>" + notification.getTitle() + "</b>";
-        }
+        //if (!(notification.getType() != null && notification.getType().equals("Welcome"))) {
+        System.out.println("Event Title : "+notification.getTitle());
+            holder.notificationTitle.setText(Html.fromHtml("("+notification.getTitle()+")"));
+        //}
+
+        notificationText = notificationText.replaceAll("accepted", "<font color='#FFAA4E'>accepted</font>");
+        notificationText = notificationText.replaceAll("declined", "<font color='#FFAA4E'>declined</font>");
+        notificationText = notificationText.replaceAll("deleted", "<font color='#FFAA4E'>deleted</font>");
+        System.out.println(notificationText);
         holder.notificationMessage.setText(Html.fromHtml( notificationText));
-        holder.notificationTime.setText(CenesUtils.ddMMM.format(notification.getNotificationTime()).toUpperCase());
 
         //if (notification.getSenderImage() != null && notification.getSenderImage() != "" && notification.getSenderImage() != "null") {
         //    Glide.with(activity).load(notification.getSenderImage()).apply(RequestOptions.placeholderOf(R.drawable.default_profile_icon)).into(holder.senderPic);
@@ -109,35 +113,45 @@ public class NotificationAdapter extends BaseAdapter {
         System.out.println("Different in Days : "+daysDiff/(1000*3600*24)+"   -----   "+daysDiff);
         if (daysDiff > 0) {
             holder.notificationDay.setText(daysDiff +" Days Ago");
+            holder.notificationTime.setText(CenesUtils.ddMMM.format(notification.getNotificationTime()).toUpperCase());
+
         } else {
 
             //int hours = CenesUtils.differenceInHours(notification.getNotificationTime(), new Date().getTime());
             int hours = Math.round((new Date().getTime() - notification.getNotificationTime())/(1000*3600));
             System.out.println("Hours Diff : "+hours);
             if (hours == 0) {
-
+                System.out.println("abc 1");
                 int minutes = Math.round((new Date().getTime() - notification.getNotificationTime())/(1000*60));
                 if (minutes == 0) {
-                    holder.notificationDay.setText("Just Now");
+                    System.out.println("abc 2");
+                    int seconds = Math.round((new Date().getTime() - notification.getNotificationTime())/(1000));
+                    System.out.println("seconds  : "+seconds);
+                    holder.notificationDay.setText(seconds+"s");
                 } else {
-                    holder.notificationDay.setText(minutes+" Minutes Ago");
+                    System.out.println("abc 3");
+                    holder.notificationDay.setText(minutes+"m");
                 }
-            } else if (hours == 1) {
-                holder.notificationDay.setText(hours+" Hour Ago");
-            } else {
-                holder.notificationDay.setText(hours+" Hours Ago");
+            } else {/*if (hours == 1) {
+                holder.notificationDay.setText(hours+"h");
+            } else {*/
+                System.out.println("abc 4");
+                System.out.println("hours hours hours");
+                holder.notificationDay.setText(hours+"h");
             }
         }
         if (notification.getReadStatus().equals("Read")) {
-            holder.llContainer.setBackground(notificationFragment.getActivity().getResources().getDrawable(R.drawable.xml_curved_corner_markread_fill));
-            holder.notificationTime.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_markread_color));
-            holder.notificationDay.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_markread_color));
-            holder.notifcationReadStatus.setVisibility(View.VISIBLE);
+          //  holder.llContainer.setBackground(notificationFragment.getActivity().getResources().getDrawable(R.drawable.xml_curved_corner_markread_fill));
+         //   holder.notificationTime.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_markread_color));
+          //  holder.notificationDay.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_markread_color));
+         //   holder.notifcationReadStatus.setVisibility(View.VISIBLE);
+            holder.rlUnreadDot.setVisibility(View.GONE);
         } else {
-            holder.llContainer.setBackground(notificationFragment.getActivity().getResources().getDrawable(R.drawable.xml_curved_corner_blue_fill));
-            holder.notificationTime.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_selectedText_color));
-            holder.notificationDay.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_selectedText_color));
-            holder.notifcationReadStatus.setVisibility(View.GONE);
+           // holder.llContainer.setBackground(notificationFragment.getActivity().getResources().getDrawable(R.drawable.xml_curved_corner_blue_fill));
+          //  holder.notificationTime.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_selectedText_color));
+          //  holder.notificationDay.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_selectedText_color));
+           // holder.notifcationReadStatus.setVisibility(View.GONE);
+            holder.rlUnreadDot.setVisibility(View.VISIBLE);
         }
 
         holder.llContainer.setOnClickListener(new View.OnClickListener() {
@@ -145,15 +159,15 @@ public class NotificationAdapter extends BaseAdapter {
             public void onClick(View v) {
                 notification.setReadStatus("Read");
                 if (notification.getReadStatus().equals("Read")) {
-                    holder.llContainer.setBackground(notificationFragment.getActivity().getResources().getDrawable(R.drawable.xml_curved_corner_markread_fill));
+                   // holder.llContainer.setBackground(notificationFragment.getActivity().getResources().getDrawable(R.drawable.xml_curved_corner_markread_fill));
                     holder.notificationTime.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_markread_color));
                     holder.notificationDay.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_markread_color));
-                    holder.notifcationReadStatus.setVisibility(View.VISIBLE);
+                   // holder.notifcationReadStatus.setVisibility(View.VISIBLE);
                 } else {
-                    holder.llContainer.setBackground(notificationFragment.getActivity().getResources().getDrawable(R.drawable.xml_curved_corner_blue_fill));
+                  //  holder.llContainer.setBackground(notificationFragment.getActivity().getResources().getDrawable(R.drawable.xml_curved_corner_blue_fill));
                     holder.notificationTime.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_selectedText_color));
                     holder.notificationDay.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_selectedText_color));
-                    holder.notifcationReadStatus.setVisibility(View.GONE);
+                   // holder.notifcationReadStatus.setVisibility(View.GONE);
                 }
 
                 notificationFragment.notificationManagerImpl.updateNotificationReadStatus(notification);
@@ -218,11 +232,12 @@ public class NotificationAdapter extends BaseAdapter {
     }
 
     class ViewHolder {
-        private TextView notificationMessage;
+        private TextView notificationMessage, notificationTitle;
         private TextView notificationTime;
         private TextView notifcationReadStatus;
         private RoundedImageView senderPic;
         private LinearLayout llContainer;
+        private RelativeLayout rlUnreadDot;
         private TextView notificationDay;
     }
 }

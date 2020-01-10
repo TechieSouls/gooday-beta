@@ -45,6 +45,7 @@ import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
+import com.cenesbeta.fragment.NotificationFragment;
 import com.cenesbeta.fragment.dashboard.HomeFragment;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.ImageUtils;
@@ -114,12 +115,13 @@ public class ProfileFragment extends CenesFragment {
 
         init(v);
 
-        ((CenesBaseActivity)getActivity()).hideFooter();
+        ((CenesBaseActivity) getActivity()).showFooter();
+        ((CenesBaseActivity)  getActivity()).activateFooterIcon(ProfileFragment.TAG);
 
         return v;
     }
 
-    @Override
+   /* @Override
     public void onResume() {
         super.onResume();
         try {
@@ -131,7 +133,7 @@ public class ProfileFragment extends CenesFragment {
         } catch (Exception e) {
 
         }
-    }
+    } */
 
     public void init(View v) {
         cenesApplication = getCenesActivity().getCenesApplication();
