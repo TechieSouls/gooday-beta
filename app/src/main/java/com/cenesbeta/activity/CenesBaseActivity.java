@@ -38,6 +38,7 @@ import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
 import com.cenesbeta.fragment.gathering.GatheringsFragment;
 import com.cenesbeta.fragment.metime.MeTimeCardFragment;
 import com.cenesbeta.fragment.metime.MeTimeFragment;
+import com.cenesbeta.fragment.profile.ProfileFragment;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -50,7 +51,7 @@ public class CenesBaseActivity extends CenesActivity {
 
     public FragmentTransaction fragmentTransaction;
     public FragmentManager fragmentManager;
-    public ImageView footerHomeIcon, footerGatheringIcon, footerMeTimeIcon;
+    public ImageView footerHomeIcon, footerGatheringIcon, footerMeTimeIcon, footerProfileIcon, footerNotificationIcon;
     LinearLayout llFooter;
     public RelativeLayout rlLoadingBlock;
     public TextView tvLoadingMsg;
@@ -90,6 +91,8 @@ public class CenesBaseActivity extends CenesActivity {
         footerHomeIcon = (ImageView) findViewById(R.id.footer_home_icon);
         footerGatheringIcon = (ImageView) findViewById(R.id.footer_gathering_icon);
         footerMeTimeIcon = (ImageView) findViewById(R.id.footer_metime_icon);
+        footerProfileIcon = (ImageView) findViewById(R.id.footer_profile_icon);
+        footerNotificationIcon = (ImageView) findViewById(R.id.footer_notification_icon);
         ivNotificationFloatingIcon = (ImageView) findViewById(R.id.iv_notification_floating_icon);
 
         rlLoadingBlock = (RelativeLayout) findViewById(R.id.rl_loading_block);
@@ -98,7 +101,9 @@ public class CenesBaseActivity extends CenesActivity {
         //Click Listeners
         footerHomeIcon.setOnClickListener(onClickListener);
         footerGatheringIcon.setOnClickListener(onClickListener);
+        footerProfileIcon.setOnClickListener(onClickListener);
         footerMeTimeIcon.setOnClickListener(onClickListener);
+        footerNotificationIcon.setOnClickListener(onClickListener);
         ivNotificationFloatingIcon.setOnClickListener(onClickListener);
 
         shortAnimationDuration = getResources().getInteger(
@@ -206,6 +211,16 @@ public class CenesBaseActivity extends CenesActivity {
                     clearBackStackInclusive(null);
                     replaceFragment(new NotificationFragment(), null);
                     break;
+
+                case R.id.footer_profile_icon:
+                    getFragmentManager().popBackStack();
+                    replaceFragment(new ProfileFragment(), ProfileFragment.TAG);
+
+                    break;
+                case R.id.footer_notification_icon:
+                    getFragmentManager().popBackStack();
+                    replaceFragment(new NotificationFragment(), NotificationFragment.TAG);
+                    break;
             }
         }
     };
@@ -283,6 +298,16 @@ public class CenesBaseActivity extends CenesActivity {
             footerMeTimeIcon.setImageResource(R.drawable.metime_icon_selected);
         } else {
             footerMeTimeIcon.setImageResource(R.drawable.metime_icon_unselected);
+        }
+        if (tag.equals(ProfileFragment.TAG)) {
+            footerProfileIcon.setImageResource(R.drawable.profile_icon_selected);
+        } else {
+            footerProfileIcon.setImageResource(R.drawable.profile_icon_unselected);
+        }
+        if (tag.equals(NotificationFragment.TAG)) {
+            footerNotificationIcon.setImageResource(R.drawable.notification_icon_selected);
+        } else {
+            footerNotificationIcon.setImageResource(R.drawable.notification_icon_unselected);
         }
     }
 

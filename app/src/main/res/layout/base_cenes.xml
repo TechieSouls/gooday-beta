@@ -81,6 +81,25 @@
                     android:gravity="center"
                     android:src="@drawable/metime_icon_unselected"/>
 
+
+                <ImageView
+                    android:id="@+id/footer_notification_icon"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:src="@drawable/notification_icon_unselected"/>
+
+                <ImageView
+                    android:id="@+id/footer_profile_icon"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:src="@drawable/profile_icon_unselected"/>
+
                 <ImageView
                     android:id="@+id/footer_reminder_icon"
                     android:layout_width="0dp"
