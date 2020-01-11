@@ -12,6 +12,7 @@ import com.cenesbeta.R;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.materialcalendarview.CalendarDay;
 import com.logentries.logger.AndroidLogger;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONObject;
 
@@ -252,6 +253,17 @@ public class CenesUtils {
             return s;
         } else {
             return Character.toUpperCase(first) + s.substring(1);
+        }
+    }
+
+    public static void postOnMixPanel(Context context, String eventName, JSONObject properties) {
+
+        MixpanelAPI mixpanel = MixpanelAPI.getInstance(context, CenesUtils.MIXPANEL_TOKEN);
+        try {
+            mixpanel.track(eventName, properties);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

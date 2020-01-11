@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 
+import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.JsonParsing;
 import com.cenesbeta.activity.GuestActivity;
 import com.cenesbeta.activity.SignInActivity;
@@ -998,7 +999,7 @@ public class ProfileAsyncTask {
             if (asyncTaskDto.getQueryStr() != null) {
                 apiUrl = apiUrl +"?"+asyncTaskDto.getQueryStr();
             }
-            return jsonParsing.httpGetJsonObject(apiUrl,null);
+            return jsonParsing.httpGetJsonObject(apiUrl,asyncTaskDto.getAuthToken());
         }
 
         @Override
@@ -1007,5 +1008,77 @@ public class ProfileAsyncTask {
             delegate.processFinish(stringObjectMap);
         }
     }
+
+
+    public static class CommonPostRequestTask extends AsyncTask<AsyncTaskDto, JSONObject, JSONObject> {
+
+        // you may separate this or combined to caller class.
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+        public AsyncResponse delegate = null;
+
+        public CommonPostRequestTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected JSONObject doInBackground(AsyncTaskDto... asyncTaskDtos) {
+
+            AsyncTaskDto asyncTaskDto = asyncTaskDtos[0];
+
+            JsonParsing jsonParsing = new JsonParsing();
+            String apiUrl = asyncTaskDto.getApiUrl();
+            return jsonParsing.httpPost(apiUrl,asyncTaskDto.getPostData(), asyncTaskDto.getAuthToken());
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject stringObjectMap) {
+            super.onPostExecute(stringObjectMap);
+            delegate.processFinish(stringObjectMap);
+        }
+    }
+
+    public static class CommonMultipartUploadTask extends AsyncTask<AsyncTaskDto, JSONObject, JSONObject> {
+
+        private CoreManager coreManager = cenesApplication.getCoreManager();
+
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+        public AsyncResponse delegate = null;
+
+        public CommonMultipartUploadTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected JSONObject doInBackground(AsyncTaskDto... params) {
+
+            UserManager userManager = coreManager.getUserManager();
+            User user = userManager.getUser();
+
+            AsyncTaskDto asyncTaskDto = params[0];
+            File file = asyncTaskDto.getFileToUpload();
+            String api = asyncTaskDto.getApiUrl();
+            try {
+                JsonParsing jsonParsing = new JsonParsing();
+                return jsonParsing.httpPostMultipart(api, user, file);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject response) {
+            delegate.processFinish(response);
+        }
+    }
+
 
 }

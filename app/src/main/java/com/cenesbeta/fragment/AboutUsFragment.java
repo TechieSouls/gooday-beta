@@ -39,8 +39,7 @@ public class AboutUsFragment  extends CenesFragment {
 
     RelativeLayout rlVersionUpdateButton;
     TextView tvVersionText;
-    private RoundedImageView homeProfilePic;
-    private ImageView homeIcon;
+    private ImageView ivBackButtonImg;
 
     CenesApplication cenesApplication;
     CoreManager coreManager;
@@ -54,8 +53,7 @@ public class AboutUsFragment  extends CenesFragment {
 
         View v = inflater.inflate(R.layout.activity_about_us, container, false);
 
-        homeProfilePic = (RoundedImageView) v.findViewById(R.id.home_profile_pic);
-        homeIcon = (ImageView) v.findViewById(R.id.home_icon);
+        ivBackButtonImg = (ImageView) v.findViewById(R.id.iv_back_button_img);
 
         setFragmentManager();
 
@@ -70,16 +68,8 @@ public class AboutUsFragment  extends CenesFragment {
         userManager = coreManager.getUserManager();
 
         user = userManager.getUser();
-        if (user != null && user.getPicture() != null && user.getPicture() != "null") {
-            RequestOptions requestOptions = new RequestOptions();
-            requestOptions.circleCrop();
-            requestOptions.placeholder(R.drawable.profile_pic_no_image);
-            Glide.with(getActivity()).load(user.getPicture()).apply(requestOptions).into(homeProfilePic);
-        }
 
-
-        homeIcon.setOnClickListener(onClickListener);
-        homeProfilePic.setOnClickListener(onClickListener);
+        ivBackButtonImg.setOnClickListener(onClickListener);
         rlVersionUpdateButton.setOnClickListener(onClickListener);
 
         PackageManager manager = getActivity().getPackageManager();
@@ -104,16 +94,10 @@ public class AboutUsFragment  extends CenesFragment {
         public void onClick(View v) {
 
             switch (v.getId()) {
-                case R.id.home_icon:
+                case R.id.iv_back_button_img:
                     getActivity().onBackPressed();
                     break;
-
-                case R.id.home_profile_pic:
-                    if (getActivity() instanceof CenesBaseActivity) {
-                        ((CenesBaseActivity)getActivity()).mDrawerLayout.openDrawer(GravityCompat.START);
-                    }
-                    break;
-                case R.id.rl_version_update_btn:
+                    case R.id.rl_version_update_btn:
                     Intent intent = new Intent(Intent.ACTION_VIEW,
                             Uri.parse(getString(R.string.about_us_version_update_link)));
                     startActivity(intent);

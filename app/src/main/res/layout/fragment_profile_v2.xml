@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_profile_top_view"
+        android:layout_width="match_parent"
+        android:layout_height="380dp"
+        android:background="@drawable/profile_base">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="35dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.cenesbeta.util.RoundedImageView
+                    android:id="@+id/iv_profile_pic"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/profile_pic_no_image" />
+
+                <TextView
+                    android:id="@+id/tv_profile_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="Guest"
+                    android:textColor="#898989"
+                    android:textSize="25dp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_ios_spinner"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="60dp"
+            android:layout_marginBottom="80dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/profile_screen_blue_circle">
+
+                <TextView
+                    android:id="@+id/tv_events_hosted"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textSize="25dp" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Events Hosted"
+                android:textAlignment="center"
+                android:textColor="#898989"
+                android:textSize="13dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="60dp"
+            android:layout_marginBottom="80dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/profile_screen_yellow_circle">
+
+                <TextView
+                    android:id="@+id/tv_events_attended"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textSize="25dp" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Events Attended"
+                android:textAlignment="center"
+                android:textColor="#898989"
+                android:textSize="13dp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+    <ListView
+        android:id="@+id/lv_profile_list_items"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_profile_top_view"></ListView>
+    <RelativeLayout
+        android:id="@+id/rl_photo_action_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#45000000"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_remove_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:text="Remove Current Photo"
+                    android:textAlignment="center"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/red"
+                    android:textSize="17sp"/>
+                <TextView
+                    android:id="@+id/tv_take_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:text="Take Photo"
+                    android:textAlignment="center"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/link_color"
+                    android:textSize="17sp"/>
+                <TextView
+                    android:id="@+id/tv_choose_library"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:text="Choose From Library"
+                    android:textAlignment="center"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/link_color"
+                    android:layout_marginTop="0.5dp"
+                    android:layout_marginBottom="0.5dp"
+                    android:textSize="17sp"/>
+
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_photo_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/xml_curved_corner_white"
+                android:text="Cancel"
+                android:textAlignment="center"
+                android:gravity="center_vertical"
+                android:textColor="@color/link_color"
+                android:layout_marginTop="20dp"
+                android:textSize="17sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_helpAndFeedback_action_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#45000000"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_faq"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:text="FAQ"
+                    android:textAlignment="center"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/link_color"
+                    android:textSize="17sp"/>
+                <TextView
+                    android:id="@+id/tv_help_and_feedback"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:text="Help &amp; Feedback"
+                    android:textAlignment="center"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/link_color"
+                    android:layout_marginTop="0.5dp"
+                    android:layout_marginBottom="0.5dp"
+                    android:textSize="17sp"/>
+
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_handf_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/xml_curved_corner_white"
+                android:text="Cancel"
+                android:textAlignment="center"
+                android:gravity="center_vertical"
+                android:textColor="@color/link_color"
+                android:layout_marginTop="20dp"
+                android:textSize="17sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

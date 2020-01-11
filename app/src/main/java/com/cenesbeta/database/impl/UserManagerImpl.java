@@ -204,7 +204,11 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public void updateProfilePic(User user) {
-        db.execSQL("update user_record set picture = '"+user.getPicture()+"'");
+        String query = "update user_record set picture = '"+user.getPicture()+"'";
+        if (user.getPicture() == null) {
+            query = "update user_record set picture = null";
+        }
+        db.execSQL(query);
     }
 
     @Override

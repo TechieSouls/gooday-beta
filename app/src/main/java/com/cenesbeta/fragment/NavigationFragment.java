@@ -35,6 +35,7 @@ import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.metime.MeTimeFragment;
 import com.cenesbeta.fragment.profile.DeleteAccountFragment;
 import com.cenesbeta.fragment.profile.ProfileFragment;
+import com.cenesbeta.fragment.profile.ProfileFragmentV2;
 import com.cenesbeta.service.AlarmReceiver;
 import com.cenesbeta.util.RoundedImageView;
 import com.facebook.login.LoginManager;
@@ -164,7 +165,7 @@ public class NavigationFragment extends CenesFragment {
                     System.out.println("Profile Fragment Clicked...");
                     //checkFragmentBeforeOpening(new ProfileFragment(), ProfileFragment.TAG);
                     getFragmentManager().popBackStack();
-                    replaceFragment(new ProfileFragment(), ProfileFragment.TAG);
+                    replaceFragment(new ProfileFragmentV2(), ProfileFragment.TAG);
                     break;
                 case R.id.tvCalendarSync:
                     //checkFragmentBeforeOpening(new CalenderSyncFragment(), CalenderSyncFragment.TAG);

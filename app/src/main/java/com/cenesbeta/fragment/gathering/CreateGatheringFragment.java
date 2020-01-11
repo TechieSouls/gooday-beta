@@ -1479,6 +1479,7 @@ public class CreateGatheringFragment extends CenesFragment {
     }
 
     public void checkCameraPermissiosn() {
+        rlPhotoActionSheet.setVisibility(View.GONE);
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
         } else {

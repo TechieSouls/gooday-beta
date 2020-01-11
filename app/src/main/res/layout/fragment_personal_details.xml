@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_color">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <ImageView
+            android:id="@+id/iv_back_button_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/abondan_event_icon"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Personal Details"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="17dp"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_below="@+id/rl_header">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/rl_profile_name_bar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <TextView
+                android:id="@+id/tv_profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your Name"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="15dp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/grey_arrow_icon"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_profile_password_bar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <TextView
+                android:id="@+id/tv_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="xxxxxxx"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="15dp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/grey_arrow_icon"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_profile_email_bar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <TextView
+                android:id="@+id/tv_profile_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your Email"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="15dp"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_profile_phone_bar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <TextView
+                android:id="@+id/tv_profile_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Phone Registered"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="15dp"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@color/theme_color"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white">
+
+            <RelativeLayout
+                android:id="@+id/rl_profile_dob_bar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp">
+
+                <TextView
+                    android:id="@+id/tv_profile_dob"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Choose BirthDate"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="15dp"
+                    android:layout_centerVertical="true"/>
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/grey_arrow_icon"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_profile_gender_bar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp">
+
+                <TextView
+                    android:id="@+id/tv_profile_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select Gender"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="15dp"
+                    android:layout_centerVertical="true"/>
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/grey_arrow_icon"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_gender_action_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#45000000"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_gender_male"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:text="Male"
+                    android:textAlignment="center"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/facebook_blue"
+                    android:textSize="17sp"/>
+
+                <TextView
+                    android:id="@+id/tv_gender_female"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:text="Female"
+                    android:textAlignment="center"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/facebook_blue"
+                    android:layout_marginTop="0.5dp"
+                    android:layout_marginBottom="0.5dp"
+                    android:textSize="17sp"/>
+
+                <TextView
+                    android:id="@+id/tv_gender_other"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:text="Other"
+                    android:textAlignment="center"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/facebook_blue"
+                    android:textSize="17sp"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_gender_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/xml_curved_corner_white"
+                android:text="Cancel"
+                android:textAlignment="center"
+                android:gravity="center_vertical"
+                android:textColor="@color/facebook_blue"
+                android:layout_marginTop="20dp"
+                android:textSize="17sp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

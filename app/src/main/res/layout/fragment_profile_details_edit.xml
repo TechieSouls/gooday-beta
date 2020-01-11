@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:text="Cancel"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/link_color"/>
+
+        <TextView
+            android:id="@+id/tv_profile_edit_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="17dp"
+            android:layout_centerInParent="true"
+            />
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:text="Save"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/link_color"
+            android:layout_alignParentRight="true"
+            android:visibility="gone"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_edit_name_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_header"
+        android:background="@color/white"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/et_profile_name"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/transparent"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:textSize="16dp"
+            android:hint="Enter Your Name"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/rl_edit_password_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_header"
+        android:background="@color/white"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:id="@+id/ll_current_password_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/et_profile_current_password"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/transparent"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:textSize="16dp"
+                android:hint="Current Password"
+                android:inputType="textPassword"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@color/theme_color"/>
+        </LinearLayout>
+        <EditText
+            android:id="@+id/et_profile_choose_password"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/transparent"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:textSize="16dp"
+            android:hint="Choose a Password"
+            android:inputType="textPassword"/>
+
+        <EditText
+            android:id="@+id/et_profile_confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/transparent"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:textSize="16dp"
+            android:hint="Confirm Password"
+            android:inputType="textPassword"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/password_guideline"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="13dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"/>
+    </LinearLayout>
+
+</RelativeLayout>

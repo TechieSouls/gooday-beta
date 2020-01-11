@@ -33,6 +33,7 @@ import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.guest.SignupCountryListFragment;
 import com.cenesbeta.service.AuthenticateService;
 import com.cenesbeta.util.CenesUtils;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONObject;
 
@@ -46,7 +47,7 @@ public class DeleteAccountFragment extends CenesFragment {
     private TextView tvSelectedCountryName, tvCountryCodeDigit;
     private EditText etPhoneNumber, etPassword;
     private Button btnDeleteAccount;
-    private ImageView ivProfilePic, homeIcon;
+    private ImageView ivBackButtonImg;
     private View fragmentView;
 
     private Boolean isCountrySelected = false;
@@ -89,14 +90,12 @@ public class DeleteAccountFragment extends CenesFragment {
 
         btnDeleteAccount = (Button) view.findViewById(R.id.btn_delete_account);
 
-        ivProfilePic = (ImageView) view.findViewById(R.id.iv_profile_pic);
-        homeIcon = (ImageView) view.findViewById(R.id.home_icon);
+        ivBackButtonImg = (ImageView) view.findViewById(R.id.iv_back_button_img);
 
         rlDeleteAccountBar.setOnClickListener(onClickListener);
         rlSelectCountryBar.setOnClickListener(onClickListener);
         btnDeleteAccount.setOnClickListener(onClickListener);
-        ivProfilePic.setOnClickListener(onClickListener);
-        homeIcon.setOnClickListener(onClickListener);
+        ivBackButtonImg.setOnClickListener(onClickListener);
 
         userManagerImpl = new UserManagerImpl(getCenesActivity().getCenesApplication());
         eventManagerImpl = new EventManagerImpl(getCenesActivity().getCenesApplication());
@@ -120,12 +119,6 @@ public class DeleteAccountFragment extends CenesFragment {
             tvCountryCodeDigit.setText(countryCodeDigit);
             tvSelectedCountryName.setText(countryName);
         }
-
-
-        RequestOptions requestOptions = new RequestOptions();
-        requestOptions.circleCrop();
-        requestOptions.placeholder(R.drawable.profile_pic_no_image);
-        Glide.with(getContext()).load(loggedInUser.getPicture()).apply(requestOptions).into(ivProfilePic);
 
         llDeleteAccountForm.setVisibility(View.GONE);
         if (CenesUtils.isEmpty(loggedInUser.getPassword())) {
@@ -161,6 +154,8 @@ public class DeleteAccountFragment extends CenesFragment {
                     postData.put("password", etPassword.getText().toString());
                 }
 
+                callMixPanelOnAccountDeleted();
+
                 new ProfileAsyncTask(getCenesActivity().getCenesApplication(), (CenesBaseActivity)getActivity());
                 new ProfileAsyncTask.DeleteAccountTask(new ProfileAsyncTask.DeleteAccountTask.AsyncResponse() {
                     @Override
@@ -192,6 +187,20 @@ public class DeleteAccountFragment extends CenesFragment {
         }
     }
 
+    public void callMixPanelOnAccountDeleted() {
+        MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+        try {
+            JSONObject props = new JSONObject();
+            props.put("Action","Delete Account");
+            props.put("UserEmail",loggedInUser.getEmail());
+            props.put("UserName",loggedInUser.getName());
+            mixpanel.track("ProfileScreen", props);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -215,14 +224,8 @@ public class DeleteAccountFragment extends CenesFragment {
                     deleteAccountButtonPressed();
                     break;
 
-                case R.id.home_icon:
+                case R.id.iv_back_button_img:
                     getActivity().onBackPressed();
-                    break;
-
-                case R.id.iv_profile_pic:
-                    if (getActivity() instanceof CenesBaseActivity) {
-                        ((CenesBaseActivity)getActivity()).mDrawerLayout.openDrawer(GravityCompat.START);
-                    }
                     break;
             }
         }
