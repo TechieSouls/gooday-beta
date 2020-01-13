@@ -14,6 +14,7 @@ public class UserAPI {
     public static String post_sendVerificationCodeAPI = "/api/guest/sendVerificationCode";
     public static String post_checkVerificationCodeAPI = "/api/guest/checkVerificationCode";
     public static String post_imageUplaodAPI = "/api/user/profile/upload";
+    public static String post_upload_profile_pic_v2 = "/api/user/profile/upload/v2";
     public static String post_deviceTokenSyncAPI = "/api/user/registerdevice";
     public static String post_syncPhoneContactsAPI = "/api/syncContacts";
     public static String post_changePasswordAPI = "/api/user/changePassword";
@@ -22,10 +23,12 @@ public class UserAPI {
     public static String post_userdetails = "/api/user/updateDetails";
     public static String post_update_password = "/auth/updatePassword";
     public static String post_delete_user_by_phone_password = "/api/deleteUserByPhonePassword";
+    public static String post_validate_password = "/api/user/validatePassword";
 
     //GET
     public static String get_user_ip = "https://api6.ipify.org/?format=json";
     public static String get_country_by_ip_address = "/auth/getCountryByIpAddress";
+    public static String get_user_stats = "/api/user/userStatsByUserId";
 
     public static String get_holidayCalendarByUserId = "/api/user/holidayCalendarByUserId";
     public static String get_forget_password_api = "/auth/forgetPassword";

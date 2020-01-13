@@ -568,8 +568,14 @@ public class SignupStepSuccessFragment extends CenesFragment {
             public void processFinish(Object response) {
 
                 //((GuestActivity)getActivity()).replaceFragment(new HolidaySyncFragment(), null);
-                startActivity(new Intent((GuestActivity)getActivity(), CenesBaseActivity.class));
-                getActivity().finish();
+                try {
+                    if (getActivity() != null) {
+                        startActivity(new Intent((GuestActivity)getActivity(), CenesBaseActivity.class));
+                        getActivity().finish();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }).execute(userContact);
     }

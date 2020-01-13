@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_color">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <ImageView
+            android:id="@+id/iv_back_button_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/abondan_event_icon"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Calendars"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="17dp"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/rl_mycalendars_holiday_bar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <TextView
+                android:id="@+id/tv_holiday_calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Holiday Calendar "
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="15dp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/grey_arrow_icon"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:background="@color/theme_color"/>
+        <RelativeLayout
+            android:id="@+id/rl_mycalendars_google_bar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <TextView
+                android:id="@+id/tv_google_calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Google Calendar"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="15dp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/grey_arrow_icon"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_mycalendars_outlook_bar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <TextView
+                android:id="@+id/tv_outlook_calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Outlook Calendar"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="15dp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/grey_arrow_icon"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>
