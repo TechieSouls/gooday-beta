@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cenesbeta.R;
@@ -50,7 +51,7 @@ public class HolidayCountryItemAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             convertView = this.inflter.inflate(R.layout.adapter_holiday_country_list_item, null);
 
-            viewHolder.llHolidayListItemBar = (LinearLayout) convertView.findViewById(R.id.ll_holiday_list_item_bar);
+            viewHolder.llHolidayListItemBar = (RelativeLayout) convertView.findViewById(R.id.tv_holiday_country_list_item);
             viewHolder.tvCountryName = (TextView) convertView.findViewById(R.id.tv_country_name);
 
             convertView.setTag(viewHolder);
@@ -73,7 +74,7 @@ public class HolidayCountryItemAdapter extends BaseAdapter {
 
     class ViewHolder {
 
-        private LinearLayout llHolidayListItemBar;
+        private RelativeLayout llHolidayListItemBar;
         private TextView tvCountryName;
     }
 }
