@@ -208,7 +208,7 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                 }
             }
 
-            if (child.getIsOwner()) {
+            if (child.getCreatedById().equals(homeFragment.loggedInUser.getUserId())) {
                 viewHolder.tvDecline.setVisibility(View.GONE);
                 viewHolder.trash.setVisibility(View.VISIBLE);
             } else {
