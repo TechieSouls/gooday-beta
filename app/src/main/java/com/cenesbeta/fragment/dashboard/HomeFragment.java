@@ -115,7 +115,7 @@ public class HomeFragment extends CenesFragment {
     UrlManager urlManager;
     InternetManager internetManager;
     HomeScreenApiManager homeScreenApiManager;
-    User loggedInUser;
+    public User loggedInUser;
     Tracker mTracker;
     private EventManagerImpl eventManagerImpl;
     private View fragmentView;

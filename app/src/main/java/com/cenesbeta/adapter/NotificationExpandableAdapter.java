@@ -236,6 +236,9 @@ public class NotificationExpandableAdapter extends BaseExpandableListAdapter {
 
 
                 notificationFragment.notificationManagerImpl.updateNotificationReadStatus(notification);
+                List<Notification> notifications = notificationFragment.notificationManagerImpl.fetchAllNotifications();
+                notificationFragment.filterNotification(notifications);
+
                 if (notificationFragment.internetManager.isInternetConnection(notificationFragment.getCenesActivity())) {
 
                     new NotificationAsyncTask(((CenesBaseActivity)notificationFragment.getActivity()).getCenesApplication(), notificationFragment.getActivity());
@@ -248,10 +251,12 @@ public class NotificationExpandableAdapter extends BaseExpandableListAdapter {
 
                 }
 
-                GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
-                gatheringPreviewFragment.event = notification.getEvent();
-                ((CenesBaseActivity)notificationFragment.getActivity()).replaceFragment(gatheringPreviewFragment, NotificationFragment.TAG);
 
+                if(notification.getEvent() != null) {
+                    GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
+                    gatheringPreviewFragment.event = notification.getEvent();
+                    ((CenesBaseActivity) notificationFragment.getActivity()).replaceFragment(gatheringPreviewFragment, NotificationFragment.TAG);
+                }
 
             }
         });

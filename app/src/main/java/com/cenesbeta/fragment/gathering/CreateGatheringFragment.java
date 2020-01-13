@@ -781,7 +781,7 @@ public class CreateGatheringFragment extends CenesFragment {
                         e.printStackTrace();
                     }
 
-                    //llPredictiveCalCell.setVisibility(View.GONE);
+                    llPredictiveCalCell.setVisibility(View.GONE);
                     llPredictiveCalInfo.setVisibility(View.GONE);
 
                     llGatheringDateBars.setVisibility(View.VISIBLE);

@@ -39,6 +39,7 @@ import com.cenesbeta.fragment.gathering.GatheringsFragment;
 import com.cenesbeta.fragment.metime.MeTimeCardFragment;
 import com.cenesbeta.fragment.metime.MeTimeFragment;
 import com.cenesbeta.fragment.profile.ProfileFragment;
+import com.cenesbeta.fragment.profile.ProfileFragmentV2;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -213,12 +214,9 @@ public class CenesBaseActivity extends CenesActivity {
                     break;
 
                 case R.id.footer_profile_icon:
-                    getFragmentManager().popBackStack();
-                    replaceFragment(new ProfileFragment(), ProfileFragment.TAG);
-
+                    replaceFragment(new ProfileFragmentV2(), ProfileFragment.TAG);
                     break;
                 case R.id.footer_notification_icon:
-                    getFragmentManager().popBackStack();
                     replaceFragment(new NotificationFragment(), NotificationFragment.TAG);
                     break;
             }

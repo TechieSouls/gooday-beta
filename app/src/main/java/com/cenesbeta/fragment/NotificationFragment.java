@@ -108,21 +108,24 @@ public class NotificationFragment extends CenesFragment {
         return v;
     }
 
-   /* @Override
+    @Override
     public void onResume() {
         super.onResume();
-        try {
-            if (getActivity() instanceof CenesBaseActivity) {
+       try {
+           ((CenesBaseActivity) getActivity()).showFooter();
+           ((CenesBaseActivity)  getActivity()).activateFooterIcon(NotificationFragment.TAG);
+
+           /*  if (getActivity() instanceof CenesBaseActivity) {
                 ((CenesBaseActivity) getActivity()).hideFooter();
             } else if (getActivity() instanceof GatheringScreenActivity) {
                 ((GatheringScreenActivity) getActivity()).hideFooter();
             } else if (getActivity() instanceof DiaryActivity) {
                 ((DiaryActivity) getActivity()).hideFooter();
-            }
+            } */
         } catch (Exception e) {
 
         }
-    } */
+    }
 
     public void init(View view) {
         cenesApplication = getCenesActivity().getCenesApplication();
@@ -196,7 +199,7 @@ public class NotificationFragment extends CenesFragment {
         }
 
     }
-    private void filterNotification(List<Notification> notifications){
+    public void filterNotification(List<Notification> notifications){
         notificationMapList = new HashMap<>();
         headers = new ArrayList<>();
         List<Notification> newNotifications = new ArrayList<>();
