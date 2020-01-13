@@ -785,10 +785,10 @@ public class CreateGatheringFragment extends CenesFragment {
                     llPredictiveCalInfo.setVisibility(View.GONE);
 
                     llGatheringDateBars.setVisibility(View.VISIBLE);
-                    //llGatheringInfoBars.setVisibility(View.VISIBLE);
+                    llGatheringInfoBars.setVisibility(View.VISIBLE);
                     rlSelectedFriendsRecyclerView.setVisibility(View.VISIBLE);
                     rlHeader.setVisibility(View.VISIBLE);
-                    //rlPreviewInvitationButton.setVisibility(View.VISIBLE);
+                    rlPreviewInvitationButton.setVisibility(View.VISIBLE);
 
                     createGatheringDto.setDate(true);
                 } else {

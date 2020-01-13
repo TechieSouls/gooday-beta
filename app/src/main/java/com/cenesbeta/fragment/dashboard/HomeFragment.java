@@ -240,7 +240,7 @@ public class HomeFragment extends CenesFragment {
         gatheringFabMenuBtn.setOnClickListener(onClickListener);
         reminderFabMenuBtn.setOnClickListener(onClickListener);
         alarmFabMenuBtn.setOnClickListener(onClickListener);
-        homePageProfilePic.setOnClickListener(onClickListener);
+       // homePageProfilePic.setOnClickListener(onClickListener);
 
         homeCalSearchView.setOnDateChangedListener(onDateSelectedListener);
 

@@ -102,7 +102,7 @@ public class MeTimeFragment extends CenesFragment {
         homeProfilePic = v.findViewById(R.id.home_profile_pic);
 
         ivAddMetime.setOnClickListener(onClickListener);
-        homeProfilePic.setOnClickListener(onClickListener);
+       // homeProfilePic.setOnClickListener(onClickListener);
         meTimeItemMap = new HashMap<>();
 
         CoreManager coreManager = cenesApplication.getCoreManager();

@@ -137,6 +137,7 @@ public class ProfileFragmentV2  extends CenesFragment {
 
         //Calling Functions
         ((CenesBaseActivity)getActivity()).showFooter();
+        ((CenesBaseActivity)  getActivity()).activateFooterIcon(ProfileFragmentV2.TAG);
         populateProfileScreen();
         callMixPanel();
         new ProfileAsyncTask(getCenesActivity().getCenesApplication(), (CenesBaseActivity)getActivity());
@@ -153,6 +154,7 @@ public class ProfileFragmentV2  extends CenesFragment {
     public void onResume() {
         super.onResume();
         ((CenesBaseActivity)getActivity()).showFooter();
+        ((CenesBaseActivity)  getActivity()).activateFooterIcon(ProfileFragmentV2.TAG);
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {

@@ -112,7 +112,7 @@ public class CenesBaseActivity extends CenesActivity {
 
         notificationCountCall();
 
-        mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+        /*mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View view, float v) {
 
@@ -132,7 +132,7 @@ public class CenesBaseActivity extends CenesActivity {
             public void onDrawerStateChanged(int i) {
 
             }
-        });
+        }); */
 
         String data = getIntent().getDataString();
         System.out.println(data);
@@ -214,9 +214,11 @@ public class CenesBaseActivity extends CenesActivity {
                     break;
 
                 case R.id.footer_profile_icon:
-                    replaceFragment(new ProfileFragmentV2(), ProfileFragment.TAG);
+                    notificationCountCall();
+                    replaceFragment(new ProfileFragmentV2(), ProfileFragmentV2.TAG);
                     break;
                 case R.id.footer_notification_icon:
+                    notificationCountCall();
                     replaceFragment(new NotificationFragment(), NotificationFragment.TAG);
                     break;
             }
@@ -297,7 +299,7 @@ public class CenesBaseActivity extends CenesActivity {
         } else {
             footerMeTimeIcon.setImageResource(R.drawable.metime_icon_unselected);
         }
-        if (tag.equals(ProfileFragment.TAG)) {
+        if (tag.equals(ProfileFragmentV2.TAG)) {
             footerProfileIcon.setImageResource(R.drawable.profile_icon_selected);
         } else {
             footerProfileIcon.setImageResource(R.drawable.profile_icon_unselected);
