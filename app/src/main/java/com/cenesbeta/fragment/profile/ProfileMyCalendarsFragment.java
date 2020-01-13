@@ -43,7 +43,8 @@ public class ProfileMyCalendarsFragment extends CenesFragment {
 
             switch (v.getId()) {
                 case R.id.rl_mycalendars_holiday_bar:
-
+                    HolidayCalendarFragment holidayCalendarFragment = new HolidayCalendarFragment();
+                    ((CenesBaseActivity)getActivity()).replaceFragment(holidayCalendarFragment, ProfileMyCalendarsFragment.TAG);
                     break;
                 case R.id.rl_mycalendars_google_bar:
 
@@ -58,8 +59,6 @@ public class ProfileMyCalendarsFragment extends CenesFragment {
                     ((CenesBaseActivity)getActivity()).replaceFragment(profileMyCalendarsSocialFragmentOutlook, ProfileMyCalendarsFragment.TAG);
 
                     break;
-
-
             }
         }
     };

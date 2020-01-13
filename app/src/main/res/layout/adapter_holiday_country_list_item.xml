@@ -4,10 +4,11 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/tv_holiday_country_list_item"
         android:layout_width="match_parent"
         android:layout_height="50dp">
         <TextView
-            android:id="@+id/tv_holiday_country_list_item"
+            android:id="@+id/tv_country_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"

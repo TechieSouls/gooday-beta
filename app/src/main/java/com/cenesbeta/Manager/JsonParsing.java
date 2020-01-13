@@ -215,7 +215,10 @@ public class JsonParsing {
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
             //add request header
+            con.setDoOutput(true);
             con.setRequestMethod("DELETE");
+            con.setRequestProperty(
+                    "Content-Type", "application/x-www-form-urlencoded" );
             con.setConnectTimeout(TIMEOUT_MILLIS);
             if (authToken != null) {
                 con.setRequestProperty("token", authToken);

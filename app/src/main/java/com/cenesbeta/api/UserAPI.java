@@ -25,7 +25,8 @@ public class UserAPI {
     public static String post_delete_user_by_phone_password = "/api/deleteUserByPhonePassword";
     public static String post_validate_password = "/api/user/validatePassword";
     public static String post_sync_google_calendar = "/api/google/events/android/v2";
-    public static String post_sync_outlook_calendar = " /api/outlook/events/android/v2";
+    public static String post_sync_outlook_calendar = "/api/outlook/events/android/v2";
+    public static String post_sync_holiday_calendar = "/api/holiday/calendar/events/v2";
 
     //GET
     public static String get_user_ip = "https://api6.ipify.org/?format=json";
@@ -40,7 +41,7 @@ public class UserAPI {
     public static String get_forget_password_send_email = "/auth/forgetPassword/v2/sendEmail";
 
     //DELETE
-    public static String delete_sync_token = "api/user/deleteSyncBySyncId";
+    public static String delete_sync_token = "/api/user/deleteSyncBySyncId";
 
 
 

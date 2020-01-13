@@ -6,8 +6,11 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -301,6 +304,16 @@ public class HomeFragment extends CenesFragment {
         }
     }
 
+    //This is the handler that will manager to process the broadcast intent
+    private BroadcastReceiver reloadHomeScreenBroadcaster = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            //do other stuff here
+            initialSync();
+        }
+    };
+
     OnDateSelectedListener onDateSelectedListener = new OnDateSelectedListener() {
         @Override
         public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
@@ -499,6 +512,11 @@ public class HomeFragment extends CenesFragment {
 
         ((CenesBaseActivity) getActivity()).showFooter();
         ((CenesBaseActivity)  getActivity()).activateFooterIcon(HomeFragment.TAG);
+
+        if (getActivity() != null) {
+            ((CenesBaseActivity)  getActivity()).registerReceiver(reloadHomeScreenBroadcaster, new IntentFilter("homescreenrefresh"));
+        }
+
     }
 
     @Override
@@ -512,6 +530,14 @@ public class HomeFragment extends CenesFragment {
             holidayCalendarTask.cancel(true);
         }
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (getActivity() != null) {
+            ((CenesBaseActivity)  getActivity()).unregisterReceiver(reloadHomeScreenBroadcaster);
+        }
     }
 
     public Bitmap rotateImage(Bitmap source, float angle) {

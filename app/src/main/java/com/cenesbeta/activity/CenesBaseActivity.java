@@ -374,6 +374,12 @@ public class CenesBaseActivity extends CenesActivity {
         }
     }
 
+    public void homeScreenReloadBroadcaster() {
+        Intent newintent = new Intent("homescreenrefresh");
+        getApplicationContext().sendBroadcast(newintent);
+
+    }
+
 
     public void zoomImageFromThumb(final ImageView thumbView, String imageUrl) {
         // If there's an animation in progress, cancel it
