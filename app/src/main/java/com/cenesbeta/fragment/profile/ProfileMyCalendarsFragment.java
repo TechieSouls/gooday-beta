@@ -14,6 +14,8 @@ import com.cenesbeta.fragment.CenesFragment;
 
 public class ProfileMyCalendarsFragment extends CenesFragment {
 
+    private static String TAG = "ProfileMyCalendarsFragment";
+
     private RelativeLayout rlMycalendarsHolidayBar, rlMycalendarsGoogleBar, rlMycalendarsOutlookBar;
 
     @Nullable
@@ -45,8 +47,15 @@ public class ProfileMyCalendarsFragment extends CenesFragment {
                     break;
                 case R.id.rl_mycalendars_google_bar:
 
+                    ProfileMyCalendarsSocialFragment profileMyCalendarsSocialFragment = new ProfileMyCalendarsSocialFragment();
+                    profileMyCalendarsSocialFragment.calendarSelected = ProfileMyCalendarsSocialFragment.CalendarType.Google;
+                    ((CenesBaseActivity)getActivity()).replaceFragment(profileMyCalendarsSocialFragment, ProfileMyCalendarsFragment.TAG);
+
                     break;
                 case R.id.rl_mycalendars_outlook_bar:
+                    ProfileMyCalendarsSocialFragment profileMyCalendarsSocialFragmentOutlook = new ProfileMyCalendarsSocialFragment();
+                    profileMyCalendarsSocialFragmentOutlook.calendarSelected = ProfileMyCalendarsSocialFragment.CalendarType.Outlook;
+                    ((CenesBaseActivity)getActivity()).replaceFragment(profileMyCalendarsSocialFragmentOutlook, ProfileMyCalendarsFragment.TAG);
 
                     break;
 

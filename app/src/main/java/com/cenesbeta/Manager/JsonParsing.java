@@ -208,6 +208,38 @@ public class JsonParsing {
         return null;
     }
 
+    public JSONObject httpDeleteJsonObject(String url,String authToken) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            System.out.println("API : "+url);
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            //add request header
+            con.setRequestMethod("DELETE");
+            con.setConnectTimeout(TIMEOUT_MILLIS);
+            if (authToken != null) {
+                con.setRequestProperty("token", authToken);
+            }
+
+            int responseCode = con.getResponseCode();
+            System.out.println("Response Code : " + responseCode);
+            if (responseCode == 200) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String line = br.readLine();
+                while (line != null) {
+                    sb.append(line);
+                    line = br.readLine();
+                }
+                System.out.println(sb.toString());
+                JSONObject jsonObject = new JSONObject(sb.toString());
+                return jsonObject;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public JSONObject httpPutJsonObject(String url,String authToken) {
         StringBuilder sb = new StringBuilder();

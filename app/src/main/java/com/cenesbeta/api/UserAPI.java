@@ -24,17 +24,24 @@ public class UserAPI {
     public static String post_update_password = "/auth/updatePassword";
     public static String post_delete_user_by_phone_password = "/api/deleteUserByPhonePassword";
     public static String post_validate_password = "/api/user/validatePassword";
+    public static String post_sync_google_calendar = "/api/google/events/android/v2";
+    public static String post_sync_outlook_calendar = " /api/outlook/events/android/v2";
 
     //GET
     public static String get_user_ip = "https://api6.ipify.org/?format=json";
     public static String get_country_by_ip_address = "/auth/getCountryByIpAddress";
     public static String get_user_stats = "/api/user/userStatsByUserId";
+    public static String get_user_sync_details = "/api/user/syncDetails";
 
     public static String get_holidayCalendarByUserId = "/api/user/holidayCalendarByUserId";
     public static String get_forget_password_api = "/auth/forgetPassword";
 
     public static String get_forget_password_email_api = "/auth/forgetPassword/v2";
     public static String get_forget_password_send_email = "/auth/forgetPassword/v2/sendEmail";
+
+    //DELETE
+    public static String delete_sync_token = "api/user/deleteSyncBySyncId";
+
 
 
 }

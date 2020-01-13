@@ -34,7 +34,7 @@
         android:layout_below="@+id/rl_header">
 
         <RelativeLayout
-            android:id="@+id/rl_profile_name_bar"
+            android:id="@+id/rl_profile_calendar_name_bar"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@color/white">
@@ -58,14 +58,15 @@
             android:background="@color/link_color"
             android:textColor="@color/white"
             android:textSize="16dp"/>
+
         <Button
             android:id="@+id/btn_calendar_action_sync"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="Delete"
             android:background="@color/link_color"
+            android:text="Delete"
             android:textColor="@color/white"
-            android:textSize="16dp"/>
+            android:textSize="16dp" />
 
         <TextView
             android:id="@+id/tv_calendar_guideline"

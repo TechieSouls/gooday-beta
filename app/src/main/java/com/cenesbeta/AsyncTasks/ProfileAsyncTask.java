@@ -27,6 +27,7 @@ import com.cenesbeta.fragment.guest.ForgotPasswordSuccessFragment;
 import com.google.gson.Gson;
 
 import org.apache.http.util.ByteArrayBuffer;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -1000,6 +1001,69 @@ public class ProfileAsyncTask {
                 apiUrl = apiUrl +"?"+asyncTaskDto.getQueryStr();
             }
             return jsonParsing.httpGetJsonObject(apiUrl,asyncTaskDto.getAuthToken());
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject stringObjectMap) {
+            super.onPostExecute(stringObjectMap);
+            delegate.processFinish(stringObjectMap);
+        }
+    }
+
+    public static class CommonGetRequestArrayResponseTask extends AsyncTask<AsyncTaskDto, JSONArray, JSONArray> {
+
+        // you may separate this or combined to caller class.
+        public interface AsyncResponse {
+            void processFinish(JSONArray response);
+        }
+        public AsyncResponse delegate = null;
+
+        public CommonGetRequestArrayResponseTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected JSONArray doInBackground(AsyncTaskDto... asyncTaskDtos) {
+
+            AsyncTaskDto asyncTaskDto = asyncTaskDtos[0];
+
+            JsonParsing jsonParsing = new JsonParsing();
+            String apiUrl = asyncTaskDto.getApiUrl();
+            if (asyncTaskDto.getQueryStr() != null) {
+                apiUrl = apiUrl +"?"+asyncTaskDto.getQueryStr();
+            }
+            return jsonParsing.httpGet(apiUrl,asyncTaskDto.getAuthToken());
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray stringObjectMap) {
+            super.onPostExecute(stringObjectMap);
+            delegate.processFinish(stringObjectMap);
+        }
+    }
+    public static class CommonDeleteRequestTask extends AsyncTask<AsyncTaskDto, JSONObject, JSONObject> {
+
+        // you may separate this or combined to caller class.
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+        public AsyncResponse delegate = null;
+
+        public CommonDeleteRequestTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected JSONObject doInBackground(AsyncTaskDto... asyncTaskDtos) {
+
+            AsyncTaskDto asyncTaskDto = asyncTaskDtos[0];
+
+            JsonParsing jsonParsing = new JsonParsing();
+            String apiUrl = asyncTaskDto.getApiUrl();
+            if (asyncTaskDto.getQueryStr() != null) {
+                apiUrl = apiUrl +"?"+asyncTaskDto.getQueryStr();
+            }
+            return jsonParsing.httpDeleteJsonObject(apiUrl,asyncTaskDto.getAuthToken());
         }
 
         @Override
