@@ -115,23 +115,23 @@ public class NavigationFragment extends CenesFragment {
     }
 
     public void closeDrawer() {
-        if (getActivity() instanceof GatheringScreenActivity) {
+        /*if (getActivity() instanceof GatheringScreenActivity) {
             GatheringScreenActivity.mDrawerLayout.closeDrawer(GravityCompat.START);
         } else if (getActivity() instanceof DiaryActivity) {
             DiaryActivity.mDrawerLayout.closeDrawer(GravityCompat.START);
         } else if (getActivity() instanceof CenesBaseActivity) {
             ((CenesBaseActivity)getActivity()).mDrawerLayout.closeDrawer(GravityCompat.START);
-        }
+        }*/
     }
 
     public void replaceFragment(Fragment fragment, String tag) {
-        if (getActivity() instanceof GatheringScreenActivity) {
+        /*if (getActivity() instanceof GatheringScreenActivity) {
             ((GatheringScreenActivity) getActivity()).replaceFragment(fragment, tag);
         } else if (getActivity() instanceof DiaryActivity) {
             ((DiaryActivity) getActivity()).replaceFragment(fragment, tag);
         } else if (getActivity() instanceof CenesBaseActivity) {
             ((CenesBaseActivity) getActivity()).replaceFragment(fragment, tag);
-        }
+        }*/
     }
 
     @Override

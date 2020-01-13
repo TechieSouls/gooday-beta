@@ -197,7 +197,7 @@ public class GatheringsFragment extends CenesFragment {
         maybeBtn.setOnClickListener(onClickListener);
         declinedBtn.setOnClickListener(onClickListener);
         createGatheringBtn.setOnClickListener(onClickListener);
-        homePageProfilePic.setOnClickListener(onClickListener);
+       // homePageProfilePic.setOnClickListener(onClickListener);
     }
 
     public void updateUIAfterGatheringAsyncTask(Map<String, Object> response, boolean isInvitation, String displayAtScreen) {
