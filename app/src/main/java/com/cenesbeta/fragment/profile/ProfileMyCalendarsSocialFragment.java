@@ -344,8 +344,10 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
     public void loadUserSyncTokens() {
         try {
             if (calendarSelected.equals(CalendarType.Google)) {
+                tvCalendarGuideline.setText(getString(R.string.google_calendar_sync_guideline));
                 tvSocialItemHeader.setText("Google Calendar");
             } else {
+                tvCalendarGuideline.setText(getString(R.string.outlook_calendar_sync_guideline));
                 tvSocialItemHeader.setText("Outlook Calendar");
             }
             AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
@@ -360,7 +362,6 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
 
     public void getAsyncTaskCall(AsyncTaskDto asyncTaskDto) {
         try {
-
             new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
                 @Override
                 public void processFinish(JSONObject response) {

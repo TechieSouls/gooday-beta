@@ -118,6 +118,8 @@ time for everyone to meet.\n\n\nNo more back and forth messaging.\nNo more time 
     <string name="about_us_version_update_link">https://play.google.com/store/apps/details?id=com.cenesbeta</string>
 
     <string name="password_guideline">Password must be 8-16 characters long.</string>
+    <string name="google_calendar_sync_guideline">Only one Google account can be synced at a time. Add a different account by deleting the current one.</string>
+    <string name="outlook_calendar_sync_guideline">Only one Outlook account can be synced at a time. Add a different account by deleting the current one.</string>
 
     <!-- Cenes Constants  -->
     <string name="cenesWebDomain">https://www.cenesgroup.com</string>

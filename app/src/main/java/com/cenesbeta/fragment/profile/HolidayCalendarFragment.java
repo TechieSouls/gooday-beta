@@ -66,9 +66,7 @@ public class HolidayCalendarFragment extends CenesFragment {
 
             switch (v.getId()) {
                 case R.id.iv_back_button_img:
-
                     ((CenesBaseActivity)getActivity()).onBackPressed();
-
                     break;
 
                 case R.id.ll_hide_holiday_calendar_bar:

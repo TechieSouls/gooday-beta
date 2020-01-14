@@ -35,8 +35,10 @@ import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.adapter.ProfileListItemAdapter;
 import com.cenesbeta.api.UserAPI;
+import com.cenesbeta.bo.CalenadarSyncToken;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
+import com.cenesbeta.database.impl.CalendarSyncTokenManagerImpl;
 import com.cenesbeta.database.impl.UserManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.dto.AsyncTaskDto;
@@ -47,6 +49,9 @@ import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.ImageUtils;
 import com.cenesbeta.util.RoundedDrawable;
 import com.cenesbeta.util.RoundedImageView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.soundcloud.android.crop.Crop;
 
@@ -57,6 +62,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -87,6 +93,8 @@ public class ProfileFragmentV2  extends CenesFragment {
     private File file;
     private String isTakeOrUpload = "take_picture";
     private ProfileListItemAdapter profileListItemAdapter;
+    private CalendarSyncTokenManagerImpl calendarSyncTokenManagerImpl;
+
 
     @Nullable
     @Override
@@ -141,7 +149,9 @@ public class ProfileFragmentV2  extends CenesFragment {
         populateProfileScreen();
         callMixPanel();
         new ProfileAsyncTask(getCenesActivity().getCenesApplication(), (CenesBaseActivity)getActivity());
+        calendarSyncTokenManagerImpl = new CalendarSyncTokenManagerImpl(((CenesBaseActivity)getActivity()).getCenesApplication());
         loadAttenedHostedCounts();
+        loadUserSyncTokens();
         Glide.with(getContext())
                 .asGif()
                 .load(R.drawable.ios_spinner)
@@ -326,7 +336,7 @@ public class ProfileFragmentV2  extends CenesFragment {
                     }, 1000);
 
 
-                    //uploadPictureToServer();
+                    uploadPictureToServer();
                     //ivProfilePic.setImageBitmap(rotatedBitmap);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -590,5 +600,68 @@ public class ProfileFragmentV2  extends CenesFragment {
             Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
         }
     }
+
+    public void loadUserSyncTokens() {
+        try {
+            AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+            asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ UserAPI.get_user_sync_details);
+            asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+            asyncTaskDto.setQueryStr("userId="+loggedInUser.getUserId());
+            getAsyncTaskCall(asyncTaskDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getAsyncTaskCall(AsyncTaskDto asyncTaskDto) {
+        try {
+            new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+
+                    try {
+                        boolean success = response.getBoolean("success");
+                        if (success == true) {
+
+                            Gson gson = new GsonBuilder().create();
+                            Type listType = new TypeToken<List<CalenadarSyncToken>>(){}.getType();
+                            List<CalenadarSyncToken> calenadarSyncTokens = gson.fromJson(response.getJSONArray("data").toString(), listType);
+                            if (calenadarSyncTokens != null && calenadarSyncTokens.size() > 0) {
+
+                                List<CalenadarSyncToken> localCalenadarSyncTokens = calendarSyncTokenManagerImpl.fetchCalendarAll();
+                                if (localCalenadarSyncTokens != null && localCalenadarSyncTokens.size() > 0) {
+
+
+                                    for (CalenadarSyncToken calenadarSyncToken: calenadarSyncTokens) {
+                                        boolean syncTokenExists = false;
+                                        for (CalenadarSyncToken localCalenadarSyncToken: localCalenadarSyncTokens) {
+                                            if (localCalenadarSyncToken.getRefreshTokenId().equals(localCalenadarSyncToken.getRefreshTokenId())) {
+                                                syncTokenExists = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if (syncTokenExists == false) {
+                                                calendarSyncTokenManagerImpl.addNewRow(calenadarSyncToken);
+                                        }
+                                    }
+                                }
+
+                            }
+
+                        } else {
+                            showAlert("Error", response.getString("message"));
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).execute(asyncTaskDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
