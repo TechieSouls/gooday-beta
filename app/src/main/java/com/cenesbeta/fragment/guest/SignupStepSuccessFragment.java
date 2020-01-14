@@ -223,14 +223,22 @@ public class SignupStepSuccessFragment extends CenesFragment {
                                                                     getCenesActivity().showRequestTimeoutDialog();
                                                                 }
 
-                                                                getContacts();
+                                                                //getContacts();
+                                                                  if (getActivity() != null) {
+                                                                      startActivity(new Intent((GuestActivity)getActivity(), CenesBaseActivity.class));
+                                                                      getActivity().finish();
+                                                                  }
                                                             } catch (Exception e) {
                                                                 e.printStackTrace();
                                                             }
                                                         }
                                                     }).execute(file);
                                                 } else {
-                                                    getContacts();
+                                                    //getContacts();
+                                                    if (getActivity() != null) {
+                                                        startActivity(new Intent((GuestActivity)getActivity(), CenesBaseActivity.class));
+                                                        getActivity().finish();
+                                                    }
                                                 }
                                             } else {
 
@@ -412,7 +420,7 @@ public class SignupStepSuccessFragment extends CenesFragment {
         } else if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission is granted
-                getContacts();
+                //getContacts();
             } else {
                 Toast.makeText(getActivity(), "Until you grant the permission, we cannot show your friendList", Toast.LENGTH_SHORT).show();
                 //((GuestActivity)getActivity()).replaceFragment(new HolidaySyncFragment(), null);

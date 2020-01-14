@@ -405,6 +405,7 @@ public class ProfileFragmentV2  extends CenesFragment {
             props.put("Action","Profile Screen Opened");
             props.put("UserEmail",loggedInUser.getEmail());
             props.put("UserName",loggedInUser.getName());
+            props.put("Device","Android");
             mixpanel.track("ProfileScreen", props);
 
         } catch (Exception e) {
@@ -517,6 +518,11 @@ public class ProfileFragmentV2  extends CenesFragment {
                             String profilePic = response.getString("data");
                             loggedInUser.setPicture(profilePic);
                             userManager.updateProfilePic(loggedInUser);
+
+                            //Reload Home Screen
+                            if (getActivity() != null) {
+                                ((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
+                            }
                         }
 
                     } catch (Exception e) {
@@ -642,8 +648,13 @@ public class ProfileFragmentV2  extends CenesFragment {
                                         }
 
                                         if (syncTokenExists == false) {
-                                                calendarSyncTokenManagerImpl.addNewRow(calenadarSyncToken);
+                                            calendarSyncTokenManagerImpl.addNewRow(calenadarSyncToken);
                                         }
+                                    }
+                                } else {
+                                    for (CalenadarSyncToken calenadarSyncToken: calenadarSyncTokens) {
+                                            calendarSyncTokenManagerImpl.addNewRow(calenadarSyncToken);
+
                                     }
                                 }
 

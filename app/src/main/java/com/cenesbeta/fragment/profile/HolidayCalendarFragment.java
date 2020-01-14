@@ -20,10 +20,12 @@ import com.cenesbeta.bo.CalenadarSyncToken;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.countrypicker.CountryUtils;
+import com.cenesbeta.database.impl.CalendarSyncTokenManagerImpl;
 import com.cenesbeta.dto.AsyncTaskDto;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.CustomLoadingDialog;
+import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -38,7 +40,8 @@ public class HolidayCalendarFragment extends CenesFragment {
     private HolidayCountryItemAdapter holidayCountryItemAdapter;
     private CoreManager coreManager;
     private User loggedInUser;
-    private CalenadarSyncToken calenadarSyncToken;
+    public CalenadarSyncToken calenadarSyncToken;
+    private CalendarSyncTokenManagerImpl calendarSyncTokenManager;
 
     @Nullable
     @Override
@@ -55,6 +58,7 @@ public class HolidayCalendarFragment extends CenesFragment {
         llHideHolidayCalendarBar.setOnClickListener(onClickListener);
 
         coreManager = ((CenesBaseActivity)getActivity()).getCenesApplication().getCoreManager();
+        calendarSyncTokenManager = new CalendarSyncTokenManagerImpl(((CenesBaseActivity)getActivity()).getCenesApplication());
         loggedInUser = coreManager.getUserManager().getUser();
         loadHolidayCountries();
         return view;
@@ -126,6 +130,22 @@ public class HolidayCalendarFragment extends CenesFragment {
             public void processFinish(JSONObject response) {
                 customLoadingDialog.hideDialog();
 
+                try {
+                    boolean success = response.getBoolean("success");
+                    if (success == true) {
+                        if (calenadarSyncToken != null) {
+                            calendarSyncTokenManager.deleteCalendarByRefreshTokenId(calenadarSyncToken.getRefreshTokenId());
+                        }
+
+                        calenadarSyncToken = new Gson().fromJson(response.getJSONObject("data").toString(), CalenadarSyncToken.class);
+                        calendarSyncTokenManager.addNewRow(calenadarSyncToken);
+
+                        loadHolidayCountries();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 ((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
                 ((CenesBaseActivity)getActivity()).onBackPressed();
 
@@ -143,6 +163,10 @@ public class HolidayCalendarFragment extends CenesFragment {
                 public void processFinish(JSONObject response) {
                     customLoadingDialog.hideDialog();
 
+                    if (calenadarSyncToken != null) {
+                        calendarSyncTokenManager.deleteCalendarByRefreshTokenId(calenadarSyncToken.getRefreshTokenId());
+                    }
+                    loadHolidayCountries();
                     ((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
                     ((CenesBaseActivity)getActivity()).onBackPressed();
                 }

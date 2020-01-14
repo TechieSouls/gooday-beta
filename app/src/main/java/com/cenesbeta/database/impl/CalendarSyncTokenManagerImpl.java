@@ -2,6 +2,7 @@ package com.cenesbeta.database.impl;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.SystemClock;
 
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.CalenadarSyncToken;
@@ -51,8 +52,9 @@ public class CalendarSyncTokenManagerImpl {
                 if (CenesUtils.isEmpty(calenadarSyncToken.getRefreshToken())) {
                     calenadarSyncToken.setRefreshToken("");
                 }
-                String insertQuery = "insert into calendar_sync_tokens (account_type, email_id, user_id, refresh_token, refresh_token_id) values("+calenadarSyncToken.getAccountType()+", '"+calenadarSyncToken.getEmailId()+"', " +
-                        ""+calenadarSyncToken.getUserId()+", "+calenadarSyncToken.getRefreshToken()+", '"+calenadarSyncToken.getRefreshTokenId()+"')";
+                String insertQuery = "insert into calendar_sync_tokens (account_type, email_id, user_id, refresh_token, refresh_token_id) values('"+calenadarSyncToken.getAccountType()+"', '"+calenadarSyncToken.getEmailId()+"', " +
+                        ""+calenadarSyncToken.getUserId()+", '"+calenadarSyncToken.getRefreshToken()+"', "+calenadarSyncToken.getRefreshTokenId()+")";
+                System.out.println(insertQuery);
                 db.execSQL(insertQuery);
                 db.close();
             }
@@ -67,6 +69,25 @@ public class CalendarSyncTokenManagerImpl {
         try {
             this.db = cenesDatabase.getReadableDatabase();
             String query = "select * from calendar_sync_tokens where refresh_token_id = "+refresh_token_id;
+            Cursor cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+
+                calenadarSyncToken = putData(cursor);
+            }
+            cursor.close();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return calenadarSyncToken;
+    }
+
+    public CalenadarSyncToken fetchCalendarByAccountType(String accountType) {
+        CalenadarSyncToken calenadarSyncToken = null;
+        try {
+            this.db = cenesDatabase.getReadableDatabase();
+            String query = "select * from calendar_sync_tokens where account_type = '"+accountType+"'";
             Cursor cursor = db.rawQuery(query, null);
 
             if (cursor.moveToFirst()) {

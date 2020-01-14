@@ -53,8 +53,6 @@ public class GuestActivity extends CenesActivity {
             replaceFragment(new SignupOptionsFragment(), null);
         }
         fragmentManager.beginTransaction().commit();
-
-        ActivityCompat.requestPermissions(GuestActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, 101);
     }
 
     public void replaceFragment(Fragment fragment, String tag) {
@@ -93,18 +91,4 @@ public class GuestActivity extends CenesActivity {
         }
         return null;
     }
-
-    //@Override
-    //public void onBackPressed() {
-      //  this.moveTaskToBack(true);
-    //}
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        //If permission granted
-       System.out.print(
-               "Permission Added");
-    }
-
 }

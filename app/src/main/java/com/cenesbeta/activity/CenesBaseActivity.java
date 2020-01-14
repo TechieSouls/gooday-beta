@@ -1,17 +1,25 @@
 package com.cenesbeta.activity;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -25,11 +33,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.AsyncTasks.CenesCommonAsyncTask;
 import com.cenesbeta.AsyncTasks.GatheringAsyncTask;
+import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.NotificationCountData;
+import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.fragment.NavigationFragment;
 import com.cenesbeta.fragment.NotificationFragment;
@@ -42,12 +52,16 @@ import com.cenesbeta.fragment.profile.ProfileFragment;
 import com.cenesbeta.fragment.profile.ProfileFragmentV2;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CenesBaseActivity extends CenesActivity {
 
+    private static Integer PERMISSIONS_REQUEST_READ_CONTACTS = 1001;
     public DrawerLayout mDrawerLayout;
 
     public FragmentTransaction fragmentTransaction;
@@ -71,6 +85,7 @@ public class CenesBaseActivity extends CenesActivity {
     // duration is ideal for subtle animations or animations that occur
     // very frequently.
     private int shortAnimationDuration;
+    private User loggedInUser;
 
 
     @Override
@@ -78,10 +93,12 @@ public class CenesBaseActivity extends CenesActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_cenes);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         cenesApplication = getCenesApplication();
         coreManager = cenesApplication.getCoreManager();
+
+        loggedInUser = coreManager.getUserManager().getUser();
         internetManager = coreManager.getInternetManager();
 
         fragmentManager = getSupportFragmentManager();
@@ -110,6 +127,7 @@ public class CenesBaseActivity extends CenesActivity {
         shortAnimationDuration = getResources().getInteger(
                 android.R.integer.config_shortAnimTime);
 
+        new ProfileAsyncTask(cenesApplication, this);
         notificationCountCall();
 
         /*mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
@@ -133,7 +151,7 @@ public class CenesBaseActivity extends CenesActivity {
 
             }
         }); */
-
+        getContacts();
         String data = getIntent().getDataString();
         System.out.println(data);
         if (data != null) {
@@ -410,7 +428,7 @@ public class CenesBaseActivity extends CenesActivity {
         // bounds, since that's the origin for the positioning animation
         // properties (X, Y).
         thumbView.getGlobalVisibleRect(startBounds);
-        findViewById(R.id.drawer_layout)
+        findViewById(R.id.ll_fragment_container)
                 .getGlobalVisibleRect(finalBounds, globalOffset);
         startBounds.offset(-globalOffset.x, -globalOffset.y);
         finalBounds.offset(-globalOffset.x, -globalOffset.y);
@@ -524,6 +542,111 @@ public class CenesBaseActivity extends CenesActivity {
             }
         });
     }
+
+    public void getContacts() {
+        // Check the SDK version and whether the permission is already granted or not.
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
+        } else {
+            // Android version is lesser than 6.0 or the permission is already granted.
+            fetchDeviceContactList();
+        }
+    }
+
+    public void fetchDeviceContactList() {
+
+        Map<String, String> contactsArrayMap = new HashMap<>();
+
+        ContentResolver cr = getContentResolver();
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                null, null, null, null);
+
+        if ((cur != null ? cur.getCount() : 0) > 0) {
+            while (cur != null && cur.moveToNext()) {
+                String id = cur.getString(
+                        cur.getColumnIndex(ContactsContract.Contacts._ID));
+                String name = cur.getString(cur.getColumnIndex(
+                        ContactsContract.Contacts.DISPLAY_NAME));
+
+                if (cur.getInt(cur.getColumnIndex(
+                        ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
+                    Cursor pCur = cr.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                            new String[]{id}, null);
+
+                    while (pCur.moveToNext()) {
+                        String phoneNo = pCur.getString(pCur.getColumnIndex(
+                                ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                        //Log.e("phoneNo : "+phoneNo , "Name : "+name);
+
+                        if (phoneNo.indexOf("\\*") != -1 || phoneNo.indexOf("\\#") != -1 || phoneNo.length() < 7) {
+                            continue;
+                        }
+                        try {
+                            String parsedPhone = phoneNo.replaceAll(" ","").replaceAll("-","").replaceAll("\\(","").replaceAll("\\)","");
+                            if (parsedPhone.indexOf("+") == -1) {
+                                parsedPhone = "+"+parsedPhone;
+                            }
+                            //contactObject.put(parsedPhone, name);
+                            //contactsArray.put(contactObject);
+                            if (!contactsArrayMap.containsKey(parsedPhone)) {
+                                contactsArrayMap.put(parsedPhone, name);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    pCur.close();
+                }
+            }
+        }
+        if(cur!=null){
+            cur.close();
+        }
+        JSONArray contactsArray = new JSONArray();
+        for (Map.Entry<String, String> entryMap: contactsArrayMap.entrySet()) {
+            JSONObject contactObject = new JSONObject();
+            try {
+                contactObject.put(entryMap.getKey(), entryMap.getValue());
+                contactsArray.put(contactObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        JSONObject userContact = new JSONObject();
+        try {
+            userContact.put("userId",loggedInUser.getUserId());
+            userContact.put("contacts",contactsArray);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //Making Phone Sync Call
+        new ProfileAsyncTask.PhoneContactSync(new ProfileAsyncTask.PhoneContactSync.AsyncResponse() {
+            @Override
+            public void processFinish(Object response) {
+
+            }
+        }).execute(userContact);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                fetchDeviceContactList();
+            } else {
+                Toast.makeText(this, "Until you grant the permission, we cannot show your friendList", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);

@@ -85,6 +85,9 @@ public class UserManagerImpl implements UserManager {
         if (!CenesUtils.isEmpty(user.getPicture())) {
             insertQuery = insertQuery + ",'"+user.getPicture()+"'";
         } else {
+            if (user.getPicture() != null && user.getPicture().length() == 0) {
+                user.setPicture(null);
+            }
             insertQuery = insertQuery + ","+user.getPicture()+"";
         }
         if (!CenesUtils.isEmpty(user.getGender())) {

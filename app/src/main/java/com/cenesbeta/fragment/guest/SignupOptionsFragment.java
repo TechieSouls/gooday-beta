@@ -136,11 +136,11 @@ public class SignupOptionsFragment extends CenesFragment {
 
                     /*User testUser = new User();
                     testUser.setAuthType(User.AuthenticateType.facebook);
-                    testUser.setFacebookId("113285233031773134294");
-                    testUser.setEmail("jtd.dav@gmail.com");
-                    testUser.setPhone("+447878998932");
-                    testUser.setName("Jack Davies");
-                    testUser.setFacebookAuthToken("EAAIkmtJjwosBALuj0hl4cHWZBbNpRtK4zGB3CAoBtfddPAPvDD37dzvNzMgpOkSKKDk4LmznDjKExh5kX9ztO2lSh372C21YXkdUG3gKBXHZAmKZCZAw2OFFgbEplA7vujb2xIts6IqzQWWrUxwuhoj1CCcZCL6WrA1uh6SP5xlQli7ZAaaMZCY9oCZCXhdGpDx7H7VJHZBJLZB0giJIzHWKSIFkTZCSGs5vJcZD");
+                    testUser.setFacebookId("2088166531502959");
+                    testUser.setEmail("ahmad.rosslan@zijacorp.com");
+                    testUser.setPhone("+60173357329");
+                    testUser.setName("Ahmad Fuad");
+                    testUser.setFacebookAuthToken("EAAIkmtJjwosBAHtIKJuTWO3jjDUa4v1vhNHCeUuZBNKcvc2QGSF892EqgvpKZB83wWVlfxahk2jg9qrJ3QWIN1nnA7IQmTLLmhqgcOfcpD0eCqt9gb64vqV7wWBQ0YpvSpjWfKDrrizP5HKXgbD63kzvfHfn5QQGZB9yWJOMx4YiONpeiK7f2awZBKp12ZBY62PDRlnjDx1zeu7hqJJLFoNQRyigV3GgZD");
                     socialSignupRequest(testUser);*/
                     break;
 
@@ -235,13 +235,13 @@ public class SignupOptionsFragment extends CenesFragment {
                             JSONObject props = new JSONObject();
                             props.put("SignupType","Facebook");
                             props.put("Action","Signup Begins");
+                            props.put("Device","Android");
                             props.put("UserEmail",email);
                             mixpanel.track("Signup", props);
 
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-
                         socialSignupRequest(loggedInUser);
                         Log.i("RESULTS : ", object.getString("email"));
                     }catch (Exception e){
@@ -322,6 +322,7 @@ public class SignupOptionsFragment extends CenesFragment {
                                     props.put("SignupType",signupType);
                                     props.put("Action","Signup Success");
                                     props.put("UserEmail",loggedInUser.getEmail());
+                                    props.put("Device","Android");
                                     mixpanel.track("Signup", props);
 
                                 } catch (Exception e) {
@@ -331,9 +332,13 @@ public class SignupOptionsFragment extends CenesFragment {
                                 SignupStepSuccessFragment signupStepSuccessFragment = new SignupStepSuccessFragment();
                                 ((GuestActivity)getActivity()).clearFragmentsAndOpen(signupStepSuccessFragment);
                             } else {
-                                getContacts();
-                                startActivity(new Intent((GuestActivity)getActivity(), CenesBaseActivity.class));
-                                getActivity().finish();
+                                //getContacts();
+                                try {
+                                    startActivity(new Intent((GuestActivity)getActivity(), CenesBaseActivity.class));
+                                    getActivity().finish();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
 
                         } else {
@@ -497,6 +502,7 @@ public class SignupOptionsFragment extends CenesFragment {
                 props.put("SignupType","Google");
                 props.put("Action","Signup Begins");
                 props.put("UserEmail",loggedInUser.getEmail());
+                props.put("Device","Android");
                 mixpanel.track("Signup", props);
 
             } catch (Exception e) {

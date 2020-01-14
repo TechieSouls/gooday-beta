@@ -23,6 +23,8 @@ import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
+import com.cenesbeta.util.CenesUtils;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONObject;
 
@@ -80,6 +82,18 @@ public class PhoneVerificationStep2Fragment extends CenesFragment {
         alertManager = coreManager.getAlertManager();
         userManager = coreManager.getUserManager();
 
+        MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+        try {
+            JSONObject props = new JSONObject();
+            props.put("Action","Verification Begins");
+            props.put("Title","Step 2");
+            props.put("Device","Android");
+            mixpanel.track("PhoneVerification", props);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -136,6 +150,18 @@ public class PhoneVerificationStep2Fragment extends CenesFragment {
 
                 try {
                     if (response.getBoolean("success")) {
+                        MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                        try {
+                            JSONObject props = new JSONObject();
+                            props.put("Action","Verification Success");
+                            props.put("Title","Step 2");
+                            props.put("Device","Android");
+                            mixpanel.track("PhoneVerification", props);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                         System.out.println("countryCodeStr : "+countryCodeStr);
 
                         User user = new User();

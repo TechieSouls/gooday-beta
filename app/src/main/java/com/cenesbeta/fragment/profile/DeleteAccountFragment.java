@@ -194,6 +194,7 @@ public class DeleteAccountFragment extends CenesFragment {
             props.put("Action","Delete Account");
             props.put("UserEmail",loggedInUser.getEmail());
             props.put("UserName",loggedInUser.getName());
+            props.put("Device","Android");
             mixpanel.track("ProfileScreen", props);
 
         } catch (Exception e) {

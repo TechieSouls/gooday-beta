@@ -28,9 +28,11 @@ import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.impl.NotificationManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.dashboard.HomeFragment;
+import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -105,6 +107,8 @@ public class NotificationFragment extends CenesFragment {
         ((CenesBaseActivity) getActivity()).showFooter();
         ((CenesBaseActivity)  getActivity()).activateFooterIcon(NotificationFragment.TAG);
         headers = new ArrayList<>();
+
+        callMixPanel();
         return v;
     }
 
@@ -227,5 +231,20 @@ public class NotificationFragment extends CenesFragment {
 
         notificationExpandableAdapter = new NotificationExpandableAdapter(NotificationFragment.this, headers, notificationMapList);
         elvNotificationList.setAdapter(notificationExpandableAdapter);
+    }
+
+    public void callMixPanel() {
+        MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+        try {
+            JSONObject props = new JSONObject();
+            props.put("Action","Notification Screen Opened");
+            props.put("UserEmail",loggedInUser.getEmail());
+            props.put("UserName",loggedInUser.getName());
+            props.put("Device","Android");
+            mixpanel.track("NotificationScreen", props);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

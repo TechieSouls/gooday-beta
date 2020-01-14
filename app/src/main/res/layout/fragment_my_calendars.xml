@@ -46,9 +46,9 @@
                 android:layout_height="wrap_content"
                 android:text="Select Holiday Calendar "
                 android:textSize="16dp"
-                android:textStyle="bold"
                 android:layout_marginLeft="15dp"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:textColor="@color/black"/>
 
             <ImageView
                 android:layout_width="14dp"
@@ -73,9 +73,9 @@
                 android:layout_height="wrap_content"
                 android:text="Google Calendar"
                 android:textSize="16dp"
-                android:textStyle="bold"
                 android:layout_marginLeft="15dp"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:textColor="@color/black"/>
 
             <ImageView
                 android:layout_width="14dp"
@@ -96,9 +96,9 @@
                 android:layout_height="wrap_content"
                 android:text="Outlook Calendar"
                 android:textSize="16dp"
-                android:textStyle="bold"
                 android:layout_marginLeft="15dp"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:textColor="@color/black"/>
 
             <ImageView
                 android:layout_width="14dp"

@@ -56,13 +56,14 @@
                 android:textColor="@color/black"/>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
+                android:layout_height="15dp"
                 android:background="@color/theme_color"/>
         </LinearLayout>
         <ListView
             android:id="@+id/lv_holiday_countries"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:divider="@null"/>
     </LinearLayout>
 
 </RelativeLayout>

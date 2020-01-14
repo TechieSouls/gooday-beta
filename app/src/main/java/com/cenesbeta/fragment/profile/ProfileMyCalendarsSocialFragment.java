@@ -20,14 +20,13 @@ import com.cenesbeta.api.UserAPI;
 import com.cenesbeta.bo.CalenadarSyncToken;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
+import com.cenesbeta.database.impl.CalendarSyncTokenManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.dto.AsyncTaskDto;
-import com.cenesbeta.fragment.CalenderSyncFragment;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.livesdk.com.microsoft.live.LiveAuthClient;
 import com.cenesbeta.livesdk.com.microsoft.live.LiveAuthException;
 import com.cenesbeta.livesdk.com.microsoft.live.LiveAuthListener;
-import com.cenesbeta.livesdk.com.microsoft.live.LiveConnectClient;
 import com.cenesbeta.livesdk.com.microsoft.live.LiveConnectSession;
 import com.cenesbeta.livesdk.com.microsoft.live.LiveStatus;
 import com.cenesbeta.util.CenesConstants;
@@ -43,17 +42,12 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ProfileMyCalendarsSocialFragment extends CenesFragment {
@@ -72,6 +66,7 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
     private UserManager userManager;
     private User loggedInUser;
     public CalendarType calendarSelected;
+    private CalendarSyncTokenManagerImpl calendarSyncTokenManager;
     private CalenadarSyncToken selectedCalendarSyncToken;
     private Map<CalendarType, String> notSyncedMessageMap;
     private MyCalendarActions myCalendarActions;
@@ -98,7 +93,7 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
         btnCalendarActionDelete.setOnClickListener(onClickListener);
         btnCalendarActionSync.setOnClickListener(onClickListener);
 
-        coreManager = getCenesActivity().getCenesApplication().getCoreManager();
+        coreManager = ((CenesBaseActivity)getActivity()).getCenesApplication().getCoreManager();
         userManager = coreManager.getUserManager();
         loggedInUser = userManager.getUser();
 
@@ -108,6 +103,7 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
 
         myCalendarActions = MyCalendarActions.Load;
         mAuthClient = new LiveAuthClient(getCenesActivity(), CenesConstants.OutlookClientId);
+        calendarSyncTokenManager = new CalendarSyncTokenManagerImpl(((CenesBaseActivity)getActivity()).getCenesApplication());
         loadUserSyncTokens();
         return view;
 
@@ -342,7 +338,16 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
     }
 
     public void loadUserSyncTokens() {
+
+        if (calendarSelected.equals(CalendarType.Google)) {
+            selectedCalendarSyncToken = calendarSyncTokenManager.fetchCalendarByAccountType("Google");
+        } else {
+            selectedCalendarSyncToken = calendarSyncTokenManager.fetchCalendarByAccountType("Outlook");
+        }
         try {
+            if (selectedCalendarSyncToken != null) {
+                tvCalendarName.setText("Account: "+ selectedCalendarSyncToken.getEmailId());
+            }
             if (calendarSelected.equals(CalendarType.Google)) {
                 tvCalendarGuideline.setText(getString(R.string.google_calendar_sync_guideline));
                 tvSocialItemHeader.setText("Google Calendar");
@@ -350,64 +355,105 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
                 tvCalendarGuideline.setText(getString(R.string.outlook_calendar_sync_guideline));
                 tvSocialItemHeader.setText("Outlook Calendar");
             }
-            AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
-            asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ UserAPI.get_user_sync_details);
-            asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
-            asyncTaskDto.setQueryStr("userId="+loggedInUser.getUserId());
-            getAsyncTaskCall(asyncTaskDto);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void getAsyncTaskCall(AsyncTaskDto asyncTaskDto) {
+    public void handleDeleteApiResponse(JSONObject response) {
         try {
-            new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
-                @Override
-                public void processFinish(JSONObject response) {
+            boolean success = response.getBoolean("success");
+            if (success == true) {
 
-                    try {
-                        if (myCalendarActions.equals(MyCalendarActions.Load)) {
-                            boolean success = response.getBoolean("success");
-                            if (success == true) {
-
-                                Gson gson = new GsonBuilder().create();
-                                Type listType = new TypeToken<List<CalenadarSyncToken>>(){}.getType();
-                                List<CalenadarSyncToken> calenadarSyncTokens = gson.fromJson(response.getJSONArray("data").toString(), listType);
-                                for (CalenadarSyncToken calenadarSyncToken: calenadarSyncTokens) {
-                                    if (calenadarSyncToken.getAccountType().equals(calendarSelected.toString())) {
-                                        selectedCalendarSyncToken = calenadarSyncToken;
-                                        break;
-                                    }
-                                }
-                                if (selectedCalendarSyncToken != null && selectedCalendarSyncToken.getEmailId() != null) {
-
-                                    tvCalendarName.setText("Account: "+ selectedCalendarSyncToken.getEmailId());
-                                    btnCalendarActionDelete.setVisibility(View.VISIBLE);
-                                    btnCalendarActionSync.setVisibility(View.GONE);
-
-                                } else {
-                                    btnCalendarActionDelete.setVisibility(View.GONE);
-                                    btnCalendarActionSync.setVisibility(View.VISIBLE);
-
-                                    if (calendarSelected.equals(CalendarType.Google)) {
-                                        tvCalendarName.setText(notSyncedMessageMap.get(CalendarType.Google));
-                                    } else if (calendarSelected.equals(CalendarType.Outlook)) {
-                                        tvCalendarName.setText(notSyncedMessageMap.get(CalendarType.Outlook));
-                                    }
-                                }
-                            } else {
-                                showAlert("Error", response.getString("message"));
-                            }
-                        } else if (myCalendarActions.equals(MyCalendarActions.Sync)) {
-
-                            //Refresh Home Page
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                //Reload Home Screen
+                if (getActivity() != null) {
+                    ((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
                 }
-            }).execute(asyncTaskDto);
+
+                //Delete Record From local Database
+                if (selectedCalendarSyncToken != null) {
+                    calendarSyncTokenManager.deleteCalendarByRefreshTokenId(selectedCalendarSyncToken.getRefreshTokenId());
+                    selectedCalendarSyncToken = null;
+                }
+                if (calendarSelected.equals(CalendarType.Google)) {
+                    tvCalendarName.setText(notSyncedMessageMap.get(CalendarType.Google).toString());
+                } else if (calendarSelected.equals(CalendarType.Outlook)) {
+                    tvCalendarName.setText(notSyncedMessageMap.get(CalendarType.Outlook).toString());
+                }
+
+                btnCalendarActionDelete.setVisibility(View.GONE);
+                btnCalendarActionSync.setVisibility(View.VISIBLE);
+
+                //Mix Panel Tracking
+                MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                try {
+                    JSONObject props = new JSONObject();
+                    if (calendarSelected.equals(CalendarType.Google)) {
+                        props.put("CalendarType","Google");
+                    } else if (calendarSelected.equals(CalendarType.Outlook)) {
+                        props.put("CalendarType","Outlook");
+                    }
+                    props.put("Action","Delete Calendar");
+                    props.put("UserEmail",loggedInUser.getEmail());
+                    props.put("UserName",loggedInUser.getName());
+                    props.put("Device","Android");
+                    mixpanel.track("SyncCalendar", props);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                showAlert("", "Account Deleted");
+
+            } else {
+                showAlert("Error", response.getString("message"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void handleSyncApiResponse(JSONObject response) {
+
+        try {
+            //Reload Home Screen
+            if (getActivity() != null) {
+                ((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
+            }
+
+            boolean success = response.getBoolean("success");
+            if (success == true) {
+
+                JSONObject data = response.getJSONObject("data");
+                selectedCalendarSyncToken = new Gson().fromJson(data.toString(), CalenadarSyncToken.class);
+
+                //Adding Record to local database
+                calendarSyncTokenManager.addNewRow(selectedCalendarSyncToken);
+
+                tvCalendarName.setText("Account: "+selectedCalendarSyncToken.getEmailId());
+                btnCalendarActionDelete.setVisibility(View.VISIBLE);
+                btnCalendarActionSync.setVisibility(View.GONE);
+
+                //Mix Panel Tracking
+                MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                try {
+                    JSONObject props = new JSONObject();
+                    if (calendarSelected.equals(CalendarType.Google)) {
+                        props.put("CalendarType","Google");
+                    } else {
+                        props.put("CalendarType","Outlook");
+                    }
+                    props.put("Action","Sync Ends");
+                    props.put("UserEmail",loggedInUser.getEmail());
+                    props.put("UserName",loggedInUser.getName());
+                    props.put("Device","Android");
+                    mixpanel.track("SyncCalendar", props);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            showAlert("", "Account Synced");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -423,51 +469,7 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
                 public void processFinish(JSONObject response) {
                     customLoadingDialog.hideDialog();
 
-                    try {
-                        boolean success = response.getBoolean("success");
-                        if (success == true) {
-
-                            //Reload Home Screen
-                            if (getActivity() != null) {
-                                ((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
-                            }
-
-                            if (calendarSelected.equals(CalendarType.Google)) {
-                                tvCalendarName.setText(notSyncedMessageMap.get(CalendarType.Google).toString());
-                            } else if (calendarSelected.equals(CalendarType.Outlook)) {
-                                tvCalendarName.setText(notSyncedMessageMap.get(CalendarType.Outlook).toString());
-                            }
-
-                            btnCalendarActionDelete.setVisibility(View.GONE);
-                            btnCalendarActionSync.setVisibility(View.VISIBLE);
-
-                            //Mix Panel Tracking
-                            MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
-                            try {
-                                JSONObject props = new JSONObject();
-                                if (calendarSelected.equals(CalendarType.Google)) {
-                                    props.put("CalendarType","Google");
-                                } else if (calendarSelected.equals(CalendarType.Outlook)) {
-                                    props.put("CalendarType","Outlook");
-                                }
-                                props.put("Action","Delete Calendar");
-                                props.put("UserEmail",loggedInUser.getEmail());
-                                props.put("UserName",loggedInUser.getName());
-                                props.put("Device","Android");
-                                mixpanel.track("SyncCalendar", props);
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                            showAlert("", "Account Deleted");
-
-                        } else {
-                            showAlert("Error", response.getString("message"));
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    handleDeleteApiResponse(response);
                 }
             }).execute(asyncTaskDto);
         } catch (Exception e) {
@@ -489,41 +491,8 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
                         customLoadingDialog.hideDialog();
 
                         if (myCalendarActions.equals(MyCalendarActions.Sync)) {
-                            //Reload Home Screen
-                            if (getActivity() != null) {
-                                ((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
-                            }
 
-                            boolean success = response.getBoolean("success");
-                            if (success == true) {
-
-                                JSONObject data = response.getJSONObject("data");
-                                selectedCalendarSyncToken = new Gson().fromJson(data.toString(), CalenadarSyncToken.class);
-
-                                tvCalendarName.setText("Account: "+selectedCalendarSyncToken.getEmailId());
-                                btnCalendarActionDelete.setVisibility(View.VISIBLE);
-                                btnCalendarActionSync.setVisibility(View.GONE);
-
-                                //Mix Panel Tracking
-                                MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
-                                try {
-                                    JSONObject props = new JSONObject();
-                                    if (calendarSelected.equals(CalendarType.Google)) {
-                                        props.put("CalendarType","Google");
-                                    } else {
-                                        props.put("CalendarType","Outlook");
-                                    }
-                                    props.put("Action","Sync Ends");
-                                    props.put("UserEmail",loggedInUser.getEmail());
-                                    props.put("UserName",loggedInUser.getName());
-                                    props.put("Device","Android");
-                                    mixpanel.track("SyncCalendar", props);
-
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            showAlert("", "Account Synced");
+                            handleSyncApiResponse(response);
 
                         } else {
                             boolean success = response.getBoolean("success");

@@ -32,6 +32,7 @@ import com.cenesbeta.dto.AsyncTaskDto;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.service.AuthenticateService;
 import com.cenesbeta.util.CenesUtils;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONObject;
 /**
@@ -173,6 +174,18 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
         alertManager = coreManager.getAlertManager();
 
         authenticateService = new AuthenticateService();
+
+        MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+        try {
+            JSONObject props = new JSONObject();
+            props.put("Action","Verification Begins");
+            props.put("Title","Step 1");
+            props.put("Device","Android");
+            mixpanel.track("PhoneVerification", props);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -225,6 +238,19 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
                                     boolean success = response.getBoolean("success");
 
                                     if (success) {
+
+                                        MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                                        try {
+                                            JSONObject props = new JSONObject();
+                                            props.put("Action","Verification Success");
+                                            props.put("Title","Step 1");
+                                            props.put("Device","Android");
+                                            mixpanel.track("PhoneVerification", props);
+
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
                                         System.out.println("countryCodeStr : "+countryCodeStr);
 
                                         PhoneVerificationStep2Fragment ss2Fragment = new PhoneVerificationStep2Fragment();
