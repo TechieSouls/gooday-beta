@@ -216,8 +216,47 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public void updateUser(User user) {
-        db.execSQL("update user_record set name = '"+user.getName()+"', gender = '"+user.getGender()+"', email = '"+user.getEmail()+"', " +
-                "token = '"+user.getAuthToken()+"', picture = '"+user.getPicture()+"', birth_day_str = '"+user.getBirthDateStr()+"'");
+
+        String updateData = "update user_record set ";
+        if (user.getName() != null && user.getName().length() == 0) {
+            user.setName(null);
+            updateData += "name = "+user.getName()+",";
+        } else {
+            updateData += "name = '"+user.getName()+"',";
+        }
+
+        if (user.getGender() != null && user.getGender().length() == 0) {
+            user.setGender(null);
+            updateData += "gender = "+user.getGender()+",";
+        } else {
+            updateData += "gender = '"+user.getGender()+"',";
+        }
+
+        updateData += "email = '"+user.getEmail()+"',";
+        updateData += "token = '"+user.getAuthToken()+"',";
+
+        if (user.getPicture() != null && user.getPicture().length() == 0) {
+            user.setPicture(null);
+            updateData += "picture = "+user.getPicture()+",";
+        } else {
+            updateData += "picture = '"+user.getPicture()+"',";
+        }
+
+        if (user.getBirthDateStr() != null && user.getBirthDateStr().length() == 0) {
+            user.setBirthDateStr(null);
+            updateData += "birth_day_str = "+user.getBirthDateStr()+",";
+        } else {
+            updateData += "birth_day_str = '"+user.getBirthDateStr()+"',";
+        }
+
+        if (user.getPassword() != null && user.getPassword().length() == 0) {
+            user.setPicture(null);
+            updateData += "password = "+user.getPassword()+"";
+        } else {
+            updateData += "password = '"+user.getPassword()+"'";
+        }
+
+        db.execSQL(updateData);
     }
 
     @Override
