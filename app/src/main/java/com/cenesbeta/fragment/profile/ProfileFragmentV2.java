@@ -165,6 +165,9 @@ public class ProfileFragmentV2  extends CenesFragment {
         super.onResume();
         ((CenesBaseActivity)getActivity()).showFooter();
         ((CenesBaseActivity)  getActivity()).activateFooterIcon(ProfileFragmentV2.TAG);
+
+        loggedInUser = userManager.getUser();
+        populateProfileScreen();
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {

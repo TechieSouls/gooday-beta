@@ -93,6 +93,7 @@ public class PersonalDetailsFragment extends CenesFragment {
             switch (v.getId()) {
 
                 case R.id.iv_back_button_img:
+
                     getActivity().onBackPressed();
                     break;
 

@@ -347,6 +347,8 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
         try {
             if (selectedCalendarSyncToken != null) {
                 tvCalendarName.setText("Account: "+ selectedCalendarSyncToken.getEmailId());
+            } else {
+                tvCalendarName.setText(notSyncedMessageMap.get(calendarSelected));
             }
             if (calendarSelected.equals(CalendarType.Google)) {
                 tvCalendarGuideline.setText(getString(R.string.google_calendar_sync_guideline));

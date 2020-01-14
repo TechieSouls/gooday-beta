@@ -50,15 +50,17 @@ public class ProfileListItemAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
-
-            convertView = inflter.inflate(R.layout.adapter_profile_list_item, null);
             holder = new ViewHolder();
+            convertView = inflter.inflate(R.layout.adapter_profile_list_item, null);
+
             holder.llProfileItemBar = convertView.findViewById(R.id.ll_profile_item_bar);
             holder.ivItemImage = convertView.findViewById(R.id.iv_item_image);
             holder.tvProfileTitile = convertView.findViewById(R.id.tv_item_title);
             holder.tvProfileDetail = convertView.findViewById(R.id.tv_item_detail);
 
+            convertView.setTag(holder);
         } else {
+
             holder = (ViewHolder) convertView.getTag();
         }
 
