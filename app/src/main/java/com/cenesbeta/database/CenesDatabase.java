@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.cenesbeta.application.CenesApplication;
+import com.cenesbeta.database.impl.CalendarSyncTokenManagerImpl;
 import com.cenesbeta.database.impl.CenesUserManagerImpl;
 import com.cenesbeta.database.impl.EventManagerImpl;
 import com.cenesbeta.database.impl.EventMemberManagerImpl;
@@ -56,6 +57,7 @@ public class CenesDatabase {
             db.execSQL(NotificationManagerImpl.CreateTableQuery);
             db.execSQL(MeTimeManagerImpl.CreateTableQuery);
             db.execSQL(MeTimePatternManagerImpl.CreateTableQuery);
+            db.execSQL(CalendarSyncTokenManagerImpl.createCalendarTableQuery);
 
         }
 

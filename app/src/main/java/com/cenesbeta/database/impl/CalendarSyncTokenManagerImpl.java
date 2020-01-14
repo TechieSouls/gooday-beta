@@ -8,13 +8,17 @@ import com.cenesbeta.bo.CalenadarSyncToken;
 import com.cenesbeta.database.CenesDatabase;
 import com.cenesbeta.util.CenesUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CalendarSyncTokenManagerImpl {
 
     CenesApplication cenesApplication;
     CenesDatabase cenesDatabase;
     SQLiteDatabase db;
 
-    public static String createCalendarTableQuery = "CREATE TABLE calendar_sync_tokens (refresh_token_id INTEGER, " +
+    public static String createCalendarTableQuery = "CREATE TABLE calendar_sync_tokens " +
+            "(refresh_token_id INTEGER, " +
             "account_type TEXT, " +
             "user_id INTEGER, " +
             "email_id TEXT, " +
@@ -31,7 +35,7 @@ public class CalendarSyncTokenManagerImpl {
 
             CalenadarSyncToken calenadarSyncTokenDB = null;
             if (calenadarSyncToken.getRefreshTokenId() != null) {
-                calenadarSyncTokenDB = fetchCalendarByUserId(calenadarSyncToken.getRefreshTokenId() );
+                calenadarSyncTokenDB = fetchCalendarByRefreshTokenId(calenadarSyncToken.getRefreshTokenId() );
             }
 
             if (calenadarSyncTokenDB == null) {
@@ -44,8 +48,10 @@ public class CalendarSyncTokenManagerImpl {
                     calenadarSyncToken.setEmailId("");
                 }
 
-
-                String insertQuery = "insert into calendar_sync_tokens values("+calenadarSyncToken.getAccountType()+", '"+calenadarSyncToken.getEmailId()+"', " +
+                if (CenesUtils.isEmpty(calenadarSyncToken.getRefreshToken())) {
+                    calenadarSyncToken.setRefreshToken("");
+                }
+                String insertQuery = "insert into calendar_sync_tokens (account_type, email_id, user_id, refresh_token, refresh_token_id) values("+calenadarSyncToken.getAccountType()+", '"+calenadarSyncToken.getEmailId()+"', " +
                         ""+calenadarSyncToken.getUserId()+", "+calenadarSyncToken.getRefreshToken()+", '"+calenadarSyncToken.getRefreshTokenId()+"')";
                 db.execSQL(insertQuery);
                 db.close();
@@ -56,24 +62,16 @@ public class CalendarSyncTokenManagerImpl {
         }
     }
 
-    public CalenadarSyncToken fetchCalendarByUserId(Integer userId) {
+    public CalenadarSyncToken fetchCalendarByRefreshTokenId(Integer refresh_token_id) {
         CalenadarSyncToken calenadarSyncToken = null;
         try {
             this.db = cenesDatabase.getReadableDatabase();
-            String query = "select * from calendar_sync_tokens where user_id = "+userId;
+            String query = "select * from calendar_sync_tokens where refresh_token_id = "+refresh_token_id;
             Cursor cursor = db.rawQuery(query, null);
 
             if (cursor.moveToFirst()) {
 
-                calenadarSyncToken = new CalenadarSyncToken();
-
-                calenadarSyncToken.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
-                calenadarSyncToken.setRefreshTokenId(cursor.getInt(cursor.getColumnIndex("refresh_token_id")));
-
-                calenadarSyncToken.setRefreshToken(cursor.getString(cursor.getColumnIndex("refresh_token")));
-                calenadarSyncToken.setAccountType(cursor.getString(cursor.getColumnIndex("account_type")));
-                calenadarSyncToken.setEmailId(cursor.getString(cursor.getColumnIndex("email_id")));
-
+                calenadarSyncToken = putData(cursor);
             }
             cursor.close();
             db.close();
@@ -83,35 +81,27 @@ public class CalendarSyncTokenManagerImpl {
         return calenadarSyncToken;
     }
 
-    public CalenadarSyncToken fetchCalendarAll(Integer userId) {
-        CalenadarSyncToken calenadarSyncToken = null;
+    public List<CalenadarSyncToken> fetchCalendarAll() {
+        List<CalenadarSyncToken> calenadarSyncTokens = new ArrayList<>();
         try {
             this.db = cenesDatabase.getReadableDatabase();
             String query = "select * from calendar_sync_tokens";
             Cursor cursor = db.rawQuery(query, null);
-
-            if (cursor.moveToFirst()) {
-
-                calenadarSyncToken = new CalenadarSyncToken();
-
-                calenadarSyncToken.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
-                calenadarSyncToken.setRefreshTokenId(cursor.getInt(cursor.getColumnIndex("refresh_token_id")));
-                calenadarSyncToken.setRefreshToken(cursor.getString(cursor.getColumnIndex("refresh_token")));
-                calenadarSyncToken.setAccountType(cursor.getString(cursor.getColumnIndex("account_type")));
-                calenadarSyncToken.setEmailId(cursor.getString(cursor.getColumnIndex("email_id")));
-
+            while (cursor.moveToNext()) {
+                CalenadarSyncToken calenadarSyncToken = putData(cursor);
+                calenadarSyncTokens.add(calenadarSyncToken);
             }
             cursor.close();
             db.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return calenadarSyncToken;
+        return calenadarSyncTokens;
     }
 
     public void deleteCalendarByRefreshTokenId(Integer refresh_token_id){
 
-        String deleteQuery = "delete from calendar_sync_tokens where refresh_token_id = '"+refresh_token_id+"'";
+        String deleteQuery = "delete from calendar_sync_tokens where refresh_token_id = "+refresh_token_id+"";
         db.execSQL(deleteQuery);
 
     }
@@ -120,6 +110,18 @@ public class CalendarSyncTokenManagerImpl {
 
         String deleteQuery = "delete from calendar_sync_tokens";
         db.execSQL(deleteQuery);
+
+    }
+
+    private CalenadarSyncToken putData(Cursor cursor){
+
+        CalenadarSyncToken calenadarSyncToken = new CalenadarSyncToken();
+        calenadarSyncToken.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
+        calenadarSyncToken.setRefreshTokenId(cursor.getInt(cursor.getColumnIndex("refresh_token_id")));
+        calenadarSyncToken.setRefreshToken(cursor.getString(cursor.getColumnIndex("refresh_token")));
+        calenadarSyncToken.setAccountType(cursor.getString(cursor.getColumnIndex("account_type")));
+        calenadarSyncToken.setEmailId(cursor.getString(cursor.getColumnIndex("email_id")));
+        return calenadarSyncToken;
 
     }
 
