@@ -210,18 +210,21 @@ public class CenesBaseActivity extends CenesActivity {
             switch (v.getId()) {
                 case R.id.footer_home_icon:
                     System.out.println("Home Clicked From Base");
+                    clearBackStackInclusive(null);
                     notificationCountCall();
                     replaceFragment(new HomeFragment(), null);
                     break;
 
                 case R.id.footer_gathering_icon:
                     System.out.println("Gathering Clicked From Base");
+                    clearBackStackInclusive(null);
                     notificationCountCall();
                     replaceFragment(new GatheringsFragment(), null);
                     break;
 
                 case R.id.footer_metime_icon:
                     System.out.println("MeTime Clicked From Base");
+                    clearBackStackInclusive(null);
                     notificationCountCall();
                     replaceFragment(new MeTimeFragment(), null);
                     break;
@@ -232,10 +235,12 @@ public class CenesBaseActivity extends CenesActivity {
                     break;
 
                 case R.id.footer_profile_icon:
+                    clearBackStackInclusive(null);
                     notificationCountCall();
                     replaceFragment(new ProfileFragmentV2(), ProfileFragmentV2.TAG);
                     break;
                 case R.id.footer_notification_icon:
+                    clearBackStackInclusive(null);
                     notificationCountCall();
                     replaceFragment(new NotificationFragment(), NotificationFragment.TAG);
                     break;
