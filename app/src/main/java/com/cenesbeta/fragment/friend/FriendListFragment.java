@@ -157,6 +157,7 @@ public class FriendListFragment  extends CenesFragment {
                         String friendsArrayStr = gson.toJson(selectedFriends);
                         intent.putExtra("selectedFriendJsonArray", friendsArrayStr);
 
+                        System.out.println("Is Edit Mode: "+isEditMode);
                         if (isEditMode == true) {
 
                             getTargetFragment().onActivityResult(getTargetRequestCode(), getActivity().RESULT_OK, intent);

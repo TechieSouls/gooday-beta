@@ -56,6 +56,7 @@ import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.NavigationFragment;
 import com.cenesbeta.fragment.gathering.CreateGatheringFragment;
+import com.cenesbeta.fragment.profile.ProfileMyCalendarsSocialFragment;
 import com.cenesbeta.leolin.shortcurtbadger.ShortcutBadger;
 import com.cenesbeta.materialcalendarview.CalendarDay;
 import com.cenesbeta.materialcalendarview.CalendarMode;
@@ -71,6 +72,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -246,7 +248,7 @@ public class HomeFragment extends CenesFragment {
        // homePageProfilePic.setOnClickListener(onClickListener);
 
         homeCalSearchView.setOnDateChangedListener(onDateSelectedListener);
-
+        makeMixPanelCall();
     }
 
     public void initialSync() {
@@ -783,6 +785,23 @@ public class HomeFragment extends CenesFragment {
         }
     }
 
+    public void makeMixPanelCall() {
+
+        //Mix Panel Tracking
+        MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+        try {
+            JSONObject props = new JSONObject();
+            props.put("Action","Home Screen Opened");
+            props.put("UserEmail",loggedInUser.getEmail());
+            props.put("UserName",loggedInUser.getName());
+            props.put("Device","Android");
+            mixpanel.track("Homescreen", props);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void refreshContacts() {
                 try  {
 
@@ -882,12 +901,15 @@ public class HomeFragment extends CenesFragment {
 
                             Gson gson = new GsonBuilder().create();
                             Type listType = new TypeToken<List<Event>>(){}.getType();
-                            List<Event> events = gson.fromJson(response.getJSONArray("data").toString(), listType);
-
-                            eventManagerImpl.deleteAllEventsByDisplayAtScreen(Event.EventDisplayScreen.HOME.toString());
-                            eventManagerImpl.addEvent(events, Event.EventDisplayScreen.HOME.toString());
+                            final List<Event> events = gson.fromJson(response.getJSONArray("data").toString(), listType);
+                            AsyncTask.execute(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      eventManagerImpl.deleteAllEventsByDisplayAtScreen(Event.EventDisplayScreen.HOME.toString());
+                                      eventManagerImpl.addEvent(events, Event.EventDisplayScreen.HOME.toString());
+                                  }
+                              });
                             summarizeEventsForHomeScreen(events);
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

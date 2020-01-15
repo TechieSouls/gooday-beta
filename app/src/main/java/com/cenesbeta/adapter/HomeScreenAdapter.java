@@ -56,15 +56,11 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
     List<String> headers;
     Map<String, List<Event>> eventsMap;
     LayoutInflater inflter;
-    User loggedInUser;
 
     public HomeScreenAdapter(HomeFragment homeFragment, List<String> headers, Map<String, List<Event>> eventsMap) {
         this.homeFragment = homeFragment;
         this.headers = headers;
         this.eventsMap = eventsMap;
-
-        CoreManager coreManager = homeFragment.getCenesActivity().getCenesApplication().getCoreManager();
-        loggedInUser = coreManager.getUserManager().getUser();
 
         inflter = (LayoutInflater.from(homeFragment.getContext()));
     }
@@ -272,7 +268,7 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
 
-                    String declineQueryStr = "eventId=" +viewHolder.eventId+ "&userId="+loggedInUser.getUserId() + "&status=NotGoing";
+                    String declineQueryStr = "eventId=" +viewHolder.eventId+ "&userId="+homeFragment.loggedInUser.getUserId() + "&status=NotGoing";
                     new GatheringAsyncTask(homeFragment.getCenesActivity().getCenesApplication(), ((CenesBaseActivity) homeFragment.getActivity()));
                     new GatheringAsyncTask.UpdateStatusActionTask(new GatheringAsyncTask.UpdateStatusActionTask.AsyncResponse() {
                         @Override

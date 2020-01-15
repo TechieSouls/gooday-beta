@@ -48,9 +48,6 @@
             android:name="com.cenesbeta.activity.MainActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.cenesbeta.activity.WalkthroughActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.cenesbeta.activity.CenesBaseActivity"
             android:screenOrientation="portrait">
             <intent-filter android:label="Cenes">
@@ -89,12 +86,6 @@
 
         <activity
             android:name="com.cenesbeta.activity.SearchLocationActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.cenesbeta.activity.GatheringScreenActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.cenesbeta.activity.DiaryActivity"
             android:screenOrientation="portrait" />
         <activity
             tools:replace="android:theme"

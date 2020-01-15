@@ -28,13 +28,11 @@ import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.adapter.EventCardExpandableAdapter;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
-import com.cenesbeta.bo.Gathering;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.impl.EventManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
-import com.cenesbeta.fragment.InvitationFragment;
 import com.cenesbeta.fragment.NavigationFragment;
 import com.cenesbeta.fragment.friend.FriendListFragment;
 import com.cenesbeta.util.CenesUtils;
@@ -130,9 +128,6 @@ public class GatheringsFragment extends CenesFragment {
             updateUIAfterGatheringAsyncTask(parsedResponse, false, Event.EventDisplayScreen.ACCEPTED.toString());
 
             if (internetManager.isInternetConnection(getCenesActivity())) {
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
                         //TODO your background code
                         new GatheringAsyncTask.GatheringsTask(new GatheringAsyncTask.GatheringsTask.AsyncResponse() {
                             @Override
@@ -143,10 +138,16 @@ public class GatheringsFragment extends CenesFragment {
                                     JSONArray gatherings = response.getJSONArray("data");
                                     Type listType = new TypeToken<List<Event>>() {
                                     }.getType();
-                                    List<Event> events = new Gson().fromJson(gatherings.toString(), listType);
+                                    final List<Event> events = new Gson().fromJson(gatherings.toString(), listType);
 
-                                    eventManagerImpl.deleteAllEventsByDisplayAtScreen(Event.EventDisplayScreen.ACCEPTED.toString());
-                                    eventManagerImpl.addEvent(events, Event.EventDisplayScreen.ACCEPTED.toString());
+                                    //To Run Code of block in background
+                                    AsyncTask.execute(new Runnable() {
+                                      @Override
+                                      public void run() {
+                                          eventManagerImpl.deleteAllEventsByDisplayAtScreen(Event.EventDisplayScreen.ACCEPTED.toString());
+                                          eventManagerImpl.addEvent(events, Event.EventDisplayScreen.ACCEPTED.toString());
+                                      }
+                                  });
 
                                     Map<String, Object> parsedResponse = processGatheringApiResult(events);
                                     updateUIAfterGatheringAsyncTask(parsedResponse, false, Event.EventDisplayScreen.ACCEPTED.toString());
@@ -157,9 +158,6 @@ public class GatheringsFragment extends CenesFragment {
                             }
                         }).execute("Going");
 
-
-                    }
-                });
             }
         }
 
@@ -485,9 +483,6 @@ public class GatheringsFragment extends CenesFragment {
                         bundle.putString("message", bundle_.getString("message"));
                         bundle.putString("title", bundle_.getString("title"));
                         (GatheringsFragment.this).getArguments().clear();
-                        InvitationFragment invitationFragment = new InvitationFragment();
-                        invitationFragment.setArguments(bundle);
-                        ((CenesBaseActivity) getActivity()).replaceFragment(invitationFragment, "InvitationFragment");
                     }
                 } else {
                     Toast.makeText(getActivity(), "Gathering Not Available", Toast.LENGTH_SHORT).show();

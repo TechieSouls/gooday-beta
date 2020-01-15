@@ -1,5 +1,6 @@
 package com.cenesbeta.fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
@@ -17,8 +18,6 @@ import com.cenesbeta.AsyncTasks.NotificationAsyncTask;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.activity.DiaryActivity;
-import com.cenesbeta.activity.GatheringScreenActivity;
 import com.cenesbeta.adapter.NotificationAdapter;
 import com.cenesbeta.adapter.NotificationExpandableAdapter;
 import com.cenesbeta.application.CenesApplication;
@@ -188,9 +187,16 @@ public class NotificationFragment extends CenesFragment {
                                 noNotificationsText.setVisibility(View.GONE);
 
                                 Type listType = new TypeToken<List<Notification>>() {}.getType();
-                                List<Notification> notificationsTemp = new Gson().fromJson(response.getJSONArray("data").toString(), listType);
-                                notificationManagerImpl.deleteAllNotifications();
-                                notificationManagerImpl.addNotification(notificationsTemp);
+                                final List<Notification> notificationsTemp = new Gson().fromJson(response.getJSONArray("data").toString(), listType);
+
+                                //To Run Code of block in background
+                                AsyncTask.execute(new Runnable() {
+                                      @Override
+                                      public void run() {
+                                          notificationManagerImpl.deleteAllNotifications();
+                                          notificationManagerImpl.addNotification(notificationsTemp);
+                                      }
+                                  });
                                 filterNotification(notificationsTemp);
                             }
                         }

@@ -121,6 +121,7 @@ public class CalendarSyncTokenManagerImpl {
     }
 
     public void deleteCalendarByRefreshTokenId(Integer refresh_token_id){
+        this.db = cenesDatabase.getReadableDatabase();
 
         String deleteQuery = "delete from calendar_sync_tokens where refresh_token_id = "+refresh_token_id+"";
         db.execSQL(deleteQuery);
@@ -128,6 +129,7 @@ public class CalendarSyncTokenManagerImpl {
     }
 
     public void deleteCalendarAll(){
+        this.db = cenesDatabase.getReadableDatabase();
 
         String deleteQuery = "delete from calendar_sync_tokens";
         db.execSQL(deleteQuery);

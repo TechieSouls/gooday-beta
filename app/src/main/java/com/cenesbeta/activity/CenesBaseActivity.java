@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -237,12 +238,12 @@ public class CenesBaseActivity extends CenesActivity {
                 case R.id.footer_profile_icon:
                     clearBackStackInclusive(null);
                     notificationCountCall();
-                    replaceFragment(new ProfileFragmentV2(), ProfileFragmentV2.TAG);
+                    replaceFragment(new ProfileFragmentV2(), null);
                     break;
                 case R.id.footer_notification_icon:
                     clearBackStackInclusive(null);
                     notificationCountCall();
-                    replaceFragment(new NotificationFragment(), NotificationFragment.TAG);
+                    replaceFragment(new NotificationFragment(), null);
                     break;
             }
         }
@@ -560,83 +561,90 @@ public class CenesBaseActivity extends CenesActivity {
 
     public void fetchDeviceContactList() {
 
-        Map<String, String> contactsArrayMap = new HashMap<>();
+        AsyncTask contactSyncTask = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                Map<String, String> contactsArrayMap = new HashMap<>();
 
-        ContentResolver cr = getContentResolver();
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
-                null, null, null, null);
+                ContentResolver cr = getContentResolver();
+                Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                        null, null, null, null);
 
-        if ((cur != null ? cur.getCount() : 0) > 0) {
-            while (cur != null && cur.moveToNext()) {
-                String id = cur.getString(
-                        cur.getColumnIndex(ContactsContract.Contacts._ID));
-                String name = cur.getString(cur.getColumnIndex(
-                        ContactsContract.Contacts.DISPLAY_NAME));
+                if ((cur != null ? cur.getCount() : 0) > 0) {
+                    while (cur != null && cur.moveToNext()) {
+                        String id = cur.getString(
+                                cur.getColumnIndex(ContactsContract.Contacts._ID));
+                        String name = cur.getString(cur.getColumnIndex(
+                                ContactsContract.Contacts.DISPLAY_NAME));
 
-                if (cur.getInt(cur.getColumnIndex(
-                        ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
-                    Cursor pCur = cr.query(
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                            new String[]{id}, null);
+                        if (cur.getInt(cur.getColumnIndex(
+                                ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
+                            Cursor pCur = cr.query(
+                                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                    null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                    new String[]{id}, null);
 
-                    while (pCur.moveToNext()) {
-                        String phoneNo = pCur.getString(pCur.getColumnIndex(
-                                ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            while (pCur.moveToNext()) {
+                                String phoneNo = pCur.getString(pCur.getColumnIndex(
+                                        ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                        //Log.e("phoneNo : "+phoneNo , "Name : "+name);
+                                //Log.e("phoneNo : "+phoneNo , "Name : "+name);
 
-                        if (phoneNo.indexOf("\\*") != -1 || phoneNo.indexOf("\\#") != -1 || phoneNo.length() < 7) {
-                            continue;
-                        }
-                        try {
-                            String parsedPhone = phoneNo.replaceAll(" ","").replaceAll("-","").replaceAll("\\(","").replaceAll("\\)","");
-                            if (parsedPhone.indexOf("+") == -1) {
-                                parsedPhone = "+"+parsedPhone;
+                                if (phoneNo.indexOf("\\*") != -1 || phoneNo.indexOf("\\#") != -1 || phoneNo.length() < 7) {
+                                    continue;
+                                }
+                                try {
+                                    String parsedPhone = phoneNo.replaceAll(" ","").replaceAll("-","").replaceAll("\\(","").replaceAll("\\)","");
+                                    if (parsedPhone.indexOf("+") == -1) {
+                                        parsedPhone = "+"+parsedPhone;
+                                    }
+                                    //contactObject.put(parsedPhone, name);
+                                    //contactsArray.put(contactObject);
+                                    if (!contactsArrayMap.containsKey(parsedPhone)) {
+                                        contactsArrayMap.put(parsedPhone, name);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
-                            //contactObject.put(parsedPhone, name);
-                            //contactsArray.put(contactObject);
-                            if (!contactsArrayMap.containsKey(parsedPhone)) {
-                                contactsArrayMap.put(parsedPhone, name);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                            pCur.close();
                         }
                     }
-                    pCur.close();
                 }
-            }
-        }
-        if(cur!=null){
-            cur.close();
-        }
-        JSONArray contactsArray = new JSONArray();
-        for (Map.Entry<String, String> entryMap: contactsArrayMap.entrySet()) {
-            JSONObject contactObject = new JSONObject();
-            try {
-                contactObject.put(entryMap.getKey(), entryMap.getValue());
-                contactsArray.put(contactObject);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+                if(cur!=null){
+                    cur.close();
+                }
+                JSONArray contactsArray = new JSONArray();
+                for (Map.Entry<String, String> entryMap: contactsArrayMap.entrySet()) {
+                    JSONObject contactObject = new JSONObject();
+                    try {
+                        contactObject.put(entryMap.getKey(), entryMap.getValue());
+                        contactsArray.put(contactObject);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
 
-        JSONObject userContact = new JSONObject();
-        try {
-            userContact.put("userId",loggedInUser.getUserId());
-            userContact.put("contacts",contactsArray);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                JSONObject userContact = new JSONObject();
+                try {
+                    userContact.put("userId",loggedInUser.getUserId());
+                    userContact.put("contacts",contactsArray);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-        //Making Phone Sync Call
-        new ProfileAsyncTask.PhoneContactSync(new ProfileAsyncTask.PhoneContactSync.AsyncResponse() {
-            @Override
-            public void processFinish(Object response) {
+                //Making Phone Sync Call
+                new ProfileAsyncTask.PhoneContactSync(new ProfileAsyncTask.PhoneContactSync.AsyncResponse() {
+                    @Override
+                    public void processFinish(Object response) {
 
+                    }
+                }).execute(userContact);
+                return null;
             }
-        }).execute(userContact);
+        };
+        contactSyncTask.execute();
     }
 
     @Override
