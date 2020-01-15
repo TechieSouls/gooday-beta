@@ -1,9 +1,8 @@
 package com.cenesbeta.fragment.metime;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
@@ -183,7 +182,13 @@ public class MeTimeFragment extends CenesFragment {
 
                             if (meTimeData != null && meTimeData.length() > 0) {
 
-                                meTimeManagerImpl.deleteAllMeTimeRecurringEvents();
+                                //To Run Code of block in background
+                                AsyncTask.execute(new Runnable() {
+                                      @Override
+                                      public void run() {
+                                          meTimeManagerImpl.deleteAllMeTimeRecurringEvents();
+                                      }
+                                  });
 
                                 Type listType = new TypeToken<List<MeTime>>() {}.getType();
                                 meTimes = new Gson().fromJson(response.getJSONArray("data").toString(), listType);
@@ -338,13 +343,18 @@ public class MeTimeFragment extends CenesFragment {
                                             }
                                         });
                                 }
-                                    try {
-                                        meTimeManagerImpl.deleteAllMeTimeRecurringEventsByRecurringEventId(meTimeJSONObj.getLong("recurringEventId"));
+                                    //To Run Code of block in background
+                                    AsyncTask.execute(new Runnable() {
+                                          @Override
+                                          public void run() {
+                                              try {
+                                                  meTimeManagerImpl.deleteAllMeTimeRecurringEventsByRecurringEventId(meTimeJSONObj.getLong("recurringEventId"));
+                                              } catch (Exception e) {
+                                                  e.printStackTrace();
+                                              }
 
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-
+                                          }
+                                      });
                                     loadMeTimes();
                                     Handler handler = new android.os.Handler();
                                     handler.postDelayed(hideLoadingBlock, 1000);
@@ -431,27 +441,45 @@ public class MeTimeFragment extends CenesFragment {
                                         }
 
                                         if (metimePhotoFile != null) {
-                                            JSONObject recurringEventJson = response.getJSONObject("recurringEvent");
+                                            final JSONObject recurringEventJson = response.getJSONObject("recurringEvent");
                                             Map<String, Object> photoPostData = new HashMap<>();
                                             photoPostData.put("file",metimePhotoFile);
                                             photoPostData.put("recurringEventId", recurringEventJson.getLong("recurringEventId"));
 
-                                            meTimeManagerImpl.deleteAllMeTimeRecurringEventsByRecurringEventId(recurringEventJson.getLong("recurringEventId"));
-                                            meTimeManagerImpl.addMeTime(new Gson().fromJson(recurringEventJson.toString(), MeTime.class));
+                                            //To Run Code of block in background
+                                            AsyncTask.execute(new Runnable() {
+                                                  @Override
+                                                  public void run() {
+                                                      try {
+                                                          meTimeManagerImpl.deleteAllMeTimeRecurringEventsByRecurringEventId(recurringEventJson.getLong("recurringEventId"));
+                                                          meTimeManagerImpl.addMeTime(new Gson().fromJson(recurringEventJson.toString(), MeTime.class));
+                                                      } catch (Exception e) {
+                                                          e.printStackTrace();
+                                                      }
+                                                  }
+                                              });
 
                                             new MeTimeAsyncTask.UploadPhotoTask(new MeTimeAsyncTask.UploadPhotoTask.AsyncResponse() {
                                                 @Override
-                                                public void processFinish(JSONObject response) {
+                                                public void processFinish(final JSONObject response) {
                                                     System.out.println(response.toString());
 
-                                                    try {
-                                                        String photoStr = response.getString("photo");
-                                                        Long recurringEventId = response.getLong("recurringEventId");
-                                                        meTimeManagerImpl.updateMeTimePhoto(recurringEventId, photoStr);
+                                                    //To Run Code of block in background
+                                                    AsyncTask.execute(new Runnable() {
+                                                          @Override
+                                                          public void run() {
+                                                              try {
+                                                                  String photoStr = response.getString("photo");
+                                                                  Long recurringEventId = response.getLong("recurringEventId");
+                                                                  meTimeManagerImpl.updateMeTimePhoto(recurringEventId, photoStr);
 
-                                                    } catch (Exception e) {
-                                                        e.printStackTrace();
-                                                    }
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
+
+                                                            }
+                                                      });
+
 
                                                     ((CenesBaseActivity) getActivity()).runOnUiThread(new Runnable() {
                                                         @Override

@@ -1,45 +1,21 @@
 package com.cenesbeta.AsyncTasks;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.provider.Telephony;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.activity.GatheringScreenActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.backendManager.GatheringApiManager;
 import com.cenesbeta.backendManager.HomeScreenApiManager;
 import com.cenesbeta.backendManager.NotificationAPiManager;
-import com.cenesbeta.bo.Event;
-import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
-import com.cenesbeta.util.CenesConstants;
-import com.cenesbeta.util.CenesUtils;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

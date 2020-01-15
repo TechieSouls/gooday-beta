@@ -36,7 +36,6 @@ public class CompleteYourProfileActivity extends CenesActivity {
         setContentView(R.layout.pager_complete_your_profile);
 
         ivDots = (ImageView) findViewById(R.id.iv_dots);
-        layoutFooter = (RelativeLayout) findViewById(R.id.rl_footer);
 
         viewPager = (ViewPager) findViewById(R.id.vp);
         setupViewPager(viewPager);
@@ -121,13 +120,10 @@ public class CompleteYourProfileActivity extends CenesActivity {
         public void onPageSelected(final int position) {
             //btNext.setText("NEXT");
             if (position == 0) {
-                ivDots.setImageResource(R.drawable.dots_1);
             } else if (position == 1) {
-                ivDots.setImageResource(R.drawable.dots_2);
             } /*else if (position == 2) {
                 ivDots.setImageResource(R.drawable.dots_3);
             }*/ else if (position == 2) {
-                ivDots.setImageResource(R.drawable.dots_3);
                 //btNext.setText("FINISH");
             }
         }

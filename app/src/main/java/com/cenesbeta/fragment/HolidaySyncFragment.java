@@ -19,8 +19,6 @@ import com.cenesbeta.Manager.DeviceManager;
 import com.cenesbeta.Manager.UrlManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.activity.DiaryActivity;
-import com.cenesbeta.activity.GatheringScreenActivity;
 import com.cenesbeta.activity.GuestActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.HolidayCalendar;
@@ -332,15 +330,7 @@ public class HolidaySyncFragment extends CenesFragment {
     @Override
     public void onResume() {
         super.onResume();
-        try {
-            if (getActivity() instanceof GatheringScreenActivity) {
-                ((GatheringScreenActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof DiaryActivity) {
-                ((DiaryActivity) getActivity()).hideFooter();
-            }
-        } catch (Exception e) {
 
-        }
     }
 
     public void nextClickListener() {

@@ -9,11 +9,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,9 +20,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.Manager.ApiManager;
 import com.cenesbeta.Manager.UrlManager;
 import com.cenesbeta.R;
-import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.activity.DiaryActivity;
-import com.cenesbeta.activity.GatheringScreenActivity;
 import com.cenesbeta.activity.GuestActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Alarm;
@@ -107,31 +102,15 @@ public class NavigationFragment extends CenesFragment {
     }
 
     public void setFragmentManager() {
-        if (getActivity() instanceof GatheringScreenActivity) {
-            fragmentManager = ((GatheringScreenActivity) getActivity()).fragmentManager;
-        } else if (getActivity() instanceof DiaryActivity) {
-            fragmentManager = ((DiaryActivity) getActivity()).fragmentManager;
-        }
+
     }
 
     public void closeDrawer() {
-        /*if (getActivity() instanceof GatheringScreenActivity) {
-            GatheringScreenActivity.mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else if (getActivity() instanceof DiaryActivity) {
-            DiaryActivity.mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else if (getActivity() instanceof CenesBaseActivity) {
-            ((CenesBaseActivity)getActivity()).mDrawerLayout.closeDrawer(GravityCompat.START);
-        }*/
+
     }
 
     public void replaceFragment(Fragment fragment, String tag) {
-        /*if (getActivity() instanceof GatheringScreenActivity) {
-            ((GatheringScreenActivity) getActivity()).replaceFragment(fragment, tag);
-        } else if (getActivity() instanceof DiaryActivity) {
-            ((DiaryActivity) getActivity()).replaceFragment(fragment, tag);
-        } else if (getActivity() instanceof CenesBaseActivity) {
-            ((CenesBaseActivity) getActivity()).replaceFragment(fragment, tag);
-        }*/
+
     }
 
     @Override

@@ -16,8 +16,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.activity.DiaryActivity;
-import com.cenesbeta.activity.GatheringScreenActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
@@ -121,11 +119,7 @@ public class HelpFeedbackFragment  extends CenesFragment {
     public void onResume() {
         super.onResume();
         try {
-            if (getActivity() instanceof GatheringScreenActivity) {
-                ((GatheringScreenActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof DiaryActivity) {
-                ((DiaryActivity) getActivity()).hideFooter();
-            }
+
         } catch (Exception e) {
 
         }
@@ -146,11 +140,7 @@ public class HelpFeedbackFragment  extends CenesFragment {
     }
 
     public void setFragmentManager() {
-         if (getActivity() instanceof GatheringScreenActivity) {
-            fragmentManager = ((GatheringScreenActivity) getActivity()).fragmentManager;
-        } else if (getActivity() instanceof DiaryActivity) {
-            fragmentManager = ((DiaryActivity) getActivity()).fragmentManager;
-        }
+
     }
 
 }

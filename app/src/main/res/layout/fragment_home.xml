@@ -134,7 +134,6 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="10dp"
         android:layout_marginRight="10dp"
-        android:src="@drawable/plus_white"
         app:backgroundTint="@color/cenes_new_orange"
         android:visibility="gone"/>
 

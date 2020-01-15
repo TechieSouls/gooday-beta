@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +14,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.activity.DiaryActivity;
-import com.cenesbeta.activity.GatheringScreenActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
-import com.cenesbeta.util.RoundedImageView;
 
 import java.util.List;
 
@@ -110,15 +104,6 @@ public class AboutUsFragment  extends CenesFragment {
     @Override
     public void onResume() {
         super.onResume();
-        try {
-            if (getActivity() instanceof GatheringScreenActivity) {
-                ((GatheringScreenActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof DiaryActivity) {
-                ((DiaryActivity) getActivity()).hideFooter();
-            }
-        } catch (Exception e) {
-
-        }
     }
 
 
@@ -136,10 +121,5 @@ public class AboutUsFragment  extends CenesFragment {
     }
 
     public void setFragmentManager() {
-        if (getActivity() instanceof GatheringScreenActivity) {
-            fragmentManager = ((GatheringScreenActivity) getActivity()).fragmentManager;
-        } else if (getActivity() instanceof DiaryActivity) {
-            fragmentManager = ((DiaryActivity) getActivity()).fragmentManager;
-        }
     }
 }

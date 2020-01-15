@@ -28,8 +28,6 @@ import com.cenesbeta.Manager.ValidationManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesActivity;
 import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.activity.DiaryActivity;
-import com.cenesbeta.activity.GatheringScreenActivity;
 import com.cenesbeta.activity.GuestActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.User;
@@ -137,15 +135,7 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
     @Override
     public void onResume() {
         super.onResume();
-        try {
-            if (getActivity() instanceof GatheringScreenActivity) {
-                ((GatheringScreenActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof DiaryActivity) {
-                ((DiaryActivity) getActivity()).hideFooter();
-            }
-        } catch (Exception e) {
 
-        }
     }
 
     public void nextClickListener() {

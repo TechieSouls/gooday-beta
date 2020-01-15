@@ -1,7 +1,9 @@
 package com.cenesbeta.fragment.profile;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -103,6 +105,7 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
 
         myCalendarActions = MyCalendarActions.Load;
         mAuthClient = new LiveAuthClient(getCenesActivity(), CenesConstants.OutlookClientId);
+
         calendarSyncTokenManager = new CalendarSyncTokenManagerImpl(((CenesBaseActivity)getActivity()).getCenesApplication());
         loadUserSyncTokens();
         return view;
@@ -139,25 +142,42 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
         public void onAuthComplete(LiveStatus status, LiveConnectSession session, Object userState) {
             if (status == LiveStatus.CONNECTED) {
 
-                String refreshToken = session.getRefreshToken();
-                String outlookAccessToken = session.getAccessToken();
+                final String refreshToken = session.getRefreshToken();
+                final String outlookAccessToken = session.getAccessToken();
 
-                MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
-                try {
-                    JSONObject props = new JSONObject();
-                    props.put("CalendarType","Outlook");
-                    props.put("Action","Sync Begins");
-                    props.put("UserEmail",loggedInUser.getEmail());
-                    props.put("UserName",loggedInUser.getName());
-                    mixpanel.track("SyncCalendar", props);
+                AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+                asyncTaskDto.setApiUrl("https://outlook.office.com/api/v2.0/me");
+                asyncTaskDto.setAuthToken(outlookAccessToken);
+                new ProfileAsyncTask.CommonGetRequestBearerTask(new ProfileAsyncTask.CommonGetRequestBearerTask.AsyncResponse() {
+                    @Override
+                    public void processFinish(JSONObject response) {
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                syncOutlookCalendar(outlookAccessToken, refreshToken);
+                        System.out.println(response.toString());
+
+                        try {
+                            String name = response.getString("DisplayName");
+                            MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                            try {
+                                JSONObject props = new JSONObject();
+                                props.put("CalendarType","Outlook");
+                                props.put("Action","Sync Begins");
+                                props.put("UserEmail",loggedInUser.getEmail());
+                                props.put("UserName",loggedInUser.getName());
+                                mixpanel.track("SyncCalendar", props);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            syncOutlookCalendar(name, outlookAccessToken, refreshToken);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).execute(asyncTaskDto);
+
             } else {
                 //resultTextView.setText(R.string.auth_no);
-                Toast.makeText(getCenesActivity(), "Could Not Authenticate", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getCenesActivity(), "Could Not Authenticate", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -269,20 +289,21 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
         //super.onStart();
         try {
             Iterable<String> scopes = Arrays.asList("wl.calendars,wl.offline_access ");
+            mAuthClient.logout(outlookAuthListener);
             mAuthClient.login(getActivity(), scopes, outlookAuthListener);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void syncOutlookCalendar(String accessToken, String refreshToken) {
+    public void syncOutlookCalendar(String name, String accessToken, String refreshToken) {
 
         JSONObject postData = new JSONObject();
         try {
             postData.put("accessToken", accessToken);
             postData.put("userId", loggedInUser.getUserId());
+            postData.put("name", name);
             postData.put("refreshToken", refreshToken);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -298,25 +319,35 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
 
     }
 
-    public void syncCalendar(String googleEmail, String authCode) {
-        myCalendarActions = MyCalendarActions.Sync;
+    public void syncCalendar(final String googleEmail, final String authCode) {
         try {
-            String googleAccessToken = GoogleAuthUtil.getToken(
-                    getCenesActivity().getApplicationContext(),
-                    googleEmail, googleWebPermissions);
+            final AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        String googleAccessToken = GoogleAuthUtil.getToken(
+                            getCenesActivity().getApplicationContext(),
+                            googleEmail, googleWebPermissions);
 
-            JSONObject postData = new JSONObject();
-            postData.put("accessToken", googleAccessToken);
-            postData.put("userId", loggedInUser.getUserId());
-            postData.put("serverAuthCode", authCode);
+                        JSONObject postData = new JSONObject();
 
-            AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
-            asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
-            asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+UserAPI.post_sync_google_calendar);
-            asyncTaskDto.setPostData(postData);
+                        postData.put("accessToken", googleAccessToken);
+                        postData.put("userId", loggedInUser.getUserId());
+                        postData.put("serverAuthCode", authCode);
+                        postData.put("email", googleEmail);
 
-            myCalendarActions = MyCalendarActions.Sync;
+                        asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+                        asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+UserAPI.post_sync_google_calendar);
+                        asyncTaskDto.setPostData(postData);
 
+                        myCalendarActions = MyCalendarActions.Sync;
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
             postAsyncTaskCall(asyncTaskDto);
 
         } catch (Exception e) {
@@ -347,7 +378,12 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
         try {
             if (selectedCalendarSyncToken != null) {
                 tvCalendarName.setText("Account: "+ selectedCalendarSyncToken.getEmailId());
+                btnCalendarActionDelete.setVisibility(View.VISIBLE);
+                btnCalendarActionSync.setVisibility(View.GONE);
             } else {
+                btnCalendarActionDelete.setVisibility(View.GONE);
+                btnCalendarActionSync.setVisibility(View.VISIBLE);
+
                 tvCalendarName.setText(notSyncedMessageMap.get(calendarSelected));
             }
             if (calendarSelected.equals(CalendarType.Google)) {
@@ -426,6 +462,9 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
             boolean success = response.getBoolean("success");
             if (success == true) {
 
+                if (selectedCalendarSyncToken != null) {
+                    calendarSyncTokenManager.deleteCalendarByRefreshTokenId(selectedCalendarSyncToken.getRefreshTokenId());
+                }
                 JSONObject data = response.getJSONObject("data");
                 selectedCalendarSyncToken = new Gson().fromJson(data.toString(), CalenadarSyncToken.class);
 

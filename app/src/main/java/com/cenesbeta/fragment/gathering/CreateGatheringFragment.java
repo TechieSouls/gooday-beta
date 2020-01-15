@@ -128,7 +128,6 @@ public class CreateGatheringFragment extends CenesFragment {
     private Calendar currentMonth;
 
     private EditText gathEventTitleEditView;
-    TextView gathSelectDatetimeBtn;
     private Switch predictiveCalSwitch;
 
     private TextView startTimePickerLabel, endTimePickerLabel;
@@ -275,7 +274,6 @@ public class CreateGatheringFragment extends CenesFragment {
         progressBar = (ProgressBar) fragmentView.findViewById(R.id.progressBar);
 
         gathEventTitleEditView = (EditText) fragmentView.findViewById(R.id.gath_event_title_et);
-        gathSelectDatetimeBtn = (TextView) fragmentView.findViewById(R.id.gath_select_datetime_btn);
 
         ivDateBarArrow = (ImageView) fragmentView.findViewById(R.id.iv_date_bar_arrow);
         gathInviteFrndsBtn = (ImageView) fragmentView.findViewById(R.id.gath_invite_frnds_btn);
@@ -573,22 +571,6 @@ public class CreateGatheringFragment extends CenesFragment {
                 case R.id.gath_search_location_button:
                     startActivityForResult(new Intent(getActivity(), SearchLocationActivity.class), SEACRH_LOCATION_RESULT_CODE);
                     break;
-
-                case R.id.gath_date_after_fix:
-                    v.setVisibility(View.GONE);
-                    try {
-                        gathSelectDatetimeBtn.setVisibility(View.GONE);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    RelativeLayout rl3 = (RelativeLayout) fragmentView.findViewById(R.id.predictive_cal_date_time_cal_block);
-                    if (rl3.getVisibility() == View.GONE) {
-                        rl3.setVisibility(View.VISIBLE);
-                    } else {
-                        rl3.setVisibility(View.GONE);
-                    }
-                    break;
-
             }
         }
     };
@@ -1029,7 +1011,7 @@ public class CreateGatheringFragment extends CenesFragment {
                 System.out.println("Inside Activity result : ");
                 String selectedFriendsJsonArrayStr = data.getExtras().getString("selectedFriendJsonArray");
                 try {
-
+System.out.println(selectedFriendsJsonArrayStr);
                     predictiveDataList = null;
                     predictiveDataForDate = null;
 
@@ -1388,7 +1370,7 @@ public class CreateGatheringFragment extends CenesFragment {
                 event.setEventMembers(new ArrayList<EventMember>());
             }
             event.setEventMembers(membersSelected);
-
+System.out.println("Event Member Size : "+membersSelected.size());
             recyclerView = (RecyclerView) fragmentView.findViewById(R.id.recycler_view);
             recyclerView.setVisibility(View.VISIBLE);
 

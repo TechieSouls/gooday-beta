@@ -1010,6 +1010,38 @@ public class ProfileAsyncTask {
         }
     }
 
+    public static class CommonGetRequestBearerTask extends AsyncTask<AsyncTaskDto, JSONObject, JSONObject> {
+
+        // you may separate this or combined to caller class.
+        public interface AsyncResponse {
+            void processFinish(JSONObject response);
+        }
+        public AsyncResponse delegate = null;
+
+        public CommonGetRequestBearerTask(AsyncResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected JSONObject doInBackground(AsyncTaskDto... asyncTaskDtos) {
+
+            AsyncTaskDto asyncTaskDto = asyncTaskDtos[0];
+
+            JsonParsing jsonParsing = new JsonParsing();
+            String apiUrl = asyncTaskDto.getApiUrl();
+            if (asyncTaskDto.getQueryStr() != null) {
+                apiUrl = apiUrl +"?"+asyncTaskDto.getQueryStr();
+            }
+            return jsonParsing.httpGetJsonObjectAuthBearer(apiUrl,asyncTaskDto.getAuthToken());
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject stringObjectMap) {
+            super.onPostExecute(stringObjectMap);
+            delegate.processFinish(stringObjectMap);
+        }
+    }
+
     public static class CommonGetRequestArrayResponseTask extends AsyncTask<AsyncTaskDto, JSONArray, JSONArray> {
 
         // you may separate this or combined to caller class.
