@@ -45,6 +45,7 @@ import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.fragment.NavigationFragment;
 import com.cenesbeta.fragment.NotificationFragment;
 import com.cenesbeta.fragment.dashboard.HomeFragment;
+import com.cenesbeta.fragment.dashboard.HomeFragmentV2;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
 import com.cenesbeta.fragment.gathering.GatheringsFragment;
 import com.cenesbeta.fragment.metime.MeTimeCardFragment;
@@ -103,7 +104,7 @@ public class CenesBaseActivity extends CenesActivity {
         internetManager = coreManager.getInternetManager();
 
         fragmentManager = getSupportFragmentManager();
-        initialFragment = new HomeFragment();
+        initialFragment = new HomeFragmentV2();
         replaceFragment(initialFragment, null);
 
         llFooter = (LinearLayout) findViewById(R.id.rl_footer);

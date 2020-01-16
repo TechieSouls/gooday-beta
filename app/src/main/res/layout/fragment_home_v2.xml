@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/rl_home_fragment_contaner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rl_header"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/theme_color">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="15dp"
+                android:layout_centerVertical="true">
+
+                <TextView
+                    android:id="@+id/tv_calendar_tab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calendar"
+                    android:textSize="16dp"
+                    android:textColor="@color/black"
+                    android:background="@drawable/xml_border_bottom_black"
+                    />
+                   <View
+                       android:layout_width="20dp"
+                       android:layout_height="match_parent"
+                       android:background="@color/transparent"/>
+                <TextView
+                    android:id="@+id/tv_invitation_tab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Invitation"
+                    android:textSize="16dp"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_refresh_cals_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/refresh_cal_icon"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="60dp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:id="@+id/iv_plus_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/plus_icon"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/rl_calendar_section"
+            android:layout_below="@+id/rl_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/theme_color"
+            android:paddingBottom="5dp">
+
+            <LinearLayout
+                android:id="@+id/ll_calendar_date_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:orientation="horizontal"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center_vertical"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+
+                <TextView
+                    android:id="@+id/tv_cal_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fri June 7"
+                    android:textSize="30dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    />
+                <ImageView
+                    android:id="@+id/iv_cal_date_bar_arrow"
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/close_calendar"
+                    android:padding="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+
+            <com.cenesbeta.materialcalendarview.MaterialCalendarView
+                android:id="@+id/mcv_home_calendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                app:mcv_calendarMode="month"
+                app:mcv_tileHeight="30dp"
+                app:mcv_weekDayLabels="@array/weekdays"
+                android:background="@drawable/xml_curved_corner_calendar_bg"
+                android:layout_margin="10dp"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <ExpandableListView
+            android:id="@+id/elv_home_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/rl_calendar_section"/>
+    </RelativeLayout>
+
+</RelativeLayout>

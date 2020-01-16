@@ -1372,7 +1372,7 @@ public class CreateGatheringFragment extends CenesFragment {
                 event.setEventMembers(new ArrayList<EventMember>());
             }
             event.setEventMembers(membersSelected);
-System.out.println("Event Member Size : "+membersSelected.size());
+            System.out.println("Event Member Size : "+membersSelected.size());
             recyclerView = (RecyclerView) fragmentView.findViewById(R.id.recycler_view);
             recyclerView.setVisibility(View.VISIBLE);
 
