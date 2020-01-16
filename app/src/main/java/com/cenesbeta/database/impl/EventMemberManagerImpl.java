@@ -75,6 +75,8 @@ public class EventMemberManagerImpl  {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            db.close();
         }
 
     }
@@ -112,6 +114,8 @@ public class EventMemberManagerImpl  {
             db.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            db.close();
         }
         return eventMembers;
     }

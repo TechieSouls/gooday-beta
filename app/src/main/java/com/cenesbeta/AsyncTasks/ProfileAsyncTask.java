@@ -162,7 +162,7 @@ public class ProfileAsyncTask {
 
         private CoreManager coreManager = cenesApplication.getCoreManager();
 
-        ProgressDialog syncContactsDialog;
+        //ProgressDialog syncContactsDialog;
 
         public interface AsyncResponse {
             void processFinish(Object response);
@@ -177,12 +177,12 @@ public class ProfileAsyncTask {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            syncContactsDialog = new ProgressDialog(activity);
+            /*syncContactsDialog = new ProgressDialog(activity);
             syncContactsDialog.setMessage("Syncing Contacts..");
             syncContactsDialog.setIndeterminate(false);
             syncContactsDialog.setCanceledOnTouchOutside(false);
             syncContactsDialog.setCancelable(false);
-            syncContactsDialog.show();
+            syncContactsDialog.show();*/
         }
 
         @Override
@@ -199,13 +199,13 @@ public class ProfileAsyncTask {
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-            if (activity != null) {
+            /*if (activity != null) {
                 if (syncContactsDialog != null) {
                     syncContactsDialog.dismiss();
                 }
             }
 
-            syncContactsDialog = null;
+            syncContactsDialog = null;*/
             delegate.processFinish(o);
         }
     }

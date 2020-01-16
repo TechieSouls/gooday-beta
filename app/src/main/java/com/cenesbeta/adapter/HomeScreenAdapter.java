@@ -62,7 +62,9 @@ public class HomeScreenAdapter extends BaseExpandableListAdapter {
         this.headers = headers;
         this.eventsMap = eventsMap;
 
-        inflter = (LayoutInflater.from(homeFragment.getContext()));
+        if (homeFragment != null && homeFragment.getContext() != null) {
+            inflter = (LayoutInflater.from(homeFragment.getContext()));
+        }
     }
 
     @Override

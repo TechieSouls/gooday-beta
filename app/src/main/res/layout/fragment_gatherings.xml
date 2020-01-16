@@ -23,7 +23,7 @@
             android:layout_height="@dimen/header_profile_pic_height"
             android:layout_alignParentLeft="true"
             android:layout_margin="5dp"
-            android:gravity="center"
+            android:layout_centerVertical="true"
             android:scaleType="centerCrop"
             android:src="@drawable/profile_pic_no_image"/>
         <TextView

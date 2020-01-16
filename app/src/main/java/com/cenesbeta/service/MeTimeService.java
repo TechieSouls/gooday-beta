@@ -2,11 +2,8 @@ package com.cenesbeta.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,7 +11,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.activity.MeTimeActivity;
 import com.cenesbeta.bo.MeTime;
 import com.cenesbeta.util.CenesConstants;
 import com.cenesbeta.util.CenesUtils;

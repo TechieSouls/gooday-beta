@@ -165,7 +165,7 @@ public class GatheringAsyncTask {
     }
 
     public static class EventInfoTask extends AsyncTask<Long, JSONObject, JSONObject> {
-        ProgressDialog eventInfoDialog;
+        //ProgressDialog eventInfoDialog;
 
         // you may separate this or combined to caller class.
         public interface AsyncResponse {
@@ -182,12 +182,12 @@ public class GatheringAsyncTask {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            eventInfoDialog = new ProgressDialog(activity);
+            /*eventInfoDialog = new ProgressDialog(activity);
             eventInfoDialog.setMessage("Loading");
             eventInfoDialog.setIndeterminate(false);
             eventInfoDialog.setCanceledOnTouchOutside(false);
             eventInfoDialog.setCancelable(false);
-            eventInfoDialog.show();
+            eventInfoDialog.show();*/
         }
 
         @Override
@@ -207,10 +207,10 @@ public class GatheringAsyncTask {
         @Override
         protected void onPostExecute(JSONObject responseObj) {
             super.onPostExecute(responseObj);
-            if (eventInfoDialog != null) {
+            /*if (eventInfoDialog != null) {
                 eventInfoDialog.dismiss();
                 eventInfoDialog = null;
-            }
+            }*/
             delegate.processFinish(responseObj);
         }
     }

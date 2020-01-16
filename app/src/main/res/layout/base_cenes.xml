@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     >
 
     <!-- <android.support.v4.widget.DrawerLayout
@@ -13,27 +13,14 @@
     <RelativeLayout
         android:id="@+id/ll_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/rl_footer"/>
-
-        <FrameLayout
-            android:id="@+id/settings_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/expanded_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#000000"
-            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/rl_footer"
@@ -108,38 +95,24 @@
                     android:padding="5dp"
                     android:src="@drawable/profile_icon_unselected" />
 
-                <ImageView
-                    android:id="@+id/footer_reminder_icon"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawablePadding="5dp"
-                    android:gravity="center"
-                    android:visibility="gone" />
-
-                <ImageView
-                    android:id="@+id/footer_diary_icon"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawablePadding="5dp"
-                    android:gravity="center"
-                    android:src="@drawable/diary_icon"
-                    android:visibility="gone" />
-
-                <ImageView
-                    android:id="@+id/footer_alarm_icon"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawablePadding="5dp"
-                    android:gravity="center"
-                    android:visibility="gone" />
             </LinearLayout>
 
 
         </LinearLayout>
 
+        <FrameLayout
+            android:id="@+id/settings_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/expanded_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000000"
+            android:visibility="gone" />
         <RelativeLayout
             android:id="@+id/rl_loading_block"
             android:layout_width="match_parent"
@@ -179,5 +152,6 @@
 
 
     </RelativeLayout>
+
 
 </RelativeLayout>

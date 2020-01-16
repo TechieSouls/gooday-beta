@@ -9,8 +9,7 @@
     <ImageView
         android:id="@+id/event_image"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:src="@drawable/party_image" />
+        android:layout_height="100dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"

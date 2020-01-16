@@ -57,10 +57,7 @@ public class RecentLocationAdapter extends RecyclerView.Adapter<RecentLocationAd
             try {
                 final Location locationObj = (Location) locations.get(position);
 
-                holder.ivLocationPhoto.setImageResource(R.drawable.party_image);
-                if (locationObj.getPhoto() != null) {
-                    Glide.with(context).load(locationObj.getPhoto()).apply(RequestOptions.placeholderOf(R.drawable.party_image)).into(holder.ivLocationPhoto);
-                }
+
                 holder.tvLocation.setText(locationObj.getLocation().split(",")[0]);
 
                 holder.btnUseLocation.setOnClickListener(new View.OnClickListener() {

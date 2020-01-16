@@ -58,6 +58,8 @@ public class UserContactManagerImpl {
 
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            db.close();
         }
     }
 
@@ -83,6 +85,8 @@ public class UserContactManagerImpl {
             db.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            db.close();
         }
         return userContact;
     }

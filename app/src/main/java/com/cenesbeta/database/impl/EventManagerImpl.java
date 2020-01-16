@@ -67,13 +67,13 @@ public class EventManagerImpl {
 
             System.out.println(insertQuery);
             db.execSQL(insertQuery);
-
             EventMemberManagerImpl eventMemberManagerImpl = new EventMemberManagerImpl(cenesApplication);
             eventMemberManagerImpl.addEventMember(event.getEventMembers());
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            db.close();
         }
-        db.close();
     }
 
     public List<Event> fetchAllEventsByScreen(String displayAtScreen) {
@@ -112,6 +112,8 @@ public class EventManagerImpl {
             db.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            db.close();
         }
 
         return events;
