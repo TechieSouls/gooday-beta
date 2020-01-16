@@ -18,6 +18,7 @@
     <color name="cenes_red">#F07851</color>
     <color name="cenes_blue">#FF3B4C8B</color>
     <color name="cenes_very_light_gray">#efefef</color>
+    <color name="light_tint_gray">#EFEFEF</color>
     <color name="cenes_new_orange">#F9992C</color>
     <color name="cenes_teal">#004346</color>
     <color name="facebook_blue">#3b5998</color>
@@ -47,6 +48,7 @@
     <color name="cenes_mcv_lightgrey">#DBDDDD</color>
     <color name="cenes_mcv_lightergrey">#DCDDDD</color>
     <color name="cenes_grey">#898989</color>
+    <color name="cenes_pink">#C76BBC</color>
 
 
 
