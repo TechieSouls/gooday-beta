@@ -37,12 +37,12 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
     }
     @Override
     public int getGroupCount() {
-        return homeScreenDto.getHomeDataListMap().size();
+        return homeScreenDto.getHomeDataHeaders().size();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return groupPosition;
+        return homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(groupPosition)).size();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
 
     @Override
     public Event getChild(int groupPosition, int childPosition) {
-        return homeScreenDto.getHomeDataListMap().get(groupPosition).get(childPosition);
+        return homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(groupPosition)).get(childPosition);
     }
 
     @Override

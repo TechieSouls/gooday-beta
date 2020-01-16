@@ -223,7 +223,7 @@ public class CenesBaseActivity extends CenesActivity {
                     System.out.println("Home Clicked From Base");
                     //clearBackStackInclusive(null);
                     //notificationCountCall();
-                    replaceFragment(new HomeFragment(), null);
+                    replaceFragment(new HomeFragmentV2(), null);
                     break;
 
                 case R.id.footer_gathering_icon:
@@ -316,7 +316,7 @@ public class CenesBaseActivity extends CenesActivity {
 
     public void activateFooterIcon(String tag) {
 
-        if (tag.equals(HomeFragment.TAG)) {
+        if (tag.equals(HomeFragmentV2.TAG)) {
             footerHomeIcon.setImageResource(R.drawable.home_icon_selected);
         } else {
             footerHomeIcon.setImageResource(R.drawable.home_icon_unselected);
@@ -695,7 +695,7 @@ public class CenesBaseActivity extends CenesActivity {
                                 GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
                                 gatheringPreviewFragment.event = event;
                                 gatheringPreviewFragment.sourceFragment = initialFragment;
-                                replaceFragment(gatheringPreviewFragment, HomeFragment.TAG);
+                                replaceFragment(gatheringPreviewFragment, HomeFragmentV2.TAG);
 
                             }
 
