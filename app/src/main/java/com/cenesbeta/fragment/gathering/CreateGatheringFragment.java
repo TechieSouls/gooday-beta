@@ -1011,7 +1011,7 @@ public class CreateGatheringFragment extends CenesFragment {
                 System.out.println("Inside Activity result : ");
                 String selectedFriendsJsonArrayStr = data.getExtras().getString("selectedFriendJsonArray");
                 try {
-System.out.println(selectedFriendsJsonArrayStr);
+                    System.out.println(selectedFriendsJsonArrayStr);
                     predictiveDataList = null;
                     predictiveDataForDate = null;
 
@@ -1347,16 +1347,18 @@ System.out.println(selectedFriendsJsonArrayStr);
 
         if (membersSelected != null && membersSelected.size() > 0) {
 
-            //lets reorder the memers selected
+            System.out.println("MembersSelected Size : "+membersSelected.size());
             List<EventMember> orderedMembersSelected = new ArrayList<>();
             for (EventMember eventMember: membersSelected) {
-                if (eventMember.getUserId() != null && eventMember.getUserId().equals(event.getCreatedById())) {
+                if (eventMember.getUser() != null && eventMember.getUserId() != null && eventMember.getUserId().equals(event.getCreatedById())) {
                     orderedMembersSelected.add(eventMember);
                     break;
                 }
             }
             for (EventMember eventMember: membersSelected) {
-                if (eventMember.getUserId() != null && eventMember.getUserId().equals(event.getCreatedById())) {
+                System.out.println("Event Member User Id : "+eventMember.getFriendId());
+
+                if (eventMember.getUser() != null &&  eventMember.getUserId() != null && eventMember.getUserId().equals(event.getCreatedById())) {
                     continue;
                 }
                 orderedMembersSelected.add(eventMember);
