@@ -65,7 +65,7 @@
             android:id="@+id/btn_calendar_action_sync"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@color/link_color"
+            android:background="@color/light_link_color"
             android:text="Sync"
             android:textColor="@color/white"
             android:textSize="16dp" />

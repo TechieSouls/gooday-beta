@@ -52,6 +52,7 @@
             android:textSize="40dp"
             android:textColor="#B5B5B6"
             android:textColorHint="#B5B5B6"
+            android:maxLines="1"
             android:background="@color/transparent"/>
 
         <LinearLayout

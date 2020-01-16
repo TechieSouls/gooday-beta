@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,6 +127,8 @@ public class DeleteAccountFragment extends CenesFragment {
             etPassword.setVisibility(View.GONE);
         }
 
+        etPhoneNumber.addTextChangedListener(phnTextWatcher);
+        etPassword.addTextChangedListener(passwordTextWatcher);
         return view;
     }
 
@@ -229,6 +233,49 @@ public class DeleteAccountFragment extends CenesFragment {
                     getActivity().onBackPressed();
                     break;
             }
+        }
+    };
+    TextWatcher phnTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if(etPhoneNumber.length() > 0 && etPassword.length() > 0){
+                btnDeleteAccount.setBackgroundColor(getResources().getColor(R.color.light_link_color));
+            }else{
+                btnDeleteAccount.setBackgroundColor(getResources().getColor(R.color.separator_gray));
+
+            }
+        }
+    };
+    TextWatcher passwordTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if(etPhoneNumber.length() > 0 && etPassword.length() > 0){
+                btnDeleteAccount.setBackgroundColor(getResources().getColor(R.color.light_link_color));
+            }else{
+                btnDeleteAccount.setBackgroundColor(getResources().getColor(R.color.separator_gray));
+
+            }
+
         }
     };
 

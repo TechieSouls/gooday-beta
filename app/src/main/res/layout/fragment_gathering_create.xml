@@ -569,7 +569,7 @@
         android:layout_width="match_parent"
         android:layout_height="90dp"
         android:layout_alignParentBottom="true"
-        android:background="#854A90E2"
+        android:background="@color/light_link_color"
         >
 
         <TextView

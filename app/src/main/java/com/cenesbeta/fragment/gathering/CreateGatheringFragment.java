@@ -856,9 +856,28 @@ public class CreateGatheringFragment extends CenesFragment {
                     e.printStackTrace();
                 }
             } else if (requestCode == CLICK_IMAGE_REQUEST_CODE) {
-                try {
-                    try {
-                        Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
+
+                   try {
+                Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
+
+                MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+
+                    JSONObject props = new JSONObject();
+                    props.put("Action","Cropper testing");
+                    String title = "File Uri, Request URI";
+                    if (cameraFileUri == null) {
+                        title += " cameraFileUri NUll";
+                    } else {
+                        title += " cameraFileUri Not NUll";
+                    }
+                    if (resultUri == null) {
+                        title += " resultUri NUll";
+                    } else {
+                        title += " resultUri Not NUll";
+                    }
+
+                    props.put("title",title);
+                    mixpanel.track("Gathering", props);
                         UCrop.of(cameraFileUri, resultUri)
                                 //.withAspectRatio(3, 4)
                                 .withMaxResultSize(1600, 1000)
@@ -866,12 +885,10 @@ public class CreateGatheringFragment extends CenesFragment {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
             } else if (requestCode == UCrop.REQUEST_CROP) {
 
-                try {
+               try {
                     System.out.println("Back from UCrop.....");
                     Uri resultUri = UCrop.getOutput(data);
                     String filePath = ImageUtils.getPath(getCenesActivity().getApplicationContext(), resultUri);
@@ -879,7 +896,7 @@ public class CreateGatheringFragment extends CenesFragment {
                     System.out.println("File Path String : " + filePath);
                     System.out.println("File Path : " + eventImageFile.getPath());
                     event.setEventImageURI(eventImageFile.getPath());
-                    Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getCenesActivity().getContentResolver(), resultUri);
+                    //Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getCenesActivity().getContentResolver(), resultUri);
 
                     /*ExifInterface ei = new ExifInterface(filePath);
                     int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
