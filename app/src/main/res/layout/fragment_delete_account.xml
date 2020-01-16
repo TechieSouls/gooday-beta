@@ -151,7 +151,7 @@
             android:text="Delete Account"
             android:textColor="@color/white"
             android:textSize="16dp"
-            android:background="#B5B5B6"/>
+            android:background="@color/separator_gray"/>
 
     </LinearLayout>
 </RelativeLayout>

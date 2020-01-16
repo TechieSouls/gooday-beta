@@ -92,6 +92,15 @@ public class CenesBaseActivity extends CenesActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!isTaskRoot()
+                && getIntent().hasCategory(Intent.CATEGORY_LAUNCHER)
+                && getIntent().getAction() != null
+                && getIntent().getAction().equals(Intent.ACTION_MAIN)) {
+
+            finish();
+            return;
+        }
         setContentView(R.layout.base_cenes);
 
         //mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
