@@ -36,6 +36,7 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.security.spec.ECField;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -211,7 +212,14 @@ public class HomeFragmentV2 extends CenesFragment {
             try{
 
                 String headerTitle = CenesUtils.EEEMMMMdd.format(new Date(event.getStartTime()));
+                String monthTitle = CenesUtils.MMyyyy.format(new Date(event.getStartTime()));
 
+                if( mapListEvent.containsKey(monthTitle) ){
+                    List<Event> eventList = mapListEvent.get(monthTitle);
+                    Event eventNew = new Event();
+                    eventList.add(eventNew);
+                    mapListEvent.put(monthTitle,eventList);
+                }
                 if( mapListEvent.containsKey(headerTitle) ){
                     List<Event> eventList = mapListEvent.get(headerTitle);
                     eventList.add(event);
@@ -232,6 +240,51 @@ public class HomeFragmentV2 extends CenesFragment {
             String headerTitle = CenesUtils.EEEMMMMdd.format(new Date(timestamp));
             headers.add(headerTitle);
         }
+
+        for (int i=0; i < headers.size(); i++) {
+
+            if (i != 0) {
+
+                List<Event> previousListEvents = mapListEvent.get(headers.get(i-1));
+
+                List<Event> currentListEvents = mapListEvent.get(headers.get(i));
+
+
+                Event previoustListFirstEvent = previousListEvents.get(0);
+                Event currentListFirstEvent = currentListEvents.get(0);
+
+                Calendar previstListEventDateCal = Calendar.getInstance();
+                previstListEventDateCal.setTimeInMillis(previoustListFirstEvent.getStartTime());
+
+                Calendar currentListEventDateCal = Calendar.getInstance();
+                currentListEventDateCal.setTimeInMillis(currentListFirstEvent.getStartTime());
+
+                if (previstListEventDateCal.get(Calendar.MONTH) != currentListEventDateCal.get(Calendar.MONTH) ) {
+
+                    String monthTitle = CenesUtils.MMyyyy.format(new Date(currentListFirstEvent.getStartTime()));
+
+
+                    //Lets make it at the end of the day
+                    Calendar monthSeparatorCal = Calendar.getInstance();
+                    monthSeparatorCal.setTimeInMillis(previoustListFirstEvent.getStartTime());
+                    monthSeparatorCal.set(Calendar.HOUR_OF_DAY, 23);
+                    monthSeparatorCal.set(Calendar.MINUTE, 59);
+                    monthSeparatorCal.set(Calendar.SECOND, 59);
+                    monthSeparatorCal.set(Calendar.MILLISECOND, 59);
+
+                    //Lets create new event
+                    Event event = new Event();
+                    event.setScheduleAs("MonthSeparator");
+                    event.setTitle(monthTitle);
+                    event.setStartTime(monthSeparatorCal.getTimeInMillis());
+                    previousListEvents.add(event);
+                    mapListEvent.put(headers.get(i-1), previousListEvents);
+                }
+            } else{
+
+            }
+        }
+
         homeScreenDto.setHomeDataHeaders(headers);
         homeScreenDto.setHomeDataListMap(mapListEvent);
 
