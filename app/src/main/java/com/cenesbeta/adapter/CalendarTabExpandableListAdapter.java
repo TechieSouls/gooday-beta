@@ -21,6 +21,8 @@ import com.cenesbeta.util.CenesTextView;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter {
@@ -86,7 +88,18 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
         };
 
         String header = getGroup(groupPosition);
-        holder.tvHeader.setText(header);
+        String dateKey = "";
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, 1);
+        if (header.equals(CenesUtils.EEEMMMMdd.format(new Date()))) {
+
+            dateKey = "Today ";
+        } else  if (header.equals(CenesUtils.EEEMMMMdd.format(cal.getTime()))) {
+
+            dateKey = "Tomorrow ";
+        }
+        holder.tvHeader.setText(dateKey + header);
         return convertView;
     }
 
@@ -101,16 +114,30 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
             viewHolder.tvEventTitle = (CenesTextView) convertView.findViewById(R.id.tv_event_title);
             viewHolder.tvEventLocation = (CenesTextView) convertView.findViewById(R.id.tv_event_location);
             viewHolder.llEventLocationSection = (LinearLayout) convertView.findViewById(R.id.ll_event_location_section);
+            viewHolder.llCenesEvents = (LinearLayout) convertView.findViewById(R.id.ll_cenes_events);
+            viewHolder.llTpEvents = (LinearLayout) convertView.findViewById(R.id.ll_tp_events);
+            viewHolder.llHoliday = (LinearLayout) convertView.findViewById(R.id.ll_holiday);
+            viewHolder.tvStartTime = (TextView) convertView.findViewById(R.id.tv_start_time);
+            viewHolder.tvTpStartTime = (TextView) convertView.findViewById(R.id.tv_tp_start_time);
+            viewHolder.tvHolidayTitle = (TextView) convertView.findViewById(R.id.tv_holiday_title);
+            viewHolder.dividerView = (View) convertView.findViewById(R.id.view_divider);
 
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (RowViewHolder) convertView.getTag();
         }
-
+        viewHolder.llCenesEvents.setVisibility(View.GONE);
+        viewHolder.llTpEvents.setVisibility(View.GONE);
+        viewHolder.llHoliday.setVisibility(View.GONE);
 
         Event event = getChild(groupPosition, childPosition);
         List<EventMember> eventMembers = event.getEventMembers();
 
+        if ( isLastChild ) {
+            viewHolder.dividerView.setVisibility(View.GONE);
+        }else {
+            viewHolder.dividerView.setVisibility(View.VISIBLE);
+        }
 
         //Lets hanle the case of Event Type as Gatheirngs
         if (event.getScheduleAs().equals("Gathering")) {
@@ -122,7 +149,8 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
                 viewHolder.llEventLocationSection.setVisibility(View.VISIBLE);
                 viewHolder.tvEventLocation.setText(event.getLocation());
             }
-
+            viewHolder.llCenesEvents.setVisibility(View.VISIBLE);
+            viewHolder.tvStartTime.setText(CenesUtils.hmmaa.format(new Date(event.getStartTime())));
             //Lets find Event Host
             EventMember eventHost = null;
             for (EventMember eventMember: eventMembers) {
@@ -145,6 +173,20 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
             }
         }
 
+        else if (event.getScheduleAs().equals("Event")) {
+
+            viewHolder.llTpEvents.setVisibility(View.VISIBLE);
+            viewHolder.tvTpStartTime.setText(CenesUtils.hmmaa.format(new Date(event.getStartTime())));
+
+        }
+
+        else if (event.getScheduleAs().equals("Holiday")) {
+            viewHolder.llHoliday.setVisibility(View.VISIBLE);
+            viewHolder.tvHolidayTitle.setText(event.getTitle());
+        }
+
+
+
 
         return convertView;
     }
@@ -161,7 +203,8 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
     class RowViewHolder {
 
         private RoundedImageView ivEventHost;
-        private TextView tvEventTitle, tvEventLocation;
-        private LinearLayout llEventLocationSection;
+        private TextView tvEventTitle, tvEventLocation, tvStartTime, tvTpStartTime, tvHolidayTitle;
+        private LinearLayout llEventLocationSection, llCenesEvents, llTpEvents, llHoliday;
+        private View dividerView;
     }
 }

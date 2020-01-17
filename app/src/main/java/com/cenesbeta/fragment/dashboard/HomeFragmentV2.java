@@ -39,6 +39,8 @@ import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -93,6 +95,8 @@ public class HomeFragmentV2 extends CenesFragment {
         loggedInUser = userManager.getUser();
 
         loadCalendarTabData();
+        ((CenesBaseActivity) getActivity()).showFooter();
+        ((CenesBaseActivity)  getActivity()).activateFooterIcon(HomeFragmentV2.TAG);
         return view;
     }
 
@@ -198,46 +202,36 @@ public class HomeFragmentV2 extends CenesFragment {
     public void processCalendarTabData(List<Event> events){
 
         List<String> headers = new ArrayList<>();
+        List<Long> headersTimstamp = new ArrayList<>();
+
         Map<String,List<Event>> mapListEvent = new HashMap<>();
+
 
         for (Event event : events) {
             try{
-                String dateKey = "";
+
                 String headerTitle = CenesUtils.EEEMMMMdd.format(new Date(event.getStartTime()));
-
-                if (headerTitle.equals(CenesUtils.EEEMMMMdd.format(new Date()))) {
-
-                    dateKey = "TODAY ";
-                }
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(new Date());
-                cal.add(Calendar.DATE, 1);
-
-                if (headerTitle.equals(CenesUtils.EEEMMMMdd.format(cal.getTime()))) {
-
-                    dateKey = "TOMORROW ";
-                }
 
                 if( mapListEvent.containsKey(headerTitle) ){
                     List<Event> eventList = mapListEvent.get(headerTitle);
                     eventList.add(event);
-                    mapListEvent.put(dateKey+" "+headerTitle,eventList);
-
+                    mapListEvent.put(headerTitle,eventList);
                 } else {
-
                     List<Event> eventList = new ArrayList<>();
                     eventList.add(event);
-                    mapListEvent.put(dateKey + headerTitle,eventList);
-                    headers.add(dateKey + headerTitle);
+                    mapListEvent.put(headerTitle,eventList);
+                    headersTimstamp.add(event.getStartTime());
 
                 }
-
-
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
-
+        Collections.sort(headersTimstamp);
+        for (Long timestamp : headersTimstamp){
+            String headerTitle = CenesUtils.EEEMMMMdd.format(new Date(timestamp));
+            headers.add(headerTitle);
+        }
         homeScreenDto.setHomeDataHeaders(headers);
         homeScreenDto.setHomeDataListMap(mapListEvent);
 
