@@ -123,6 +123,15 @@
             android:layout_below="@+id/rl_calendar_section"
             android:groupIndicator="@null"
             />
+        <ExpandableListView
+            android:id="@+id/elv_invitation_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/rl_calendar_section"
+            android:groupIndicator="@null"
+            android:visibility="gone"
+            />
+
     </RelativeLayout>
 
 </RelativeLayout>
