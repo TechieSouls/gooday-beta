@@ -858,34 +858,14 @@ public class CreateGatheringFragment extends CenesFragment {
             } else if (requestCode == CLICK_IMAGE_REQUEST_CODE) {
 
                    try {
-                Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
-
-                MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
-
-                    JSONObject props = new JSONObject();
-                    props.put("Action","Cropper testing");
-                    String title = "File Uri, Request URI";
-                    if (cameraFileUri == null) {
-                        title += " cameraFileUri NUll";
-                    } else {
-                        title += " cameraFileUri Not NUll";
-                    }
-                    if (resultUri == null) {
-                        title += " resultUri NUll";
-                    } else {
-                        title += " resultUri Not NUll";
-                    }
-
-                    props.put("title",title);
-                    mixpanel.track("Gathering", props);
+                        Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
                         UCrop.of(cameraFileUri, resultUri)
-                                //.withAspectRatio(3, 4)
-                                .withMaxResultSize(1600, 1000)
-                                .start(getContext(), CreateGatheringFragment.this, UCrop.REQUEST_CROP);
+                                        //.withAspectRatio(3, 4)
+                                        .withMaxResultSize(1600, 1000)
+                                        .start(getContext(), CreateGatheringFragment.this, UCrop.REQUEST_CROP);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
             } else if (requestCode == UCrop.REQUEST_CROP) {
 
                try {

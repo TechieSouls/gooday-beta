@@ -13,7 +13,9 @@ public class HomeScreenDto {
     private Map<String, List<Event>> homeDataListMap;
     private List<String> homeDataHeaders;
     private HomeScreenAPICall homeScreenAPICall;
-
+    private List<Event> acceptedEvents;
+    private List<Event> pendingEvents;
+    private List<Event> declinedEvents;
 
     public List<String> getHomeDataHeaders() {
         return homeDataHeaders;
@@ -45,5 +47,29 @@ public class HomeScreenDto {
 
     public void setHomeScreenAPICall(HomeScreenAPICall homeScreenAPICall) {
         this.homeScreenAPICall = homeScreenAPICall;
+    }
+
+    public List<Event> getAcceptedEvents() {
+        return acceptedEvents;
+    }
+
+    public void setAcceptedEvents(List<Event> acceptedEvents) {
+        this.acceptedEvents = acceptedEvents;
+    }
+
+    public List<Event> getPendingEvents() {
+        return pendingEvents;
+    }
+
+    public void setPendingEvents(List<Event> pendingEvents) {
+        this.pendingEvents = pendingEvents;
+    }
+
+    public List<Event> getDeclinedEvents() {
+        return declinedEvents;
+    }
+
+    public void setDeclinedEvents(List<Event> declinedEvents) {
+        this.declinedEvents = declinedEvents;
     }
 }
