@@ -7,6 +7,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -120,7 +121,9 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
             viewHolder.tvStartTime = (TextView) convertView.findViewById(R.id.tv_start_time);
             viewHolder.tvTpStartTime = (TextView) convertView.findViewById(R.id.tv_tp_start_time);
             viewHolder.tvHolidayTitle = (TextView) convertView.findViewById(R.id.tv_holiday_title);
+            viewHolder.tvMonthSeparator = (TextView) convertView.findViewById(R.id.tv_month_separator);
             viewHolder.dividerView = (View) convertView.findViewById(R.id.view_divider);
+            viewHolder.rlMonthSeparator = (RelativeLayout) convertView.findViewById(R.id.rl_month_separator);
 
             convertView.setTag(viewHolder);
         } else {
@@ -129,6 +132,7 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
         viewHolder.llCenesEvents.setVisibility(View.GONE);
         viewHolder.llTpEvents.setVisibility(View.GONE);
         viewHolder.llHoliday.setVisibility(View.GONE);
+        viewHolder.rlMonthSeparator.setVisibility(View.GONE);
 
         Event event = getChild(groupPosition, childPosition);
         List<EventMember> eventMembers = event.getEventMembers();
@@ -183,6 +187,9 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
         else if (event.getScheduleAs().equals("Holiday")) {
             viewHolder.llHoliday.setVisibility(View.VISIBLE);
             viewHolder.tvHolidayTitle.setText(event.getTitle());
+        } else if (event.getScheduleAs().equals("MonthSeparator")) {
+            viewHolder.rlMonthSeparator.setVisibility(View.VISIBLE);
+            viewHolder.tvMonthSeparator.setText(event.getTitle());
         }
 
 
@@ -203,8 +210,9 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
     class RowViewHolder {
 
         private RoundedImageView ivEventHost;
-        private TextView tvEventTitle, tvEventLocation, tvStartTime, tvTpStartTime, tvHolidayTitle;
+        private TextView tvEventTitle, tvEventLocation, tvStartTime, tvTpStartTime, tvHolidayTitle, tvMonthSeparator;
         private LinearLayout llEventLocationSection, llCenesEvents, llTpEvents, llHoliday;
         private View dividerView;
+        private RelativeLayout rlMonthSeparator;
     }
 }
