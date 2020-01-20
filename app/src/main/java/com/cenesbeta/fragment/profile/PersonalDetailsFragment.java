@@ -208,7 +208,7 @@ public class PersonalDetailsFragment extends CenesFragment {
             DatePickerDialog birthDatePicker = new DatePickerDialog((CenesBaseActivity)getActivity(), datePickerListener, eligibleCal
                     .get(Calendar.YEAR), eligibleCal.get(Calendar.MONTH),
                     eligibleCal.get(Calendar.DAY_OF_MONTH));
-            birthDatePicker.getDatePicker().setMaxDate(eligibleCal.getTime().getTime());
+            birthDatePicker.getDatePicker().setMaxDate(new Date().getTime());
             birthDatePicker.show();
         } catch (Exception e) {
             e.printStackTrace();

@@ -31,7 +31,7 @@
                 android:text="Personal Details"
                 android:textColor="@color/black"
                 android:textSize="17dp"
-                android:textStyle="bold"/>
+                android:textStyle="normal"/>
 
 
             <TextView
@@ -41,7 +41,7 @@
                 android:text="Username, Email, Password, Phone, DOB"
                 android:textColor="#B5B5B6"
                 android:textSize="13dp"
-                android:textStyle="bold" />
+                android:textStyle="normal" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

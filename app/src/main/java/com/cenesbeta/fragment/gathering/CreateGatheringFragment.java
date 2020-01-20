@@ -389,7 +389,7 @@ public class CreateGatheringFragment extends CenesFragment {
 
                 case R.id.gath_event_title_et:
 
-                    rlPreviewInvitationButton.setVisibility(View.INVISIBLE);
+                   // rlPreviewInvitationButton.setVisibility(View.INVISIBLE);
                     break;
                 case R.id.rl_start_bar:
 
@@ -597,7 +597,7 @@ public class CreateGatheringFragment extends CenesFragment {
             predictedDateStartCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
             predictedDateStartCal.set(Calendar.MINUTE, minute);
 
-            startTimePickerLabel.setText(CenesUtils.hmmaa.format(predictedDateStartCal.getTime()));
+            startTimePickerLabel.setText(CenesUtils.hmmaa.format(predictedDateStartCal.getTime()).toUpperCase());
             Log.e("Start Date : ", predictedDateStartCal.getTime().toString());
             event.setStartTime(predictedDateStartCal.getTimeInMillis());
 

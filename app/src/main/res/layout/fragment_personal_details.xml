@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/abondan_event_icon"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="20dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:text="Your Name"
                 android:textSize="16dp"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 android:layout_marginLeft="15dp"
                 android:layout_centerVertical="true"/>
 
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:text="xxxxxxx"
                 android:textSize="16dp"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 android:layout_marginLeft="15dp"
                 android:layout_centerVertical="true"/>
 
@@ -98,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:text="Your Email"
                 android:textSize="16dp"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 android:layout_marginLeft="15dp"
                 android:layout_centerVertical="true"/>
         </RelativeLayout>
@@ -113,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:text="No Phone Registered"
                 android:textSize="16dp"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 android:layout_marginLeft="15dp"
                 android:layout_centerVertical="true"/>
         </RelativeLayout>
@@ -141,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:text="Choose BirthDate"
                     android:textSize="16dp"
-                    android:textStyle="bold"
+                    android:textStyle="normal"
                     android:layout_marginLeft="15dp"
                     android:layout_centerVertical="true"/>
                 <ImageView
@@ -163,7 +163,7 @@
                     android:layout_height="wrap_content"
                     android:text="Select Gender"
                     android:textSize="16dp"
-                    android:textStyle="bold"
+                    android:textStyle="normal"
                     android:layout_marginLeft="15dp"
                     android:layout_centerVertical="true"/>
                 <ImageView
@@ -207,7 +207,7 @@
                     android:text="Male"
                     android:textAlignment="center"
                     android:gravity="center_vertical"
-                    android:textColor="@color/facebook_blue"
+                    android:textColor="@color/light_blue"
                     android:textSize="17sp"/>
 
                 <TextView
@@ -218,7 +218,7 @@
                     android:text="Female"
                     android:textAlignment="center"
                     android:gravity="center_vertical"
-                    android:textColor="@color/facebook_blue"
+                    android:textColor="@color/light_blue"
                     android:layout_marginTop="0.5dp"
                     android:layout_marginBottom="0.5dp"
                     android:textSize="17sp"/>
@@ -231,7 +231,7 @@
                     android:text="Other"
                     android:textAlignment="center"
                     android:gravity="center_vertical"
-                    android:textColor="@color/facebook_blue"
+                    android:textColor="@color/light_blue"
                     android:textSize="17sp"/>
 
             </LinearLayout>

@@ -251,7 +251,7 @@ public class DeleteAccountFragment extends CenesFragment {
             if(etPhoneNumber.length() > 0 && etPassword.length() > 0){
                 btnDeleteAccount.setBackgroundColor(getResources().getColor(R.color.light_link_color));
             }else{
-                btnDeleteAccount.setBackgroundColor(getResources().getColor(R.color.separator_gray));
+                btnDeleteAccount.setBackgroundColor(getResources().getColor(R.color.hues_of_gray));
 
             }
         }
@@ -272,7 +272,7 @@ public class DeleteAccountFragment extends CenesFragment {
             if(etPhoneNumber.length() > 0 && etPassword.length() > 0){
                 btnDeleteAccount.setBackgroundColor(getResources().getColor(R.color.light_link_color));
             }else{
-                btnDeleteAccount.setBackgroundColor(getResources().getColor(R.color.separator_gray));
+                btnDeleteAccount.setBackgroundColor(getResources().getColor(R.color.hues_of_gray));
 
             }
 

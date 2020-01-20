@@ -5,8 +5,8 @@
     android:background="@color/white">
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:src="@drawable/about_us_logo"
         android:layout_marginTop="100dp"
         android:layout_centerHorizontal="true"/>

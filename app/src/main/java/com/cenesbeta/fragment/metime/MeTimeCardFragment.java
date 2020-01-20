@@ -176,8 +176,8 @@ public class MeTimeCardFragment extends CenesFragment {
 
                 if (metime.getStartTime() != null && metime.getStartTime() != 0) {
 
-                    startTimeText.setText(CenesUtils.hmmaa.format(new Date(metime.getStartTime())));
-                    endTimeText.setText(CenesUtils.hmmaa.format(new Date(metime.getEndTime())));
+                    startTimeText.setText(CenesUtils.hmmaa.format(new Date(metime.getStartTime())).toUpperCase());
+                    endTimeText.setText(CenesUtils.hmmaa.format(new Date(metime.getEndTime())).toUpperCase());
 
 
                     for(MeTimeItem meTimeItem: metime.getItems()) {

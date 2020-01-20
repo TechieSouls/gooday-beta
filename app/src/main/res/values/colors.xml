@@ -29,7 +29,8 @@
     <color name="new_theme_grey_color">#03FFFFFF</color>
     <color name="font_grey_color">#FF9B9B9B</color>
     <color name="font_orange_color">#FFF5A623</color>
-    <color name="separator_gray">#B5B5B6</color>
+    <color name="hues_of_gray">#B5B5B6</color>
+    <color name="light_blue">#4A8FE3</color>
 
     <color name="cenes_textfield_color">#FF4A4A4A</color>
     <color name="cenes_selectedText_color">#FFF5A623</color>
