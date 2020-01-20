@@ -10,5 +10,6 @@ public class HomeScreenAPI {
     public static String get_refreshGoogleEvents = "/api/google/refreshEvents";
     public static String get_refreshGOutlookEvents = "/api/outlook/refreshevents";
     public static String get_homescreen_events = "/api/getEvents"; //user_id, date(in millis)
+    public static String get_gathering_evnets =  "/api/user/gatherings/v2";
 
 }

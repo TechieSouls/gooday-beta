@@ -8,14 +8,17 @@ import java.util.Map;
 public class HomeScreenDto {
 
     public enum HomeScreenAPICall{Home,Accepted,Pending,Declined};
+    public enum HomeTabs {Calendar,Invitation};
 
     private boolean isCalendarOpen;
     private Map<String, List<Event>> homeDataListMap;
     private List<String> homeDataHeaders;
     private HomeScreenAPICall homeScreenAPICall;
+    private List<Event> homeEvents;
     private List<Event> acceptedEvents;
     private List<Event> pendingEvents;
     private List<Event> declinedEvents;
+    private HomeTabs tabSelected = HomeTabs.Calendar;
 
     public List<String> getHomeDataHeaders() {
         return homeDataHeaders;
@@ -71,5 +74,21 @@ public class HomeScreenDto {
 
     public void setDeclinedEvents(List<Event> declinedEvents) {
         this.declinedEvents = declinedEvents;
+    }
+
+    public List<Event> getHomeEvents() {
+        return homeEvents;
+    }
+
+    public void setHomeEvents(List<Event> homeEvents) {
+        this.homeEvents = homeEvents;
+    }
+
+    public HomeTabs getTabSelected() {
+        return tabSelected;
+    }
+
+    public void setTabSelected(HomeTabs tabSelected) {
+        this.tabSelected = tabSelected;
     }
 }
