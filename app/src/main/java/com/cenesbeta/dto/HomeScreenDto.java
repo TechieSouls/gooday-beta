@@ -9,6 +9,7 @@ public class HomeScreenDto {
 
     public enum HomeScreenAPICall{Home,Accepted,Pending,Declined};
     public enum HomeTabs {Calendar,Invitation};
+    public enum InvitationTabs {Accepted,Pending,Declined};
 
     private boolean isCalendarOpen;
     private Map<String, List<Event>> homeDataListMap;

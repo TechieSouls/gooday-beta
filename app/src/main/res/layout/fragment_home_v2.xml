@@ -122,15 +122,66 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/rl_calendar_section"
             android:groupIndicator="@null"
+            android:visibility="visible"
             />
-        <ExpandableListView
-            android:id="@+id/elv_invitation_list_view"
+
+        <LinearLayout
+            android:id="@+id/ll_invitation_tab_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             android:layout_below="@+id/rl_calendar_section"
-            android:groupIndicator="@null"
-            android:visibility="gone"
-            />
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/ll_switchable_headres"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="-1dp">
+
+                <TextView
+                    android:id="@+id/tv_confirmed_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_bottom_orange"
+                    android:gravity="center"
+                    android:text="Accepted"
+                    android:textColor="#FFF5A623"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_pending_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Pending"
+                    android:textColor="#FF9B9B9B"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_declined_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Declined"
+                    android:textColor="#FF9B9B9B"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <ExpandableListView
+                android:id="@+id/elv_invitation_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:groupIndicator="@null"
+                />
+
+        </LinearLayout>
 
     </RelativeLayout>
 

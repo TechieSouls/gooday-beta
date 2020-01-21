@@ -1,18 +1,13 @@
 package com.cenesbeta.adapter;
 
-import android.os.Build;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,8 +19,8 @@ import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.dto.HomeScreenDto;
-import com.cenesbeta.fragment.dashboard.HomeFragment;
 import com.cenesbeta.fragment.dashboard.HomeFragmentV2;
+import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
 
@@ -106,7 +101,7 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-        EventViewHolder eventViewHolder;
+        final EventViewHolder eventViewHolder;
         if(convertView == null) {
             eventViewHolder = new EventViewHolder();
             convertView = inflter.inflate(R.layout.adapter_invitation_list_item, null);
@@ -120,6 +115,7 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
             eventViewHolder.recyclerViewGuests = (RecyclerView) convertView.findViewById(R.id.recycler_view_guests);
             eventViewHolder.rvHostImage = (RoundedImageView) convertView.findViewById(R.id.rv_host_image);
             eventViewHolder.rlNonCenesCountView = (RelativeLayout) convertView.findViewById(R.id.rl_non_cenes_count_view);
+            eventViewHolder.rlEventInfoSection = (RelativeLayout) convertView.findViewById(R.id.rl_event_info_section);
 
             convertView.setTag(eventViewHolder);
 
@@ -127,7 +123,7 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
             eventViewHolder = (EventViewHolder)convertView.getTag();
         }
 
-        Event event = getChild(groupPosition, childPosition);
+        final Event event = getChild(groupPosition, childPosition);
         List<EventMember> eventMembers = event.getEventMembers();
 
         eventViewHolder.tvEventTitle.setText(event.getTitle());
@@ -138,6 +134,7 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
             eventViewHolder.llEventLocationSection.setVisibility(View.VISIBLE);
         }
 
+        System.out.println("Event Title : "+event.getTitle()+" Start Time : "+event.getStartTime()+", End Time :"+event.getEndTime() );
         String eventDate = CenesUtils.hmmaa.format(new Date(event.getStartTime()))+"-"+CenesUtils.hmmaa.format(new Date(event.getEndTime()));
         eventViewHolder.tvEventDate.setText(eventDate.toUpperCase());
 
@@ -164,6 +161,13 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
             eventViewHolder.rvHostImage.setImageResource(R.drawable.profile_pic_no_image);
         }
 
+        final EventMember eventMemberHost = eventHost;
+        eventViewHolder.rvHostImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((CenesBaseActivity)homeFragmentV2.getActivity()).zoomImageFromThumb(eventViewHolder.rvHostImage, eventMemberHost.getUser().getPicture());
+            }
+        });
 
         //Lets show Event Members without images
         List<EventMember> eventMembersWithoutHostAsCenesMember = new ArrayList<>();
@@ -220,6 +224,17 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
             eventViewHolder.rlNonCenesCountView.setVisibility(View.GONE);
         }
 
+        eventViewHolder.rlEventInfoSection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
+                gatheringPreviewFragment.event = event;
+                gatheringPreviewFragment.sourceFragment = homeFragmentV2;
+                ((CenesBaseActivity) homeFragmentV2.getActivity()).replaceFragment(gatheringPreviewFragment, HomeFragmentV2.TAG);
+
+            }
+        });
+
         return convertView;
     }
 
@@ -231,7 +246,7 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
     class EventViewHolder {
         private TextView tvEventTitle, tvEventLocation, tvEventDate, tvHostName, tvNonCenesCount;
         private LinearLayout llEventLocationSection;
-        private RelativeLayout rlNonCenesCountView;
+        private RelativeLayout rlNonCenesCountView, rlEventInfoSection;
         private RoundedImageView rvHostImage;
         private RecyclerView recyclerViewGuests;
     }
