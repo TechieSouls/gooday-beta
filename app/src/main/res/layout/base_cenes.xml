@@ -42,7 +42,7 @@
                 android:layout_alignParentBottom="true"
                 android:background="@color/white"
                 android:orientation="horizontal"
-                android:weightSum="5">
+                android:weightSum="4">
 
                 <ImageView
                     android:id="@+id/footer_home_icon"
@@ -62,7 +62,8 @@
                     android:drawablePadding="5dp"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:src="@drawable/gathering_icon_unselected" />
+                    android:src="@drawable/gathering_icon_unselected"
+                    android:visibility="gone"/>
 
                 <ImageView
                     android:id="@+id/footer_metime_icon"

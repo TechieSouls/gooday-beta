@@ -13,9 +13,9 @@ import android.support.annotation.ArrayRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.text.style.CharacterStyle;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.util.TypedValue;
@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cenesbeta.R;
+import com.cenesbeta.fragment.dashboard.HomeFragmentV2;
 import com.cenesbeta.materialcalendarview.format.ArrayWeekDayFormatter;
 import com.cenesbeta.materialcalendarview.format.DateFormatTitleFormatter;
 import com.cenesbeta.materialcalendarview.format.DayFormatter;
@@ -184,6 +185,7 @@ public class MaterialCalendarView extends ViewGroup {
     private CalendarDay currentMonth;
     private LinearLayout topbar;
     private CalendarMode calendarMode;
+    public Fragment sourceFragment;
     /**
      * Used for the dynamic calendar height.
      */
@@ -214,6 +216,12 @@ public class MaterialCalendarView extends ViewGroup {
             Boolean sent = LocalBroadcastManager.getInstance(getContext()).sendBroadcast(monthChangedIntent);
 
             dispatchOnMonthChanged(currentMonth);
+
+            if (sourceFragment != null) {
+                if (sourceFragment instanceof HomeFragmentV2) {
+                    ((HomeFragmentV2) sourceFragment).onCalendarPageChangeListener(currentMonth);
+                }
+            }
         }
 
         @Override

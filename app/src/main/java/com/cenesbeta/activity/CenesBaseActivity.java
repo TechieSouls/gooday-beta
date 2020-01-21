@@ -227,7 +227,9 @@ public class CenesBaseActivity extends CenesActivity {
                     System.out.println("Home Clicked From Base");
                     //clearBackStackInclusive(null);
                     //notificationCountCall();
+                    homeFragmentV2.homeButtonPressed();
                     replaceFragment(homeFragmentV2, null);
+
                     break;
 
                 case R.id.footer_gathering_icon:

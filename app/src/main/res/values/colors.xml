@@ -3,6 +3,7 @@
 
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="toast_black">#90000000</color>
     <color name="red">#FF574E</color>
     <color name="transparent">#00000000</color>
     <color name="theme_color">#F9F9F9</color>

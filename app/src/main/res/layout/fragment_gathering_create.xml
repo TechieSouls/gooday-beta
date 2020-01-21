@@ -19,7 +19,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"/>
 
-        <EditText
+        <com.cenesbeta.util.CenesEditText
             android:id="@+id/gath_event_title_et"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

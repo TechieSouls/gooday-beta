@@ -47,7 +47,10 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(groupPosition)).size();
+        if (groupPosition <= homeScreenDto.getHomeDataListMap().size() - 1) {
+            return homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(groupPosition)).size();
+        }
+        return 0;
     }
 
     @Override
@@ -98,14 +101,17 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         cal.add(Calendar.DATE, 1);
-        if (header.equals(CenesUtils.EEEMMMMdd.format(new Date()))) {
 
-            dateKey = "Today ";
-        } else  if (header.equals(CenesUtils.EEEMMMMdd.format(cal.getTime()))) {
+        if (header != null) {
+            if (header.equals(CenesUtils.EEEMMMMdd.format(new Date()))) {
 
-            dateKey = "Tomorrow ";
+                dateKey = "Today ";
+            } else  if (header.equals(CenesUtils.EEEMMMMdd.format(cal.getTime()))) {
+
+                dateKey = "Tomorrow ";
+            }
+            holder.tvHeader.setText(dateKey + header);
         }
-        holder.tvHeader.setText(dateKey + header);
         return convertView;
     }
 
@@ -153,10 +159,21 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
 
         System.out.println("Event Schdedule As : "+event.getTitle()+" ----- "+event.getScheduleAs());
 
+
+        Calendar currentDateCal = Calendar.getInstance();
+        Calendar eventDateCal = Calendar.getInstance();
+        eventDateCal.setTimeInMillis(event.getStartTime());
+        if (currentDateCal.get(Calendar.YEAR) == eventDateCal.get(Calendar.YEAR)) {
+            homeFragmentV2.updateCalendarLabelDate(CenesUtils.MMMM.format(new Date(event.getStartTime())));
+        } else {
+            homeFragmentV2.updateCalendarLabelDate(CenesUtils.MMMM_yyyy.format(new Date(event.getStartTime())));
+        }
+
+
         //Lets hanle the case of Event Type as Gatheirngs
         if (event.getScheduleAs().equals("Gathering")) {
             viewHolder.rlCenesEvents.setVisibility(View.VISIBLE);
-
+            viewHolder.rlCenesEvents.setTag("January");
             viewHolder.tvEventTitle.setText(event.getTitle());
             if (CenesUtils.isEmpty(event.getLocation())) {
                 viewHolder.llEventLocationSection.setVisibility(View.GONE);
@@ -200,6 +217,7 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
         else if (event.getScheduleAs().equals("Event")) {
 
             viewHolder.rlTpEvents.setVisibility(View.VISIBLE);
+            viewHolder.rlTpEvents.setTag("January");
 
             viewHolder.tvTpEventTitle.setText(event.getTitle());
             viewHolder.tvTpStartTime.setText(CenesUtils.hmmaa.format(new Date(event.getStartTime())));
@@ -215,11 +233,14 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
             }
 
         } else if (event.getScheduleAs().equals("Holiday")) {
+            viewHolder.llHoliday.setTag("January");
 
             viewHolder.llHoliday.setVisibility(View.VISIBLE);
             viewHolder.tvHolidayTitle.setText(event.getTitle());
 
         } else if (event.getScheduleAs().equals("MonthSeparator")) {
+            viewHolder.rlMonthSeparator.setTag("January");
+
             viewHolder.rlMonthSeparator.setVisibility(View.VISIBLE);
             viewHolder.tvMonthSeparator.setText(event.getTitle());
         }

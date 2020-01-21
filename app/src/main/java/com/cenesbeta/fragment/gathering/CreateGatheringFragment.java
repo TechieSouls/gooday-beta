@@ -84,6 +84,7 @@ import com.cenesbeta.materialcalendarview.decorators.OneDayDecorator;
 import com.cenesbeta.materialcalendarview.format.WeekDayFormatter;
 import com.cenesbeta.service.GatheringService;
 import com.cenesbeta.util.CenesConstants;
+import com.cenesbeta.util.CenesEditText;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.ImageUtils;
 import com.google.gson.Gson;
@@ -127,7 +128,7 @@ public class CreateGatheringFragment extends CenesFragment {
 
     private Calendar currentMonth;
 
-    private EditText gathEventTitleEditView;
+    private CenesEditText gathEventTitleEditView;
     private Switch predictiveCalSwitch;
 
     private TextView startTimePickerLabel, endTimePickerLabel;
@@ -152,8 +153,8 @@ public class CreateGatheringFragment extends CenesFragment {
     private CenesApplication cenesApplication;
     private CoreManager coreManager;
     private UserManager userManager;
+    private DeviceManager deviceManager;
     private Long eventId;
-    private String placeId;
     public User loggedInUser;
     public Event event;
     public List<EventMember> membersSelected;
@@ -270,10 +271,11 @@ public class CreateGatheringFragment extends CenesFragment {
         cenesApplication = getCenesActivity().getCenesApplication();
         coreManager = cenesApplication.getCoreManager();
         userManager = coreManager.getUserManager();
+        deviceManager = coreManager.getDeviceManager();
 
         progressBar = (ProgressBar) fragmentView.findViewById(R.id.progressBar);
 
-        gathEventTitleEditView = (EditText) fragmentView.findViewById(R.id.gath_event_title_et);
+        gathEventTitleEditView = (CenesEditText) fragmentView.findViewById(R.id.gath_event_title_et);
 
         ivDateBarArrow = (ImageView) fragmentView.findViewById(R.id.iv_date_bar_arrow);
         gathInviteFrndsBtn = (ImageView) fragmentView.findViewById(R.id.gath_invite_frnds_btn);
@@ -341,9 +343,26 @@ public class CreateGatheringFragment extends CenesFragment {
     private View.OnFocusChangeListener focusListener = new View.OnFocusChangeListener() {
         public void onFocusChange(View v, boolean hasFocus) {
             if (hasFocus){
-                rlPreviewInvitationButton.setVisibility(View.INVISIBLE);
+
+                rlPreviewInvitationButton.setVisibility(View.GONE);
+
             } else {
-                rlPreviewInvitationButton.setVisibility(View.VISIBLE);
+
+                deviceManager.hideKeyBoard(gathEventTitleEditView, (CenesBaseActivity)getActivity());
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (llPredictiveCalCell.getVisibility() == View.GONE) {
+                                rlPreviewInvitationButton.setVisibility(View.VISIBLE);
+                            }
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                        }
+                    }
+                }, 200);
+
             }
         }
     };
@@ -359,9 +378,14 @@ public class CreateGatheringFragment extends CenesFragment {
                     @Override
                     public void run() {
                         try {
-                            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-                            rlPreviewInvitationButton.setVisibility(View.VISIBLE);
+
+                            deviceManager.hideKeyBoard(gathEventTitleEditView, (CenesBaseActivity)getActivity());
+
+                            gathEventTitleEditView.clearFocus();
+                            gathEventTitleEditView.setFocusableInTouchMode(false);
+                            gathEventTitleEditView.setFocusable(false);
+                            gathEventTitleEditView.setFocusableInTouchMode(true);
+                            gathEventTitleEditView.setFocusable(true);
 
                         } catch (Exception e) {
                             // TODO: handle exception
@@ -446,7 +470,8 @@ public class CreateGatheringFragment extends CenesFragment {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
-                                    if (event.getEventId() != null && event.getEventId() != 0) {
+                                    ((CenesBaseActivity)getActivity()).replaceFragment(((CenesBaseActivity)getActivity()).homeFragmentV2, null);
+                                    /*if (event.getEventId() != null && event.getEventId() != 0) {
 
                                         ((CenesBaseActivity)getActivity()).clearAllFragmentsInBackstack();
                                         ((CenesBaseActivity)getActivity()).replaceFragment(new HomeFragment(), null);
@@ -456,7 +481,7 @@ public class CreateGatheringFragment extends CenesFragment {
                                         ((CenesBaseActivity)getActivity()).clearAllFragmentsInBackstack();
                                         ((CenesBaseActivity)getActivity()).replaceFragment(new GatheringsFragment(), null);
 
-                                    }
+                                    }*/
 
                                 }
                             }).setNegativeButton("Stay", new DialogInterface.OnClickListener() {
@@ -1267,6 +1292,12 @@ public class CreateGatheringFragment extends CenesFragment {
                         //String message = response.getString("message");
                         Toast.makeText(getContext(), "Error Uploading Image", Toast.LENGTH_LONG).show();
                     }
+
+                    gathEventTitleEditView.clearFocus();
+                    gathEventTitleEditView.setFocusableInTouchMode(false);
+                    gathEventTitleEditView.setFocusable(false);
+                    gathEventTitleEditView.setFocusableInTouchMode(true);
+                    gathEventTitleEditView.setFocusable(true);
 
                 } catch (Exception e) {
                     e.printStackTrace();
