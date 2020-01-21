@@ -17,6 +17,7 @@
     <color name="cenes_mustard">#ffb536</color>
     <color name="cenes_red">#F07851</color>
     <color name="cenes_blue">#FF3B4C8B</color>
+    <color name="cenes_light_blue">#4A8FE3</color>
     <color name="cenes_very_light_gray">#efefef</color>
     <color name="light_tint_gray">#EFEFEF</color>
     <color name="cenes_new_orange">#F9992C</color>
@@ -30,7 +31,6 @@
     <color name="font_grey_color">#FF9B9B9B</color>
     <color name="font_orange_color">#FFF5A623</color>
     <color name="hues_of_gray">#B5B5B6</color>
-    <color name="light_blue">#4A8FE3</color>
 
     <color name="cenes_textfield_color">#FF4A4A4A</color>
     <color name="cenes_selectedText_color">#FFF5A623</color>

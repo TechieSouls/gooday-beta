@@ -132,7 +132,7 @@ public class ChangePasswordFragment extends CenesFragment {
                 etRetypeNewPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             } else {
                 tvErrorMsg.setVisibility(View.GONE);
-                btnSaveChanges.setBackgroundColor(getResources().getColor(R.color.cenes_blue));
+                btnSaveChanges.setBackgroundColor(getResources().getColor(R.color.cenes_light_blue));
                 btnSaveChanges.setClickable(true);
                 btnSaveChanges.setEnabled(true);
 

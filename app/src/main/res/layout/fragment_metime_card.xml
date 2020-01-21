@@ -298,7 +298,7 @@
                 android:layout_weight="1"
                 android:text="DELETE"
                 android:textColor="@color/white"
-                android:background="@color/cenes_blue"/>
+                android:background="@color/cenes_light_blue"/>
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
@@ -311,7 +311,7 @@
                 android:layout_weight="1"
                 android:text="SAVE"
                 android:textColor="@color/white"
-                android:background="@color/cenes_blue"/>
+                android:background="@color/cenes_light_blue"/>
 
 
         </LinearLayout>

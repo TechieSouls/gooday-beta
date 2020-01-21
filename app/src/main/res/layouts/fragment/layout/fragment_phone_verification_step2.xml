@@ -50,7 +50,7 @@
             android:layout_marginTop="50dp"
             android:hint="0000"
             android:textSize="40dp"
-            android:textColor="@color/light_blue"
+            android:textColor="@color/cenes_light_blue"
             android:textColorHint="@color/hues_of_gray"
             android:maxLines="1"
             android:background="@color/transparent"/>

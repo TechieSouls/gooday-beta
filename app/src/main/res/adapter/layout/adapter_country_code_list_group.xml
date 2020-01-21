@@ -14,7 +14,7 @@
         android:textSize="16dp"
         android:layout_marginLeft="20dp"
         android:padding="5dp"
-        android:textColor="@color/cenes_blue"
+        android:textColor="@color/cenes_light_blue"
         android:text="A"
         android:textStyle="bold"/>
 
