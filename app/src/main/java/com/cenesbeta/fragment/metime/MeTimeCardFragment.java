@@ -9,8 +9,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -21,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -50,6 +53,8 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -74,11 +79,12 @@ public class MeTimeCardFragment extends CenesFragment {
 
     private Button sunday, monday, tuesday, wednesday, thursday, friday, saturday;
     private Button saveMeTime, deleteMeTime;
-    private TextView startTimeText, endTimeText;
+    private TextView startTimeText, endTimeText, tvTakePhoto, tvUploadPhoto, tvPhotoCancel;
     private LinearLayout metimeStartTime, metimeEndTime;
     private EditText etMetimeTitle;
-    private RelativeLayout rlUploadMetimeImg, swipeCard;
-    private RoundedImageView rivMeTimeImg;
+    private RelativeLayout rlUploadMetimeImg, swipeCard, rlPhotoActionSheet;
+    private ImageView rivMeTimeImg;
+    private View fragmentView;
     View viewOpaque;
 
     private MeTime metime;
@@ -92,10 +98,22 @@ public class MeTimeCardFragment extends CenesFragment {
     private File metimePhotoFile;
     JSONObject selectedDaysHolder;
 
+    private Uri cameraFileUri;
+    private File file;
+    private String isTakeOrUpload = "take_picture";
+
+    private static final int CAMERA_PERMISSION_CODE = 1001, UPLOAD_PERMISSION_CODE = 1002;
+    private static final int OPEN_CAMERA_REQUEST_CODE = 1003, OPEN_GALLERY_REQUEST_CODE = 1004;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        if (fragmentView != null) {
+            return fragmentView;
+        }
         View view = inflater.inflate(R.layout.fragment_metime_card, container, false);
+
+        fragmentView = view;
 
         ((CenesBaseActivity) getActivity()).hideFooter();
         cenesApplication = ((CenesBaseActivity)getActivity()).getCenesApplication();
@@ -103,8 +121,9 @@ public class MeTimeCardFragment extends CenesFragment {
         internetManager = coreManager.getInternetManager();
 
         rlUploadMetimeImg = (RelativeLayout) view.findViewById(R.id.rl_upload_metime_img);
+        rlPhotoActionSheet = (RelativeLayout) view.findViewById(R.id.rl_photo_action_sheet);
         swipeCard = (RelativeLayout) view.findViewById(R.id.swipe_card);
-        rivMeTimeImg = (RoundedImageView) view.findViewById(R.id.riv_meTime_img);
+        rivMeTimeImg = (ImageView) view.findViewById(R.id.riv_meTime_img);
         etMetimeTitle = (EditText) view.findViewById(R.id.et_metime_title);
         viewOpaque = view.findViewById(R.id.view_opaque);
 
@@ -126,8 +145,10 @@ public class MeTimeCardFragment extends CenesFragment {
         saveMeTime = (Button) view.findViewById(R.id.btn_save_metime);
         deleteMeTime = (Button) view.findViewById(R.id.btn_delete_meTime);
 
-        rivMeTimeImg.setOnClickListener(onClickListener);
-        rivMeTimeImg.setOnClickListener(onClickListener);
+        tvTakePhoto = (TextView) view.findViewById(R.id.tv_take_photo);
+        tvUploadPhoto = (TextView) view.findViewById(R.id.tv_choose_library);
+        tvPhotoCancel = (TextView) view.findViewById(R.id.tv_photo_cancel);
+
 
         slideToTop(swipeCard);
 
@@ -144,6 +165,9 @@ public class MeTimeCardFragment extends CenesFragment {
         metimeEndTime.setOnClickListener(onClickListener);
         rlUploadMetimeImg.setOnClickListener(onClickListener);
         viewOpaque.setOnClickListener(onClickListener);
+        tvTakePhoto.setOnClickListener(onClickListener);
+        tvUploadPhoto.setOnClickListener(onClickListener);
+        tvPhotoCancel.setOnClickListener(onClickListener);
 
         cenesApplication = getCenesActivity().getCenesApplication();
         meTimeService = new MeTimeService();
@@ -166,8 +190,8 @@ public class MeTimeCardFragment extends CenesFragment {
                 metime = new Gson().fromJson(meTimeFragmentBundle.getString("meTimeCard"), MeTime.class);
 
                 if (!CenesUtils.isEmpty(metime.getPhoto())) {
-                    rivMeTimeImg.setVisibility(View.VISIBLE);
-                    rlUploadMetimeImg.setVisibility(View.GONE);
+                   // rivMeTimeImg.setVisibility(View.VISIBLE);
+                    //rlUploadMetimeImg.setVisibility(View.GONE);
                     Glide.with(getActivity()).load(CenesConstants.imageDomain+metime.getPhoto()).apply(RequestOptions.placeholderOf(R.drawable.metime_default)).into(rivMeTimeImg);
                 }
 
@@ -231,26 +255,31 @@ public class MeTimeCardFragment extends CenesFragment {
             switch (v.getId()) {
 
                 case R.id.rl_upload_metime_img:
-                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-                    } else {
-                        Intent browseIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                        browseIntent.setType("image/*");
 
-                        startActivityForResult(browseIntent, UPLOAD_IMAGE_CODE);
-                    }
-                    break;
-                case R.id.riv_meTime_img:
-                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-                    } else {
-                        Intent browseIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                        browseIntent.setType("image/*");
+                    rlPhotoActionSheet.setVisibility(View.VISIBLE);
 
-                        startActivityForResult(browseIntent, UPLOAD_IMAGE_CODE);
-                    }
                     break;
+
+                case R.id.tv_take_photo:
+                    isTakeOrUpload = "take_picture";
+                    checkCameraPermissiosn();
+                    rlPhotoActionSheet.setVisibility(View.GONE);
+
+
+                    break;
+                case R.id.tv_choose_library:
+                    isTakeOrUpload = "upload_picture";
+                    checkReadWritePermissiosn();
+                    rlPhotoActionSheet.setVisibility(View.GONE);
+
+                    break;
+
+                case R.id.tv_photo_cancel:
+                    rlPhotoActionSheet.setVisibility(View.GONE);
+                    break;
+
                 case R.id.metime_sun_text:
+                    rlPhotoActionSheet.setVisibility(View.GONE);
                     try {
                         if (!selectedDaysHolder.has("Sunday") || !selectedDaysHolder.getBoolean("Sunday")) {
                             sunday.setBackground(getResources().getDrawable(R.drawable.round_button_red));
@@ -266,6 +295,7 @@ public class MeTimeCardFragment extends CenesFragment {
                     }
                     break;
                 case R.id.metime_mon_text:
+                    rlPhotoActionSheet.setVisibility(View.GONE);
                     try {
                         if (!selectedDaysHolder.has("Monday") || !selectedDaysHolder.getBoolean("Monday")) {
                             monday.setBackground(getResources().getDrawable(R.drawable.round_button_red));
@@ -282,6 +312,7 @@ public class MeTimeCardFragment extends CenesFragment {
 
                     break;
                 case R.id.metime_tue_text:
+                    rlPhotoActionSheet.setVisibility(View.GONE);
                     try {
                         if (!selectedDaysHolder.has("Tuesday") || !selectedDaysHolder.getBoolean("Tuesday")) {
                             tuesday.setBackground(getResources().getDrawable(R.drawable.round_button_red));
@@ -300,6 +331,7 @@ public class MeTimeCardFragment extends CenesFragment {
 
                     break;
                 case R.id.metime_wed_text:
+                    rlPhotoActionSheet.setVisibility(View.GONE);
                     try {
                         if (!selectedDaysHolder.has("Wednesday") || !selectedDaysHolder.getBoolean("Wednesday")) {
                             wednesday.setBackground(getResources().getDrawable(R.drawable.round_button_red));
@@ -317,6 +349,7 @@ public class MeTimeCardFragment extends CenesFragment {
 
                     break;
                 case R.id.metime_thu_text:
+                    rlPhotoActionSheet.setVisibility(View.GONE);
                     try {
                         if (!selectedDaysHolder.has("Thursday") || !selectedDaysHolder.getBoolean("Thursday")) {
                             thursday.setBackground(getResources().getDrawable(R.drawable.round_button_red));
@@ -334,6 +367,7 @@ public class MeTimeCardFragment extends CenesFragment {
 
                     break;
                 case R.id.metime_fri_text:
+                    rlPhotoActionSheet.setVisibility(View.GONE);
                     try {
                         if (!selectedDaysHolder.has("Friday") || !selectedDaysHolder.getBoolean("Friday")) {
                             friday.setBackground(getResources().getDrawable(R.drawable.round_button_red));
@@ -352,6 +386,7 @@ public class MeTimeCardFragment extends CenesFragment {
 
                     break;
                 case R.id.metime_sat_text:
+                    rlPhotoActionSheet.setVisibility(View.GONE);
                     try {
                         if (!selectedDaysHolder.has("Saturday") || !selectedDaysHolder.getBoolean("Saturday")) {
                             saturday.setBackground(getResources().getDrawable(R.drawable.round_button_red));
@@ -368,6 +403,7 @@ public class MeTimeCardFragment extends CenesFragment {
 
                     break;
                 case R.id.metime_start_time:
+                    rlPhotoActionSheet.setVisibility(View.GONE);
                     Calendar mcurrentTimeForStartTime = Calendar.getInstance();
                     int mcurrentTimeForStartTimeHour = mcurrentTimeForStartTime.get(Calendar.HOUR_OF_DAY);
                     int mcurrentTimeForStartTimeMinute = mcurrentTimeForStartTime.get(Calendar.MINUTE);
@@ -413,6 +449,7 @@ public class MeTimeCardFragment extends CenesFragment {
 
                     break;
                 case R.id.metime_end_time:
+                    rlPhotoActionSheet.setVisibility(View.GONE);
                     Calendar endCalTime = Calendar.getInstance();
                     int endTimeHour = endCalTime.get(Calendar.HOUR_OF_DAY);
                     int endTimeMinute = endCalTime.get(Calendar.MINUTE);
@@ -544,6 +581,7 @@ public class MeTimeCardFragment extends CenesFragment {
         }
     };
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 0) {
@@ -630,9 +668,13 @@ public class MeTimeCardFragment extends CenesFragment {
                         rotatedBitmap = imageBitmap;
                 }
 
-                rlUploadMetimeImg.setVisibility(View.GONE);
-                rivMeTimeImg.setVisibility(View.VISIBLE);
+               // rlUploadMetimeImg.setVisibility(View.GONE);
+                //rivMeTimeImg.setVisibility(View.VISIBLE);
                 rivMeTimeImg.setImageBitmap(rotatedBitmap);
+                rivMeTimeImg.getLayoutParams().height = 90;
+                rivMeTimeImg.getLayoutParams().width = 90;
+                rivMeTimeImg.requestLayout();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -669,4 +711,49 @@ public class MeTimeCardFragment extends CenesFragment {
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
+
+    public void firePictureIntent() {
+        if (isTakeOrUpload == "take_picture") {
+            final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Cenes";
+            File newdir = new File(dir);
+            newdir.mkdirs();
+
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            file = new File(dir + File.separator + "IMG_" + timeStamp + ".jpg");
+
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            cameraFileUri = null;
+            cameraFileUri = Uri.fromFile(file);
+
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraFileUri);
+            startActivityForResult(takePictureIntent, OPEN_CAMERA_REQUEST_CODE);
+
+        } else if (isTakeOrUpload == "upload_picture") {
+            Intent browseIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            browseIntent.setType("image/*");
+            startActivityForResult(browseIntent, OPEN_GALLERY_REQUEST_CODE);
+        }
+    }
+    public void checkCameraPermissiosn() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+        } else {
+            checkReadWritePermissiosn();
+        }
+    }
+
+    public void checkReadWritePermissiosn() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, UPLOAD_PERMISSION_CODE);
+        } else {
+            firePictureIntent();
+        }
+    }
+
 }
