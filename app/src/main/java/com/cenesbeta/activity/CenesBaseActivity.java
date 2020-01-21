@@ -14,6 +14,7 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -76,6 +77,7 @@ public class CenesBaseActivity extends CenesActivity {
     private CenesApplication cenesApplication;
     private CoreManager coreManager;
     private InternetManager internetManager;
+    public HomeFragmentV2 homeFragmentV2;
 
     public Event parentEvent;
     private Fragment initialFragment;
@@ -113,8 +115,10 @@ public class CenesBaseActivity extends CenesActivity {
         internetManager = coreManager.getInternetManager();
 
         fragmentManager = getSupportFragmentManager();
-        initialFragment = new HomeFragmentV2();
-        replaceFragment(initialFragment, null);
+        homeFragmentV2 = new HomeFragmentV2();
+        //homeFragmentV2.loadCalendarTabData();
+        initialFragment = homeFragmentV2;
+        replaceFragment(homeFragmentV2, null);
 
         llFooter = (LinearLayout) findViewById(R.id.rl_footer);
         footerHomeIcon = (ImageView) findViewById(R.id.footer_home_icon);
@@ -223,7 +227,7 @@ public class CenesBaseActivity extends CenesActivity {
                     System.out.println("Home Clicked From Base");
                     //clearBackStackInclusive(null);
                     //notificationCountCall();
-                    replaceFragment(new HomeFragmentV2(), null);
+                    replaceFragment(homeFragmentV2, null);
                     break;
 
                 case R.id.footer_gathering_icon:

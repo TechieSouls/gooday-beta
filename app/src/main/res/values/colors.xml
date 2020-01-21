@@ -5,7 +5,7 @@
     <color name="black">#000000</color>
     <color name="red">#FF574E</color>
     <color name="transparent">#00000000</color>
-    <color name="theme_color">#FFF7F7F7</color>
+    <color name="theme_color">#F9F9F9</color>
     <color name="button_disable_color">#DCDDDD</color>
     <color name="button_enable_color">#754A8FE3</color>
     <color name="link_color">#4A90E2</color>
@@ -29,7 +29,7 @@
     <color name="new_theme_grey_color">#03FFFFFF</color>
     <color name="font_grey_color">#FF9B9B9B</color>
     <color name="font_orange_color">#FFF5A623</color>
-    <color name="hues_of_gray">#B5B5B6</color>
+    <color name="hues_of_gray">#FFB5B5B6</color>
     <color name="light_blue">#4A8FE3</color>
 
     <color name="cenes_textfield_color">#FF4A4A4A</color>
