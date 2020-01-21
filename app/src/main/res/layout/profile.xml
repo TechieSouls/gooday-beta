@@ -65,7 +65,7 @@
                 android:layout_marginTop="45dp"
                 android:layout_alignParentRight="true"
                 android:text="Done"
-                android:textColor="@color/cenes_blue"
+                android:textColor="@color/cenes_light_blue"
                 android:background="@color/transparent"
                 android:textSize="18sp"
                 android:visibility="gone"/>
@@ -212,7 +212,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/ll_mid"
-                android:background="@color/cenes_blue"
+                android:background="@color/cenes_light_blue"
                 android:text="JOIN US WITH FACEBOOK"
                 android:textColor="@color/white"
                 android:visibility="gone" />

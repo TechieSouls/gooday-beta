@@ -203,7 +203,7 @@ public class MeTimeService {
             circleText.setLayoutParams(imageViewParams);
             circleText.setText(imageName);
             circleText.setGravity(Gravity.CENTER);
-            circleText.setTextColor(activity.getResources().getColor(R.color.cenes_blue));
+            circleText.setTextColor(activity.getResources().getColor(R.color.cenes_light_blue));
             circleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
             circleText.setBackground(activity.getResources().getDrawable(R.drawable.xml_circle_trans_blue_border));
             metimeTile.addView(circleText);
@@ -221,7 +221,7 @@ public class MeTimeService {
             //The View for Mon, Tue, Wed, Thur, Fri, Sat
             TextView metimeTitle = new TextView(activity);
             metimeTitle.setText(meTime.getTitle());
-            metimeTitle.setTextColor(activity.getResources().getColor(R.color.cenes_blue));
+            metimeTitle.setTextColor(activity.getResources().getColor(R.color.cenes_light_blue));
             metimeTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
             detailsLayout.addView(metimeTitle);
         } catch (Exception e) {

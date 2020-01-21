@@ -141,7 +141,7 @@
                         android:layout_centerInParent="true"
                         android:text=""
                         android:textSize="20sp"
-                        android:textColor="@color/cenes_blue"
+                        android:textColor="@color/cenes_light_blue"
                         />
                 </RelativeLayout>
 
@@ -149,7 +149,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Decline"
-                    android:textColor="@color/cenes_blue"
+                    android:textColor="@color/cenes_light_blue"
                     android:textStyle="bold"
                     android:textSize="15sp"
                     android:layout_marginTop="5dp"/>

@@ -12,8 +12,9 @@
 
         <ImageView
             android:id="@+id/iv_back_button_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
             android:src="@drawable/abondan_event_icon"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"/>

@@ -686,7 +686,7 @@ public class HomeFragment extends CenesFragment {
                     todaySet2.add(calendarDay1);
 
                     //homeCalSearchView.addDecorator(new EventDecorator(getResources().getColor(R.color.cenes_teal), calendarHighlights.get("Holiday")));
-                    homeCalSearchView.addDecorator(new EventDecorator(getResources().getColor(R.color.cenes_blue), todaySet2));
+                    homeCalSearchView.addDecorator(new EventDecorator(getResources().getColor(R.color.cenes_light_blue), todaySet2));
 
 */
 

@@ -119,7 +119,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/cenes_blue"
+            android:background="@color/cenes_light_blue"
             android:visibility="gone">
 
             <TextView

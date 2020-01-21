@@ -109,7 +109,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Change Country"
-                    android:textColor="@color/cenes_blue"
+                    android:textColor="@color/cenes_light_blue"
                     android:background="@color/transparent"
                     android:textSize="12sp"
 
