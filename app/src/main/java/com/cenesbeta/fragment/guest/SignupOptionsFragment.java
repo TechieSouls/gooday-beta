@@ -330,7 +330,7 @@ public class SignupOptionsFragment extends CenesFragment {
                                 }
 
                                 SignupStepSuccessFragment signupStepSuccessFragment = new SignupStepSuccessFragment();
-                                ((GuestActivity)getActivity()).clearFragmentsAndOpen(signupStepSuccessFragment);
+                                ((GuestActivity)getActivity()).clearFragmentsAndOpen(signupStepSuccessFragment, null);
                             } else {
                                 //getContacts();
                                 try {

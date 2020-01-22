@@ -178,7 +178,7 @@ public class EmailSignupFragment extends CenesFragment {
                                             }
 
                                             SignupStepSuccessFragment signupStepSuccessFragment = new SignupStepSuccessFragment();
-                                            ((GuestActivity)getActivity()).clearFragmentsAndOpen(signupStepSuccessFragment);
+                                            ((GuestActivity)getActivity()).clearFragmentsAndOpen(signupStepSuccessFragment, null);
                                         } else {
 
                                             String message = response.getString("message");

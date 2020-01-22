@@ -71,9 +71,9 @@ public class GuestActivity extends CenesActivity {
         }
     }
 
-    public void clearFragmentsAndOpen(Fragment fragment) {
+    public void clearFragmentsAndOpen(Fragment fragment, String tag) {
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        replaceFragment(fragment, null);
+        replaceFragment(fragment, tag);
     }
 
     public FragmentManager getHomeActivityFragmentManager() {
@@ -90,5 +90,15 @@ public class GuestActivity extends CenesActivity {
             }
         }
         return null;
+    }
+
+    public void clearAllFragmentsInBackstack() {
+        if(getFragmentManager() != null) {
+            FragmentManager fm = getSupportFragmentManager(); // or 'getSupportFragmentManager();'
+            int count = fm.getBackStackEntryCount();
+            for (int i = 0; i < count; ++i) {
+                fm.popBackStack();
+            }
+        }
     }
 }

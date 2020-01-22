@@ -170,7 +170,7 @@ public class PhoneVerificationStep2Fragment extends CenesFragment {
                         userManager.deleteAll();
                         userManager.addUser(user);
                         SignupOptionsFragment signupOptionsFragment = new SignupOptionsFragment();
-                        ((GuestActivity) getActivity()).replaceFragment(signupOptionsFragment, null);
+                        ((GuestActivity) getActivity()).replaceFragment(signupOptionsFragment, PhoneVerificationStep1Fragment.TAG);
 
                     } else {
                         alertManager.getAlert((GuestActivity)getActivity(), response.getString("message"), "Alert", null, false, "OK");

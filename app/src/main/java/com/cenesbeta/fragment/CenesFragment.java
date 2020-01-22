@@ -16,14 +16,14 @@ import com.cenesbeta.activity.CenesBaseActivity;
 public abstract class CenesFragment extends Fragment {
 
     public CenesActivity getCenesActivity() {
-        return (CenesBaseActivity) getActivity();
+        return (CenesActivity) getActivity();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         if (getActivity() != null) {
-            ((CenesBaseActivity) getActivity()).hideSoftInput(getView());
+            ((CenesActivity) getActivity()).hideSoftInput(getView());
         }
     }
 
