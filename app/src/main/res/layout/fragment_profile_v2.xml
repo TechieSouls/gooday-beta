@@ -144,11 +144,12 @@
                     android:id="@+id/tv_remove_photo"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="@color/white"
+                    android:background="@drawable/xml_curved_corner_top_only"
                     android:text="Remove Current Photo"
                     android:textAlignment="center"
                     android:gravity="center_vertical"
                     android:textColor="@color/red"
+                    android:layout_marginBottom="0.5dp"
                     android:textSize="17sp"/>
                 <TextView
                     android:id="@+id/tv_take_photo"
@@ -164,7 +165,7 @@
                     android:id="@+id/tv_choose_library"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="@color/white"
+                    android:background="@drawable/xml_curved_corner_bottom_only"
                     android:text="Choose From Library"
                     android:textAlignment="center"
                     android:gravity="center_vertical"

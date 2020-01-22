@@ -21,7 +21,8 @@
                 android:src="@drawable/instabug_report"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginRight="25dp"/>
+                android:layout_marginRight="25dp"
+                android:visibility="gone"/>
         </RelativeLayout>
     </RelativeLayout>
 

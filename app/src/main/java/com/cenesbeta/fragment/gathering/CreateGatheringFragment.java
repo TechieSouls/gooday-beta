@@ -444,20 +444,23 @@ public class CreateGatheringFragment extends CenesFragment {
                     break;
 
                 case R.id.rl_cover_image_bar:
-
+                    rlPreviewInvitationButton.setVisibility(View.GONE);
                     rlPhotoActionSheet.setVisibility(View.VISIBLE);
 
                     break;
                 case R.id.tv_choose_library:
                     isTakeOrUpload = "Upload";
                     chooseFromGalleryPressed();
+                    rlPreviewInvitationButton.setVisibility(View.VISIBLE);
                     break;
 
                 case R.id.tv_take_photo:
                     isTakeOrUpload = "Take";
                     checkCameraPermissiosn();
+                    rlPreviewInvitationButton.setVisibility(View.VISIBLE);
                     break;
                 case R.id.tv_photo_cancel:
+                    rlPreviewInvitationButton.setVisibility(View.VISIBLE);
                     rlPhotoActionSheet.setVisibility(View.GONE);
                     break;
                 case R.id.iv_abandon_event:
