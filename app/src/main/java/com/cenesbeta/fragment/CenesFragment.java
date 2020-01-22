@@ -3,6 +3,8 @@ package com.cenesbeta.fragment;
 import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 
 import com.cenesbeta.activity.CenesActivity;
 import com.cenesbeta.activity.CenesBaseActivity;
@@ -35,4 +37,13 @@ public abstract class CenesFragment extends Fragment {
 
     }
 
+    public void rotate(float degree, ImageView imageView) {
+        final RotateAnimation rotateAnim = new RotateAnimation(0.0f, degree,
+                RotateAnimation.RELATIVE_TO_SELF, 0.5f,
+                RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+
+        rotateAnim.setDuration(500);
+        rotateAnim.setFillAfter(true);
+        imageView.startAnimation(rotateAnim);
+    }
 }

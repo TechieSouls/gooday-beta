@@ -186,17 +186,23 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/ll_sync_cal_toast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_marginTop="100dp"
         android:orientation="vertical"
         android:visibility="gone"
         >
         <ImageView
+            android:id="@+id/iv_ios_spinner"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/ios_spinner"/>
+            android:src="@drawable/ios_spinner"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"/>
         <TextView
+            android:id="@+id/tv_sync_cal_toast_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Syncing calendar..."

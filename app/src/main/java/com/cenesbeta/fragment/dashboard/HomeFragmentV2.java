@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
 import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.InternetManager;
@@ -53,9 +54,9 @@ public class HomeFragmentV2 extends CenesFragment {
     public static String TAG = "HomeFragmentV2";
     public enum SyncCallFor {Google, Outlook, Contacts}
 
-    private TextView tvCalendarTab, tvInvitationTab, tvCalDate, tvConfirmedBtn, tvPendingBtn, tvDeclinedBtn;
-    private ImageView ivPlusBtn, ivCalDateBarArrow, ivRefreshCalsBtn;
-    private LinearLayout llCalendarDateBar, llInvitationTabView;
+    private TextView tvCalendarTab, tvInvitationTab, tvCalDate, tvConfirmedBtn, tvPendingBtn, tvDeclinedBtn, tvSyncCalToastText;
+    private ImageView ivPlusBtn, ivCalDateBarArrow, ivRefreshCalsBtn, ivIosSpinner;
+    private LinearLayout llCalendarDateBar, llInvitationTabView, llSyncCalToast;
     private MaterialCalendarView mcvHomeCalendar;
     private ExpandableListView elvHomeListView;
     private ExpandableListView elvInvitationListView;
@@ -91,11 +92,14 @@ public class HomeFragmentV2 extends CenesFragment {
         tvConfirmedBtn = (TextView) view.findViewById(R.id.tv_confirmed_btn);
         tvPendingBtn = (TextView) view.findViewById(R.id.tv_pending_btn);
         tvDeclinedBtn = (TextView) view.findViewById(R.id.tv_declined_btn);
+        tvSyncCalToastText = (TextView) view.findViewById(R.id.tv_sync_cal_toast_text);
         ivCalDateBarArrow = (ImageView) view.findViewById(R.id.iv_cal_date_bar_arrow);
         ivRefreshCalsBtn = (ImageView) view.findViewById(R.id.iv_refresh_cals_btn);
         ivPlusBtn = (ImageView) view.findViewById(R.id.iv_plus_btn);
+        ivIosSpinner = (ImageView) view.findViewById(R.id.iv_ios_spinner);
         llCalendarDateBar = (LinearLayout) view.findViewById(R.id.ll_calendar_date_bar);
         llInvitationTabView= (LinearLayout)view.findViewById(R.id.ll_invitation_tab_view);
+        llSyncCalToast = (LinearLayout) view.findViewById(R.id.ll_sync_cal_toast);
         mcvHomeCalendar = (MaterialCalendarView) view.findViewById(R.id.mcv_home_calendar);
         elvHomeListView = (ExpandableListView) view.findViewById(R.id.elv_home_list_view);
         elvInvitationListView = (ExpandableListView)view.findViewById(R.id.elv_invitation_list_view);
@@ -287,6 +291,12 @@ public class HomeFragmentV2 extends CenesFragment {
 
     public void refreshCalBtnPressed() {
 
+        rotate(360, ivRefreshCalsBtn);
+        llSyncCalToast.setVisibility(View.VISIBLE);
+        tvSyncCalToastText.setText("Syncing calendar...");
+        ivIosSpinner.setVisibility(View.VISIBLE);
+        Glide.with(getContext()).asGif().load(R.drawable.ios_spinner).into(ivIosSpinner);
+
         prepareCalendarSyncCalls(SyncCallFor.Google);
 
         final Handler handler = new Handler();
@@ -324,7 +334,8 @@ public class HomeFragmentV2 extends CenesFragment {
             asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+HomeScreenAPI.get_refreshGOutlookEvents);
         }
 
-        asyncTaskDto.setQueryStr("userId="+loggedInUser.getAuthToken());
+        asyncTaskDto.setQueryStr("userId="+loggedInUser.getUserId());
+        asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
         getSyncCallAsyncCall(asyncTaskDto, syncCallFor);
     }
 
@@ -414,6 +425,15 @@ public class HomeFragmentV2 extends CenesFragment {
 
                 if (calendarRefreshed.size() == 2) {
                     calendarRefreshed = new HashMap<>();
+                    tvSyncCalToastText.setText("Done");
+                    ivIosSpinner.setVisibility(View.GONE);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            llSyncCalToast.setVisibility(View.GONE);
+                        }
+                    }, 1000);
+                    loadCalendarTabData();
                 }
             }
         }).execute(asyncTaskDto);

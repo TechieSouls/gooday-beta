@@ -1030,16 +1030,6 @@ public class GatheringPreviewFragment extends CenesFragment {
 
     }
 
-    private void rotate(float degree, ImageView imageView) {
-        final RotateAnimation rotateAnim = new RotateAnimation(0.0f, degree,
-                RotateAnimation.RELATIVE_TO_SELF, 0.5f,
-                RotateAnimation.RELATIVE_TO_SELF, 0.5f);
-
-        rotateAnim.setDuration(500);
-        rotateAnim.setFillAfter(true);
-        imageView.startAnimation(rotateAnim);
-    }
-
     public void populateInvitationCard(final Event event) {
         tvEventTitle.setText(event.getTitle());
 

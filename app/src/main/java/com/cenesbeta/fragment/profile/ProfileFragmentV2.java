@@ -524,7 +524,8 @@ public class ProfileFragmentV2  extends CenesFragment {
 
                             //Reload Home Screen
                             if (getActivity() != null) {
-                                ((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
+                                //((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
+                                ((CenesBaseActivity)getActivity()).homeFragmentV2.loadCalendarTabData();
                             }
                         }
 

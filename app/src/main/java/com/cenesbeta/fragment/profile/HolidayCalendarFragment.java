@@ -146,7 +146,8 @@ public class HolidayCalendarFragment extends CenesFragment {
                     e.printStackTrace();
                 }
 
-                ((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
+                //((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
+                ((CenesBaseActivity)getActivity()).homeFragmentV2.loadCalendarTabData();
                 ((CenesBaseActivity)getActivity()).onBackPressed();
 
             }
@@ -167,7 +168,8 @@ public class HolidayCalendarFragment extends CenesFragment {
                         calendarSyncTokenManager.deleteCalendarByRefreshTokenId(calenadarSyncToken.getRefreshTokenId());
                     }
                     loadHolidayCountries();
-                    ((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
+                    //((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
+                    ((CenesBaseActivity)getActivity()).homeFragmentV2.loadCalendarTabData();
                     ((CenesBaseActivity)getActivity()).onBackPressed();
                 }
             }).execute(asyncTaskDto);
