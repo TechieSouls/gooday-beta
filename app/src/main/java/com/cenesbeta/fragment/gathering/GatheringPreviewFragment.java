@@ -732,7 +732,8 @@ public class GatheringPreviewFragment extends CenesFragment {
                                             public void run() {
 
                                                 ((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
-                                                ((CenesBaseActivity) getActivity()).replaceFragment(new HomeFragment(), null);
+                                                ((CenesBaseActivity) getActivity()).homeFragmentV2.loadCalendarTabData();
+                                                ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
                                             }
                                         }, 1000);
                                     }
@@ -760,13 +761,14 @@ public class GatheringPreviewFragment extends CenesFragment {
                                                 new Handler().postDelayed(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        if (sourceFragment != null) {
+                                                        /*if (sourceFragment != null) {
                                                             if (sourceFragment instanceof HomeFragment) {
                                                                 ((HomeFragment) sourceFragment).initialSync();
                                                             } else if (sourceFragment instanceof GatheringsFragment) {
                                                                 ((GatheringsFragment) sourceFragment).refreshSelectedTabData();
                                                             }
-                                                        }
+                                                        }*/
+                                                        ((CenesBaseActivity) getActivity()).homeFragmentV2.loadCalendarTabData();
                                                         ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
                                                     }
                                                 }, 500);
@@ -829,13 +831,14 @@ public class GatheringPreviewFragment extends CenesFragment {
                                             new Handler().postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    if (sourceFragment != null) {
+                                                    /*if (sourceFragment != null) {
                                                         if (sourceFragment instanceof HomeFragment) {
                                                             ((HomeFragment) sourceFragment).initialSync();
                                                         } else if (sourceFragment instanceof GatheringsFragment) {
                                                             ((GatheringsFragment) sourceFragment).refreshSelectedTabData();
                                                         }
-                                                    }
+                                                    }*/
+                                                    ((CenesBaseActivity) getActivity()).homeFragmentV2.loadCalendarTabData();
                                                     ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
                                                 }
                                             }, 500);
