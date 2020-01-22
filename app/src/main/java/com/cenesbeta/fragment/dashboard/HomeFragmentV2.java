@@ -373,6 +373,8 @@ public class HomeFragmentV2 extends CenesFragment {
         declinedAsyncTaskDto.setQueryStr("userId=" + loggedInUser.getUserId() + "&status=NotGoing&timestamp="+new Date().getTime()+"&pageNumber=0&offSet=20");
         declinedAsyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
         getAsyncDto(declinedAsyncTaskDto, HomeScreenDto.HomeScreenAPICall.Declined);
+
+        highlightInvitationTabs(tvConfirmedBtn);
     }
 
     public void getAsyncDto(AsyncTaskDto asyncTaskDto, final HomeScreenDto.HomeScreenAPICall homeScreenAPICall){
@@ -392,17 +394,35 @@ public class HomeFragmentV2 extends CenesFragment {
                         if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Home)) {
                             processCalendarDotEvents(events);
                             homeScreenDto.setHomeEvents(events);
-                            processCalendarTabData(events);
+                            if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
+                                calendarTabPressed();
+                            } else {
+                                invitationTabPressed();
+                            }
 
                         } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Accepted)) {
                             homeScreenDto.setAcceptedEvents(events);
+                            if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
+                                calendarTabPressed();
+                            } else {
+                                invitationTabPressed();
+                            }
 
                         } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Pending)) {
                             homeScreenDto.setPendingEvents(events);
+                            if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
+                                calendarTabPressed();
+                            } else {
+                                invitationTabPressed();
+                            }
 
                         } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Declined)) {
                             homeScreenDto.setDeclinedEvents(events);
-
+                            if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
+                                calendarTabPressed();
+                            } else {
+                                invitationTabPressed();
+                            }
                         }
 
                     }

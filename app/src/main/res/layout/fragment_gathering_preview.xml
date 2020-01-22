@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/cenes_lighter_gray">
 
 
     <RelativeLayout
@@ -93,18 +94,18 @@
                 android:id="@+id/sv_card"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/theme_color">
+                android:background="@color/cenes_lighter_gray">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
 
                     <RelativeLayout
                         android:id="@+id/rl_invitation_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_event_picture"
@@ -320,7 +321,7 @@
                         android:id="@+id/rl_welcome_invitation"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:visibility="gone">
+                        android:visibility="visible">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -364,11 +365,11 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/ll_invitation_image_layout"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="600dp"
                             android:orientation="vertical"
-                            android:layout_marginTop="170dp"
-                            android:layout_above="@id/ll_invitation_footer">
+                            android:layout_marginTop="170dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -384,12 +385,13 @@
                                 android:layout_height="match_parent"
                                 android:src="@drawable/welcome_swipe_images"
                                 android:layout_marginTop="20dp"
-                                android:layout_marginBottom="20dp"/>
+                                android:layout_marginBottom="20dp"
+                                />
                         </LinearLayout>
                         <LinearLayout
                             android:id="@+id/ll_invitation_footer"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="50dp"
                             android:layout_alignParentBottom="true"
                             android:layout_marginBottom="15dp"
                             android:orientation="vertical">
@@ -409,6 +411,8 @@
                                 android:textColor="@color/black"
                                 android:textSize="12dp" />
                         </LinearLayout>
+
+
                     </RelativeLayout>
 
                     <RelativeLayout
