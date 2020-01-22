@@ -317,6 +317,11 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
             return false;
         }
 
+        if(etPhoneNumber.getText().toString().contains("+")){
+            alertManager.getAlert((GuestActivity)getActivity(), "Please enter phone number without country code, select country code from drop down only.", "Alert", null, false, "OK");
+            return false;
+        }
+
         return true;
     }
 
