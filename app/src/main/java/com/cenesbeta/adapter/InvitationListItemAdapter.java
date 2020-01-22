@@ -132,6 +132,8 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
             eventViewHolder.rvHostImage = (RoundedImageView) convertView.findViewById(R.id.rv_host_image);
             eventViewHolder.rlNonCenesCountView = (RelativeLayout) convertView.findViewById(R.id.rl_non_cenes_count_view);
             eventViewHolder.rlEventInfoSection = (RelativeLayout) convertView.findViewById(R.id.rl_event_info_section);
+            eventViewHolder.dividerView = (View) convertView.findViewById(R.id.view_divider);
+
 
             convertView.setTag(eventViewHolder);
 
@@ -251,6 +253,12 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
             }
         });
 
+        if ( isLastChild ) {
+            eventViewHolder.dividerView.setVisibility(View.GONE);
+        }else {
+            eventViewHolder.dividerView.setVisibility(View.VISIBLE);
+        }
+
         return convertView;
     }
 
@@ -265,6 +273,7 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
         private RelativeLayout rlNonCenesCountView, rlEventInfoSection;
         private RoundedImageView rvHostImage;
         private RecyclerView recyclerViewGuests;
+        private View dividerView;
     }
     class HeaderViewHolder {
         private TextView tvHeader;

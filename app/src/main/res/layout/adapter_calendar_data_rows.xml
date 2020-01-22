@@ -5,12 +5,7 @@
     android:background="@color/transparent"
     android:orientation="vertical">
 
-    <View
-        android:id="@+id/view_divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="60dp"
-        android:background="@color/cenes_very_light_gray" />
+
 
 
         <LinearLayout
@@ -204,6 +199,11 @@
             </RelativeLayout>
 
         </LinearLayout>
-
+    <View
+        android:id="@+id/view_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="60dp"
+        android:background="@color/cenes_very_light_gray" />
 
 </LinearLayout>
