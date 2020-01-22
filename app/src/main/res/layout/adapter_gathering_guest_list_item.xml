@@ -34,7 +34,7 @@
                 android:text="Mandeep"
                 android:textSize="18sp"
                 android:textColor="@color/black"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 />
             <TextView
                 android:id="@+id/tv_phonebook_name"
