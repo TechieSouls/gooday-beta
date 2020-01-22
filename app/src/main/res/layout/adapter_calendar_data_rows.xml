@@ -60,7 +60,7 @@
                         android:lines="1"
                         android:text="Seahawks at Rams"
                         android:textColor="@color/black"
-                        android:textSize="17dp"
+                        android:textSize="16dp"
                         android:textStyle="bold" />
 
                     <LinearLayout
