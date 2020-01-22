@@ -216,6 +216,13 @@ public class GatheringPreviewFragment extends CenesFragment {
             }
             populateInvitationCard(event);
         }
+        ivProfilePicView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((CenesBaseActivity)getActivity()).zoomImageFromThumb(ivProfilePicView,eventOwner.getUser().getPicture() );
+
+            }
+        });
         return view;
     }
 
@@ -223,6 +230,10 @@ public class GatheringPreviewFragment extends CenesFragment {
     public void onResume() {
         super.onResume();
     }
+
+
+
+
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override

@@ -32,6 +32,7 @@ import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.friend.FriendListFragment;
 import com.cenesbeta.materialcalendarview.CalendarDay;
 import com.cenesbeta.materialcalendarview.MaterialCalendarView;
+import com.cenesbeta.materialcalendarview.decorators.EventDecorator;
 import com.cenesbeta.util.CenesUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -46,8 +47,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class HomeFragmentV2 extends CenesFragment {
 
@@ -71,6 +74,7 @@ public class HomeFragmentV2 extends CenesFragment {
     private CalendarTabExpandableListAdapter calendarTabExpandableListAdapter;
     private InvitationListItemAdapter invitationListItemAdapter;
     private Map<SyncCallFor, Boolean> calendarRefreshed = new HashMap<>();
+
 
     @Nullable
     @Override
@@ -386,6 +390,7 @@ public class HomeFragmentV2 extends CenesFragment {
                         List<Event> events = gson.fromJson(response.getJSONArray("data").toString(), listType);
 
                         if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Home)) {
+                            processCalendarDotEvents(events);
                             homeScreenDto.setHomeEvents(events);
                             processCalendarTabData(events);
 
@@ -545,5 +550,21 @@ public class HomeFragmentV2 extends CenesFragment {
             elvInvitationListView.setAdapter(invitationListItemAdapter);
 
         }
+    }
+
+    private void processCalendarDotEvents(List<Event> calendarDotEvents){
+
+        Set<CalendarDay> calendarDays = new HashSet<>();
+        for(Event event : calendarDotEvents){
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(event.getStartTime());
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+            CalendarDay calendarDay = new CalendarDay(year, month, dayOfMonth);
+            calendarDays.add(calendarDay);
+        }
+        mcvHomeCalendar.addDecorator(new EventDecorator(getResources().getColor(R.color.cenes_new_orange), calendarDays));
+
     }
 }

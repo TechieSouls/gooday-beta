@@ -286,7 +286,7 @@ public class ProfileFragmentV2  extends CenesFragment {
                         }
 
 
-                        ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), rotatedBitmap), this, 200, 200);
+                        ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), rotatedBitmap), this, 300, 300);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

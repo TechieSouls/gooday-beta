@@ -183,7 +183,7 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
             }
             viewHolder.tvStartTime.setText(CenesUtils.hmmaa.format(new Date(event.getStartTime())));
             //Lets find Event Host
-            EventMember eventHost = null;
+           EventMember eventHost = null;
             for (EventMember eventMember: eventMembers) {
                 if (eventMember.getUserId() != null && eventMember.getUserId().equals(event.getCreatedById())) {
                     eventHost = eventMember;
@@ -202,7 +202,14 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
             } else {
                 viewHolder.ivEventHost.setImageResource(R.drawable.profile_pic_no_image);
             }
+            final EventMember eventMemberHost = eventHost;
 
+            viewHolder.ivEventHost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((CenesBaseActivity)homeFragmentV2.getActivity()).zoomImageFromThumb(viewHolder.ivEventHost, eventMemberHost.getUser().getPicture());
+                }
+            });
             viewHolder.rlCenesEvents.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
