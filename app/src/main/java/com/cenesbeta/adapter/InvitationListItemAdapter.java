@@ -25,6 +25,7 @@ import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -94,7 +95,22 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
         };
 
         String header = getGroup(groupPosition);
-        holder.tvHeader.setText(header);
+        String dateKey = "";
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, 1);
+
+        if (header != null) {
+            if (header.equals(CenesUtils.EEEMMMMdd.format(new Date()))) {
+
+                dateKey = "Today ";
+            } else  if (header.equals(CenesUtils.EEEMMMMdd.format(cal.getTime()))) {
+
+                dateKey = "Tomorrow ";
+            }
+            holder.tvHeader.setText(dateKey + header);
+        }
+        //holder.tvHeader.setText(header);
         return convertView;
     }
 
