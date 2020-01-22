@@ -398,6 +398,9 @@ public class MeTimeFragment extends CenesFragment {
                             }
                         }
                         meTimeJSONObj.put("events", meTimeEvents);
+                        if (meTimeBeforeSaving.getPhotoToUpload() != null) {
+                            meTimeJSONObj.put("metimePhotoFilePath", meTimeBeforeSaving.getPhotoToUpload());
+                        }
                         boolean isUpdateCallTemp = false;
                         if (meTimeBeforeSaving.getRecurringEventId() != null) {
                             isUpdateCallTemp = true;

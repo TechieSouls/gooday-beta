@@ -71,6 +71,8 @@
                     android:textColorHint="@color/white"
                     android:textColor="@color/white"
                     android:backgroundTint="@color/transparent"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"
                     />
             </LinearLayout>
 

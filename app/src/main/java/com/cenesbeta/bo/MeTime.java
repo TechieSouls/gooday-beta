@@ -18,6 +18,7 @@ public class MeTime {
     private Long userId;
     String timezone;
     private String photo;
+    private String photoToUpload;
     private Long startTime;
     private Long endTime;
     private String days;
@@ -92,6 +93,14 @@ public class MeTime {
 
     public void setDays(String days) {
         this.days = days;
+    }
+
+    public String getPhotoToUpload() {
+        return photoToUpload;
+    }
+
+    public void setPhotoToUpload(String photoToUpload) {
+        this.photoToUpload = photoToUpload;
     }
 
     @Override

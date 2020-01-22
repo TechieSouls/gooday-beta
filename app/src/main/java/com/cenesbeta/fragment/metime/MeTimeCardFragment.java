@@ -13,6 +13,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -75,7 +76,6 @@ public class MeTimeCardFragment extends CenesFragment {
 
     public final static String TAG = "MeTimeCardFragment";
     private final static int TIME_PICKER_INTERVAL = 5;
-    private final static int UPLOAD_IMAGE_CODE = 100;
 
     private Button sunday, monday, tuesday, wednesday, thursday, friday, saturday;
     private Button saveMeTime, deleteMeTime;
@@ -192,7 +192,11 @@ public class MeTimeCardFragment extends CenesFragment {
                 if (!CenesUtils.isEmpty(metime.getPhoto())) {
                    // rivMeTimeImg.setVisibility(View.VISIBLE);
                     //rlUploadMetimeImg.setVisibility(View.GONE);
-                    Glide.with(getActivity()).load(CenesConstants.imageDomain+metime.getPhoto()).apply(RequestOptions.placeholderOf(R.drawable.metime_default)).into(rivMeTimeImg);
+                    rivMeTimeImg.getLayoutParams().height = CenesUtils.dpToPx(90);
+                    rivMeTimeImg.getLayoutParams().width = CenesUtils.dpToPx(90);
+                    RequestOptions requestOptions = new RequestOptions();
+                    requestOptions.circleCrop();
+                    Glide.with(getActivity()).load(CenesConstants.imageDomain+metime.getPhoto()).apply(requestOptions).into(rivMeTimeImg);
                 }
 
                 System.out.println(metime.getTitle());
@@ -513,6 +517,9 @@ public class MeTimeCardFragment extends CenesFragment {
                     }
 
                     metime.setTitle(etMetimeTitle.getText().toString());
+                    if (metimePhotoFile != null) {
+                        metime.setPhotoToUpload(metimePhotoFile.getAbsolutePath());
+                    }
                     metime.setItems(null);
                     List<MeTimeItem> meTimeItemList = new ArrayList<>();
                     Iterator<String> itr = selectedDaysHolder.keys();
@@ -584,15 +591,17 @@ public class MeTimeCardFragment extends CenesFragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 0) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            } else {
-
-                Intent browseIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                browseIntent.setType("image/*");
-                startActivityForResult(browseIntent, UPLOAD_IMAGE_CODE);
-
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                checkReadWritePermissiosn();
+            }
+        } else if (requestCode == UPLOAD_PERMISSION_CODE) {
+            try  {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    firePictureIntent();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -601,82 +610,90 @@ public class MeTimeCardFragment extends CenesFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == UPLOAD_IMAGE_CODE && resultCode == Activity.RESULT_OK) {
-            try {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == OPEN_CAMERA_REQUEST_CODE || requestCode == OPEN_GALLERY_REQUEST_CODE) {
+                try {
 
-                String filePath = ImageUtils.getPath(getCenesActivity().getApplicationContext(), data.getData());
+                    if (isTakeOrUpload == "take_picture") {
+                        ImageUtils.cropImageWithAspect(cameraFileUri, this, 512, 512);
+                    } else if (isTakeOrUpload == "upload_picture") {
+                        String filePath = ImageUtils.getPath(getCenesActivity().getApplicationContext(), data.getData());
 
-                Uri imageUri = data.getData();
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getCenesActivity().getContentResolver(), imageUri);
-                ExifInterface ei = new ExifInterface(filePath);
-                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                        ExifInterface.ORIENTATION_UNDEFINED);
+                        Uri imageUri = data.getData();
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getCenesActivity().getContentResolver(), imageUri);
+                        ExifInterface ei = new ExifInterface(filePath);
+                        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                                ExifInterface.ORIENTATION_UNDEFINED);
 
-                Bitmap rotatedBitmap = null;
-                switch(orientation) {
+                        Bitmap rotatedBitmap = null;
+                        switch(orientation) {
 
-                    case ExifInterface.ORIENTATION_ROTATE_90:
-                        rotatedBitmap = rotateImage(bitmap, 90);
-                        break;
+                            case ExifInterface.ORIENTATION_ROTATE_90:
+                                rotatedBitmap = rotateImage(bitmap, 90);
+                                break;
 
-                    case ExifInterface.ORIENTATION_ROTATE_180:
-                        rotatedBitmap = rotateImage(bitmap, 180);
-                        break;
+                            case ExifInterface.ORIENTATION_ROTATE_180:
+                                rotatedBitmap = rotateImage(bitmap, 180);
+                                break;
 
-                    case ExifInterface.ORIENTATION_ROTATE_270:
-                        rotatedBitmap = rotateImage(bitmap, 270);
-                        break;
+                            case ExifInterface.ORIENTATION_ROTATE_270:
+                                rotatedBitmap = rotateImage(bitmap, 270);
+                                break;
 
-                    case ExifInterface.ORIENTATION_NORMAL:
-                    default:
-                        rotatedBitmap = bitmap;
+                            case ExifInterface.ORIENTATION_NORMAL:
+                            default:
+                                rotatedBitmap = bitmap;
+                        }
+
+
+                        ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), rotatedBitmap), this, 200, 200);
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+            } else if (requestCode == Crop.REQUEST_CROP) {
+                try {
+                    String filePath = ImageUtils.getPath(getCenesActivity().getApplicationContext(), Crop.getOutput(data));
+                    metimePhotoFile = new File(filePath);
 
+                    Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getCenesActivity().getContentResolver(), Crop.getOutput(data));
 
-                ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), rotatedBitmap), this, 200, 200);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (requestCode == Crop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
-            try {
-                String filePath = ImageUtils.getPath(getCenesActivity().getApplicationContext(), Crop.getOutput(data));
-                metimePhotoFile = new File(filePath);
+                    ExifInterface ei = new ExifInterface(filePath);
+                    int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                            ExifInterface.ORIENTATION_UNDEFINED);
 
-                Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getCenesActivity().getContentResolver(), Crop.getOutput(data));
+                    Bitmap rotatedBitmap = null;
+                    switch(orientation) {
 
-                ExifInterface ei = new ExifInterface(filePath);
-                int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                        ExifInterface.ORIENTATION_UNDEFINED);
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            rotatedBitmap = rotateImage(imageBitmap, 90);
+                            break;
 
-                Bitmap rotatedBitmap = null;
-                switch(orientation) {
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            rotatedBitmap = rotateImage(imageBitmap, 180);
+                            break;
 
-                    case ExifInterface.ORIENTATION_ROTATE_90:
-                        rotatedBitmap = rotateImage(imageBitmap, 90);
-                        break;
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            rotatedBitmap = rotateImage(imageBitmap, 270);
+                            break;
 
-                    case ExifInterface.ORIENTATION_ROTATE_180:
-                        rotatedBitmap = rotateImage(imageBitmap, 180);
-                        break;
+                        case ExifInterface.ORIENTATION_NORMAL:
+                        default:
+                            rotatedBitmap = imageBitmap;
+                    }
 
-                    case ExifInterface.ORIENTATION_ROTATE_270:
-                        rotatedBitmap = rotateImage(imageBitmap, 270);
-                        break;
+                    // rlUploadMetimeImg.setVisibility(View.GONE);
+                    //rivMeTimeImg.setVisibility(View.VISIBLE);
 
-                    case ExifInterface.ORIENTATION_NORMAL:
-                    default:
-                        rotatedBitmap = imageBitmap;
+                    rivMeTimeImg.getLayoutParams().height = CenesUtils.dpToPx(90);
+                    rivMeTimeImg.getLayoutParams().width = CenesUtils.dpToPx(90);
+                    Glide.with(getContext()).load(metimePhotoFile).apply(RequestOptions.circleCropTransform()).into(rivMeTimeImg);
+                    rivMeTimeImg.requestLayout();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-               // rlUploadMetimeImg.setVisibility(View.GONE);
-                //rivMeTimeImg.setVisibility(View.VISIBLE);
-                rivMeTimeImg.setImageBitmap(rotatedBitmap);
-                rivMeTimeImg.getLayoutParams().height = 90;
-                rivMeTimeImg.getLayoutParams().width = 90;
-                rivMeTimeImg.requestLayout();
-
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
