@@ -79,7 +79,6 @@ public class HomeFragmentV2 extends CenesFragment {
 
 
         if (homeFragementView != null) {
-            homeButtonPressed();
             return homeFragementView;
         }
         View view = inflater.inflate(R.layout.fragment_home_v2, container, false);
