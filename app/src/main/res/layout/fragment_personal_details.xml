@@ -210,22 +210,22 @@
                     android:id="@+id/tv_gender_male"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="@color/white"
+                    android:background="@drawable/xml_curved_corner_top_only"
                     android:text="Male"
                     android:textAlignment="center"
                     android:gravity="center_vertical"
-                    android:textColor="@color/cenes_light_blue"
+                    android:textColor="@color/link_color"
                     android:textSize="17sp"/>
 
                 <TextView
                     android:id="@+id/tv_gender_female"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="@color/white"
+                    android:background="@color/light_tint_gray"
                     android:text="Female"
                     android:textAlignment="center"
                     android:gravity="center_vertical"
-                    android:textColor="@color/cenes_light_blue"
+                    android:textColor="@color/link_color"
                     android:layout_marginTop="0.5dp"
                     android:layout_marginBottom="0.5dp"
                     android:textSize="17sp"/>
@@ -234,11 +234,11 @@
                     android:id="@+id/tv_gender_other"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="@color/white"
+                    android:background="@drawable/xml_curved_corner_bottom_only"
                     android:text="Other"
                     android:textAlignment="center"
                     android:gravity="center_vertical"
-                    android:textColor="@color/cenes_light_blue"
+                    android:textColor="@color/link_color"
                     android:textSize="17sp"/>
 
             </LinearLayout>
@@ -251,7 +251,7 @@
                 android:text="Cancel"
                 android:textAlignment="center"
                 android:gravity="center_vertical"
-                android:textColor="@color/facebook_blue"
+                android:textColor="@color/cenes_light_blue"
                 android:layout_marginTop="20dp"
                 android:textSize="17sp"/>
         </LinearLayout>

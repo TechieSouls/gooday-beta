@@ -6,6 +6,12 @@
 <!--
     <string name="title_3">Private Diary\nrecord your memories</string>
 -->
+    <string name="onbording_step_1_desc">Make your next event more personal.
+Begin by inviting your friends on Cenes or straight from your contacts.</string>
+    <string name="onboarding_step_2_desc">Everyone has their own schedule.
+Sync your calendar with Cenes to let your friends know your availability. </string>
+    <string name="onboarding_step_3_desc">Create custom invitations for your guests to RSVP. Manage your social
+events right within our calendar. </string>
     <string name="gs_heading">Private Diary\nrecord your memories</string>
 
 
@@ -24,7 +30,7 @@ time for everyone to meet.\n\n\nNo more back and forth messaging.\nNo more time 
 
     <string name="next">NEXT</string>
     <string name="skip">SKIP</string>
-    <string name="start">GET STARTED</string>
+    <string name="start">Get Started</string>
 
 
     <string name="ins_1">Empower self-awareness and\ncustomize all types of schedules.</string>
@@ -50,7 +56,7 @@ time for everyone to meet.\n\n\nNo more back and forth messaging.\nNo more time 
     <string name="forgot_password_hint">EMAIL</string>
     <string name="login_btn_text"><p>Already Have an Account? </p><b>Log In</b></string>
     <string name="signup_btn_text"><p>Dont have an Account? </p><b>Sign Up Now</b></string>
-    <string name="tandc_text"><p>By signing up, you have read and\nagree to the &lt;a href="https://www.cenesgroup.com/legal/terms-and-conditions"><font color='#FF4A90E2'>terms and conditions</font>&lt;/a> and the  &lt;a href="https://www.cenesgroup.com/legal/privacy-policy">privacy policy&lt;/a>. </p></string>
+    <string name="tandc_text"><p>By signing up, you have read and\nagree to the &lt;a href="https://www.cenesgroup.com/legal/terms-and-conditions"><font color='#FF4A90E2'>terms and conditions</font>&lt;/a> and &lt;a href="https://www.cenesgroup.com/legal/privacy-policy">privacy policy&lt;/a>. </p></string>
     <string name="fp_knoyourpassword"><p>Know Your Password? <b>Log In</b> </p></string>
 
     <!--<string name="facebook_app_id">150590745521474</string>-->

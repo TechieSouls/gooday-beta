@@ -1,9 +1,12 @@
 package com.cenesbeta.fragment;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.animation.RotateAnimation;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.cenesbeta.activity.CenesActivity;
@@ -45,5 +48,20 @@ public abstract class CenesFragment extends Fragment {
         rotateAnim.setDuration(500);
         rotateAnim.setFillAfter(true);
         imageView.startAnimation(rotateAnim);
+    }
+
+    public void hideKeyboardAndClearFocus(EditText editText) {
+        try {
+            InputMethodManager inputManager = (InputMethodManager) ((CenesActivity)getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        editText.clearFocus();
+        editText.setFocusableInTouchMode(false);
+        editText.setFocusable(false);
+        editText.setFocusableInTouchMode(true);
+        editText.setFocusable(true);
     }
 }

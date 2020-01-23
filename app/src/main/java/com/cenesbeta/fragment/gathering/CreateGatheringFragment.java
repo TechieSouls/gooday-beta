@@ -379,13 +379,7 @@ public class CreateGatheringFragment extends CenesFragment {
                     public void run() {
                         try {
 
-                            deviceManager.hideKeyBoard(gathEventTitleEditView, (CenesBaseActivity)getActivity());
-
-                            gathEventTitleEditView.clearFocus();
-                            gathEventTitleEditView.setFocusableInTouchMode(false);
-                            gathEventTitleEditView.setFocusable(false);
-                            gathEventTitleEditView.setFocusableInTouchMode(true);
-                            gathEventTitleEditView.setFocusable(true);
+                            hideKeyboardAndClearFocus(gathEventTitleEditView);
 
                         } catch (Exception e) {
                             // TODO: handle exception
@@ -417,6 +411,8 @@ public class CreateGatheringFragment extends CenesFragment {
                     break;
                 case R.id.rl_start_bar:
 
+                    hideKeyboardAndClearFocus(gathEventTitleEditView);
+
                     Calendar predictedDateStartCal = Calendar.getInstance();
                     predictedDateStartCal.setTimeInMillis(event.getStartTime());
                     int hour = predictedDateStartCal.get(predictedDateStartCal.HOUR_OF_DAY);
@@ -426,6 +422,8 @@ public class CreateGatheringFragment extends CenesFragment {
                     break;
 
                 case R.id.rl_end_bar:
+
+                    hideKeyboardAndClearFocus(gathEventTitleEditView);
 
                     Calendar predictedDateEndCal = Calendar.getInstance();
                     predictedDateEndCal.setTimeInMillis(event.getEndTime());
@@ -503,12 +501,15 @@ public class CreateGatheringFragment extends CenesFragment {
                         llGatheringInfoBars.setVisibility(View.GONE);
                         rlPreviewInvitationButton.setVisibility(View.GONE);
                         ivDateBarArrow.setImageResource(R.drawable.date_panel_down_arrow);
+                        hideKeyboardAndClearFocus(gathEventTitleEditView);
 
                     } else {
 
                         llPredictiveCalCell.setVisibility(View.GONE);
                         llGatheringInfoBars.setVisibility(View.VISIBLE);
-                        rlPreviewInvitationButton.setVisibility(View.VISIBLE);
+                        if (!gathEventTitleEditView.hasFocus()) {
+                            rlPreviewInvitationButton.setVisibility(View.VISIBLE);
+                        }
                         ivDateBarArrow.setImageResource(R.drawable.date_panel_right_arrow);
 
                     }
@@ -962,8 +963,8 @@ public class CreateGatheringFragment extends CenesFragment {
 
                         event.setLocation(location.getLocation());
 
-                        if (location.getLocation().length() > 25) {
-                            tvLocationLabel.setText(location.getLocation().substring(0, 25)+"...");
+                        if (location.getLocation().length() > 20) {
+                            tvLocationLabel.setText(location.getLocation().substring(0, 20)+"...");
                         } else {
                             tvLocationLabel.setText(location.getLocation());
 
@@ -992,8 +993,8 @@ public class CreateGatheringFragment extends CenesFragment {
                         System.out.println("Location Title : "+title);
                         event.setLocation(title);
 
-                        if (title.length() > 25) {
-                            tvLocationLabel.setText(title.substring(0, 25)+"...");
+                        if (title.length() > 20) {
+                            tvLocationLabel.setText(title.substring(0, 20)+"...");
                         } else {
                             tvLocationLabel.setText(title);
 
@@ -1021,8 +1022,8 @@ public class CreateGatheringFragment extends CenesFragment {
                     } else if (data.getStringExtra("selection").equals("done")) {
                         String title = data.getStringExtra("title");
 
-                        if (title.length() > 25) {
-                            tvLocationLabel.setText(title.substring(0, 25)+"...");
+                        if (title.length() > 20) {
+                            tvLocationLabel.setText(title.substring(0, 20)+"...");
                         } else {
                             tvLocationLabel.setText(title);
 
@@ -1429,8 +1430,8 @@ public class CreateGatheringFragment extends CenesFragment {
             }
             if (!CenesUtils.isEmpty(event.getLocation())) {
 
-                if (event.getLocation().length() > 25) {
-                    tvLocationLabel.setText(event.getLocation().substring(0, 25)+"...");
+                if (event.getLocation().length() > 20) {
+                    tvLocationLabel.setText(event.getLocation().substring(0, 20)+"...");
                 } else {
                     tvLocationLabel.setText(event.getLocation());
                 }

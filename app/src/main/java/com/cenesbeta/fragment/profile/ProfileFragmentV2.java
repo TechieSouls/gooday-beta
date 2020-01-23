@@ -254,7 +254,11 @@ public class ProfileFragmentV2  extends CenesFragment {
             if (requestCode == OPEN_CAMERA_REQUEST_CODE || requestCode == OPEN_GALLERY_REQUEST_CODE) {
                 try {
                     if (isTakeOrUpload == "take_picture") {
-                        ImageUtils.cropImageWithAspect(cameraFileUri, this, 512, 512);
+                        try {
+                            ImageUtils.cropImageWithAspect(cameraFileUri, this, 512, 512);
+                        } catch (Exception e) {
+                            showAlert("Error", e.getMessage());
+                        }
                     } else if (isTakeOrUpload == "upload_picture") {
 
                         String filePath = ImageUtils.getPath(getCenesActivity().getApplicationContext(), data.getData());
@@ -286,7 +290,7 @@ public class ProfileFragmentV2  extends CenesFragment {
                         }
 
 
-                        ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), rotatedBitmap), this, 300, 300);
+                        ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), rotatedBitmap), this, 512, 512);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

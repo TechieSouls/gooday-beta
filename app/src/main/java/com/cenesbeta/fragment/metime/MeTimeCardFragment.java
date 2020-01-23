@@ -168,6 +168,7 @@ public class MeTimeCardFragment extends CenesFragment {
         tvTakePhoto.setOnClickListener(onClickListener);
         tvUploadPhoto.setOnClickListener(onClickListener);
         tvPhotoCancel.setOnClickListener(onClickListener);
+        swipeCard.setOnClickListener(onClickListener);
 
         cenesApplication = getCenesActivity().getCenesApplication();
         meTimeService = new MeTimeService();
@@ -258,8 +259,12 @@ public class MeTimeCardFragment extends CenesFragment {
 
             switch (v.getId()) {
 
-                case R.id.rl_upload_metime_img:
+                case R.id.swipe_card:
+                    hideKeyboardAndClearFocus(etMetimeTitle);
+                    break;
 
+                case R.id.rl_upload_metime_img:
+                    hideKeyboardAndClearFocus(etMetimeTitle);
                     rlPhotoActionSheet.setVisibility(View.VISIBLE);
 
                     break;
@@ -283,6 +288,8 @@ public class MeTimeCardFragment extends CenesFragment {
                     break;
 
                 case R.id.metime_sun_text:
+                    hideKeyboardAndClearFocus(etMetimeTitle);
+
                     rlPhotoActionSheet.setVisibility(View.GONE);
                     try {
                         if (!selectedDaysHolder.has("Sunday") || !selectedDaysHolder.getBoolean("Sunday")) {
@@ -299,6 +306,8 @@ public class MeTimeCardFragment extends CenesFragment {
                     }
                     break;
                 case R.id.metime_mon_text:
+                    hideKeyboardAndClearFocus(etMetimeTitle);
+
                     rlPhotoActionSheet.setVisibility(View.GONE);
                     try {
                         if (!selectedDaysHolder.has("Monday") || !selectedDaysHolder.getBoolean("Monday")) {
@@ -316,6 +325,8 @@ public class MeTimeCardFragment extends CenesFragment {
 
                     break;
                 case R.id.metime_tue_text:
+                    hideKeyboardAndClearFocus(etMetimeTitle);
+
                     rlPhotoActionSheet.setVisibility(View.GONE);
                     try {
                         if (!selectedDaysHolder.has("Tuesday") || !selectedDaysHolder.getBoolean("Tuesday")) {
@@ -335,6 +346,8 @@ public class MeTimeCardFragment extends CenesFragment {
 
                     break;
                 case R.id.metime_wed_text:
+                    hideKeyboardAndClearFocus(etMetimeTitle);
+
                     rlPhotoActionSheet.setVisibility(View.GONE);
                     try {
                         if (!selectedDaysHolder.has("Wednesday") || !selectedDaysHolder.getBoolean("Wednesday")) {
@@ -353,6 +366,8 @@ public class MeTimeCardFragment extends CenesFragment {
 
                     break;
                 case R.id.metime_thu_text:
+                    hideKeyboardAndClearFocus(etMetimeTitle);
+
                     rlPhotoActionSheet.setVisibility(View.GONE);
                     try {
                         if (!selectedDaysHolder.has("Thursday") || !selectedDaysHolder.getBoolean("Thursday")) {
@@ -371,6 +386,8 @@ public class MeTimeCardFragment extends CenesFragment {
 
                     break;
                 case R.id.metime_fri_text:
+                    hideKeyboardAndClearFocus(etMetimeTitle);
+
                     rlPhotoActionSheet.setVisibility(View.GONE);
                     try {
                         if (!selectedDaysHolder.has("Friday") || !selectedDaysHolder.getBoolean("Friday")) {
@@ -390,6 +407,8 @@ public class MeTimeCardFragment extends CenesFragment {
 
                     break;
                 case R.id.metime_sat_text:
+                    hideKeyboardAndClearFocus(etMetimeTitle);
+
                     rlPhotoActionSheet.setVisibility(View.GONE);
                     try {
                         if (!selectedDaysHolder.has("Saturday") || !selectedDaysHolder.getBoolean("Saturday")) {
@@ -407,6 +426,8 @@ public class MeTimeCardFragment extends CenesFragment {
 
                     break;
                 case R.id.metime_start_time:
+                    hideKeyboardAndClearFocus(etMetimeTitle);
+
                     rlPhotoActionSheet.setVisibility(View.GONE);
                     Calendar mcurrentTimeForStartTime = Calendar.getInstance();
                     int mcurrentTimeForStartTimeHour = mcurrentTimeForStartTime.get(Calendar.HOUR_OF_DAY);
@@ -453,6 +474,8 @@ public class MeTimeCardFragment extends CenesFragment {
 
                     break;
                 case R.id.metime_end_time:
+                    hideKeyboardAndClearFocus(etMetimeTitle);
+
                     rlPhotoActionSheet.setVisibility(View.GONE);
                     Calendar endCalTime = Calendar.getInstance();
                     int endTimeHour = endCalTime.get(Calendar.HOUR_OF_DAY);

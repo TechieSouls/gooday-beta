@@ -26,7 +26,7 @@
             android:gravity="center"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:textSize="@dimen/header_title_font"
+            android:textSize="16dp"
             android:layout_marginLeft="@dimen/header_title_margin_left"
             android:layout_marginRight="@dimen/header_title_margin_right"/>
         <ImageView

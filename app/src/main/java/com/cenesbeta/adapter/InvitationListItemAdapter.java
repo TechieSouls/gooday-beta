@@ -131,7 +131,7 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
             eventViewHolder.recyclerViewGuests = (RecyclerView) convertView.findViewById(R.id.recycler_view_guests);
             eventViewHolder.rvHostImage = (RoundedImageView) convertView.findViewById(R.id.rv_host_image);
             eventViewHolder.rlNonCenesCountView = (RelativeLayout) convertView.findViewById(R.id.rl_non_cenes_count_view);
-            eventViewHolder.rlEventInfoSection = (RelativeLayout) convertView.findViewById(R.id.rl_event_info_section);
+            eventViewHolder.rlInvitationBar = (RelativeLayout) convertView.findViewById(R.id.rl_invitation_bar);
             eventViewHolder.dividerView = (View) convertView.findViewById(R.id.view_divider);
 
 
@@ -242,7 +242,7 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
             eventViewHolder.rlNonCenesCountView.setVisibility(View.GONE);
         }
 
-        eventViewHolder.rlEventInfoSection.setOnClickListener(new View.OnClickListener() {
+        eventViewHolder.rlInvitationBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
@@ -270,7 +270,7 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
     class EventViewHolder {
         private TextView tvEventTitle, tvEventLocation, tvEventDate, tvHostName, tvNonCenesCount;
         private LinearLayout llEventLocationSection;
-        private RelativeLayout rlNonCenesCountView, rlEventInfoSection;
+        private RelativeLayout rlNonCenesCountView, rlInvitationBar;
         private RoundedImageView rvHostImage;
         private RecyclerView recyclerViewGuests;
         private View dividerView;

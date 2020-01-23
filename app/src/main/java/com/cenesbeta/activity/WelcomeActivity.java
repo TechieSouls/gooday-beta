@@ -72,9 +72,10 @@ public class WelcomeActivity extends AppCompatActivity {
         layouts = new int[]{
                 R.layout.onboarding_step1,
                 R.layout.onboarding_step2,
-                //R.layout.onboarding_step3,
-                R.layout.onboarding_step4,
-                R.layout.onboarding_step5};
+                R.layout.onboarding_step3,
+                //R.layout.onboarding_step4,
+                //R.layout.onboarding_step5
+        };
 
         // adding bottom dots
         addBottomDots(0);
@@ -128,17 +129,17 @@ public class WelcomeActivity extends AppCompatActivity {
         dotsLayout.removeAllViews();
         for (int i = 0; i < dots.length; i++) {
 
-            LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(CenesUtils.dpToPx(10), CenesUtils.dpToPx(10));
+            LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(CenesUtils.dpToPx(8), CenesUtils.dpToPx(8));
             viewParams.setMargins(CenesUtils.dpToPx(5), 0, CenesUtils.dpToPx(5), 0);
             viewParams.gravity = Gravity.CENTER;
             dots[i] = new View(this);
             dots[i].setLayoutParams(viewParams);
-            dots[i].setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
+            dots[i].setBackground(getResources().getDrawable(R.drawable.xml_circle_tranparent_white));
             dotsLayout.addView(dots[i]);
         }
 
         if (dots.length > 0)
-            dots[currentPage].setBackground(getResources().getDrawable(R.drawable.xml_circle_orange));
+            dots[currentPage].setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
     }
 
     private int getItem(int i) {
@@ -163,19 +164,19 @@ public class WelcomeActivity extends AppCompatActivity {
             if (position == layouts.length - 1) {
                 // last page. make button text to GOT IT
 
-                btnGetStarted.setVisibility(View.VISIBLE);
-                getStartedSeparator.setVisibility(View.VISIBLE);
+                //btnGetStarted.setVisibility(View.VISIBLE);
+                //getStartedSeparator.setVisibility(View.VISIBLE);
                 btnGetStarted.setText(getString(R.string.start));
                 btnNext.setVisibility(View.GONE);
                 btnSkip.setVisibility(View.GONE);
-                dotsLayout.setVisibility(View.GONE);
+                //dotsLayout.setVisibility(View.GONE);
             } else {
                 // still pages are left
-                btnNext.setText(getString(R.string.next));
-                btnNext.setVisibility(View.VISIBLE);
-                btnSkip.setVisibility(View.VISIBLE);
+                //btnNext.setText(getString(R.string.next));
+                //btnNext.setVisibility(View.VISIBLE);
+                //btnSkip.setVisibility(View.VISIBLE);
                 dotsLayout.setVisibility(View.VISIBLE);
-                btnGetStarted.setVisibility(View.GONE);
+                //btnGetStarted.setVisibility(View.GONE);
                 getStartedSeparator.setVisibility(View.GONE);
 
             }

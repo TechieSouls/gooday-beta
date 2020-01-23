@@ -2,13 +2,14 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 <RelativeLayout
         android:id="@+id/rl_header"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_alignParentTop="true"
-        android:background="@drawable/xml_border_bottom_grey">
+        android:background="#50EFEFEF">
 
         <com.cenesbeta.util.RoundedImageView
             android:id="@+id/home_profile_pic"
@@ -18,7 +19,8 @@
             android:layout_margin="5dp"
             android:layout_centerVertical="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/profile_pic_no_image"/>
+            android:src="@drawable/profile_pic_no_image"
+            android:visibility="gone"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
