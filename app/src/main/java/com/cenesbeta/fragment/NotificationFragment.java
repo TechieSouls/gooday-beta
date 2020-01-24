@@ -29,6 +29,7 @@ import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.dashboard.HomeFragment;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
@@ -67,6 +68,8 @@ public class NotificationFragment extends CenesFragment {
     public InternetManager internetManager;
     private User loggedInUser;
     public NotificationManagerImpl notificationManagerImpl;
+    private ShimmerFrameLayout shimmerFrameLayout;
+
 
     private NotificationExpandableAdapter notificationExpandableAdapter;
     private List<String> headers;
@@ -86,6 +89,8 @@ public class NotificationFragment extends CenesFragment {
         View v = inflater.inflate(R.layout.activity_notifications, container, false);
         fragmentView = v;
         init(v);
+        shimmerFrameLayout = (ShimmerFrameLayout) v.findViewById(R.id.shimmer_view_container);
+
 
         if (loggedInUser != null && loggedInUser.getPicture() != null && loggedInUser.getPicture() != "null") {
             // DownloadImageTask(homePageProfilePic).execute(user.getPicture());
@@ -93,12 +98,7 @@ public class NotificationFragment extends CenesFragment {
         }
 
         notificationManagerImpl = new NotificationManagerImpl(cenesApplication);
-
-        //Fetching All Offline notifications and showing them.
-        List<Notification> notifications = notificationManagerImpl.fetchAllNotifications();
-       /* notificationAdapter = new NotificationAdapter(this, notifications);
-        notificationExpandablelv.setAdapter(notificationAdapter); */
-
+       // notificationManagerImpl.deleteAllNotifications();
        loadNotifications();
 
         ((CenesBaseActivity)getActivity()).ivNotificationFloatingIcon.setVisibility(View.GONE);
@@ -168,10 +168,21 @@ public class NotificationFragment extends CenesFragment {
     public void loadNotifications(){
 
         List<Notification> notifications = notificationManagerImpl.fetchAllNotifications();
-        filterNotification(notifications);
+        if(notifications.size() == 0 ){
+
+            System.out.println("I am here 3333...................");
+
+            if (internetManager.isInternetConnection(getCenesActivity())) {
+                System.out.println("I am here ...................");
+                shimmerFrameLayout.setVisibility(View.VISIBLE);
+            }
+        }else {
+            filterNotification(notifications);
+        }
 
         /****/
         if (internetManager.isInternetConnection(getCenesActivity())) {
+
 
             new NotificationAsyncTask(cenesApplication, getActivity());
             new NotificationAsyncTask.NotificationListTask(new NotificationAsyncTask.NotificationListTask.AsyncResponse() {
@@ -234,7 +245,8 @@ public class NotificationFragment extends CenesFragment {
             headers.add(SEEN_NOTIFICATION);
         }
 
-
+        shimmerFrameLayout.hideShimmer();
+        shimmerFrameLayout.setVisibility(View.GONE);
         notificationExpandableAdapter = new NotificationExpandableAdapter(NotificationFragment.this, headers, notificationMapList);
         elvNotificationList.setAdapter(notificationExpandableAdapter);
     }

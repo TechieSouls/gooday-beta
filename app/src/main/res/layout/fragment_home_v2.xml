@@ -127,7 +127,8 @@
             android:layout_gravity="center"
             android:layout_marginTop="150dp"
             android:duration="800"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <!-- Adding 3 rows of placeholders -->
             <LinearLayout

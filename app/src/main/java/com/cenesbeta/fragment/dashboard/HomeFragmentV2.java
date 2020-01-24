@@ -1,6 +1,7 @@
 package com.cenesbeta.fragment.dashboard;
 
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -20,11 +21,14 @@ import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.adapter.CalendarTabExpandableListAdapter;
+import com.cenesbeta.adapter.HomeScreenAdapter;
 import com.cenesbeta.adapter.InvitationListItemAdapter;
 import com.cenesbeta.api.HomeScreenAPI;
+import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
+import com.cenesbeta.database.impl.EventManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.dto.AsyncTaskDto;
 import com.cenesbeta.dto.HomeScreenDto;
@@ -46,9 +50,11 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -76,6 +82,8 @@ public class HomeFragmentV2 extends CenesFragment {
     private InvitationListItemAdapter invitationListItemAdapter;
     private Map<SyncCallFor, Boolean> calendarRefreshed = new HashMap<>();
     private ShimmerFrameLayout shimmerFrameLayout;
+    private EventManagerImpl eventManagerImpl;
+    private CenesApplication cenesApplication;
 
 
     @Nullable
@@ -124,15 +132,20 @@ public class HomeFragmentV2 extends CenesFragment {
 
         //Java Variables
         homeScreenDto = new HomeScreenDto();
+        cenesApplication = ((CenesBaseActivity) getActivity()).getCenesApplication();
         coreManager = ((CenesBaseActivity)getActivity()).getCenesApplication().getCoreManager();
         internetManager = coreManager.getInternetManager();
         userManager = coreManager.getUserManager();
         loggedInUser = userManager.getUser();
+        eventManagerImpl = new EventManagerImpl(cenesApplication);
 
         mcvHomeCalendar.sourceFragment = this;
-        
-        loadCalendarTabData();
-        makeMixPanelCall();
+
+        //When internet connection is off/first time loading...
+       // eventManagerImpl.deleteAllEvents();
+            firstTimeLoadData();
+            loadCalendarTabData();
+            makeMixPanelCall();
         ((CenesBaseActivity) getActivity()).showFooter();
         ((CenesBaseActivity)  getActivity()).activateFooterIcon(HomeFragmentV2.TAG);
         return view;
@@ -384,59 +397,96 @@ public class HomeFragmentV2 extends CenesFragment {
 
     public void getAsyncDto(AsyncTaskDto asyncTaskDto, final HomeScreenDto.HomeScreenAPICall homeScreenAPICall){
 
-       new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
-           @Override
-           public void processFinish(JSONObject response) {
+        if (internetManager.isInternetConnection((CenesBaseActivity) getActivity())) {
+            new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
 
-                try {
-                    boolean success = response.getBoolean("success");
+                    try {
+                        boolean success = response.getBoolean("success");
 
-                    if (success) {
-                        Gson gson = new GsonBuilder().create();
-                        Type listType = new TypeToken<List<Event>>(){}.getType();
-                        List<Event> events = gson.fromJson(response.getJSONArray("data").toString(), listType);
+                        if (success) {
+                            Gson gson = new GsonBuilder().create();
+                            Type listType = new TypeToken<List<Event>>() {
+                            }.getType();
+                            final List<Event> events = gson.fromJson(response.getJSONArray("data").toString(), listType);
 
-                        if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Home)) {
-                            processCalendarDotEvents(events);
-                            homeScreenDto.setHomeEvents(events);
-                            if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
-                                calendarTabPressed();
-                            } else {
-                                invitationTabPressed();
+                            if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Home)) {
+
+                                AsyncTask.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        eventManagerImpl.deleteAllEventsByDisplayAtScreen(Event.EventDisplayScreen.HOME.toString());
+                                        eventManagerImpl.addEvent(events, Event.EventDisplayScreen.HOME.toString());
+                                    }
+                                });
+
+                                processCalendarDotEvents(events);
+                                homeScreenDto.setHomeEvents(events);
+                                if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
+                                    calendarTabPressed();
+                                } else {
+                                    invitationTabPressed();
+                                }
+
+                            } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Accepted)) {
+                                AsyncTask.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        eventManagerImpl.deleteAllEventsByDisplayAtScreen(Event.EventDisplayScreen.ACCEPTED.toString());
+                                        eventManagerImpl.addEvent(events, Event.EventDisplayScreen.ACCEPTED.toString());
+                                    }
+                                });
+                                homeScreenDto.setAcceptedEvents(events);
+                                if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
+                                    calendarTabPressed();
+                                } else {
+                                    invitationTabPressed();
+                                }
+
+                            } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Pending)) {
+
+                                AsyncTask.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        eventManagerImpl.deleteAllEventsByDisplayAtScreen(Event.EventDisplayScreen.PENDING.toString());
+                                        eventManagerImpl.addEvent(events, Event.EventDisplayScreen.PENDING.toString());
+
+                                    }
+                                });
+
+                                homeScreenDto.setPendingEvents(events);
+                                if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
+                                    calendarTabPressed();
+                                } else {
+                                    invitationTabPressed();
+                                }
+
+                            } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Declined)) {
+
+                                AsyncTask.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        eventManagerImpl.deleteAllEventsByDisplayAtScreen(Event.EventDisplayScreen.DECLINED.toString());
+                                        eventManagerImpl.addEvent(events, Event.EventDisplayScreen.DECLINED.toString());
+                                    }
+                                });
+                                homeScreenDto.setDeclinedEvents(events);
+                                if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
+                                    calendarTabPressed();
+                                } else {
+                                    invitationTabPressed();
+                                }
                             }
 
-                        } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Accepted)) {
-                            homeScreenDto.setAcceptedEvents(events);
-                            if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
-                                calendarTabPressed();
-                            } else {
-                                invitationTabPressed();
-                            }
-
-                        } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Pending)) {
-                            homeScreenDto.setPendingEvents(events);
-                            if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
-                                calendarTabPressed();
-                            } else {
-                                invitationTabPressed();
-                            }
-
-                        } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Declined)) {
-                            homeScreenDto.setDeclinedEvents(events);
-                            if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
-                                calendarTabPressed();
-                            } else {
-                                invitationTabPressed();
-                            }
                         }
 
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-           }
-       }).execute(asyncTaskDto);
+            }).execute(asyncTaskDto);
+        }
     }
 
     public void getSyncCallAsyncCall(AsyncTaskDto asyncTaskDto, final SyncCallFor syncCallFor) {
@@ -596,4 +646,31 @@ public class HomeFragmentV2 extends CenesFragment {
         mcvHomeCalendar.addDecorator(new EventDecorator(getResources().getColor(R.color.cenes_new_orange), calendarDays));
 
     }
+
+    private void firstTimeLoadData(){
+        List<Event> homeEvents = eventManagerImpl.fetchAllEventsByScreen(Event.EventDisplayScreen.HOME.toString());
+        if(homeEvents.size() == 0){
+            if (internetManager.isInternetConnection(getCenesActivity())) {
+                    shimmerFrameLayout.setVisibility(View.VISIBLE);
+            }
+        } else{
+            processCalendarTabData(homeEvents);
+            homeScreenDto.setHomeEvents(homeEvents);
+        }
+        List<Event> acceptedEvents = eventManagerImpl.fetchAllEventsByScreen(Event.EventDisplayScreen.ACCEPTED.toString());
+        homeScreenDto.setAcceptedEvents(acceptedEvents);
+
+        List<Event> pendingEvents = eventManagerImpl.fetchAllEventsByScreen(Event.EventDisplayScreen.PENDING.toString());
+        homeScreenDto.setPendingEvents(pendingEvents);
+
+        List<Event> declinedEvents = eventManagerImpl.fetchAllEventsByScreen(Event.EventDisplayScreen.DECLINED.toString());
+        homeScreenDto.setDeclinedEvents(declinedEvents);
+
+
+
+
+
+    }
+
+
 }

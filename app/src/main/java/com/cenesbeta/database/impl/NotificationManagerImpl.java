@@ -56,6 +56,9 @@ public class NotificationManagerImpl {
     }
     public void saveNotification(Notification notification){
 
+        this.db = cenesDatabase.getReadableDatabase();
+
+
         String title = "";
         if (!CenesUtils.isEmpty(notification.getTitle())) {
             title = notification.getTitle().replaceAll("'","''");
@@ -89,9 +92,11 @@ public class NotificationManagerImpl {
         } else {
             this.userManagerImpl.updateCenesUser(notification.getUser());
         }
+        db.close();
     }
 
     public List<Notification> fetchAllNotifications() {
+        this.db = cenesDatabase.getReadableDatabase();
 
         List<Notification> notifications = new ArrayList<>();
 
@@ -119,6 +124,8 @@ public class NotificationManagerImpl {
             notification.setUser(this.userManagerImpl.fetchCenesUserByUserId(Integer.parseInt(notification.getSenderId().toString())));
             notifications.add(notification);
         }
+        cursor.close();
+        db.close();
         return notifications;
     }
 
@@ -132,9 +139,13 @@ public class NotificationManagerImpl {
 
     public void updateNotificationReadStatus(Notification notification) {
             db.execSQL("update notifications set read_status = 'Read' where notification_id = "+notification.getNotificationId()+" ");
+            db.close();
     }
     public void deleteAllNotifications() {
+        this.db = cenesDatabase.getReadableDatabase();
+
         String deleteQuery = "delete from notifications";
         db.execSQL(deleteQuery);
+        db.close();
     }
 }
