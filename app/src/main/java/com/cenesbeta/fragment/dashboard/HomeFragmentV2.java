@@ -34,6 +34,7 @@ import com.cenesbeta.materialcalendarview.CalendarDay;
 import com.cenesbeta.materialcalendarview.MaterialCalendarView;
 import com.cenesbeta.materialcalendarview.decorators.EventDecorator;
 import com.cenesbeta.util.CenesUtils;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -74,6 +75,7 @@ public class HomeFragmentV2 extends CenesFragment {
     private CalendarTabExpandableListAdapter calendarTabExpandableListAdapter;
     private InvitationListItemAdapter invitationListItemAdapter;
     private Map<SyncCallFor, Boolean> calendarRefreshed = new HashMap<>();
+    private ShimmerFrameLayout shimmerFrameLayout;
 
 
     @Nullable
@@ -88,6 +90,9 @@ public class HomeFragmentV2 extends CenesFragment {
         View view = inflater.inflate(R.layout.fragment_home_v2, container, false);
 
         homeFragementView = view;
+
+        shimmerFrameLayout = (ShimmerFrameLayout) view.findViewById(R.id.shimmer_view_container);
+
 
         tvCalendarTab = (TextView) view.findViewById(R.id.tv_calendar_tab);
         tvInvitationTab = (TextView) view.findViewById(R.id.tv_invitation_tab);
@@ -455,10 +460,12 @@ public class HomeFragmentV2 extends CenesFragment {
                         @Override
                         public void run() {
                             llSyncCalToast.setVisibility(View.GONE);
+
                         }
                     }, 1000);
                     loadCalendarTabData();
                 }
+
             }
         }).execute(asyncTaskDto);
     }
@@ -561,6 +568,8 @@ public class HomeFragmentV2 extends CenesFragment {
             }
             calendarTabExpandableListAdapter = new CalendarTabExpandableListAdapter(this, homeScreenDto);
             elvHomeListView.setAdapter(calendarTabExpandableListAdapter);
+            shimmerFrameLayout.hideShimmer();
+            shimmerFrameLayout.setVisibility(View.GONE);
 
         } else {
             if (invitationListItemAdapter != null) {
