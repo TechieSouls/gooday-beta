@@ -21,10 +21,8 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -37,15 +35,14 @@ import com.cenesbeta.AsyncTasks.GatheringAsyncTask;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.adapter.GatheringInvitationCardAdapterV2;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
+import com.cenesbeta.dto.GatheringPreviewDto;
 import com.cenesbeta.fragment.CenesFragment;
-import com.cenesbeta.fragment.dashboard.HomeFragment;
 import com.cenesbeta.util.CenesConstants;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
@@ -99,8 +96,6 @@ public class GatheringPreviewFragment extends CenesFragment {
     float x, y;
     private int yPositionOfCard = 0;
     boolean leftPartClicked, bottomBarClicked;
-    boolean ifSwipedLeftToRight, ifSwipedRightToLeft, ifSwipedUp;
-    boolean cardSwipedToExtent;
     boolean isLoggedInUserExistsInMemberList = false;
     private List<EventMember> nonCenesMember;
     private boolean isNewEvent = false;
@@ -167,6 +162,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         UserManager userManager = coreManager.getUserManager();
         internetManager = coreManager.getInternetManager();
         loggedInUser = userManager.getUser();
+        new GatheringPreviewDto();
 
         windowWidth = getActivity().getWindowManager().getDefaultDisplay().getWidth();
         windowHeight = getActivity().getWindowManager().getDefaultDisplay().getHeight();
@@ -419,7 +415,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    cardSwipedToExtent = false;
+                                    GatheringPreviewDto.cardSwipedToExtent = false;
                                     tinderCardView.setX(0);
                                     tinderCardView.setY(0);
                                     tinderCardView.setRotation(0.0f);
@@ -462,7 +458,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     tinderCardView.setX(0);
                     tinderCardView.setY(0);
                     tinderCardView.setRotation(0);
-                    ifSwipedRightToLeft = false;
+                    GatheringPreviewDto.ifSwipedRightToLeft = false;
 
                     if (x < screenCenter) {
                         leftPartClicked = true;
@@ -476,145 +472,70 @@ public class GatheringPreviewFragment extends CenesFragment {
                     Log.d("Bottom : ", (y > (windowHeight - 100))+"");
                     Log.v("On touch", x + " " + y+ " Screen Center : "+screenCenter);
 
-                    cardSwipedToExtent = false;
+                    GatheringPreviewDto.cardSwipedToExtent = false;
 
                     break;
 
                 case MotionEvent.ACTION_UP:
 
-                    if (ifSwipedRightToLeft) {
+                    System.out.println("[ACTION_UP] : User Picker Up Finder");
+                    if (GatheringPreviewDto.cardSwipedToExtent) {
 
-                        if (cardSwipedToExtent) {
+                        System.out.println("[ACTION_UP] : Card Swiped to full Extent");
+                        GatheringPreviewDto.cardSwipedToExtent = false;
+
+                        GatheringPreviewDto.userClickedToCloseCard = true;
+
+                        if (GatheringPreviewDto.ifSwipedRightToLeft) {
+
+                            System.out.println("[ACTION_UP] : Card was swiped to left");
+
                             tinderCardView.setRotation(-20);
                             tinderCardView.setX(-300);
-                        } else {
-                            tinderCardView.setRotation(0);
-                        }
 
-                        if (cardSwipedToExtent) {
-                            if (isNewOrEditMode) {
-
-                                if (Math.abs(xCord - x) > 300) {
-                                    tinderCardView.setX(-300);
-                                    tinderCardView.setRotation(-20);
-
-                                } else {
-                                    //tinderCardView.setX(newXcord);
-                                    tinderCardView.setX(0);
-                                    tinderCardView.setY(0);
-                                    tinderCardView.setRotation(0);
-                                }
-                                //tinderCardView.setY(newYCord);
-
-                            } else {
-                                rejectGathering();
-                                if (Math.abs(newXcord) > 300) {
-                                    tinderCardView.setX(-300);
-                                    tinderCardView.setRotation(-20);
-
-                                }
-                                //tinderCardView.setY(newYCord);
-                            }
-                        }
-
-                        ifSwipedLeftToRight = false;
-                        ifSwipedRightToLeft = false;
-                        ifSwipedUp = false;
-                        cardSwipedToExtent = false;
-                        //ivAcceptSendIcon.setVisibility(View.GONE);
-                        //ivEditRejectIcon.setVisibility(View.GONE);
-                        if (pendingEvents != null && pendingEvents.size() > 0) {
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    cardSwipedToExtent = false;
-                                    tinderCardView.setX(0);
-                                    tinderCardView.setY(0);
-                                    tinderCardView.setRotation(0.0f);
-                                    populateInvitationCard((GatheringPreviewFragment.this).event);
-                                }
-                            }, 500);
-                        }
-
-
-                    } else if (ifSwipedLeftToRight) {
-
-                        if (cardSwipedToExtent) {
-                            tinderCardView.setRotation(20);
-                            tinderCardView.setX(300);
-                        } else {
-                            tinderCardView.setRotation(0);
-                        }
-
-                        ifSwipedLeftToRight = false;
-                        ifSwipedRightToLeft = false;
-                        ifSwipedUp = false;
-                        //ivAcceptSendIcon.setVisibility(View.GONE);
-                        //ivEditRejectIcon.setVisibility(View.GONE);
-
-                        if (cardSwipedToExtent) {
                             if (!isNewOrEditMode) {
                                 if (pendingEvents != null && pendingEvents.size() > 0) {
                                     new Handler().postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            cardSwipedToExtent = false;
-                                            tinderCardView.setX(0);
-                                            tinderCardView.setY(0);
-                                            tinderCardView.setRotation(0.0f);
+                                            resetCardPosition();
                                             populateInvitationCard((GatheringPreviewFragment.this).event);
                                         }
                                     }, 500);
                                 } else {
-                                    accpetGathering();
+                                    rejectGathering();
+                                }
+                            }
+                        } else if (GatheringPreviewDto.ifSwipedLeftToRight) {
+
+                            System.out.println("[ACTION_UP] : Card was swiped to Right");
+
+                            tinderCardView.setRotation(20);
+                            tinderCardView.setX(300);
+
+                            if (!isNewOrEditMode) {
+
+                                if (pendingEvents != null && pendingEvents.size() > 0) {
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            resetCardPosition();
+                                            populateInvitationCard((GatheringPreviewFragment.this).event);
+                                        }
+                                    }, 500);
+                                } else {
+                                    acceptGathering();
                                 }
                             } else {
                                 createUpdateGathering();
                             }
-                        }
-                    } /*else if (ifSwipedUp) {
-
-                        System.out.println("After User lift the finger");
-                        ifSwipedUp = false;
-                        tinderCardView.setRotation(0);
-                        tinderCardView.setY(yCord - y);
-
-                        if (cardSwipedToExtent) {
-                            System.out.println("If card is swiped upto full extent");
-
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    tinderCardView.setX(0);
-                                    tinderCardView.setY(yCord - y);
-                                }
-                            }, 500);
-                        } else {
-                            System.out.println("If card is not swiped upto full extent and finger is up");
-                            tinderCardView.setX(0);
-                            tinderCardView.setY(yCord - y);
-                            tinderCardView.setRotation(0);
 
                         }
-                    }*/ else {
 
-                        System.out.println("After user just clicked the card to keep it down.....");
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                tinderCardView.setX(0);
-                                tinderCardView.setY(0);
-                                tinderCardView.setRotation(0);
-                            }
-                        }, 500);
-
-
+                    } else {
+                        System.out.println("[ACTION_UP] : Reset Card To Initial Position");
+                        resetCardPosition();
                     }
-                    bottomBarClicked = false;
-                    leftPartClicked = false;
-                     //}
-
                     break;
 
 
@@ -625,249 +546,110 @@ public class GatheringPreviewFragment extends CenesFragment {
                     yCord = (int) event.getRawY();
 
                     newXcord = (int)(xCord - x);
-                    yPositionOfCard = (int)(yCord - y);
-                    System.out.println("Y Position of Card When Clicked to push down : "+yPositionOfCard);
-                    //newYCord = (int)(yCord - y);
+                    System.out.println("enableLeftToRightSwipe && enableRightToLeftSwipe : "+enableLeftToRightSwipe+","+enableRightToLeftSwipe);
 
-                    //Log.d("xCord : yCord : ",(xCord - x)+""+(yCord - y));
-                    if (enableLeftToRightSwipe && enableRightToLeftSwipe && !ifSwipedUp) {
+                    if (enableLeftToRightSwipe && enableRightToLeftSwipe) {
 
-                        if (Math.abs(newXcord) < 300) {
+                        System.out.println("[ACTION_MOVE] -- INSIDE BOTH WAY SWIPE");
 
+                        if (Math.abs(newXcord) < 300 ) {
                             tinderCardView.setX(newXcord);
-                            tinderCardView.setY(newYCord);
-
+                            if ((float)((xCord - x)/2 *  (Math.PI/32)) < 15) {
+                                tinderCardView.setRotation((float)((xCord - x)/2 *  (Math.PI/32)));
+                            }
                         } else {
-
+                            GatheringPreviewDto.cardSwipedToExtent = true;
                             if (newXcord < 0) {
-
                                 tinderCardView.setX(-300);
-                                cardSwipedToExtent = true;
-
-                            } else if (newXcord > 0) {
-
+                                tinderCardView.setRotation(-20);
+                            } else {
                                 tinderCardView.setX(300);
-                                cardSwipedToExtent = true;
-
+                                tinderCardView.setRotation(20);
                             }
                         }
 
-                    } else if (enableLeftToRightSwipe && !enableRightToLeftSwipe && !ifSwipedUp) {
+                        if (newXcord < 0) {
+                            GatheringPreviewDto.ifSwipedRightToLeft = true;
+                        } else if (newXcord > 0) {
+                            GatheringPreviewDto.ifSwipedLeftToRight = true;
+                        } else {
+                            resetCardPosition();
+                        }
 
-                        if (enableLeftToRightSwipe && newXcord > 100) {
+                    } else if (enableLeftToRightSwipe && !enableRightToLeftSwipe) {
 
-                            if (Math.abs(xCord - x) < 300) {
+                        System.out.println("[ACTION_MOVE] -- INSIDE LEFT TO RIGHT SWIPE");
+                        GatheringPreviewDto.ifSwipedLeftToRight = true;
+                        if (newXcord > 0) {
+
+                            if (GatheringPreviewDto.cardSwipedToExtent == false) {
 
                                 tinderCardView.setX(newXcord);
-                                tinderCardView.setY(newYCord);
-
-                            } else {
-                                    //tinderCardView.setX(300);
-                                    //cardSwipedToExtent = true;
-                                    //ifSwipedRightToLeft = true;
-                                    if (Math.abs(newYCord) < 250) {
-
-                                        tinderCardView.setX(300);
-                                        cardSwipedToExtent = true;
-
-                                    }
-                                    ifSwipedLeftToRight = false;
-                            }
-
-
-                        } else if (newYCord < 0) {
-
-                            //if (Math.abs(yCord - y) < 300) {
-
-                                tinderCardView.setX(0);
-                                tinderCardView.setY(yCord - y);
-
-                            //}
-
-                        } else {
-
-                            tinderCardView.setX(0);
-                            tinderCardView.setY(0);
-                            tinderCardView.setRotation(0);
-
-                        }
-
-                    } else if (!enableLeftToRightSwipe && enableRightToLeftSwipe && !ifSwipedUp) {
-
-                        //Log.d("RightToLeftSwipe : ", newXcord+" newYCord : "+newYCord);
-                        if (enableRightToLeftSwipe && newXcord < -100) {
-
-
                                 if (Math.abs(newXcord) < 300 ) {
+                                    if ((float)((xCord - x)/2 *  (Math.PI/32)) < 15) {
+                                        tinderCardView.setRotation((float)((xCord - x)/2 *  (Math.PI/32)));
+                                    }
 
-                                    Log.d("Right To Left Sipe : ",(newXcord)+"  :   "+(yCord - y));
+                                    Log.d("Left To Right Swipe : ",(newXcord)+"  :   "+(yCord - y));
                                     tinderCardView.setX(newXcord);
                                     tinderCardView.setY(newYCord);
-                                    ifSwipedRightToLeft = true;
+                                    GatheringPreviewDto.ifSwipedLeftToRight = true;
 
                                 } else {
+                                    tinderCardView.setX(300);
+                                    GatheringPreviewDto.cardSwipedToExtent = true;
 
-                                    if (Math.abs(newYCord) < 250) {
-
-                                        tinderCardView.setX(-300);
-                                        cardSwipedToExtent = true;
-
-                                    }
-                                    ifSwipedRightToLeft = false;
-
-                                }
-
-                        }  else if (newYCord < 0) {
-
-                                tinderCardView.setX(0);
-                                tinderCardView.setY(yCord - y);
-
-                        } else {
-
-                            tinderCardView.setX(0);
-                            tinderCardView.setY(0);
-                            tinderCardView.setRotation(0);
-
-                        }
-                    }
-
-                    //Log.v("X And Xcord : ", (xCord - x)+" Screen Center : "+screenCenter);
-
-                    //Accepting Or Sending Invitation
-                    if ((xCord - x) > 100 && enableLeftToRightSwipe && !ifSwipedUp) {
-                        //If User swipe from left to right
-
-                        if ((float)((xCord - x)/2 *  (Math.PI/32)) < 15) {
-                            tinderCardView.setRotation((float)((xCord - x)/2 *  (Math.PI/32)));
-                        }
-                        ifSwipedLeftToRight = true;
-                        cardSwipedToExtent = false;
-                        if (Math.abs(xCord - x) > 250) {
-
-                            if (isNewOrEditMode) {
-
-                                if (!cardSwipedToExtent) {
-                                    cardSwipedToExtent = true;
                                 }
                             } else {
-                                //Log.v("Swipe Cords : ",(xCord - x)+" ===  "+(screenCenter - 150));
-                                    if (!cardSwipedToExtent) {
-                                        cardSwipedToExtent = true;
-                                    }
+                                tinderCardView.setX(300);
+                                tinderCardView.setRotation(20);
+                                GatheringPreviewDto.cardSwipedToExtent = true;
                             }
-
-                        } else {
-                            ifSwipedLeftToRight = true;
                         }
 
-                    } else if ((xCord - x) < -100 && enableRightToLeftSwipe && !ifSwipedUp) {
-                        //Declining or Editing Invitation
+                    } else  if (!enableLeftToRightSwipe && enableRightToLeftSwipe) {
+
+                        System.out.println("[INSIDE RIGHT TO LEFT SWIPE] : Card Swiped Extent : " + GatheringPreviewDto.cardSwipedToExtent + "," +
+                                "Card Closed Cliked : " + GatheringPreviewDto.userClickedToCloseCard);
 
 
-                        //If User swipe from right to left
-                        ifSwipedRightToLeft = false;
+                        GatheringPreviewDto.ifSwipedRightToLeft = true;
+                        if (newXcord < 0) {
 
-                        if ((float)((xCord - x)/2 *  (Math.PI/32)) > -15) {
-                            tinderCardView.setRotation((float)((xCord - x)/2 *  (Math.PI/32)));
-                        }
-                        cardSwipedToExtent = false;
-                        if (Math.abs(xCord - x) > 200) {
+                            if (GatheringPreviewDto.cardSwipedToExtent == false) {
 
-                            ifSwipedRightToLeft = true;
-                            cardSwipedToExtent = true;
-                            if (isNewOrEditMode) {
+                                if (GatheringPreviewDto.userClickedToCloseCard) {
+                                    tinderCardView.setX(0);
+                                    tinderCardView.setRotation(0);
+                                    GatheringPreviewDto.userClickedToCloseCard = false;
 
-                                //((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
+                                    System.out.println("X Cordinates after card closed : " + (tinderCardView.getX()));
+                                } else {
+                                    tinderCardView.setX(newXcord);
 
-                            } else {
-
-                                //Log.v("Swipe Cords : ",Math.abs(xCord - x)+" ===  "+(screenCenter - 150));
-                                /*if (!cardSwipedToExtent) {
-                                    cardSwipedToExtent = true;
-
-                                    invitationRejectSpinner.setVisibility(View.VISIBLE);
-                                    rotate(360, invitationRejectSpinner);
-
-                                    if ((GatheringPreviewFragment.this).event.getScheduleAs() != null && (GatheringPreviewFragment.this).event.getScheduleAs().equals("Notification")) {
-
-                                        new Handler().postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                if (getActivity() != null){
-                                                    ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
-                                            }
-                                            }
-                                        }, 500);
-                                    } else {
-                                        String queryStr = "eventId="+GatheringPreviewFragment.this.event.getEventId()+"&userId="+loggedInUser.getUserId()+"&status=NotGoing";
-                                        updateAttendingStatus(queryStr);
-
-                                        if (pendingEvents != null && pendingEvents.size() > 0 && pendingEventIndex < pendingEvents.size()) {
-
-                                            (GatheringPreviewFragment.this).event = pendingEvents.get(pendingEventIndex);
-                                            pendingEventIndex++;
-
-                                        } else {
-
-                                            new Handler().postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
-
-                                                    ((CenesBaseActivity) getActivity()).homeFragmentV2.loadCalendarTabData();
-                                                    ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
-                                                }
-                                            }, 500);
-
+                                    if (Math.abs(newXcord) < 300) {
+                                        if ((float) ((xCord - x) / 2 * (Math.PI / 32)) < 15) {
+                                            tinderCardView.setRotation((float) ((xCord - x) / 2 * (Math.PI / 32)));
                                         }
+
+                                        Log.d("Right To Left Sipe : ", (newXcord) + "  :   " + (yCord - y));
+                                        tinderCardView.setX(newXcord);
+                                        tinderCardView.setY(newYCord);
+                                        GatheringPreviewDto.ifSwipedRightToLeft = true;
+
+                                    } else {
+                                        tinderCardView.setX(-300);
+                                        GatheringPreviewDto.cardSwipedToExtent = true;
                                     }
-                                }*/
+                                }
 
+                            } else {
+                                tinderCardView.setX(-300);
+                                tinderCardView.setRotation(-20);
+                                GatheringPreviewDto.cardSwipedToExtent = true;
                             }
-                        } else {
-                            ifSwipedRightToLeft = true;
                         }
                     }
-
-
-                    //This is when user move the card up
-                    //Log.d("Y Cords : ","------------------ "+Math.abs(yCord  - y)+" , X Cord : "+Math.abs((xCord - x))+"");
-                    /*if ((yCord - y) < -50) {
-                        ifSwipedUp = true;
-
-                        //Lets move the card until it swiped upto certain height
-                        if ((yCord - y) > -300) {
-                            System.out.println("[Swipe Up] : Lets see the Y cordinates when user keeps on swiping up : "+(yCord - y));
-                            tinderCardView.setY(yCord - y);
-                        }
-
-                        if ((yCord - y) > -100) {
-
-                            Log.e("Y Crossed  : ", "1000000000 "+rlSkipText.getScaleX()+"");
-                            ifSwipedRightToLeft = false;
-                            ifSwipedRightToLeft = false;
-                            x = 0;
-                            xCord = 0;
-                            tinderCardView.setX(0);
-                            tinderCardView.setRotation(0);
-                        }
-
-                    }
-
-                    if ((yCord - y) < -300) {
-
-                        tinderCardView.setY(-300);
-
-                        System.out.println("Y Cordinates after reaching full extent : "+(yCord - y));
-                        Log.e("Skip Text : ", "SWipppppeedddddd uuppppppppppppppp "+rlSkipText.getScaleX()+"");
-                        ifSwipedUp = true;
-                        if (!cardSwipedToExtent) {
-
-                            System.out.println("Card Swiped UP TO FULL extent");
-                            cardSwipedToExtent = true;
-                            tinderCardView.setY(-300);
-                           }
-                    }*/
-
                     break;
 
                 default:
@@ -879,6 +661,19 @@ public class GatheringPreviewFragment extends CenesFragment {
             return false;
         }
     };
+
+
+    public void resetCardPosition() {
+
+        tinderCardView.setX(0);
+        tinderCardView.setY(0);
+        tinderCardView.setRotation(0);
+        GatheringPreviewDto.userClickedToCloseCard = false;
+        GatheringPreviewDto.cardSwipedToExtent = false;
+        GatheringPreviewDto.ifSwipedLeftToRight = false;
+        GatheringPreviewDto.ifSwipedRightToLeft = false;
+        GatheringPreviewDto.ifSwipedUp = false;
+    }
 
     public void hideDescriptionMessage() {
         rvEventDescriptionDialog.setVisibility(View.GONE);
@@ -994,7 +789,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         }
     }
 
-    public void accpetGathering() {
+    public void acceptGathering() {
         try {
             invitationAcceptSpinner.setVisibility(View.VISIBLE);
             rotate(360, invitationAcceptSpinner);
