@@ -85,6 +85,10 @@ dependencies {
 
     //Ui Image Cropper
     implementation 'com.github.yalantis:ucrop:2.2.3'
+
+    // Gradle dependency on Shimmer for Android
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
 }
 apply plugin: 'com.google.gms.google-services'
 crashlytics {
