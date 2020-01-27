@@ -21,7 +21,6 @@ import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.adapter.NotificationAdapter;
 import com.cenesbeta.adapter.NotificationExpandableAdapter;
 import com.cenesbeta.api.NotificationAPI;
 import com.cenesbeta.application.CenesApplication;
@@ -58,9 +57,6 @@ public class NotificationFragment extends CenesFragment {
     public final static String TAG = "NotificationFragment";
     public enum NotificationApiCall {Counts, List};
 
-    private NotificationAdapter notificationAdapter;
-
-    private ListView notificationExpandablelv;
     private ExpandableListView elvNotificationList;
 
     private RoundedImageView homeProfilePic;
@@ -151,9 +147,6 @@ public class NotificationFragment extends CenesFragment {
         homeIcon.setOnClickListener(onClickListener);
         homeProfilePic.setOnClickListener(onClickListener);
         elvNotificationList.setOnScrollListener(notificationListListener);
-
-
-
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
