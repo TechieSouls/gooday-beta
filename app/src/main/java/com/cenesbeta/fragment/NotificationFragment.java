@@ -18,7 +18,6 @@ import com.cenesbeta.AsyncTasks.NotificationAsyncTask;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.adapter.NotificationAdapter;
 import com.cenesbeta.adapter.NotificationExpandableAdapter;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Notification;
@@ -51,9 +50,6 @@ public class NotificationFragment extends CenesFragment {
 
     public final static String TAG = "NotificationFragment";
 
-    private NotificationAdapter notificationAdapter;
-
-    private ListView notificationExpandablelv;
     private ExpandableListView elvNotificationList;
 
     private RoundedImageView homeProfilePic;
