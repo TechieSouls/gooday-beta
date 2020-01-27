@@ -40,6 +40,7 @@ import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
+import com.cenesbeta.bo.Notification;
 import com.cenesbeta.bo.NotificationCountData;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
@@ -78,6 +79,7 @@ public class CenesBaseActivity extends CenesActivity {
     private CoreManager coreManager;
     private InternetManager internetManager;
     public HomeFragmentV2 homeFragmentV2;
+    public NotificationFragment notificationFragment;
 
     public Event parentEvent;
     private Fragment initialFragment;
@@ -259,7 +261,15 @@ public class CenesBaseActivity extends CenesActivity {
                 case R.id.footer_notification_icon:
                     //clearBackStackInclusive(null);
                     //notificationCountCall();
-                    replaceFragment(new NotificationFragment(), null);
+                    if (notificationFragment == null) {
+                        notificationFragment = new NotificationFragment();
+                    } else {
+                        Fragment visibleFragment = getVisibleFragment();
+                        if (visibleFragment instanceof NotificationFragment) {
+                            notificationFragment.scrollToTop();
+                        }
+                    }
+                    replaceFragment(notificationFragment, null);
                     break;
             }
         }

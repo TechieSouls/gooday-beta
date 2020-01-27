@@ -140,10 +140,10 @@ public class NotificationExpandableAdapter extends BaseExpandableListAdapter {
 
         final Notification notification = (Notification) getChild(groupPosition, childPosition);
 
-        System.out.println(notification.toString());
+        //System.out.println(notification.toString());
         String notificationText = notification.getMessage();
         //if (!(notification.getType() != null && notification.getType().equals("Welcome"))) {
-        System.out.println("Event Title : "+notification.getTitle());
+        //System.out.println("Event Title : "+notification.getTitle());
         holder.notificationTitle.setText(Html.fromHtml("("+notification.getTitle()+")"));
         //}
 
@@ -155,7 +155,7 @@ public class NotificationExpandableAdapter extends BaseExpandableListAdapter {
         notificationText = notificationText.replace("modified", "<font color='#FFAA4E'>modified</font>");
         notificationText = notificationText.replace("added", "<font color='#FFAA4E'>added</font>");
         notificationText = notificationText.replace("Invitation", "<font color='#FFAA4E'>Invitation</font>");
-        System.out.println(notificationText);
+        //System.out.println(notificationText);
         holder.notificationMessage.setText(Html.fromHtml( notificationText));
 
 
@@ -178,13 +178,13 @@ public class NotificationExpandableAdapter extends BaseExpandableListAdapter {
             e.printStackTrace();
         }
         long daysDiff  = (new Date().getTime() - notification.getNotificationTime())/(1000*3600*24);
-        System.out.println("Different in Days : "+daysDiff/(1000*3600*24)+"   -----   "+daysDiff);
+        //System.out.println("Different in Days : "+daysDiff/(1000*3600*24)+"   -----   "+daysDiff);
         if (daysDiff > 0) {
             if(daysDiff < 7) {
                 holder.notificationDay.setText(daysDiff + "d");
             }else{
                 long weekDiff = (new Date().getTime() - notification.getNotificationTime())/(1000*3600*24)/7;
-                if(weekDiff < 4) {
+                if(weekDiff < 5) {
                     holder.notificationDay.setText(weekDiff + "w");
                 }else{
                     long monthDiff = (new Date().getTime() - notification.getNotificationTime())/(1000*3600*24)/30;
@@ -192,6 +192,9 @@ public class NotificationExpandableAdapter extends BaseExpandableListAdapter {
                         holder.notificationDay.setText(monthDiff + "mo");
                     }else{
                         long yearDiff = monthDiff/12;
+                        if (yearDiff == 0) {
+                            yearDiff = 1;
+                        }
                         holder.notificationDay.setText(yearDiff + "yr");
                     }
 

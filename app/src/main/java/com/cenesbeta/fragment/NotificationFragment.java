@@ -7,6 +7,7 @@ import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -15,17 +16,22 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.AsyncTasks.NotificationAsyncTask;
+import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
+import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.adapter.NotificationAdapter;
 import com.cenesbeta.adapter.NotificationExpandableAdapter;
+import com.cenesbeta.api.NotificationAPI;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Notification;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.impl.NotificationManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
+import com.cenesbeta.dto.AsyncTaskDto;
+import com.cenesbeta.dto.NotificationDto;
 import com.cenesbeta.fragment.dashboard.HomeFragment;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
@@ -50,6 +56,7 @@ import java.util.Map;
 public class NotificationFragment extends CenesFragment {
 
     public final static String TAG = "NotificationFragment";
+    public enum NotificationApiCall {Counts, List};
 
     private NotificationAdapter notificationAdapter;
 
@@ -57,7 +64,7 @@ public class NotificationFragment extends CenesFragment {
     private ExpandableListView elvNotificationList;
 
     private RoundedImageView homeProfilePic;
-    private ImageView homeIcon;
+    private ImageView homeIcon, ivListLoader;
 
     private TextView noNotificationsText;
     private View fragmentView;
@@ -70,12 +77,12 @@ public class NotificationFragment extends CenesFragment {
     public NotificationManagerImpl notificationManagerImpl;
     private ShimmerFrameLayout shimmerFrameLayout;
 
-
     private NotificationExpandableAdapter notificationExpandableAdapter;
     private List<String> headers;
     private Map<String, List<Notification>> notificationMapList;
     private static String NEW_NOTIFICATION = "New";
     private static String SEEN_NOTIFICATION = "Seen";
+    private NotificationDto notificationDto;
 
     @Nullable
     @Override
@@ -98,15 +105,11 @@ public class NotificationFragment extends CenesFragment {
         }
 
         notificationManagerImpl = new NotificationManagerImpl(cenesApplication);
-       // notificationManagerImpl.deleteAllNotifications();
-       loadNotifications();
-
+        //notificationManagerImpl.deleteAllNotifications();
+        loadNotifications();
         ((CenesBaseActivity)getActivity()).ivNotificationFloatingIcon.setVisibility(View.GONE);
-
         ((CenesBaseActivity) getActivity()).showFooter();
         ((CenesBaseActivity)  getActivity()).activateFooterIcon(NotificationFragment.TAG);
-        headers = new ArrayList<>();
-
         callMixPanel();
         return v;
     }
@@ -117,14 +120,6 @@ public class NotificationFragment extends CenesFragment {
        try {
            ((CenesBaseActivity) getActivity()).showFooter();
            ((CenesBaseActivity)  getActivity()).activateFooterIcon(NotificationFragment.TAG);
-
-           /*  if (getActivity() instanceof CenesBaseActivity) {
-                ((CenesBaseActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof GatheringScreenActivity) {
-                ((GatheringScreenActivity) getActivity()).hideFooter();
-            } else if (getActivity() instanceof DiaryActivity) {
-                ((DiaryActivity) getActivity()).hideFooter();
-            } */
         } catch (Exception e) {
 
         }
@@ -138,13 +133,27 @@ public class NotificationFragment extends CenesFragment {
 
         loggedInUser = userManager.getUser();
 
+        notificationMapList = new HashMap<>();
+        headers = new ArrayList<>();
+        notificationDto = new NotificationDto();
+        notificationDto.setPageNumber(0);
+        notificationDto.setTotalNotificationCounts(0);
+        notificationDto.setAllNotifications(new ArrayList<Notification>());
+        notificationDto.setNewNotifications(new ArrayList<Notification>());
+        notificationDto.setSeenNotifications(new ArrayList<Notification>());
+
         elvNotificationList = (ExpandableListView) view.findViewById(R.id.notification_expandable_lv);
         homeProfilePic = (RoundedImageView) view.findViewById(R.id.home_profile_pic);
         homeIcon = (ImageView) view.findViewById(R.id.home_icon);
         noNotificationsText = (TextView) view.findViewById(R.id.no_notifications_text);
+        ivListLoader = (ImageView) view.findViewById(R.id.iv_list_loader);
 
         homeIcon.setOnClickListener(onClickListener);
         homeProfilePic.setOnClickListener(onClickListener);
+        elvNotificationList.setOnScrollListener(notificationListListener);
+
+
+
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -165,66 +174,60 @@ public class NotificationFragment extends CenesFragment {
             }
         }
     };
-    public void loadNotifications(){
 
-        List<Notification> notifications = notificationManagerImpl.fetchAllNotifications();
-        if(notifications.size() == 0 ){
+    AbsListView.OnScrollListener notificationListListener = new AbsListView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-            System.out.println("I am here 3333...................");
-
-            if (internetManager.isInternetConnection(getCenesActivity())) {
-                System.out.println("I am here ...................");
-                shimmerFrameLayout.setVisibility(View.VISIBLE);
-            }
-        }else {
-            filterNotification(notifications);
         }
 
-        /****/
-        if (internetManager.isInternetConnection(getCenesActivity())) {
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
+            //Algorithm to check if the last item is visible or not
+            final int lastItem = firstVisibleItem + visibleItemCount;
 
-            new NotificationAsyncTask(cenesApplication, getActivity());
-            new NotificationAsyncTask.NotificationListTask(new NotificationAsyncTask.NotificationListTask.AsyncResponse() {
-                @Override
-                public void processFinish(JSONObject response) {
-                    try {
-                        JSONObject notificationResponse = response;
-                        if (notificationResponse != null && notificationResponse.getBoolean("success")) {
-                            JSONArray notificationArray = notificationResponse.getJSONArray("data");
-                            if (notificationArray.length() == 0) {
-                                noNotificationsText.setVisibility(View.VISIBLE);
-                            } else {
-                                noNotificationsText.setVisibility(View.GONE);
-
-                                Type listType = new TypeToken<List<Notification>>() {}.getType();
-                                final List<Notification> notificationsTemp = new Gson().fromJson(response.getJSONArray("data").toString(), listType);
-
-                                //To Run Code of block in background
-                                AsyncTask.execute(new Runnable() {
-                                      @Override
-                                      public void run() {
-                                          notificationManagerImpl.deleteAllNotifications();
-                                          notificationManagerImpl.addNotification(notificationsTemp);
-                                      }
-                                  });
-                                filterNotification(notificationsTemp);
-                            }
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
+            //System.out.println("firstVisibleItem , visibleItemCount, totalItemCount : "+firstVisibleItem+" -- "+visibleItemCount+" -- "+totalItemCount);
+            if(lastItem == totalItemCount && totalItemCount != 0) {
+                // you have reached end of list, load more data
+                if (notificationDto.getAllNotifications().size() < notificationDto.getTotalNotificationCounts()) {
+                    if (notificationDto.isMadeApiCall()) {
+                        prepareNotificationListCall();
+                        notificationDto.setMadeApiCall(false);
                     }
                 }
-            }).execute();
-        }
 
+            }
+        }
+    };
+
+    public void loadNotifications(){
+
+        //If its an offline mode
+        if (!internetManager.isInternetConnection(getCenesActivity())) {
+
+            List<Notification> notifications = notificationManagerImpl.fetchAllNotifications();
+            if (notifications.size() > 0) {
+                filterNotification(notifications);
+            }
+
+        } else {
+
+            shimmerFrameLayout.setVisibility(View.VISIBLE);
+            prepareNotificationCountCall();
+
+        }
     }
-    public void filterNotification(List<Notification> notifications){
-        notificationMapList = new HashMap<>();
-        headers = new ArrayList<>();
+    public void filterNotification(List<Notification> notifications) {
+
         List<Notification> newNotifications = new ArrayList<>();
+        if (notificationMapList.containsKey(NEW_NOTIFICATION)) {
+            newNotifications = notificationMapList.get(NEW_NOTIFICATION);
+        }
         List<Notification> seenNotifications = new ArrayList<>();
+        if (notificationMapList.containsKey(SEEN_NOTIFICATION)) {
+            seenNotifications = notificationMapList.get(SEEN_NOTIFICATION);
+        }
 
         for (Notification notification: notifications) {
             //Seen notification
@@ -235,20 +238,31 @@ public class NotificationFragment extends CenesFragment {
             }
         }
 
+        notificationDto.setNewNotifications(newNotifications);
+        notificationDto.setSeenNotifications(seenNotifications);
+
         if (newNotifications.size() > 0) {
             notificationMapList.put(NEW_NOTIFICATION, newNotifications);
-            headers.add(NEW_NOTIFICATION);
+            if (headers.size() == 0) {
+                headers.add(NEW_NOTIFICATION);
+            }
         }
 
         if (seenNotifications.size() > 0) {
             notificationMapList.put(SEEN_NOTIFICATION, seenNotifications);
-            headers.add(SEEN_NOTIFICATION);
+            if (headers.size() == 1) {
+                headers.add(SEEN_NOTIFICATION);
+            }
         }
 
         shimmerFrameLayout.hideShimmer();
         shimmerFrameLayout.setVisibility(View.GONE);
-        notificationExpandableAdapter = new NotificationExpandableAdapter(NotificationFragment.this, headers, notificationMapList);
-        elvNotificationList.setAdapter(notificationExpandableAdapter);
+        if (notificationDto.getPageNumber() == 0) {
+            notificationExpandableAdapter = new NotificationExpandableAdapter(NotificationFragment.this, headers, notificationMapList);
+            elvNotificationList.setAdapter(notificationExpandableAdapter);
+        } else {
+            notificationExpandableAdapter.notifyDataSetChanged();
+        }
     }
 
     public void callMixPanel() {
@@ -265,4 +279,93 @@ public class NotificationFragment extends CenesFragment {
             e.printStackTrace();
         }
     }
+
+
+    public void prepareNotificationListCall() {
+
+        AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+        asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+        asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ NotificationAPI.get_pageable_notifications);
+        asyncTaskDto.setQueryStr("userId="+loggedInUser.getUserId()+"&pageNumber="+notificationDto.getPageNumber()+"&offset=20");
+
+        if (notificationDto.getPageNumber() != 0) {
+            ivListLoader.setVisibility(View.VISIBLE);
+            Glide.with(getContext()).asGif().load(R.drawable.ios_spinner).into(ivListLoader);
+        }
+        makeGetAsyncCall(asyncTaskDto, NotificationApiCall.List);
+    }
+
+
+    public void prepareNotificationCountCall() {
+
+        AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+        asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+        asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ NotificationAPI.get_notification_counts);
+        asyncTaskDto.setQueryStr("recepientId="+loggedInUser.getUserId());
+
+        makeGetAsyncCall(asyncTaskDto, NotificationApiCall.Counts);
+    }
+
+    public void makeGetAsyncCall(AsyncTaskDto asyncTaskDto, final NotificationApiCall notificationApiCall) {
+
+        new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
+            @Override
+            public void processFinish(JSONObject response) {
+                try {
+
+                    boolean success = response.getBoolean("success");
+
+                    if (notificationApiCall.equals(NotificationApiCall.Counts)) {
+                        if (success) {
+                            notificationDto.setTotalNotificationCounts(response.getInt("data"));
+                            if (notificationDto.getTotalNotificationCounts() > 0) {
+                                prepareNotificationListCall();
+                            }
+                        }
+                    } else if (notificationApiCall.equals(NotificationApiCall.List)) {
+
+                        ivListLoader.setVisibility(View.GONE);
+
+                        Type listType = new TypeToken<List<Notification>>() {}.getType();
+                        final List<Notification> notificationsTemp = new Gson().fromJson(response.getJSONArray("data").toString(), listType);
+
+                        List<Notification> allNotificationTemp = notificationDto.getAllNotifications();
+                        allNotificationTemp.addAll(notificationsTemp);
+                        notificationDto.setAllNotifications(allNotificationTemp);
+                        //We will reload the notification in local database only once
+                        //that is at very first time when page loads
+                            //To Run Code of block in background
+                            AsyncTask.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (notificationDto.getPageNumber() == 0) {
+                                        notificationManagerImpl.deleteAllNotifications();
+                                    }
+                                    notificationManagerImpl.addNotification(notificationsTemp);
+                                }
+                            });
+
+                        if (notificationDto.getPageNumber() == 0) {
+                            notificationDto.setSeenNotifications(new ArrayList<Notification>());
+                            notificationDto.setNewNotifications(new ArrayList<Notification>());
+                        }
+                        if (notificationsTemp.size() > 0) {
+                            notificationDto.setMadeApiCall(true);
+                            filterNotification(notificationsTemp);
+                            int pageNumber = notificationDto.getPageNumber() + 20;
+                            notificationDto.setPageNumber(pageNumber);
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).execute(asyncTaskDto);
+    }
+
+    public void scrollToTop() {
+        elvNotificationList.smoothScrollToPositionFromTop(0, 0, 1);
+    }
+
 }

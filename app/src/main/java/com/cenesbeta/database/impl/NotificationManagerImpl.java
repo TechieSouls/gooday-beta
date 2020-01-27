@@ -43,7 +43,7 @@ public class NotificationManagerImpl {
 
     public void addNotification(List<Notification> notifications) {
 
-        for (Notification notification: notifications) {
+        /*for (Notification notification: notifications) {
             saveNotification(notification);
             if (notification.getEvent() != null) {
 
@@ -52,7 +52,7 @@ public class NotificationManagerImpl {
                     this.eventManagerImpl.addEvent(notification.getEvent());
                 }
             }
-        }
+        }*/
     }
     public void saveNotification(Notification notification){
 
@@ -129,7 +129,8 @@ public class NotificationManagerImpl {
         return notifications;
     }
 
-    public boolean isNotificationExist(Notification notification){
+    public boolean isNotificationExist(Notification notification) {
+        this.db = cenesDatabase.getReadableDatabase();
         Cursor cursor = db.rawQuery("select * from notifications where notification_id = "+notification.getNotificationId()+" ", null);
         if (cursor.moveToNext()) {
             return true;
@@ -138,8 +139,9 @@ public class NotificationManagerImpl {
     }
 
     public void updateNotificationReadStatus(Notification notification) {
-            db.execSQL("update notifications set read_status = 'Read' where notification_id = "+notification.getNotificationId()+" ");
-            db.close();
+        this.db = cenesDatabase.getReadableDatabase();
+        db.execSQL("update notifications set read_status = 'Read' where notification_id = "+notification.getNotificationId()+" ");
+        db.close();
     }
     public void deleteAllNotifications() {
         this.db = cenesDatabase.getReadableDatabase();
