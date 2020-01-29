@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,7 @@ public class NotificationFragment extends CenesFragment {
 
     private RoundedImageView homeProfilePic;
     private ImageView homeIcon, ivListLoader;
+    private SwipeRefreshLayout swipeRefreshNotifications;
 
     private TextView noNotificationsText;
     private View fragmentView;
@@ -143,10 +145,13 @@ public class NotificationFragment extends CenesFragment {
         homeIcon = (ImageView) view.findViewById(R.id.home_icon);
         noNotificationsText = (TextView) view.findViewById(R.id.no_notifications_text);
         ivListLoader = (ImageView) view.findViewById(R.id.iv_list_loader);
+        swipeRefreshNotifications = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_notifications);
+
 
         homeIcon.setOnClickListener(onClickListener);
         homeProfilePic.setOnClickListener(onClickListener);
         elvNotificationList.setOnScrollListener(notificationListListener);
+        swipeRefreshNotifications.setOnRefreshListener(swipeDownListener);
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -194,6 +199,31 @@ public class NotificationFragment extends CenesFragment {
         }
     };
 
+    SwipeRefreshLayout.OnRefreshListener swipeDownListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            notificationMapList = new HashMap<>();
+            headers = new ArrayList<>();
+            notificationDto = new NotificationDto();
+            notificationDto.setPageNumber(0);
+            notificationDto.setTotalNotificationCounts(0);
+            notificationDto.setAllNotifications(new ArrayList<Notification>());
+            notificationDto.setNewNotifications(new ArrayList<Notification>());
+            notificationDto.setSeenNotifications(new ArrayList<Notification>());
+            prepareNotificationCountCall();
+        }
+    };
+
+
+    public void onRefreshCalled() {
+        //If its an offline mode
+        if (!internetManager.isInternetConnection(getCenesActivity())) {
+            swipeRefreshNotifications.setRefreshing(false);
+        } else {
+            prepareNotificationCountCall();
+
+        }
+    }
     public void loadNotifications(){
 
         //If its an offline mode
@@ -203,7 +233,6 @@ public class NotificationFragment extends CenesFragment {
             if (notifications.size() > 0) {
                 filterNotification(notifications);
             }
-
         } else {
 
             shimmerFrameLayout.setVisibility(View.VISIBLE);
@@ -339,6 +368,7 @@ public class NotificationFragment extends CenesFragment {
                             });
 
                         if (notificationDto.getPageNumber() == 0) {
+                            swipeRefreshNotifications.setRefreshing(false);
                             notificationDto.setSeenNotifications(new ArrayList<Notification>());
                             notificationDto.setNewNotifications(new ArrayList<Notification>());
                         }

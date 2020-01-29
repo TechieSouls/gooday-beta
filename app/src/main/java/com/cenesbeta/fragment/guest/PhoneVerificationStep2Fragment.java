@@ -2,11 +2,14 @@ package com.cenesbeta.fragment.guest;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,6 +43,7 @@ public class PhoneVerificationStep2Fragment extends CenesFragment {
     private TextView tvPhoneNumber, tvCounterDisplay;
     private EditText etOtp;
     private Button btnResendCode;
+    private LinearLayout llVerificationStep2Layout;
 
     private CenesApplication cenesApplication;
     private CoreManager coreManager;
@@ -56,12 +60,15 @@ public class PhoneVerificationStep2Fragment extends CenesFragment {
         tvPhoneNumber = (TextView) v.findViewById(R.id.tv_phone_number);
         tvCounterDisplay = (TextView) v.findViewById(R.id.tv_counter_display);
         btnResendCode = (Button) v.findViewById(R.id.btn_resend_code);
+        llVerificationStep2Layout = (LinearLayout) v.findViewById(R.id.ll_verification_step2_layout);
 
         etOtp = (EditText) v.findViewById(R.id.et_otp);
 
         ivBackButtonImg.setOnClickListener(onClickListener);
         btnResendCode.setOnClickListener(onClickListener);
         etOtp.addTextChangedListener(etTextWatcher);
+        etOtp.setOnEditorActionListener(oneditorListener);
+        llVerificationStep2Layout.setOnTouchListener(layoutTouchListener);
 
         btnResendCode.setEnabled(false);
         phoneNumber = getArguments().getString("phoneNumber");
@@ -133,6 +140,32 @@ public class PhoneVerificationStep2Fragment extends CenesFragment {
             }
         }
     };
+
+    TextView.OnEditorActionListener oneditorListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // do your stuff here
+                //rlPreviewInvitationButton.setVisibility(View.VISIBLE);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+
+                            hideKeyboardAndClearFocus(etOtp);
+
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                        }
+                    }
+                }, 200);
+
+            }
+            return false;
+        }
+    };
+
 
     public void verifyOtpByApi() {
         JSONObject postData = new JSONObject();

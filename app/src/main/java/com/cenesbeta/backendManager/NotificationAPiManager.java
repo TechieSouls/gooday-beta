@@ -22,17 +22,6 @@ public class NotificationAPiManager {
         this.cenesApplication = cenesApplication;
     }
 
-    public JSONObject getNotificationCounts(String queryStr, String authToken) {
-        try {
-            String apiUrl = UrlManagerImpl.prodAPIUrl+ NotificationAPI.get_notificationCounts+"?"+queryStr;
-            JsonParsing jsonParsing = new JsonParsing();
-            return jsonParsing.httpGetJsonObject(apiUrl,authToken);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public JSONObject getUserNotifications(String queryStr, String authToken) {
         try {
             String apiUrl = UrlManagerImpl.prodAPIUrl+ NotificationAPI.get_notification_by_user+"?"+queryStr;

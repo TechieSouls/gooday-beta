@@ -2,12 +2,18 @@ package com.cenesbeta.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.animation.RotateAnimation;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.cenesbeta.activity.CenesActivity;
 import com.cenesbeta.activity.CenesBaseActivity;
@@ -50,6 +56,14 @@ public abstract class CenesFragment extends Fragment {
         imageView.startAnimation(rotateAnim);
     }
 
+    public void hideKeyboard() {
+        try {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public void hideKeyboardAndClearFocus(EditText editText) {
         try {
             InputMethodManager inputManager = (InputMethodManager) ((CenesActivity)getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -64,4 +78,12 @@ public abstract class CenesFragment extends Fragment {
         editText.setFocusableInTouchMode(true);
         editText.setFocusable(true);
     }
+
+    public View.OnTouchListener layoutTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            hideKeyboard();
+            return true;
+        }
+    };
 }

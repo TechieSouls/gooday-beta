@@ -159,6 +159,57 @@
             android:visibility="visible"
             />
 
+        <RelativeLayout
+            android:id="@+id/rl_no_gathering_text"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_below="@+id/rl_calendar_section"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_centerInParent="true">
+
+                <Button
+                    android:id="@+id/bt_sync_calendar"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:text="Sync"
+                    android:background="@color/transparent"
+                    android:textColor="@color/link_color"
+                    android:textSize="16dp"
+                    android:textStyle="italic"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" your calendar or "
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16dp"
+                    android:textStyle="italic"
+                    android:textColor="@color/black"/>
+                <Button
+                    android:id="@+id/bt_create_gathering"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="Create"
+                    android:background="@color/transparent"
+                    android:textColor="@color/link_color"
+                    android:textSize="16dp"
+                    android:textStyle="italic"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" a new event "
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16dp"
+                    android:textStyle="italic"
+                    android:textColor="@color/black"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
         <LinearLayout
             android:id="@+id/ll_invitation_tab_view"
             android:layout_width="match_parent"

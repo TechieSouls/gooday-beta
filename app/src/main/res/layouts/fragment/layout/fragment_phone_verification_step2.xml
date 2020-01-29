@@ -21,12 +21,16 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/ll_verification_step2_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_below="@+id/rl_header"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         >
         <TextView
             android:layout_width="wrap_content"
@@ -54,6 +58,8 @@
             android:textColor="@color/cenes_light_blue"
             android:textColorHint="@color/hues_of_gray"
             android:maxLines="1"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
             android:background="@color/transparent"/>
 
         <LinearLayout

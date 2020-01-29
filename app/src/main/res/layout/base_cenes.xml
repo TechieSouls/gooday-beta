@@ -76,16 +76,27 @@
                     android:src="@drawable/metime_icon_unselected" />
 
 
-                <ImageView
-                    android:id="@+id/footer_notification_icon"
+                <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:drawablePadding="5dp"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:src="@drawable/notification_icon_unselected" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <RelativeLayout
+                        android:id="@+id/rl_badge_count_dot"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/xml_circle_red"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="2dp"/>
+                    <ImageView
+                        android:id="@+id/footer_notification_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:drawablePadding="5dp"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:src="@drawable/notification_icon_unselected" />
 
+                </RelativeLayout>
                 <ImageView
                     android:id="@+id/footer_profile_icon"
                     android:layout_width="0dp"

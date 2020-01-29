@@ -76,43 +76,6 @@ public class GatheringAsyncTask {
         }
     }
 
-
-    public static class NotificationCountTask extends AsyncTask<JSONObject, JSONObject, JSONObject> {
-
-        // you may separate this or combined to caller class.
-        public interface AsyncResponse {
-            void processFinish(JSONObject response);
-        }
-        public AsyncResponse delegate = null;
-
-        public NotificationCountTask(AsyncResponse delegate){
-            this.delegate = delegate;
-        }
-        @Override
-        protected JSONObject doInBackground(JSONObject... strings) {
-
-            CoreManager coreManager = cenesApplication.getCoreManager();
-            UserManager userManager = coreManager.getUserManager();
-            NotificationAPiManager notificationAPiManager = coreManager.getNotificationAPiManager();
-            User user = userManager.getUser();
-
-            String queryStr = "userId="+user.getUserId();
-            return notificationAPiManager.getNotificationCounts(queryStr, user.getAuthToken());
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject s) {
-            super.onPostExecute(s);
-            delegate.processFinish(s);
-        }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-            cancel(true);
-        }
-    }
-
     public static class CreateGatheringTask extends AsyncTask<JSONObject, Object, JSONObject> {
 
 

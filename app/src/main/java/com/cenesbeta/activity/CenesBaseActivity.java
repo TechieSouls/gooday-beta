@@ -36,14 +36,17 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.AsyncTasks.CenesCommonAsyncTask;
 import com.cenesbeta.AsyncTasks.GatheringAsyncTask;
 import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
+import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
+import com.cenesbeta.api.NotificationAPI;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.Notification;
 import com.cenesbeta.bo.NotificationCountData;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
+import com.cenesbeta.dto.AsyncTaskDto;
 import com.cenesbeta.fragment.NavigationFragment;
 import com.cenesbeta.fragment.NotificationFragment;
 import com.cenesbeta.fragment.dashboard.HomeFragment;
@@ -72,7 +75,7 @@ public class CenesBaseActivity extends CenesActivity {
     public FragmentManager fragmentManager;
     public ImageView footerHomeIcon, footerGatheringIcon, footerMeTimeIcon, footerProfileIcon, footerNotificationIcon;
     LinearLayout llFooter;
-    public RelativeLayout rlLoadingBlock;
+    public RelativeLayout rlLoadingBlock, rlBadgeCountDot;
     public TextView tvLoadingMsg;
     public ImageView ivNotificationFloatingIcon;
     private CenesApplication cenesApplication;
@@ -131,6 +134,7 @@ public class CenesBaseActivity extends CenesActivity {
         ivNotificationFloatingIcon = (ImageView) findViewById(R.id.iv_notification_floating_icon);
 
         rlLoadingBlock = (RelativeLayout) findViewById(R.id.rl_loading_block);
+        rlBadgeCountDot = (RelativeLayout) findViewById(R.id.rl_badge_count_dot);
         tvLoadingMsg = (TextView) findViewById(R.id.tv_loading_msg);
 
         //Click Listeners
@@ -269,6 +273,11 @@ public class CenesBaseActivity extends CenesActivity {
                             notificationFragment.scrollToTop();
                         }
                     }
+
+                    if (rlBadgeCountDot.getVisibility() == View.VISIBLE) {
+                        setBadgeCountsToZero();
+                        rlBadgeCountDot.setVisibility(View.GONE);
+                    }
                     replaceFragment(notificationFragment, null);
                     break;
             }
@@ -397,32 +406,56 @@ public class CenesBaseActivity extends CenesActivity {
     }
     public void notificationCountCall() {
         if (internetManager.isInternetConnection(CenesBaseActivity.this)) {
-            new CenesCommonAsyncTask(getCenesApplication(), this);
-            new CenesCommonAsyncTask.NotificationBadgeCountTask(new CenesCommonAsyncTask.NotificationBadgeCountTask.AsyncResponse() {
+
+            AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+            asyncTaskDto.setQueryStr("userId="+loggedInUser.getUserId());
+            asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ NotificationAPI.get_notification_badgeCounts);
+            asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+            new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
                 @Override
                 public void processFinish(JSONObject response) {
-                    //System.out.println("Notification Data "+response.toString());
-
                     try {
                         if (response != null && response.getBoolean("success") == true) {
                             Gson gson = new Gson();
                             NotificationCountData notificationCountData = gson.fromJson(response.getString("data"), NotificationCountData.class);
                             if (notificationCountData.getBadgeCount() > 0) {
-                                ivNotificationFloatingIcon.setVisibility(View.VISIBLE);
+                                rlBadgeCountDot.setVisibility(View.VISIBLE);
                             } else {
-                                ivNotificationFloatingIcon.setVisibility(View.GONE);
+                                rlBadgeCountDot.setVisibility(View.GONE);
                             }
                         } else {
-                            ivNotificationFloatingIcon.setVisibility(View.GONE);
+                            rlBadgeCountDot.setVisibility(View.GONE);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
                 }
-            }).execute();
+            }).execute(asyncTaskDto);
+
         } else {
-            Toast.makeText(this, "Please check your internet connection", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Please check your internet connection", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void setBadgeCountsToZero() {
+        if (internetManager.isInternetConnection(CenesBaseActivity.this)) {
+
+            AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+            asyncTaskDto.setQueryStr("userId="+loggedInUser.getUserId());
+            asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ NotificationAPI.get_set_badge_counts_to_zero);
+            asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+            new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+                    try {
+                        if (response != null && response.getBoolean("success") == true) {
+                            rlBadgeCountDot.setVisibility(View.GONE);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).execute(asyncTaskDto);
         }
     }
 

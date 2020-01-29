@@ -9,9 +9,11 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -34,6 +36,7 @@ import com.cenesbeta.dto.AsyncTaskDto;
 import com.cenesbeta.dto.HomeScreenDto;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.friend.FriendListFragment;
+import com.cenesbeta.fragment.profile.ProfileMyCalendarsFragment;
 import com.cenesbeta.materialcalendarview.CalendarDay;
 import com.cenesbeta.materialcalendarview.MaterialCalendarView;
 import com.cenesbeta.materialcalendarview.decorators.EventDecorator;
@@ -71,6 +74,8 @@ public class HomeFragmentV2 extends CenesFragment {
     private ExpandableListView elvHomeListView;
     private ExpandableListView elvInvitationListView;
     private View homeFragementView;
+    private RelativeLayout rlNoGatheringText;
+    private Button btCreateGathering, btSyncCalendar;
 
 
     private HomeScreenDto homeScreenDto;
@@ -116,6 +121,10 @@ public class HomeFragmentV2 extends CenesFragment {
         llCalendarDateBar = (LinearLayout) view.findViewById(R.id.ll_calendar_date_bar);
         llInvitationTabView= (LinearLayout)view.findViewById(R.id.ll_invitation_tab_view);
         llSyncCalToast = (LinearLayout) view.findViewById(R.id.ll_sync_cal_toast);
+        rlNoGatheringText = (RelativeLayout) view.findViewById(R.id.rl_no_gathering_text);
+        btCreateGathering = (Button) view.findViewById(R.id.bt_create_gathering);
+        btSyncCalendar = (Button) view.findViewById(R.id.bt_sync_calendar);
+
         mcvHomeCalendar = (MaterialCalendarView) view.findViewById(R.id.mcv_home_calendar);
         elvHomeListView = (ExpandableListView) view.findViewById(R.id.elv_home_list_view);
         elvInvitationListView = (ExpandableListView)view.findViewById(R.id.elv_invitation_list_view);
@@ -129,6 +138,8 @@ public class HomeFragmentV2 extends CenesFragment {
         ivPlusBtn.setOnClickListener(onClickListener);
         ivRefreshCalsBtn.setOnClickListener(onClickListener);
         llCalendarDateBar.setOnClickListener(onClickListener);
+        btCreateGathering.setOnClickListener(onClickListener);
+        btSyncCalendar.setOnClickListener(onClickListener);
 
         //Java Variables
         homeScreenDto = new HomeScreenDto();
@@ -143,9 +154,14 @@ public class HomeFragmentV2 extends CenesFragment {
 
         //When internet connection is off/first time loading...
        // eventManagerImpl.deleteAllEvents();
-            firstTimeLoadData();
+
+        if (internetManager.isInternetConnection((CenesBaseActivity)getActivity())) {
             loadCalendarTabData();
-            makeMixPanelCall();
+        } else {
+            firstTimeLoadData();
+        }
+
+        makeMixPanelCall();
         ((CenesBaseActivity) getActivity()).showFooter();
         ((CenesBaseActivity)  getActivity()).activateFooterIcon(HomeFragmentV2.TAG);
         return view;
@@ -194,6 +210,14 @@ public class HomeFragmentV2 extends CenesFragment {
                 case R.id.tv_declined_btn:
                     invitationStatusTabsPressed(HomeScreenDto.InvitationTabs.Declined);
 
+                    break;
+
+                case R.id.bt_create_gathering:
+                    plusButtonPressed();
+                    break;
+
+                case R.id.bt_sync_calendar:
+                    buttonSyncPressed();
                     break;
             }
         }
@@ -258,6 +282,10 @@ public class HomeFragmentV2 extends CenesFragment {
         ((CenesBaseActivity)getActivity()).replaceFragment(new FriendListFragment(), HomeFragmentV2.TAG);
     }
 
+    public void buttonSyncPressed() {
+        ((CenesBaseActivity)getActivity()).replaceFragment(new ProfileMyCalendarsFragment(), HomeFragmentV2.TAG);
+    }
+
     public void calendarDateBarPressed() {
 
         //If it was open..Lets close it
@@ -307,7 +335,7 @@ public class HomeFragmentV2 extends CenesFragment {
 
     public void homeButtonPressed() {
 
-        elvHomeListView.smoothScrollToPosition(0);
+        elvHomeListView.smoothScrollToPositionFromTop(0, 0, 300);
     }
 
     public void refreshCalBtnPressed() {
@@ -420,7 +448,13 @@ public class HomeFragmentV2 extends CenesFragment {
                                         eventManagerImpl.addEvent(events, Event.EventDisplayScreen.HOME.toString());
                                     }
                                 });
-
+                                if (events.size() == 0) {
+                                    elvHomeListView.setVisibility(View.GONE);
+                                    rlNoGatheringText.setVisibility(View.VISIBLE);
+                                } else {
+                                    elvHomeListView.setVisibility(View.VISIBLE);
+                                    rlNoGatheringText.setVisibility(View.GONE);
+                                }
                                 processCalendarDotEvents(events);
                                 homeScreenDto.setHomeEvents(events);
                                 if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
@@ -665,11 +699,6 @@ public class HomeFragmentV2 extends CenesFragment {
 
         List<Event> declinedEvents = eventManagerImpl.fetchAllEventsByScreen(Event.EventDisplayScreen.DECLINED.toString());
         homeScreenDto.setDeclinedEvents(declinedEvents);
-
-
-
-
-
     }
 
 
