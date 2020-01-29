@@ -120,7 +120,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="13dp"
                         android:text="Mandeep"
-                        android:gravity="center_horizontal"
+                        android:layout_gravity="center_horizontal"
                         android:maxLines="1"/>
                 </LinearLayout>
 

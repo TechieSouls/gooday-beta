@@ -549,7 +549,6 @@ public class HomeFragmentV2 extends CenesFragment {
                     }, 1000);
                     loadCalendarTabData();
                 }
-
             }
         }).execute(asyncTaskDto);
     }

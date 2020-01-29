@@ -142,7 +142,7 @@ public class FriendsCollectionViewAdapter extends RecyclerView.Adapter<FriendsCo
                         EventMember objectToRemove = jsonObjectArrayList.get(position);
                         context.checkboxStateHolder.remove(objectToRemove.getUserContactId());
                         context.checkboxObjectHolder.remove(objectToRemove.getUserContactId());
-
+                        context.selectedEventMembers.remove(objectToRemove);
                         //CheckBox checkBoxToUnSelect = context.checkboxButtonHolder.get(objectToRemove.getUserContactId());
                         //checkBoxToUnSelect.setSelected(false);
                         jsonObjectArrayList.remove(position);
@@ -158,8 +158,6 @@ public class FriendsCollectionViewAdapter extends RecyclerView.Adapter<FriendsCo
                             context.getView().findViewById(R.id.rl_selected_friends_recycler_view).setVisibility(View.GONE);
                         }
                     }
-
-
                 }
             });
 
@@ -172,6 +170,7 @@ public class FriendsCollectionViewAdapter extends RecyclerView.Adapter<FriendsCo
                         EventMember objectToRemove = jsonObjectArrayList.get(position);
                         context.checkboxStateHolder.remove(objectToRemove.getUserContactId());
                         context.checkboxObjectHolder.remove(objectToRemove.getUserContactId());
+                        context.selectedEventMembers.remove(objectToRemove);
 
                         //CheckBox checkBoxToUnSelect = context.checkboxButtonHolder.get(objectToRemove.getUserContactId());
                         //checkBoxToUnSelect.setSelected(false);
@@ -187,9 +186,6 @@ public class FriendsCollectionViewAdapter extends RecyclerView.Adapter<FriendsCo
                             context.getView().findViewById(R.id.rl_selected_friends_recycler_view).setVisibility(View.GONE);
                         }
                     }
-
-
-
                 }
             });
 

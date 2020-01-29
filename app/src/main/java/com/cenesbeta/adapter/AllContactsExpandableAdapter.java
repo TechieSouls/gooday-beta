@@ -23,6 +23,7 @@ import com.cenesbeta.util.RoundedImageView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +44,6 @@ public class AllContactsExpandableAdapter extends BaseExpandableListAdapter {
             this.inflter = (LayoutInflater.from(friendListFragment.getContext()));
             this.headers = headers;
             this.isCenesFriends = isCenesFriends;
-
             Collections.sort(this.headers, new Comparator<String>() {
                 @Override
                 public int compare(String o1, String o2) {
@@ -212,6 +212,7 @@ public class AllContactsExpandableAdapter extends BaseExpandableListAdapter {
                 try {
                     System.out.println("User Contact Id : "+child.toString());
                     if (friendListFragment.checkboxStateHolder.containsKey(child.getUserContactId())) {
+                        friendListFragment.selectedEventMembers.remove(child);
                         friendListFragment.checkboxStateHolder.remove(child.getUserContactId());
                         friendListFragment.checkboxObjectHolder.remove(child.getUserContactId());
                         if (child.getCenesMember().equals("no")) {
@@ -228,6 +229,8 @@ public class AllContactsExpandableAdapter extends BaseExpandableListAdapter {
                         } else {
                             viewHolder.ivHostCircleMember.setVisibility(View.VISIBLE);
                         }
+                        friendListFragment.selectedEventMembers.add(child);
+
                     }
                     friendListFragment.getAllContactsExpandableAdapter().notifyDataSetChanged();
                 } catch (Exception e) {
@@ -240,11 +243,16 @@ public class AllContactsExpandableAdapter extends BaseExpandableListAdapter {
                         @Override
                         public void run() {
 
-                            List<EventMember> members = new ArrayList<>();
+                            /*List<EventMember> members = new ArrayList<>();
                             for (Map.Entry<Integer, EventMember> checkboxHolderSet: friendListFragment.checkboxObjectHolder.entrySet()) {
                                 members.add(checkboxHolderSet.getValue());
+                            }*/
+                            List<EventMember> members = new LinkedList<>();
+                            for (int i = friendListFragment.selectedEventMembers.size() - 1; i > -1; i--) {
+                                members.add(friendListFragment.selectedEventMembers.get(i));
                             }
 
+                            //Collections.reverse(members);
                             mFriendsCollectionViewAdapter = new FriendsCollectionViewAdapter(friendListFragment, members, recyclerView);
                             mFriendsCollectionViewAdapter.notifyDataSetChanged();
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(friendListFragment.getContext(), LinearLayoutManager.HORIZONTAL, false);

@@ -174,7 +174,11 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
             } else {
                 eventViewHolder.rvHostImage.setImageResource(R.drawable.profile_pic_no_image);
             }
-            eventViewHolder.tvHostName.setText(eventHost.getUser().getName());
+            if (eventHost.getUser().getUserId().equals(homeFragmentV2.loggedInUser.getUserId())) {
+                eventViewHolder.tvHostName.setText("Me");
+            } else {
+                eventViewHolder.tvHostName.setText(eventHost.getUser().getName());
+            }
         } else {
             eventViewHolder.rvHostImage.setImageResource(R.drawable.profile_pic_no_image);
         }
@@ -194,7 +198,7 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
                 continue;
             }
             //Lets exclude who are not cenes member
-            if (eventMember.getUserId() == null) {
+            if (eventMember.getUserId() == null || eventMember.getStatus() == null) {
                 continue;
             }
             eventMembersWithoutHostAsCenesMember.add(eventMember);
@@ -231,7 +235,7 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
         List<EventMember> eventMembersAsNonCenesMember = new ArrayList<>();
         for (EventMember eventMember: eventMembers) {
             //Lets find who are not cenes member
-            if (eventMember.getUserId() == null) {
+            if (eventMember.getUserId() == null || eventMember.getStatus() == null) {
                 eventMembersAsNonCenesMember.add(eventMember);
             }
         }

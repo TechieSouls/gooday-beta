@@ -42,7 +42,15 @@ public class InvitationTabItemRecyclerAdapter extends RecyclerView.Adapter<Invit
 
             final EventMember eventMember = eventMembers.get(position);
 
-            myViewHolder.tvProfileName.setText(eventMember.getUser().getName());
+            System.out.println(eventMember.toString());
+
+            if (eventMember.getUser() != null && eventMember.getUser().getUserId() != null && eventMember.getUser().getUserId().equals(homeFragmentV2.loggedInUser.getUserId())) {
+                myViewHolder.tvProfileName.setText("Me");
+            } else if (eventMember.getUser() != null && !CenesUtils.isEmpty(eventMember.getUser().getName())) {
+                myViewHolder.tvProfileName.setText(eventMember.getUser().getName());
+            } else if (!CenesUtils.isEmpty(eventMember.getName())) {
+                myViewHolder.tvProfileName.setText(eventMember.getName());
+            }
             if (eventMember.getUser() != null && !CenesUtils.isEmpty(eventMember.getUser().getPicture())) {
                 RequestOptions requestOptions = new RequestOptions();
                 requestOptions.placeholder(R.drawable.profile_pic_no_image);

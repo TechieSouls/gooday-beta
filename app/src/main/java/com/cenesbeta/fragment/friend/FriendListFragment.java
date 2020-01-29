@@ -50,6 +50,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -415,6 +416,8 @@ public class FriendListFragment  extends CenesFragment {
                 friendObj.setCenesMember("yes");
                 checkboxStateHolder.put(loggedInUser.getUserId(), true);
                 checkboxObjectHolder.put(loggedInUser.getUserId(), friendObj);
+                selectedEventMembers = new LinkedList<>();
+                selectedEventMembers.add(friendObj);
 
             }
 
@@ -426,7 +429,12 @@ public class FriendListFragment  extends CenesFragment {
                 @Override
                 public void run() {
 
-                    List<EventMember> members = new ArrayList<>(checkboxObjectHolder.values());
+
+                    //List<EventMember> members = new ArrayList<>(checkboxObjectHolder.values());
+                    List<EventMember> members = new LinkedList<>();
+                    for (int i = selectedEventMembers.size() - 1; i > -1; i--) {
+                        members.add(selectedEventMembers.get(i));
+                    }
                     FriendsCollectionViewAdapter mFriendsCollectionViewAdapter = new FriendsCollectionViewAdapter(FriendListFragment.this, members, recyclerView);
                     mFriendsCollectionViewAdapter.notifyDataSetChanged();
                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
