@@ -585,7 +585,7 @@ public class GatheringPreviewFragmentBkup extends CenesFragment {
             String dateKey = CenesUtils.ddMMM.format(new Date(startTimeInMillis)).toUpperCase() + "<b>"+CenesUtils.EEEE.format(new Date(startTimeInMillis)).toUpperCase()+"</b>";
             eDate.setText(Html.fromHtml(dateKey));
 
-            eTime.setText(CenesUtils.hmmaa.format(new Date(startTimeInMillis))+"-"+CenesUtils.hmmaa.format(new Date(endTimeInMillis)));
+            eTime.setText(CenesUtils.hmm_aa.format(new Date(startTimeInMillis))+"-"+CenesUtils.hmm_aa.format(new Date(endTimeInMillis)));
             /*if (parentEvent.getEventPicture() != null) {
                 Glide.with(GatheringPreviewFragmentBkup.this).load(parentEvent.getEventPicture()).apply(RequestOptions.placeholderOf(R.drawable.gath_upload_img)).into(eventPicture);
             }*/

@@ -2,7 +2,6 @@ package com.cenesbeta.fragment.gathering;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,9 +11,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,10 +20,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -36,13 +29,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -54,11 +44,7 @@ import android.widget.Toast;
 
 import com.cenesbeta.AsyncTasks.GatheringAsyncTask;
 import com.cenesbeta.AsyncTasks.LocationAsyncTask;
-import com.cenesbeta.Manager.AlertManager;
-import com.cenesbeta.Manager.ApiManager;
 import com.cenesbeta.Manager.DeviceManager;
-import com.cenesbeta.Manager.UrlManager;
-import com.cenesbeta.Manager.ValidationManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.activity.SearchLocationActivity;
@@ -69,30 +55,23 @@ import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.bo.Location;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
-import com.cenesbeta.database.impl.EventManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.dto.CreateGatheringDto;
 import com.cenesbeta.dto.PredictiveData;
 import com.cenesbeta.fragment.CenesFragment;
-import com.cenesbeta.fragment.dashboard.HomeFragment;
 import com.cenesbeta.fragment.friend.FriendListFragment;
 import com.cenesbeta.materialcalendarview.CalendarDay;
 import com.cenesbeta.materialcalendarview.MaterialCalendarView;
 import com.cenesbeta.materialcalendarview.OnDateSelectedListener;
 import com.cenesbeta.materialcalendarview.decorators.BackgroundDecorator;
-import com.cenesbeta.materialcalendarview.decorators.OneDayDecorator;
-import com.cenesbeta.materialcalendarview.format.WeekDayFormatter;
 import com.cenesbeta.service.GatheringService;
-import com.cenesbeta.util.CenesConstants;
 import com.cenesbeta.util.CenesEditText;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.ImageUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
-import com.soundcloud.android.crop.Crop;
 import com.yalantis.ucrop.UCrop;
 
 import org.json.JSONArray;
@@ -626,7 +605,7 @@ public class CreateGatheringFragment extends CenesFragment {
             predictedDateStartCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
             predictedDateStartCal.set(Calendar.MINUTE, minute);
 
-            startTimePickerLabel.setText(CenesUtils.hmmaa.format(predictedDateStartCal.getTime()).toUpperCase());
+            startTimePickerLabel.setText(CenesUtils.hmm_aa.format(predictedDateStartCal.getTime()).toUpperCase());
             Log.e("Start Date : ", predictedDateStartCal.getTime().toString());
             event.setStartTime(predictedDateStartCal.getTimeInMillis());
 
@@ -635,7 +614,7 @@ public class CreateGatheringFragment extends CenesFragment {
                 Calendar predictedDateEndCal = Calendar.getInstance();
                 predictedDateEndCal.setTimeInMillis(predictedDateStartCal.getTimeInMillis());
                 predictedDateEndCal.add(Calendar.MINUTE, 60);
-                endTimePickerLabel.setText(CenesUtils.hmmaa.format(predictedDateEndCal.getTime()).toUpperCase());
+                endTimePickerLabel.setText(CenesUtils.hmm_aa.format(predictedDateEndCal.getTime()).toUpperCase());
                 Log.e("End Date : ", predictedDateEndCal.getTime().toString());
                 event.setEndTime(predictedDateEndCal.getTimeInMillis());
 
@@ -644,7 +623,7 @@ public class CreateGatheringFragment extends CenesFragment {
                 Calendar predictedDateEndCal = Calendar.getInstance();
                 predictedDateEndCal.setTimeInMillis(event.getEndTime());
                 predictedDateEndCal.add(Calendar.DAY_OF_MONTH, 1);
-                endTimePickerLabel.setText(CenesUtils.hmmaa.format(predictedDateEndCal.getTime()).toUpperCase());
+                endTimePickerLabel.setText(CenesUtils.hmm_aa.format(predictedDateEndCal.getTime()).toUpperCase());
                 Log.e("End Date : ", predictedDateEndCal.getTime().toString());
                 event.setEndTime(predictedDateEndCal.getTimeInMillis());
             }
@@ -673,7 +652,7 @@ public class CreateGatheringFragment extends CenesFragment {
             Calendar predictedDateEndCal = Calendar.getInstance();
             predictedDateEndCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
             predictedDateEndCal.set(Calendar.MINUTE, minute);
-            endTimePickerLabel.setText(CenesUtils.hmmaa.format(predictedDateEndCal.getTime()).toUpperCase());
+            endTimePickerLabel.setText(CenesUtils.hmm_aa.format(predictedDateEndCal.getTime()).toUpperCase());
             Log.e("End Date : ", predictedDateEndCal.getTime().toString());
 
             if (predictedDateEndCal.getTimeInMillis() <= event.getStartTime()) {
@@ -682,7 +661,7 @@ public class CreateGatheringFragment extends CenesFragment {
                 predictedDateEndCal.add(Calendar.DAY_OF_MONTH, 1);
                 Log.e("End Date After Adding: ",predictedDateEndCal.getTime().toString());
             }
-            endTimePickerLabel.setText(CenesUtils.hmmaa.format(predictedDateEndCal.getTime()).toUpperCase());
+            endTimePickerLabel.setText(CenesUtils.hmm_aa.format(predictedDateEndCal.getTime()).toUpperCase());
             Log.e("End Date : ", predictedDateEndCal.getTime().toString());
             event.setEndTime(predictedDateEndCal.getTimeInMillis());
 
@@ -1451,10 +1430,10 @@ public class CreateGatheringFragment extends CenesFragment {
             }
             createGatheringDto.setDate(true);
 
-            startTimePickerLabel.setText(CenesUtils.hmmaa.format(new Date(event.getStartTime())));
+            startTimePickerLabel.setText(CenesUtils.hmm_aa.format(new Date(event.getStartTime())));
             createGatheringDto.setStartTime(true);
 
-            endTimePickerLabel.setText(CenesUtils.hmmaa.format(new Date(event.getEndTime())));
+            endTimePickerLabel.setText(CenesUtils.hmm_aa.format(new Date(event.getEndTime())));
             createGatheringDto.setEndTime(true);
 
             if (event.getPredictiveOn()) {

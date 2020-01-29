@@ -342,15 +342,15 @@ public class GatheringsFragment extends CenesFragment {
 
     public void selectTab(TextView selection) {
         confirmedBtn.setBackground(getResources().getDrawable(R.drawable.border_bottom_gray));
-        confirmedBtn.setTextColor(getResources().getColor(R.color.font_grey_color));
+        confirmedBtn.setTextColor(getResources().getColor(R.color.black));
         confirmedBtn.setTypeface(Typeface.DEFAULT);
 
         maybeBtn.setBackground(getResources().getDrawable(R.drawable.border_bottom_gray));
-        maybeBtn.setTextColor(getResources().getColor(R.color.font_grey_color));
+        maybeBtn.setTextColor(getResources().getColor(R.color.black));
         maybeBtn.setTypeface(Typeface.DEFAULT);
 
         declinedBtn.setBackground(getResources().getDrawable(R.drawable.border_bottom_gray));
-        declinedBtn.setTextColor(getResources().getColor(R.color.font_grey_color));
+        declinedBtn.setTextColor(getResources().getColor(R.color.black));
         declinedBtn.setTypeface(Typeface.DEFAULT);
 
         selection.setBackground(getResources().getDrawable(R.drawable.border_bottom_orange));
@@ -361,15 +361,15 @@ public class GatheringsFragment extends CenesFragment {
     public void refreshSelectedTabData() {
         TextView selection = null;
         confirmedBtn.setBackground(getResources().getDrawable(R.drawable.border_bottom_gray));
-        confirmedBtn.setTextColor(getResources().getColor(R.color.font_grey_color));
+        confirmedBtn.setTextColor(getResources().getColor(R.color.black));
         confirmedBtn.setTypeface(Typeface.DEFAULT);
 
         maybeBtn.setBackground(getResources().getDrawable(R.drawable.border_bottom_gray));
-        maybeBtn.setTextColor(getResources().getColor(R.color.font_grey_color));
+        maybeBtn.setTextColor(getResources().getColor(R.color.black));
         maybeBtn.setTypeface(Typeface.DEFAULT);
 
         declinedBtn.setBackground(getResources().getDrawable(R.drawable.border_bottom_gray));
-        declinedBtn.setTextColor(getResources().getColor(R.color.font_grey_color));
+        declinedBtn.setTextColor(getResources().getColor(R.color.black));
         declinedBtn.setTypeface(Typeface.DEFAULT);
 
         if (tabSeleted.equals(TabSeleted.Accepted)) {

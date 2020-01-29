@@ -9,13 +9,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -46,7 +43,6 @@ import com.cenesbeta.service.MeTimeService;
 import com.cenesbeta.util.CenesConstants;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.ImageUtils;
-import com.cenesbeta.util.RoundedImageView;
 import com.google.gson.Gson;
 import com.soundcloud.android.crop.Crop;
 
@@ -205,8 +201,8 @@ public class MeTimeCardFragment extends CenesFragment {
 
                 if (metime.getStartTime() != null && metime.getStartTime() != 0) {
 
-                    startTimeText.setText(CenesUtils.hmmaa.format(new Date(metime.getStartTime())).toUpperCase());
-                    endTimeText.setText(CenesUtils.hmmaa.format(new Date(metime.getEndTime())).toUpperCase());
+                    startTimeText.setText(CenesUtils.hmm_aa.format(new Date(metime.getStartTime())).toUpperCase());
+                    endTimeText.setText(CenesUtils.hmm_aa.format(new Date(metime.getEndTime())).toUpperCase());
 
 
                     for(MeTimeItem meTimeItem: metime.getItems()) {

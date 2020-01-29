@@ -878,7 +878,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     public void populateInvitationCard(final Event event) {
         tvEventTitle.setText(event.getTitle());
 
-        final String eventDate = CenesUtils.EEEMMMMdd.format(new Date(event.getStartTime())) + "," + CenesUtils.hmmaa.format(new Date(event.getStartTime())) + "-" + CenesUtils.hmmaa.format(new Date(event.getEndTime()));
+        final String eventDate = CenesUtils.EEEMMMMdd.format(new Date(event.getStartTime())) + "," + CenesUtils.hmm_aa.format(new Date(event.getStartTime())) + "-" + CenesUtils.hmm_aa.format(new Date(event.getEndTime()));
         tvEventDate.setText(eventDate);
 
         if (event.getScheduleAs() != null && event.getScheduleAs().equals("Notification")) {

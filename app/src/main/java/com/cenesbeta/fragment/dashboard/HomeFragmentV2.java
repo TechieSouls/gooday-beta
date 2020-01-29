@@ -323,20 +323,20 @@ public class HomeFragmentV2 extends CenesFragment {
 
     public void highlightInvitationTabs(TextView selection) {
         tvConfirmedBtn.setBackground(getResources().getDrawable(R.drawable.border_bottom_gray));
-        tvConfirmedBtn.setTextColor(getResources().getColor(R.color.font_grey_color));
+        tvConfirmedBtn.setTextColor(getResources().getColor(R.color.black));
         tvConfirmedBtn.setTypeface(Typeface.DEFAULT);
 
         tvPendingBtn.setBackground(getResources().getDrawable(R.drawable.border_bottom_gray));
-        tvPendingBtn.setTextColor(getResources().getColor(R.color.font_grey_color));
+        tvPendingBtn.setTextColor(getResources().getColor(R.color.black));
         tvPendingBtn.setTypeface(Typeface.DEFAULT);
 
         tvDeclinedBtn.setBackground(getResources().getDrawable(R.drawable.border_bottom_gray));
-        tvDeclinedBtn.setTextColor(getResources().getColor(R.color.font_grey_color));
+        tvDeclinedBtn.setTextColor(getResources().getColor(R.color.black));
         tvDeclinedBtn.setTypeface(Typeface.DEFAULT);
 
         selection.setBackground(getResources().getDrawable(R.drawable.border_bottom_orange));
         selection.setTextColor(getResources().getColor(R.color.black));
-       // selection.setTypeface(Typeface.DEFAULT_BOLD);
+        //selection.setTypeface(Typeface.DEFAULT_BOLD);
     }
 
     public void homeButtonPressed() {
