@@ -354,8 +354,8 @@ public class GatheringsFragment extends CenesFragment {
         declinedBtn.setTypeface(Typeface.DEFAULT);
 
         selection.setBackground(getResources().getDrawable(R.drawable.border_bottom_orange));
-        selection.setTextColor(getResources().getColor(R.color.cenes_new_orange));
-        selection.setTypeface(Typeface.DEFAULT_BOLD);
+        selection.setTextColor(getResources().getColor(R.color.black));
+       // selection.setTypeface(Typeface.DEFAULT_BOLD);
     }
 
     public void refreshSelectedTabData() {
@@ -386,8 +386,8 @@ public class GatheringsFragment extends CenesFragment {
         }
 
         selection.setBackground(getResources().getDrawable(R.drawable.border_bottom_orange));
-        selection.setTextColor(getResources().getColor(R.color.cenes_new_orange));
-        selection.setTypeface(Typeface.DEFAULT_BOLD);
+        selection.setTextColor(getResources().getColor(R.color.black));
+       // selection.setTypeface(Typeface.DEFAULT_BOLD);
     }
 
     public Map<String, Object> processGatheringApiResult(List<Event> events) {

@@ -260,6 +260,11 @@ public class HomeFragmentV2 extends CenesFragment {
         tvInvitationTab.setBackground(null);
         elvInvitationListView.scrollTo(0, 0);
         llInvitationTabView.setVisibility(View.GONE);
+        if(homeScreenDto.getHomeEvents().size() == 0 ){
+            rlNoGatheringText.setVisibility(View.VISIBLE);
+        }else{
+            rlNoGatheringText.setVisibility(View.GONE);
+        }
         processCalendarTabData(homeScreenDto.getHomeEvents());
         elvHomeListView.setVisibility(View.VISIBLE);
     }
@@ -273,6 +278,7 @@ public class HomeFragmentV2 extends CenesFragment {
         elvHomeListView.scrollTo(0, 0);
         calendarTabExpandableListAdapter = null;
         elvHomeListView.setVisibility(View.GONE);
+        rlNoGatheringText.setVisibility(View.GONE);
         processCalendarTabData(homeScreenDto.getAcceptedEvents());
         llInvitationTabView.setVisibility(View.VISIBLE);
 
@@ -329,8 +335,8 @@ public class HomeFragmentV2 extends CenesFragment {
         tvDeclinedBtn.setTypeface(Typeface.DEFAULT);
 
         selection.setBackground(getResources().getDrawable(R.drawable.border_bottom_orange));
-        selection.setTextColor(getResources().getColor(R.color.cenes_new_orange));
-        selection.setTypeface(Typeface.DEFAULT_BOLD);
+        selection.setTextColor(getResources().getColor(R.color.black));
+       // selection.setTypeface(Typeface.DEFAULT_BOLD);
     }
 
     public void homeButtonPressed() {
