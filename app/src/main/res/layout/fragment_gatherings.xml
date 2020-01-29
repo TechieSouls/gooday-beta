@@ -80,9 +80,9 @@
                 android:background="@drawable/border_bottom_orange"
                 android:gravity="center"
                 android:text="Accepted"
-                android:textColor="#FFF5A623"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="normal" />
 
             <TextView
                 android:id="@+id/maybe_btn"
@@ -91,7 +91,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Pending"
-                android:textColor="#FF9B9B9B"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <TextView
@@ -101,7 +101,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Declined"
-                android:textColor="#FF9B9B9B"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
         </LinearLayout>

@@ -147,7 +147,7 @@
                         android:layout_height="50dp"
                         android:background="@drawable/xml_gradient_orange"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="20dp">
+                        android:layout_marginLeft="10dp">
 
                         <TextView
                             android:id="@+id/tv_non_cenes_count"
