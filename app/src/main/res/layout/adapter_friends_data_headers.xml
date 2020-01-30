@@ -14,7 +14,7 @@
         android:paddingLeft="10dp"
         android:textColor="@color/black"
         android:text="A"
-        android:textSize="20sp"
+        android:textSize="16dp"
         android:textStyle="bold"/>
 
 </LinearLayout>

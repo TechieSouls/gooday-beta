@@ -176,7 +176,7 @@ public class UserManagerImpl implements UserManager {
             if (cursor.moveToFirst()) {
                 user = new User();
                 user.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
-                user.setUserId(764);
+                //user.setUserId(764);
                 user.setEmail(cursor.getString(cursor.getColumnIndex("email")));
                 user.setPassword(cursor.getString(cursor.getColumnIndex("password")));
                 user.setApiUrl(cursor.getString(cursor.getColumnIndex("api_url")));

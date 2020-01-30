@@ -90,6 +90,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal|top"
             android:lines="1"
+            android:textColor="@color/black"
             android:textSize="13dp" />
         <View
             android:layout_width="match_parent"
