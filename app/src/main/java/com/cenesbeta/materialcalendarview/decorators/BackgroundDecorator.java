@@ -51,6 +51,6 @@ public class BackgroundDecorator implements DayViewDecorator {
         if (highlight)
             view.addSpan(new ForegroundColorSpan(Color.WHITE));
         else
-            view.addSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.cenes_mcv_lightergrey)));
+            view.addSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.black)));
     }
 }

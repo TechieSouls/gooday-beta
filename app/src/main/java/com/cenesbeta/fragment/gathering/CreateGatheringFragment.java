@@ -291,10 +291,6 @@ public class CreateGatheringFragment extends CenesFragment {
 
         materialCalendarView = (MaterialCalendarView) fragmentView.findViewById(R.id.material_calendar_view);
 
-        materialCalendarView.setOnDateChangedListener(onDateSelectedListener);
-        gathEventTitleEditView.setOnFocusChangeListener(focusListener);
-        gathEventTitleEditView.setOnEditorActionListener(oneditorListener);
-        gathEventTitleEditView.setOnClickListener(onClickListener);
 
         createGatheringDto = new CreateGatheringDto();
         new GatheringAsyncTask(cenesApplication, (CenesBaseActivity) getActivity());
@@ -305,6 +301,10 @@ public class CreateGatheringFragment extends CenesFragment {
         gathInviteFrndsBtn.setOnClickListener(onClickListener);
         ivAbandonEvent.setOnClickListener(onClickListener);
         ivPredictiveInfo.setOnClickListener(onClickListener);
+        materialCalendarView.setOnDateChangedListener(onDateSelectedListener);
+        gathEventTitleEditView.setOnFocusChangeListener(focusListener);
+        gathEventTitleEditView.setOnEditorActionListener(oneditorListener);
+        gathEventTitleEditView.setOnClickListener(onClickListener);
 
         gathSearchLocationButton.setOnClickListener(onClickListener);
         rlGatheringMessageBar.setOnClickListener(onClickListener);
@@ -1092,6 +1092,7 @@ public class CreateGatheringFragment extends CenesFragment {
 
                 } else {
                     showAlert("Alert","Please select Start and End Time.");
+                    predictiveCalSwitch.setChecked(false);
                 }
             } else {
                 event.setPredictiveOn(false);
@@ -1118,11 +1119,15 @@ public class CreateGatheringFragment extends CenesFragment {
 
                 Calendar predictiveStartCal = Calendar.getInstance();
                 predictiveStartCal.setTimeInMillis(event.getStartTime());
+                predictiveStartCal.set(Calendar.DAY_OF_MONTH, 15);
                 predictiveStartCal.set(Calendar.MILLISECOND, 0);
+                predictiveStartCal.set(Calendar.MONTH, currentMonth.get(Calendar.MONTH));
 
                 Calendar predictiveEndCal = Calendar.getInstance();
                 predictiveEndCal.setTimeInMillis(event.getEndTime());
+                predictiveEndCal.set(Calendar.DAY_OF_MONTH, 15);
                 predictiveEndCal.set(Calendar.MILLISECOND, 0);
+                predictiveEndCal.set(Calendar.MONTH, currentMonth.get(Calendar.MONTH));
 
                 JSONObject job = new JSONObject();
                 job.put("startTimeMilliseconds", predictiveStartCal.getTimeInMillis());
@@ -1171,7 +1176,7 @@ public class CreateGatheringFragment extends CenesFragment {
     }
 
     public void onCalendarPageChangeListener(CalendarDay currentMonth) {
-        System.out.println("Page Change Listener.");
+        System.out.println("Page Change Listener. Month : "+currentMonth.getMonth()+", Year : "+currentMonth.getYear());
         try {
             CreateGatheringFragment.this.currentMonth.set(Calendar.MONTH, currentMonth.getMonth());
             CreateGatheringFragment.this.currentMonth.set(Calendar.YEAR, currentMonth.getYear());
@@ -1179,6 +1184,7 @@ public class CreateGatheringFragment extends CenesFragment {
             if (event.getPredictiveOn()) {
                 Calendar predictiveStartCal = Calendar.getInstance();
                 predictiveStartCal.setTimeInMillis(event.getStartTime());
+                predictiveStartCal.set(Calendar.DAY_OF_MONTH, 15);
                 predictiveStartCal.set(Calendar.YEAR, currentMonth.getYear());
                 predictiveStartCal.set(Calendar.MONTH, currentMonth.getMonth());
                 predictiveStartCal.set(Calendar.MILLISECOND, 0);
@@ -1193,6 +1199,7 @@ public class CreateGatheringFragment extends CenesFragment {
 
                 Calendar predictiveEndCal = Calendar.getInstance();
                 predictiveEndCal.setTimeInMillis(event.getEndTime());
+                predictiveEndCal.set(Calendar.DAY_OF_MONTH, 15);
                 predictiveEndCal.set(Calendar.MONTH, currentMonth.getMonth());
                 predictiveEndCal.set(Calendar.YEAR, currentMonth.getYear());
                 predictiveEndCal.set(Calendar.MILLISECOND, 0);
