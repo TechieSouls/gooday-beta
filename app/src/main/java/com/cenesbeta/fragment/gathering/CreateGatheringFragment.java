@@ -861,6 +861,7 @@ public class CreateGatheringFragment extends CenesFragment {
 
                 ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), rotatedBitmap), this, 1280, 512);*/
                     Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
+                    UCrop.Options options = new UCrop.Options();
                     UCrop.of(imageUri, resultUri)
                             //.withAspectRatio(3, 4)
                             .withMaxResultSize(1600, 1000)
@@ -1269,7 +1270,10 @@ public class CreateGatheringFragment extends CenesFragment {
 
                 progressBar.setVisibility(View.GONE);
                 try {
-                    boolean success = response.getBoolean("success");
+                    boolean success = false;
+                    if(response != null) {
+                        success = response.getBoolean("success");
+                    }
                     if (success == true) {
                         tvCoverImageStatus.setText("Uploaded");
 

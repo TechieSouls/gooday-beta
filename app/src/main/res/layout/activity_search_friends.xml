@@ -87,7 +87,8 @@
         android:id="@+id/cenes_noncenes_select_bar"
         android:layout_below="@+id/rl_selected_friends_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="60dp"
+        android:background="@drawable/xml_whitelightgrey_gradient_border_bottom">
 
         <TextView
             android:id="@+id/tv_select_bar_title"
@@ -112,7 +113,6 @@
         android:id="@+id/gath_search_friend_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_below="@+id/cenes_noncenes_select_bar"
         android:visibility="gone"
         ></ListView>
@@ -121,7 +121,6 @@
         android:id="@+id/elv_friend_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_below="@+id/cenes_noncenes_select_bar"
         android:groupIndicator="@android:color/transparent"
         ></ExpandableListView>

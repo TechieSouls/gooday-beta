@@ -457,7 +457,13 @@ public class HomeFragmentV2 extends CenesFragment {
                 public void processFinish(JSONObject response) {
 
                     try {
-                        boolean success = response.getBoolean("success");
+
+                        boolean success = false;
+
+                        if( response != null) {
+
+                            success = response.getBoolean("success");
+                        }
 
                         if (success) {
                             Gson gson = new GsonBuilder().create();

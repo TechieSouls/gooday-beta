@@ -3,6 +3,7 @@ package com.cenesbeta.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 
 import com.cenesbeta.R;
 import com.cenesbeta.application.CenesApplication;
@@ -22,6 +23,11 @@ public class MainActivity extends CenesActivity {
     UserManager userManager;
     User user;
     Context context;
+
+    static
+    {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

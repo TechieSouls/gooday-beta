@@ -335,17 +335,26 @@ public class NotificationFragment extends CenesFragment {
             public void processFinish(JSONObject response) {
                 try {
 
-                    boolean success = response.getBoolean("success");
+                    boolean success = false;
+
+                    if( response != null) {
+
+                        success = response.getBoolean("success");
+                    }
 
                     if (notificationApiCall.equals(NotificationApiCall.Counts)) {
+                        System.out.println("A1");
                         if (success) {
+                            System.out.println("A1 1");
                             notificationDto.setTotalNotificationCounts(response.getInt("data"));
                             if (notificationDto.getTotalNotificationCounts() > 0) {
                                 prepareNotificationListCall();
                             }
+                        }else{
+                            shimmerFrameLayout.setVisibility(View.GONE);
                         }
                     } else if (notificationApiCall.equals(NotificationApiCall.List)) {
-
+                        System.out.println("A2");
                         ivListLoader.setVisibility(View.GONE);
 
                         Type listType = new TypeToken<List<Notification>>() {}.getType();
@@ -361,6 +370,7 @@ public class NotificationFragment extends CenesFragment {
                                 @Override
                                 public void run() {
                                     if (notificationDto.getPageNumber() == 0) {
+                                        System.out.println("A3");
                                         notificationManagerImpl.deleteAllNotifications();
                                     }
                                     notificationManagerImpl.addNotification(notificationsTemp);
@@ -368,11 +378,13 @@ public class NotificationFragment extends CenesFragment {
                             });
 
                         if (notificationDto.getPageNumber() == 0) {
+                            System.out.println("A4");
                             swipeRefreshNotifications.setRefreshing(false);
                             notificationDto.setSeenNotifications(new ArrayList<Notification>());
                             notificationDto.setNewNotifications(new ArrayList<Notification>());
                         }
                         if (notificationsTemp.size() > 0) {
+                            System.out.println("A5");
                             notificationDto.setMadeApiCall(true);
                             filterNotification(notificationsTemp);
                             int pageNumber = notificationDto.getPageNumber() + 20;

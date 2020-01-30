@@ -220,12 +220,21 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
                 case R.id.btn_phone_verification_step1_continue:
                     if (isValid()) {
                         JSONObject postData = new JSONObject();
+                        String phoneNumber = "";
                         try {
+                            String initialNumber = etPhoneNumberStr.substring(0, 1);
+                            if (initialNumber.equals("0")) {
+                                phoneNumber = etPhoneNumberStr.substring(1, etPhoneNumberStr.length());
+                            } else {
+                                phoneNumber = etPhoneNumberStr;
+                            }
                             postData.put("countryCode",tvPhoneCountryCode.getText().toString());
-                            postData.put("phone",etPhoneNumberStr);
+                            postData.put("phone",phoneNumber);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+
+                        final String phoneNumberTemp = phoneNumber;
                         btSignupStep1Continue.setClickable(false);
                         new ProfileAsyncTask(cenesApplication, getActivity());
                         new ProfileAsyncTask.SendVerrificationTask(new ProfileAsyncTask.SendVerrificationTask.AsyncResponse() {
@@ -257,7 +266,7 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
                                         Bundle bundle = new Bundle();
                                         bundle.putString("countryCodeStr", countryCodeStr);
                                         bundle.putString("countryCode", countryCode);
-                                        bundle.putString("phoneNumber", etPhoneNumberStr.replaceAll("\\s","").replaceAll("-",""));
+                                        bundle.putString("phoneNumber", phoneNumberTemp.replaceAll("\\s","").replaceAll("-",""));
                                         ss2Fragment.setArguments(bundle);
 
                                         ((GuestActivity) getActivity()).replaceFragment(ss2Fragment, PhoneVerificationStep1Fragment.TAG);

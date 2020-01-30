@@ -145,11 +145,11 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
         List<EventMember> eventMembers = event.getEventMembers();
 
         eventViewHolder.tvEventTitle.setText(event.getTitle());
-        if (!CenesUtils.isEmpty(event.getLocation())) {
+        if (CenesUtils.isEmpty(event.getLocation())) {
             eventViewHolder.llEventLocationSection.setVisibility(View.GONE);
-            eventViewHolder.tvEventLocation.setText(event.getLocation());
         } else {
             eventViewHolder.llEventLocationSection.setVisibility(View.VISIBLE);
+            eventViewHolder.tvEventLocation.setText(event.getLocation());
         }
 
         System.out.println("Event Title : "+event.getTitle()+" Start Time : "+event.getStartTime()+", End Time :"+event.getEndTime() );
