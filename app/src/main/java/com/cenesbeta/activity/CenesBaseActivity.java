@@ -462,7 +462,6 @@ public class CenesBaseActivity extends CenesActivity {
     public void homeScreenReloadBroadcaster() {
         Intent newintent = new Intent("homescreenrefresh");
         getApplicationContext().sendBroadcast(newintent);
-
     }
 
 
