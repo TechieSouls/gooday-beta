@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import com.cenesbeta.R;
 import com.cenesbeta.fragment.dashboard.HomeFragmentV2;
+import com.cenesbeta.fragment.gathering.CreateGatheringFragment;
 import com.cenesbeta.materialcalendarview.format.ArrayWeekDayFormatter;
 import com.cenesbeta.materialcalendarview.format.DateFormatTitleFormatter;
 import com.cenesbeta.materialcalendarview.format.DayFormatter;
@@ -211,15 +212,17 @@ public class MaterialCalendarView extends ViewGroup {
             currentMonth = adapter.getItem(position);
             updateUi();
 
-            Intent monthChangedIntent = new Intent("month_changed_intent");
+            /*Intent monthChangedIntent = new Intent("month_changed_intent");
             monthChangedIntent.putExtra("CurrentMonth", currentMonth);
-            Boolean sent = LocalBroadcastManager.getInstance(getContext()).sendBroadcast(monthChangedIntent);
+            Boolean sent = LocalBroadcastManager.getInstance(getContext()).sendBroadcast(monthChangedIntent);*/
 
             dispatchOnMonthChanged(currentMonth);
 
             if (sourceFragment != null) {
                 if (sourceFragment instanceof HomeFragmentV2) {
                     ((HomeFragmentV2) sourceFragment).onCalendarPageChangeListener(currentMonth);
+                } else if (sourceFragment instanceof CreateGatheringFragment) {
+                    ((CreateGatheringFragment) sourceFragment).onCalendarPageChangeListener(currentMonth);
                 }
             }
         }

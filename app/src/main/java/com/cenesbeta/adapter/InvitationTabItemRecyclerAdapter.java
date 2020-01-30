@@ -47,9 +47,9 @@ public class InvitationTabItemRecyclerAdapter extends RecyclerView.Adapter<Invit
             if (eventMember.getUser() != null && eventMember.getUser().getUserId() != null && eventMember.getUser().getUserId().equals(homeFragmentV2.loggedInUser.getUserId())) {
                 myViewHolder.tvProfileName.setText("Me");
             } else if (eventMember.getUser() != null && !CenesUtils.isEmpty(eventMember.getUser().getName())) {
-                myViewHolder.tvProfileName.setText(eventMember.getUser().getName());
+                myViewHolder.tvProfileName.setText(eventMember.getUser().getName().split(" ")[0]);
             } else if (!CenesUtils.isEmpty(eventMember.getName())) {
-                myViewHolder.tvProfileName.setText(eventMember.getName());
+                myViewHolder.tvProfileName.setText(eventMember.getName().split(" ")[0]);
             }
             if (eventMember.getUser() != null && !CenesUtils.isEmpty(eventMember.getUser().getPicture())) {
                 RequestOptions requestOptions = new RequestOptions();

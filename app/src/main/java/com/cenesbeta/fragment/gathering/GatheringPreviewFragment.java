@@ -68,7 +68,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     private TextView tvEventTitle, tvEventDate, tvEventDescriptionDialogText;
     private RelativeLayout rlGuestListBubble, rlLocationBubble, rlDescriptionBubble, rlShareBubble;
     private RelativeLayout rvEventDescriptionDialog;
-    private RelativeLayout rlDescriptionBubbleBackground;
+    private RelativeLayout rlDescriptionBubbleBackground, ivEventPictureOverlay;
     private ImageView ivDescriptionBubbleIcon;
     private RoundedImageView ivDescProfilePic;
     private CardView tinderCardView;
@@ -139,6 +139,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         rlParentVew = (RelativeLayout) view.findViewById(R.id.rl_parent_vew);
         rlWelcomeInvitation = (RelativeLayout) view.findViewById(R.id.rl_welcome_invitation);
         rlInvitationView = (RelativeLayout) view.findViewById(R.id.rl_invitation_view);
+        ivEventPictureOverlay = (RelativeLayout) view.findViewById(R.id.iv_event_picture_overlay);
 
         llBottomButtons = (LinearLayout) view.findViewById(R.id.ll_bottom_buttons);
         llEventDetails = (LinearLayout) view.findViewById(R.id.ll_event_details);
@@ -188,6 +189,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
 
         ivEventPicture.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, CenesUtils.dpToPx(getActivity().getWindowManager().getDefaultDisplay().getHeight())));
+        ivEventPictureOverlay.getLayoutParams().height = metrics.heightPixels;
         ivEventPicture.getLayoutParams().height = metrics.heightPixels;
         if (pendingEvents != null && pendingEvents.size() > 0) {
             event =  pendingEvents.get(0);
