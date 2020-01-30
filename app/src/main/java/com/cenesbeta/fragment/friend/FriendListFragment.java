@@ -39,6 +39,7 @@ import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.gathering.CreateGatheringFragment;
 import com.cenesbeta.service.SearchFriendService;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -77,6 +78,7 @@ public class FriendListFragment  extends CenesFragment {
     private List<EventMember> cenesFriends;
     private List<String> headers;
     private Map<String, List<EventMember>> headerFriendsMap;
+    private ShimmerFrameLayout shimmerFrameLayout;
 
     private List<EventMember> searchedFriends;
     public User loggedInUser;
@@ -94,6 +96,8 @@ public class FriendListFragment  extends CenesFragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         View view = inflater.inflate(R.layout.activity_search_friends, container, false);
+
+        shimmerFrameLayout = (ShimmerFrameLayout) view.findViewById(R.id.shimmer_view_container);
 
         closeSearchFriendsBtn = (Button) view.findViewById(R.id.close_search_friends_btn);
         searchFriendEditText = (EditText) view.findViewById(R.id.invite_friend_edit_text);
@@ -230,7 +234,6 @@ public class FriendListFragment  extends CenesFragment {
     TextWatcher onTextChangeListener = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
         }
 
         @Override
@@ -329,12 +332,15 @@ public class FriendListFragment  extends CenesFragment {
     };
 
     public void loadFriends() {
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
         new FriendAsyncTask(cenesApplication);
         new FriendAsyncTask.FriendListTask(new FriendAsyncTask.FriendListTask.AsyncResponse() {
             @Override
             public void processFinish(JSONObject response) {
 
                 try {
+                    shimmerFrameLayout.setVisibility(View.GONE);
+
                     boolean success = false;
                     if(response != null) {
                       success = response.getBoolean("success");
