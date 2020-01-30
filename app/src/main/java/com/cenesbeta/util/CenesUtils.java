@@ -36,7 +36,8 @@ public class CenesUtils {
     public static SimpleDateFormat HHmm = new SimpleDateFormat("HH:mm"); //24 Hour Format
     public static SimpleDateFormat hhmm = new SimpleDateFormat("hh:mm");
     public static SimpleDateFormat hhmmaa = new SimpleDateFormat("hh:mm aa");
-    public static SimpleDateFormat hmmaa = new SimpleDateFormat("h:mm aa");
+    public static SimpleDateFormat hmm_aa = new SimpleDateFormat("h:mm aa");
+    public static SimpleDateFormat hmmaa = new SimpleDateFormat("h:mmaa");
     public static SimpleDateFormat ampm = new SimpleDateFormat("aa");
     public static SimpleDateFormat MMMdd = new SimpleDateFormat("MMM dd");
     public static SimpleDateFormat yyyyMMdd = new SimpleDateFormat("yyyy-MM-dd");

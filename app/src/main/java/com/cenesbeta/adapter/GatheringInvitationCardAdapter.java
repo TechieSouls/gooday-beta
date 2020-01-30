@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.R;
-import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.fragment.gathering.GatheringGuestListFragment;
@@ -92,7 +91,7 @@ public class GatheringInvitationCardAdapter extends BaseAdapter {
 
             holder.tvEventTitle.setText(event.getTitle());
 
-            String eventDate = CenesUtils.EEEMMMMdd.format(new Date(event.getStartTime()))+","+CenesUtils.hmmaa.format(new Date(event.getStartTime()))+"-"+CenesUtils.hmmaa.format(new Date(event.getEndTime()));
+            String eventDate = CenesUtils.EEEMMMMdd.format(new Date(event.getStartTime()))+","+CenesUtils.hmm_aa.format(new Date(event.getStartTime()))+"-"+CenesUtils.hmm_aa.format(new Date(event.getEndTime()));
             holder.tvEventDate.setText(eventDate);
             if (!CenesUtils.isEmpty(event.getEventPicture())) {
                 Glide.with(gatheringPreviewFragment.getContext()).load(event.getThumbnail()).into(holder.ivEventPicture);

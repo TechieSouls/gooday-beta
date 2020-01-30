@@ -22,6 +22,7 @@
     <color name="cenes_very_light_gray">#efefef</color>
     <color name="light_tint_gray">#EFEFEF</color>
     <color name="cenes_new_orange">#F9992C</color>
+    <color name="cenes_orange_tint">#FF6600</color>
     <color name="cenes_teal">#004346</color>
     <color name="facebook_blue">#3b5998</color>
     <color name="outlook_blue">#0072c6</color>
