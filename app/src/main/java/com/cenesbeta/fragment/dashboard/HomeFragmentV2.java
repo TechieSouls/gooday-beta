@@ -182,13 +182,15 @@ public class HomeFragmentV2 extends CenesFragment {
     @Override
     public void onPause() {
         super.onPause();
-        getActivity().unregisterReceiver(mMessageReceiver);
+        //getActivity().unregisterReceiver(mMessageReceiver);
     }
 
     //This is the handler that will manager to process the broadcast intent
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+
+            System.out.println("Broadcaster Processing");
             //do other stuff here
             loadCalendarTabData();
         }
@@ -280,7 +282,7 @@ public class HomeFragmentV2 extends CenesFragment {
         tvInvitationTab.setBackground(null);
         elvInvitationListView.scrollTo(0, 0);
         llInvitationTabView.setVisibility(View.GONE);
-        if(homeScreenDto.getHomeEvents().size() == 0 ){
+        if(homeScreenDto.getHomeEvents() == null || homeScreenDto.getHomeEvents().size() == 0 ){
             rlNoGatheringText.setVisibility(View.VISIBLE);
         }else{
             rlNoGatheringText.setVisibility(View.GONE);

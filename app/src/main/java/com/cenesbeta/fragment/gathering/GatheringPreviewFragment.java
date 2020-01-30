@@ -732,12 +732,13 @@ public class GatheringPreviewFragment extends CenesFragment {
                 public void processFinish(JSONObject response) {
 
                     try {
+                        ((CenesBaseActivity) getActivity()).homeScreenReloadBroadcaster();
 
                         if (response.getBoolean("success") == true) {
                             JSONObject data = response.getJSONObject("data");
                             Event eve = new Gson().fromJson(data.toString(), Event.class);
 
-                            if (isNewEvent) {
+                            /*if (isNewEvent) {
                                 MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
                                 try {
                                     JSONObject props = new JSONObject();
@@ -749,13 +750,14 @@ public class GatheringPreviewFragment extends CenesFragment {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                            }
+                            } */
 
                             if (nonCenesMember.size() > 0) {
-                                ((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
-                                ((CenesBaseActivity) getActivity()).homeScreenReloadBroadcaster();
-                                ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
-
+                                if (getActivity() != null) {
+                                    ((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
+                                    ((CenesBaseActivity) getActivity()).homeScreenReloadBroadcaster();
+                                    ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
+                                }
                                 sendSmsToNonCenesMembers(nonCenesMember, eve);
                             }
                         }
@@ -807,7 +809,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     @Override
                     public void run() {
 
-                        ((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
+                        //((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
                         ((CenesBaseActivity) getActivity()).homeScreenReloadBroadcaster();
                         ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
                     }
