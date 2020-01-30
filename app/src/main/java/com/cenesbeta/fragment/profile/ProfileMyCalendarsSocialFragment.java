@@ -405,8 +405,8 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
 
                 //Reload Home Screen
                 if (getActivity() != null) {
-                    //((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
-                    ((CenesBaseActivity)getActivity()).homeFragmentV2.loadCalendarTabData();
+                    ((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
+                    //((CenesBaseActivity)getActivity()).homeFragmentV2.loadCalendarTabData();
                 }
 
                 //Delete Record From local Database
@@ -457,8 +457,8 @@ public class ProfileMyCalendarsSocialFragment extends CenesFragment {
         try {
             //Reload Home Screen
             if (getActivity() != null) {
-                //((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
-                ((CenesBaseActivity)getActivity()).homeFragmentV2.loadCalendarTabData();
+                ((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
+                //((CenesBaseActivity)getActivity()).homeFragmentV2.loadCalendarTabData();
             }
 
             boolean success = response.getBoolean("success");

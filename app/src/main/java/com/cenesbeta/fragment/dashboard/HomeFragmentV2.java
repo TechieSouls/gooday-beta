@@ -1,5 +1,9 @@
 package com.cenesbeta.fragment.dashboard;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -172,7 +176,23 @@ public class HomeFragmentV2 extends CenesFragment {
         super.onResume();
         ((CenesBaseActivity) getActivity()).showFooter();
         ((CenesBaseActivity)  getActivity()).activateFooterIcon(HomeFragmentV2.TAG);
+        getActivity().registerReceiver(mMessageReceiver, new IntentFilter("homescreenrefresh"));
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(mMessageReceiver);
+    }
+
+    //This is the handler that will manager to process the broadcast intent
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //do other stuff here
+            loadCalendarTabData();
+        }
+    };
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override

@@ -415,6 +415,7 @@ public class CreateGatheringFragment extends CenesFragment {
 
                 case R.id.rl_gath_msg_bar:
 
+                    materialCalendarView.setPagingEnabled(false);
                     GatheirngMessageFragment gatheirngMessageFragment = new GatheirngMessageFragment();
                     gatheirngMessageFragment.setTargetFragment(CreateGatheringFragment.this, MESSAGE_FRAGMENT_CODE);
                     gatheirngMessageFragment.message = event.getDescription();
@@ -1073,6 +1074,8 @@ public class CreateGatheringFragment extends CenesFragment {
                 System.out.println("Error on Cropping...");
             }
         }
+
+        //materialCalendarView.setPagingEnabled(true);
     }
 
     CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
