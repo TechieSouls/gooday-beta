@@ -124,9 +124,6 @@ public class CreateGatheringFragment extends CenesFragment {
     public static RecyclerView recyclerView;
     private FriendHorizontalScrollAdapter friendHorizontalScrollAdapter;
     private Uri cameraFileUri;
-
-    List<CalendarDay> enableDates;
-
     private File eventImageFile;
     private String isTakeOrUpload = "Take";
     private CenesApplication cenesApplication;
@@ -150,6 +147,8 @@ public class CreateGatheringFragment extends CenesFragment {
         if (fragmentView != null) {
             return fragmentView;
         }
+
+        System.out.println("Return after location");
         View view = inflater.inflate(R.layout.fragment_gathering_create, container, false);
 
         fragmentView = view;
@@ -159,7 +158,7 @@ public class CreateGatheringFragment extends CenesFragment {
 
         ((CenesBaseActivity)getActivity()).hideFooter();
 
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mMessageReceiver, new IntentFilter("month_changed_intent"));
+        //LocalBroadcastManager.getInstance(getContext()).registerReceiver(mMessageReceiver, new IntentFilter("month_changed_intent"));
 
         loggedInUser = userManager.getUser();
 
@@ -217,6 +216,7 @@ public class CreateGatheringFragment extends CenesFragment {
             populateFriendCollectionView();
         }
 
+        materialCalendarView.sourceFragment = this;
         materialCalendarView.setCurrentDate(predictedDateStartCal);
         currentMonth = predictedDateStartCal;
 
@@ -297,6 +297,7 @@ public class CreateGatheringFragment extends CenesFragment {
         gathEventTitleEditView.setOnClickListener(onClickListener);
 
         createGatheringDto = new CreateGatheringDto();
+        new GatheringAsyncTask(cenesApplication, (CenesBaseActivity) getActivity());
     }
 
     public void addClickListnersToComponents() {
@@ -414,6 +415,7 @@ public class CreateGatheringFragment extends CenesFragment {
 
                 case R.id.rl_gath_msg_bar:
 
+                    materialCalendarView.setPagingEnabled(false);
                     GatheirngMessageFragment gatheirngMessageFragment = new GatheirngMessageFragment();
                     gatheirngMessageFragment.setTargetFragment(CreateGatheringFragment.this, MESSAGE_FRAGMENT_CODE);
                     gatheirngMessageFragment.message = event.getDescription();
@@ -630,6 +632,8 @@ public class CreateGatheringFragment extends CenesFragment {
             createGatheringDto.setStartTime(true);
             createGatheringDto.setEndTime(true);
 
+
+            System.out.println("startTimePickerLisener Listener");
             showPredictions();
         }
     };
@@ -669,6 +673,8 @@ public class CreateGatheringFragment extends CenesFragment {
             if (!createGatheringDto.isStartTime()) {
                 createGatheringDto.setEndTime(true);
             }
+
+            System.out.println("endTimePickerLisener Listener");
             showPredictions();
         }
     };
@@ -1068,6 +1074,8 @@ public class CreateGatheringFragment extends CenesFragment {
                 System.out.println("Error on Cropping...");
             }
         }
+
+        //materialCalendarView.setPagingEnabled(true);
     }
 
     CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
@@ -1075,6 +1083,7 @@ public class CreateGatheringFragment extends CenesFragment {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if (isChecked) {
 
+                System.out.println("On Checked Change Listener");
                 if (createGatheringDto.isStartTime() && createGatheringDto.isEndTime()) {
 
                     event.setPredictiveOn(true);
@@ -1160,56 +1169,52 @@ public class CreateGatheringFragment extends CenesFragment {
         return true;
     }
 
-    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent != null) {
-                CalendarDay currentMonth = (CalendarDay) intent.getExtras().get("CurrentMonth");
-                CreateGatheringFragment.this.currentMonth.set(Calendar.MONTH, currentMonth.getMonth());
-                CreateGatheringFragment.this.currentMonth.set(Calendar.YEAR, currentMonth.getYear());
+    public void onCalendarPageChangeListener(CalendarDay currentMonth) {
+        System.out.println("Page Change Listener.");
+        try {
+            CreateGatheringFragment.this.currentMonth.set(Calendar.MONTH, currentMonth.getMonth());
+            CreateGatheringFragment.this.currentMonth.set(Calendar.YEAR, currentMonth.getYear());
 
-//                enableDates = GatheringService.getEnableDates(currentMonth);
-//                materialCalendarView.addDecorator(new DayEnableDecorator(enableDates));
-
-                if (event.getPredictiveOn()) {
-                    Calendar predictiveStartCal = Calendar.getInstance();
-                    predictiveStartCal.setTimeInMillis(event.getStartTime());
-                    predictiveStartCal.set(Calendar.YEAR, currentMonth.getYear());
-                    predictiveStartCal.set(Calendar.MONTH, currentMonth.getMonth());
-                    predictiveStartCal.set(Calendar.MILLISECOND, 0);
+            if (event.getPredictiveOn()) {
+                Calendar predictiveStartCal = Calendar.getInstance();
+                predictiveStartCal.setTimeInMillis(event.getStartTime());
+                predictiveStartCal.set(Calendar.YEAR, currentMonth.getYear());
+                predictiveStartCal.set(Calendar.MONTH, currentMonth.getMonth());
+                predictiveStartCal.set(Calendar.MILLISECOND, 0);
 
 
-                    Calendar nextMonth = Calendar.getInstance();
-                    nextMonth.set(Calendar.DAY_OF_MONTH, 1);
-                    nextMonth.set(Calendar.YEAR, currentMonth.getYear());
-                    nextMonth.set(Calendar.MONTH, currentMonth.getMonth());
-                    nextMonth.add(Calendar.MONTH, 1);
+                Calendar nextMonth = Calendar.getInstance();
+                nextMonth.set(Calendar.DAY_OF_MONTH, 1);
+                nextMonth.set(Calendar.YEAR, currentMonth.getYear());
+                nextMonth.set(Calendar.MONTH, currentMonth.getMonth());
+                nextMonth.add(Calendar.MONTH, 1);
 
 
-                    Calendar predictiveEndCal = Calendar.getInstance();
-                    predictiveEndCal.setTimeInMillis(event.getEndTime());
-                    predictiveEndCal.set(Calendar.MONTH, currentMonth.getMonth());
-                    predictiveEndCal.set(Calendar.YEAR, currentMonth.getYear());
-                    predictiveEndCal.set(Calendar.MILLISECOND, 0);
+                Calendar predictiveEndCal = Calendar.getInstance();
+                predictiveEndCal.setTimeInMillis(event.getEndTime());
+                predictiveEndCal.set(Calendar.MONTH, currentMonth.getMonth());
+                predictiveEndCal.set(Calendar.YEAR, currentMonth.getYear());
+                predictiveEndCal.set(Calendar.MILLISECOND, 0);
 
-                    JSONObject job = new JSONObject();
-                    try {
-                        job.put("startTimeMilliseconds", predictiveStartCal.getTimeInMillis());
-                        job.put("endTimeMilliseconds", predictiveEndCal.getTimeInMillis());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    callPredictiveCalendarTask(predictiveStartCal.getTimeInMillis(), predictiveEndCal.getTimeInMillis());
-                } else {
-                    if (((CenesBaseActivity)getActivity()) != null && ((CenesBaseActivity)getActivity()).parentEvent == null) {
-                        Set<CalendarDay> drawableDates = CenesUtils.getDrawableMonthDateList(CreateGatheringFragment.this.currentMonth);
-                        BackgroundDecorator calBgDecorator = new BackgroundDecorator(context, R.drawable.mcv_white_color, drawableDates, false, false);
-                        materialCalendarView.addDecorator(calBgDecorator);
-                    }
+                JSONObject job = new JSONObject();
+                try {
+                    job.put("startTimeMilliseconds", predictiveStartCal.getTimeInMillis());
+                    job.put("endTimeMilliseconds", predictiveEndCal.getTimeInMillis());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                callPredictiveCalendarTask(predictiveStartCal.getTimeInMillis(), predictiveEndCal.getTimeInMillis());
+            } else {
+                if (((CenesBaseActivity)getActivity()) != null && ((CenesBaseActivity)getActivity()).parentEvent == null) {
+                    Set<CalendarDay> drawableDates = CenesUtils.getDrawableMonthDateList(CreateGatheringFragment.this.currentMonth);
+                    BackgroundDecorator calBgDecorator = new BackgroundDecorator(getContext(), R.drawable.mcv_white_color, drawableDates, false, false);
+                    materialCalendarView.addDecorator(calBgDecorator);
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    };
+    }
 
     public void chooseFromGalleryPressed() {
 

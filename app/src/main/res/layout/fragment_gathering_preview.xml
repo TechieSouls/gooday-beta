@@ -96,16 +96,17 @@
                 android:layout_height="match_parent"
                 android:background="@color/cenes_lighter_gray">
 
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-
                     <RelativeLayout
                         android:id="@+id/rl_invitation_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:visibility="gone">
+
 
                         <ImageView
                             android:id="@+id/iv_event_picture"
@@ -114,10 +115,11 @@
                             android:src="@drawable/invitation_default"
                             android:scaleType="centerCrop"/>
 
-                        <View
+                        <RelativeLayout
+                            android:id="@+id/iv_event_picture_overlay"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="#20000000"/>
+                            android:background="#50000000"/>
 
                         <LinearLayout
                             android:id="@+id/ll_event_details"

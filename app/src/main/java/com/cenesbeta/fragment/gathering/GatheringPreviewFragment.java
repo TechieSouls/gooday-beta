@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -68,7 +69,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     private TextView tvEventTitle, tvEventDate, tvEventDescriptionDialogText;
     private RelativeLayout rlGuestListBubble, rlLocationBubble, rlDescriptionBubble, rlShareBubble;
     private RelativeLayout rvEventDescriptionDialog;
-    private RelativeLayout rlDescriptionBubbleBackground;
+    private RelativeLayout rlDescriptionBubbleBackground, ivEventPictureOverlay;
     private ImageView ivDescriptionBubbleIcon;
     private RoundedImageView ivDescProfilePic;
     private CardView tinderCardView;
@@ -82,7 +83,6 @@ public class GatheringPreviewFragment extends CenesFragment {
     public Fragment sourceFragment;
     private CenesApplication cenesApplication;
     private InternetManager internetManager;
-    private VelocityTracker mVelocityTracker = null;
     private User loggedInUser;
     public Event event;
     public List<Event> pendingEvents;
@@ -139,6 +139,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         rlParentVew = (RelativeLayout) view.findViewById(R.id.rl_parent_vew);
         rlWelcomeInvitation = (RelativeLayout) view.findViewById(R.id.rl_welcome_invitation);
         rlInvitationView = (RelativeLayout) view.findViewById(R.id.rl_invitation_view);
+        ivEventPictureOverlay = (RelativeLayout) view.findViewById(R.id.iv_event_picture_overlay);
 
         llBottomButtons = (LinearLayout) view.findViewById(R.id.ll_bottom_buttons);
         llEventDetails = (LinearLayout) view.findViewById(R.id.ll_event_details);
@@ -154,6 +155,25 @@ public class GatheringPreviewFragment extends CenesFragment {
         ivEditRejectIcon.setOnClickListener(onClickListener);
         tinderCardView.setOnTouchListener(onTouchListener);
         svCard.setOnTouchListener(onTouchListener);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            svCard.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                    System.out.println("Is Visible or not : "+getVisiblePercent(rlSkipText));
+                    if (getVisiblePercent(rlSkipText) > 10) {
+                        tinderCardView.setOnTouchListener(null);
+                        svCard.setOnTouchListener(null);
+                        tinderCardView.setRotation(0);
+                        tinderCardView.setX(0);
+
+                    } else {
+                        tinderCardView.setOnTouchListener(onTouchListener);
+                        svCard.setOnTouchListener(onTouchListener);
+                    }
+                }
+            });
+        }
 
         ((CenesBaseActivity)getActivity()).hideFooter();
 
@@ -188,6 +208,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
 
         ivEventPicture.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, CenesUtils.dpToPx(getActivity().getWindowManager().getDefaultDisplay().getHeight())));
+        ivEventPictureOverlay.getLayoutParams().height = metrics.heightPixels;
         ivEventPicture.getLayoutParams().height = metrics.heightPixels;
         if (pendingEvents != null && pendingEvents.size() > 0) {
             event =  pendingEvents.get(0);
@@ -698,6 +719,11 @@ public class GatheringPreviewFragment extends CenesFragment {
         System.out.println("Going to create Gathering.");
         Gson gson = new Gson();
         try {
+            tinderCardView.setOnTouchListener(null);
+            svCard.setOnTouchListener(null);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                svCard.setOnScrollChangeListener(null);
+            }
             JSONObject postata = new JSONObject(gson.toJson(event));
 
             new GatheringAsyncTask(cenesApplication, (CenesBaseActivity)getActivity());
@@ -726,9 +752,12 @@ public class GatheringPreviewFragment extends CenesFragment {
                             }
 
                             if (nonCenesMember.size() > 0) {
+                                ((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
+                                ((CenesBaseActivity) getActivity()).homeScreenReloadBroadcaster();
+                                ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
+
                                 sendSmsToNonCenesMembers(nonCenesMember, eve);
                             }
-
                         }
 
                     } catch (Exception e) {
@@ -779,7 +808,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     public void run() {
 
                         ((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
-                        ((CenesBaseActivity) getActivity()).homeFragmentV2.loadCalendarTabData();
+                        ((CenesBaseActivity) getActivity()).homeScreenReloadBroadcaster();
                         ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
                     }
                 }, 1000);
@@ -819,7 +848,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            ((CenesBaseActivity) getActivity()).homeFragmentV2.loadCalendarTabData();
+                            ((CenesBaseActivity) getActivity()) .homeScreenReloadBroadcaster();
                             ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
                         }
                     }, 500);
@@ -861,7 +890,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                         @Override
                         public void run() {
 
-                            ((CenesBaseActivity) getActivity()).homeFragmentV2.loadCalendarTabData();
+                            ((CenesBaseActivity) getActivity()).homeScreenReloadBroadcaster();
                             ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
                         }
                     }, 500);
@@ -927,9 +956,6 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                                 }
                             });
-
-
-
                 }
             }
         }
@@ -1103,9 +1129,6 @@ public class GatheringPreviewFragment extends CenesFragment {
                 }
             }
 
-            ((CenesBaseActivity) getActivity()).clearBackStackInclusive(null);
-            ((CenesBaseActivity) getActivity()).replaceFragment(new GatheringsFragment(), null);
-
             String clipHostName = "";
             if (eventOwner != null) {
                 clipHostName = eventOwner.getName();
@@ -1157,19 +1180,22 @@ public class GatheringPreviewFragment extends CenesFragment {
             }
         }
     }
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+
+    public static int getVisiblePercent(View v) {
+        if (v.isShown()) {
+            Rect r = new Rect();
+            boolean isVisible = v.getGlobalVisibleRect(r);
+            if (isVisible) {
+                double sVisible = r.width() * r.height();
+                double sTotal = v.getWidth() * v.getHeight();
+                return (int) (100 * sVisible / sTotal);
+            } else {
+                return -1;
+            }
+        } else {
+            return -1;
         }
-    } // Author: silentnuke
+    }
+
 
 }

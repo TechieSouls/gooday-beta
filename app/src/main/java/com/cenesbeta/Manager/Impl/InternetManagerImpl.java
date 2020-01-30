@@ -21,6 +21,9 @@ public class InternetManagerImpl implements InternetManager {
 
     @Override
     public boolean isInternetConnection(AppCompatActivity appCompatActivity){
+        if (appCompatActivity == null) {
+            return true;
+        }
         ConnectivityManager connectivityManager = (ConnectivityManager) appCompatActivity
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager

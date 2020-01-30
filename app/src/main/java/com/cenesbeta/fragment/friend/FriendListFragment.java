@@ -248,7 +248,7 @@ public class FriendListFragment  extends CenesFragment {
                 headerFriendsMap = new HashMap<>();
                 for (EventMember eventMember : cenesFriends) {
                     try {
-                        if (eventMember.getName().toLowerCase().contains(editable.toString().toLowerCase())) {
+                        if (eventMember.getUser().getName().toLowerCase().contains(editable.toString().toLowerCase())) {
                             searchedAllFriends.add(eventMember);
                         }
                     } catch (Exception e) {
@@ -257,7 +257,7 @@ public class FriendListFragment  extends CenesFragment {
                 }
 
                 for (EventMember friend: searchedAllFriends) {
-                    String initialAlphabet = friend.getName().substring(0, 1).toUpperCase();
+                    String initialAlphabet = friend.getUser().getName().substring(0, 1).toUpperCase();
 
                     System.out.println("Inital ALPHABET "+initialAlphabet);
                     if (!headers.contains(initialAlphabet)) {
@@ -459,7 +459,7 @@ public class FriendListFragment  extends CenesFragment {
         if (cenesFriends.size() > 0) {
 
             for (EventMember friend : cenesFriends) {
-                String initialAlphabet = friend.getName().substring(0, 1).toUpperCase();
+                String initialAlphabet = friend.getUser().getName().substring(0, 1).toUpperCase();
 
                 System.out.println("Inital ALPHABET " + initialAlphabet);
                 if (!headers.contains(initialAlphabet)) {

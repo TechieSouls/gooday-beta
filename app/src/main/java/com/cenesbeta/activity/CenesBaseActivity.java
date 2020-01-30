@@ -462,7 +462,6 @@ public class CenesBaseActivity extends CenesActivity {
     public void homeScreenReloadBroadcaster() {
         Intent newintent = new Intent("homescreenrefresh");
         getApplicationContext().sendBroadcast(newintent);
-
     }
 
 
@@ -726,7 +725,7 @@ public class CenesBaseActivity extends CenesActivity {
         try {
             Bundle bundle = getIntent().getExtras();
             Long eventId = bundle.getLong("eventId");
-            if (eventId != null) {
+            if (eventId != null && eventId != 0) {
 
                 new GatheringAsyncTask(cenesApplication, this);
                 new GatheringAsyncTask.EventInfoTask(new GatheringAsyncTask.EventInfoTask.AsyncResponse() {

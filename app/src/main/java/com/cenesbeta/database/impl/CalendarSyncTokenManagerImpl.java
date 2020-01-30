@@ -52,7 +52,7 @@ public class CalendarSyncTokenManagerImpl {
                 if (CenesUtils.isEmpty(calenadarSyncToken.getRefreshToken())) {
                     calenadarSyncToken.setRefreshToken("");
                 }
-                String insertQuery = "insert into calendar_sync_tokens (account_type, email_id, user_id, refresh_token, refresh_token_id) values('"+calenadarSyncToken.getAccountType()+"', '"+calenadarSyncToken.getEmailId()+"', " +
+                String insertQuery = "insert into calendar_sync_tokens (`account_type`, `email_id`, `user_id`, `refresh_token`, `refresh_token_id`) values ('"+calenadarSyncToken.getAccountType()+"', '"+calenadarSyncToken.getEmailId()+"', " +
                         ""+calenadarSyncToken.getUserId()+", '"+calenadarSyncToken.getRefreshToken()+"', "+calenadarSyncToken.getRefreshTokenId()+")";
                 System.out.println(insertQuery);
                 db.execSQL(insertQuery);

@@ -220,6 +220,7 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
                     break;
                 }
                 eventMembersListForRecycler.add(eveMemWithoutHost);
+                lootIndex ++;
             }
             InvitationTabItemRecyclerAdapter invitationTabItemRecyclerAdapter = new InvitationTabItemRecyclerAdapter(homeFragmentV2, eventMembersListForRecycler);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(homeFragmentV2.getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
