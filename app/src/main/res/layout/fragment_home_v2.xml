@@ -147,17 +147,42 @@
 
         </com.facebook.shimmer.ShimmerFrameLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></LinearLayout>
-        <ExpandableListView
-            android:id="@+id/elv_home_list_view"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/rl_calendar_section"
-            android:groupIndicator="@null"
-            android:visibility="visible"
-            />
+            android:layout_below="@+id/rl_calendar_section">
+
+            <ExpandableListView
+                android:id="@+id/elv_home_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:groupIndicator="@null"
+                android:visibility="visible"
+                android:layout_above="@+id/shimmer_view_onscroll"
+                />
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_view_onscroll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:duration="800"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_alignParentBottom="true"
+                >
+                <!-- Adding 3 rows of placeholders -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/layout_placeholder_row" />
+
+                </LinearLayout>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
+        </RelativeLayout>
+
 
         <RelativeLayout
             android:id="@+id/rl_no_gathering_text"

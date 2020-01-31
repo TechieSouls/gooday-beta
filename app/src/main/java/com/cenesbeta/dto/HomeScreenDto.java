@@ -2,6 +2,7 @@ package com.cenesbeta.dto;
 
 import com.cenesbeta.bo.Event;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,10 @@ public class HomeScreenDto {
     private HomeTabs tabSelected = HomeTabs.Calendar;
     public static int calendarTabPageNumber = 0;
     public static int offsetToFetchData = 20;
+    public static int totalCalendarDataCounts = 0;
+    public static boolean madeApiCall = false;
+    public static List<String> calendarDataHeaders = new ArrayList<>();
+
 
     public List<String> getHomeDataHeaders() {
         return homeDataHeaders;
