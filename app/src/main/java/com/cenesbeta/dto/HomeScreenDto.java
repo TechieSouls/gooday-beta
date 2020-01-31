@@ -20,6 +20,8 @@ public class HomeScreenDto {
     private List<Event> pendingEvents;
     private List<Event> declinedEvents;
     private HomeTabs tabSelected = HomeTabs.Calendar;
+    public static int calendarTabPageNumber = 0;
+    public static int offsetToFetchData = 20;
 
     public List<String> getHomeDataHeaders() {
         return homeDataHeaders;

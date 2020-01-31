@@ -416,9 +416,18 @@ public class HomeFragmentV2 extends CenesFragment {
 
     public void loadCalendarTabData() {
 
+        Calendar todayDate = Calendar.getInstance();
+        todayDate.set(Calendar.HOUR_OF_DAY, 0);
+        todayDate.set(Calendar.MINUTE, 0);
+        todayDate.set(Calendar.SECOND, 0);
+        todayDate.set(Calendar.MILLISECOND, 0);
+
+
+        String queryStr = "userId="+loggedInUser.getUserId()+"&timestamp="+todayDate+"" +
+                "&pageNumber="+HomeScreenDto.calendarTabPageNumber+"&offSet="+HomeScreenDto.offsetToFetchData+"";
         AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
-        asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl + HomeScreenAPI.get_homescreen_events);
-        asyncTaskDto.setQueryStr("user_id=" + loggedInUser.getUserId() + "&date="+new Date().getTime());
+        asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl + HomeScreenAPI.get_homescreen_events_v2);
+        asyncTaskDto.setQueryStr(queryStr);
         asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
 
         getAsyncDto(asyncTaskDto, HomeScreenDto.HomeScreenAPICall.Home);
