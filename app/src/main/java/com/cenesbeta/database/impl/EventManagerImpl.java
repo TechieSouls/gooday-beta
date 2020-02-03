@@ -204,7 +204,21 @@ public class EventManagerImpl {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
 
+    public void deleteEventByEventId(Long eventId) {
+        try {
+            this.db = cenesDatabase.getReadableDatabase();
+
+            String deleteQuery = "delete from events where event_id = "+eventId+"";
+            db.execSQL(deleteQuery);
+
+            EventMemberManagerImpl eventMemberManagerImpl = new EventMemberManagerImpl(cenesApplication);
+            eventMemberManagerImpl.deleteFromEventMembersByEventId(eventId.intValue());
+            db.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void deleteAllEvents() {
@@ -222,6 +236,20 @@ public class EventManagerImpl {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
 
+    public void updateByDisplayAtScreenByEventId(Long eventId, Integer userId, String displayAtScreen) {
+        try {
+            this.db = cenesDatabase.getReadableDatabase();
+
+            String updateQuery = "update events set display_at_screen = '"+Event.EventDisplayScreen.DECLINED.toString()+"' where event_id = "+eventId+"";
+            db.execSQL(updateQuery);
+
+            EventMemberManagerImpl eventMemberManagerImpl = new EventMemberManagerImpl(cenesApplication);
+            eventMemberManagerImpl.updateEventMemberStatus(eventId.intValue(), userId, displayAtScreen);
+            db.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

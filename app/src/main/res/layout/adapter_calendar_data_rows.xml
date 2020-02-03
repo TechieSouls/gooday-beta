@@ -5,14 +5,75 @@
     android:background="@color/transparent"
     android:orientation="vertical">
 
-
-
+    <LinearLayout
+        android:id="@+id/gathering_row_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/gathering_row_item"
+            android:id="@+id/ll_holiday"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="@color/theme_color"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/tv_holiday_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:background="@color/transparent"
+                android:gravity="left|center_vertical"
+                android:text="Veterans Day Veterans Day Veterans Day Veterans Day"
+                android:textColor="@color/cenes_pink"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_month_separator"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:background="@color/theme_color">
+
+            <TextView
+                android:id="@+id/tv_month_separator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="January"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <com.daimajia.swipe.SwipeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/sl_cenes_event"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            app:clickToClose="true">
+
+            <LinearLayout
+                android:id="@+id/bottom_wrapper"
+                android:layout_width="80dp"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_swipe_delete"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:background="@color/red"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="Delete"
+                    android:textColor="@color/white" />
+
+
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_cenes_events"
@@ -22,41 +83,13 @@
                 android:orientation="horizontal"
                 android:visibility="visible">
 
-                <RelativeLayout
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:background="@drawable/host_gradient_circle_small"
-                    >
-
-                    <com.cenesbeta.util.RoundedImageView
-                        android:id="@+id/iv_event_host"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:layout_centerInParent="true"
-                        android:src="@drawable/profile_pic_no_image" />
-                </RelativeLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="80dp"
-                    android:layout_marginRight="70dp">
-
-                    <com.cenesbeta.util.CenesTextView
-                        android:id="@+id/tv_event_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="10dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="Seahawks at Rams"
-                        android:textColor="@color/black"
-                        android:textSize="16dp"
-                        android:textStyle="bold" />
+                    android:layout_marginRight="70dp"
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:id="@+id/ll_event_location_section"
@@ -82,17 +115,68 @@
                             android:textSize="16sp" />
                     </LinearLayout>
 
+                    <com.cenesbeta.util.CenesTextView
+                        android:id="@+id/tv_event_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="10dp"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:text="Seahawks at Rams"
+                        android:textColor="@color/black"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+
                 </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/host_gradient_circle_small">
+
+                    <com.cenesbeta.util.RoundedImageView
+                        android:id="@+id/iv_event_host"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/profile_pic_no_image" />
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/tv_start_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="23:25PM"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:text="23:25PM" />
             </RelativeLayout>
+        </com.daimajia.swipe.SwipeLayout>
+
+        <com.daimajia.swipe.SwipeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/sl_social_event"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:clickToClose="true">
+
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_swipe_hide"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/red"
+                    android:gravity="center"
+                    android:text="Hide"
+                    android:clickable="true"
+                    android:textColor="@color/white" />
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_tp_events"
@@ -102,31 +186,13 @@
                 android:visibility="visible">
 
 
-                <RelativeLayout
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/xml_circle_tp_events_gray"
-                    android:layout_marginLeft="20dp"
-                    >
-                    <com.cenesbeta.util.CenesTextView
-                        android:id="@+id/tv_third_part_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="O"
-                        android:textSize="26dp"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"/>
-                </RelativeLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="80dp"
-                    android:layout_marginRight="70dp">
+                    android:layout_marginRight="70dp"
+                    android:orientation="vertical">
 
                     <com.cenesbeta.util.CenesTextView
                         android:id="@+id/tv_tp_event_title"
@@ -152,53 +218,38 @@
 
                 </LinearLayout>
 
+                <RelativeLayout
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/xml_circle_tp_events_gray">
+
+                    <com.cenesbeta.util.CenesTextView
+                        android:id="@+id/tv_third_part_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="O"
+                        android:textColor="@color/white"
+                        android:textSize="26dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
                 <TextView
                     android:id="@+id/tv_tp_start_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:text="22:25PM"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_marginRight="10dp"
+                    android:text="22:25PM" />
             </RelativeLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_holiday"
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:visibility="visible"
-                android:background="@color/theme_color">
+        </com.daimajia.swipe.SwipeLayout>
 
-                <TextView
-                    android:id="@+id/tv_holiday_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="20dp"
-                    android:background="@color/transparent"
-                    android:gravity="left|center_vertical"
-                    android:text="Veterans Day Veterans Day Veterans Day Veterans Day"
-                    android:textColor="@color/cenes_pink"
-                    android:textSize="14dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-            <RelativeLayout
-                android:id="@+id/rl_month_separator"
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:background="@color/theme_color">
+    </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_month_separator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="January"
-                    android:textColor="@color/black"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
-
-        </LinearLayout>
     <View
         android:id="@+id/view_divider"
         android:layout_width="match_parent"

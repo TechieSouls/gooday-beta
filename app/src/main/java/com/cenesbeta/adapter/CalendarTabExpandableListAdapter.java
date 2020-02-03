@@ -21,6 +21,7 @@ import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
 import com.cenesbeta.util.CenesTextView;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
+import com.daimajia.swipe.SwipeLayout;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -138,11 +139,15 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
             viewHolder.tvTpStartTime = (TextView) convertView.findViewById(R.id.tv_tp_start_time);
             viewHolder.tvHolidayTitle = (TextView) convertView.findViewById(R.id.tv_holiday_title);
             viewHolder.tvMonthSeparator = (TextView) convertView.findViewById(R.id.tv_month_separator);
+            viewHolder.tvSwipeDelete = (TextView) convertView.findViewById(R.id.tv_swipe_delete);
+            viewHolder.tvSwipeHide = (TextView) convertView.findViewById(R.id.tv_swipe_hide);
             viewHolder.tvThirdPartLabel = (CenesTextView) convertView.findViewById(R.id.tv_third_part_label);
             viewHolder.tvTpEventTitle = (CenesTextView) convertView.findViewById(R.id.tv_tp_event_title);
             viewHolder.tvTpSource = (CenesTextView) convertView.findViewById(R.id.tv_tp_source);
             viewHolder.dividerView = (View) convertView.findViewById(R.id.view_divider);
             viewHolder.rlMonthSeparator = (RelativeLayout) convertView.findViewById(R.id.rl_month_separator);
+            viewHolder.slCenesEvent = (SwipeLayout) convertView.findViewById(R.id.sl_cenes_event);
+            viewHolder.slSocilaEvent = (SwipeLayout) convertView.findViewById(R.id.sl_social_event);
 
             convertView.setTag(R.layout.adapter_calendar_data_rows, viewHolder);
         } else {
@@ -156,6 +161,8 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
         viewHolder.rlTpEvents.setVisibility(View.GONE);
         viewHolder.llHoliday.setVisibility(View.GONE);
         viewHolder.rlMonthSeparator.setVisibility(View.GONE);
+        viewHolder.slCenesEvent.setVisibility(View.GONE);
+        viewHolder.slSocilaEvent.setVisibility(View.GONE);
 
         final Event event = getChild(groupPosition, childPosition);
         List<EventMember> eventMembers = event.getEventMembers();
@@ -181,6 +188,8 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
 
         //Lets hanle the case of Event Type as Gatheirngs
         if (event.getScheduleAs().equals("Gathering")) {
+
+            viewHolder.slCenesEvent.setVisibility(View.VISIBLE);
             viewHolder.rlCenesEvents.setVisibility(View.VISIBLE);
             viewHolder.rlCenesEvents.setTag("January");
             viewHolder.tvEventTitle.setText(event.getTitle());
@@ -228,10 +237,27 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
                     ((CenesBaseActivity) homeFragmentV2.getActivity()).replaceFragment(gatheringPreviewFragment, HomeFragmentV2.TAG);
                 }
             });
-        }
 
-        else if (event.getScheduleAs().equals("Event")) {
 
+            if (event.getCreatedById().equals(homeFragmentV2.loggedInUser.getUserId())) {
+                viewHolder.tvSwipeDelete.setText("Delete");
+            } else {
+                viewHolder.tvSwipeDelete.setText("Decline");
+            }
+            viewHolder.tvSwipeDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (event.getCreatedById().equals(homeFragmentV2.loggedInUser.getUserId())) {
+                        homeFragmentV2.eventDeleteButtonPressed(event);
+                    } else {
+                        homeFragmentV2.updateAttendingStatus(event);
+                    }
+                }
+            });
+
+        } else if (event.getScheduleAs().equals("Event")) {
+
+            viewHolder.slSocilaEvent.setVisibility(View.VISIBLE);
             viewHolder.rlTpEvents.setVisibility(View.VISIBLE);
             viewHolder.rlTpEvents.setTag("January");
 
@@ -248,6 +274,12 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
                 viewHolder.tvTpSource.setText("Apple");
             }
 
+            viewHolder.tvSwipeHide.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         } else if (event.getScheduleAs().equals("Holiday")) {
             viewHolder.llHoliday.setTag("January");
 
@@ -276,9 +308,10 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
 
         private RoundedImageView ivEventHost;
         private TextView tvEventTitle, tvEventLocation, tvStartTime, tvTpStartTime, tvHolidayTitle, tvMonthSeparator, tvThirdPartLabel, tvTpSource;
-        private TextView  tvTpEventTitle;
+        private TextView  tvTpEventTitle, tvSwipeDelete, tvSwipeHide;
         private LinearLayout llEventLocationSection, llHoliday;
         private View dividerView;
         private RelativeLayout rlMonthSeparator, rlTpEvents, rlCenesEvents;
+        private SwipeLayout slCenesEvent, slSocilaEvent;
     }
 }

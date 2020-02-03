@@ -22,14 +22,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.cenesbeta.AsyncTasks.GatheringAsyncTask;
 import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
 import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.InternetManager;
+import com.cenesbeta.Manager.UrlManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.adapter.CalendarTabExpandableListAdapter;
 import com.cenesbeta.adapter.HomeScreenAdapter;
 import com.cenesbeta.adapter.InvitationListItemAdapter;
+import com.cenesbeta.api.GatheringAPI;
 import com.cenesbeta.api.HomeScreenAPI;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
@@ -41,6 +44,7 @@ import com.cenesbeta.dto.AsyncTaskDto;
 import com.cenesbeta.dto.HomeScreenDto;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.friend.FriendListFragment;
+import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
 import com.cenesbeta.fragment.profile.ProfileMyCalendarsFragment;
 import com.cenesbeta.materialcalendarview.CalendarDay;
 import com.cenesbeta.materialcalendarview.MaterialCalendarView;
@@ -411,6 +415,93 @@ public class HomeFragmentV2 extends CenesFragment {
                 prepareCalendarSyncCalls(SyncCallFor.Outlook);
             }
         }, 1000);
+    }
+
+    public void eventDeleteButtonPressed(Event event) {
+
+        this.eventManagerImpl.deleteEventByEventId(event.getEventId());
+
+        Map<String, List<Event>> homeDataListMap = homeScreenDto.getHomeDataListMap();
+
+        String key = "";
+        Calendar calendar = Calendar.getInstance();
+        Calendar eventCal = Calendar.getInstance();
+        eventCal.setTimeInMillis(event.getStartTime());
+        if (calendar.get(Calendar.YEAR) == eventCal.get(Calendar.YEAR)) {
+            key = CenesUtils.EEEMMMMdd.format(event.getStartTime());
+        } else {
+            key = CenesUtils.EEEMMMMddcmyyyy.format(event.getStartTime());
+        }
+        List<Event> eventList = homeDataListMap.get(key);
+        for (Event evenToDelete: eventList) {
+            if (evenToDelete.getEventId().equals(event.getEventId())) {
+                eventList.remove(event);
+                break;
+            }
+        }
+        homeDataListMap.put(key, eventList);
+        homeScreenDto.setHomeDataListMap(homeDataListMap);
+        calendarTabExpandableListAdapter.notifyDataSetChanged();
+
+        AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+        asyncTaskDto.setQueryStr("event_id="+event.getEventId());
+        asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ GatheringAPI.get_delete_event_api);
+        asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+
+        new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
+            @Override
+            public void processFinish(JSONObject response) {
+
+            }
+        }).execute(asyncTaskDto);
+    }
+
+    public void updateAttendingStatus(Event event) {
+
+        this.eventManagerImpl.updateByDisplayAtScreenByEventId(event.getEventId(), loggedInUser.getUserId(), Event.EventDisplayScreen.DECLINED.toString());
+
+        Map<String, List<Event>> homeDataListMap = homeScreenDto.getHomeDataListMap();
+
+        String key = "";
+        Calendar calendar = Calendar.getInstance();
+        Calendar eventCal = Calendar.getInstance();
+        eventCal.setTimeInMillis(event.getStartTime());
+        if (calendar.get(Calendar.YEAR) == eventCal.get(Calendar.YEAR)) {
+            key = CenesUtils.EEEMMMMdd.format(event.getStartTime());
+        } else {
+            key = CenesUtils.EEEMMMMddcmyyyy.format(event.getStartTime());
+        }
+        List<Event> eventList = homeDataListMap.get(key);
+        if (eventList != null) {
+
+            for (Event evenToDelete: eventList) {
+                if (evenToDelete.getEventId().equals(event.getEventId())) {
+                    eventList.remove(event);
+                    break;
+                }
+            }
+
+            if (eventList.size() == 0) {
+                homeDataListMap.remove(key);
+            } else {
+                homeDataListMap.put(key, eventList);
+            }
+            homeScreenDto.setHomeDataListMap(homeDataListMap);
+            calendarTabExpandableListAdapter.notifyDataSetChanged();
+        }
+
+
+        AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+        asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+        asyncTaskDto.setQueryStr("eventId="+ event.getEventId()+"&userId="+loggedInUser.getUserId()+"&status=NotGoing");
+        asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+GatheringAPI.get_update_invitation_api);
+
+        new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
+            @Override
+            public void processFinish(JSONObject response) {
+
+            }
+        }).execute(asyncTaskDto);
     }
 
     public void makeMixPanelCall() {

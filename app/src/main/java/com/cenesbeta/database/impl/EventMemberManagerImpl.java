@@ -170,6 +170,18 @@ public class EventMemberManagerImpl  {
         }
     }
 
+    public void deleteFromEventMembersByEventId(Integer eventId) {
+        try {
+            this.db = cenesDatabase.getReadableDatabase();
+            String deleteQuery = "delete from event_members where event_id = "+eventId+" ";
+            System.out.println("Delete Query : "+deleteQuery);
+            db.execSQL(deleteQuery);
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void deleteAllFromEventMembers() {
         try {
@@ -178,6 +190,17 @@ public class EventMemberManagerImpl  {
             db.execSQL(deleteQuery);
             db.close();
             cenesUserManagerImpl.deleteAllUsers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateEventMemberStatus(Integer eventId, Integer userId, String eventMemberStatus) {
+        try {
+            this.db = cenesDatabase.getReadableDatabase();
+            String updateQuery = "update event_members set status = '"+eventMemberStatus+"' where user_id = "+userId+" and event_id = "+eventId+" ";
+            db.execSQL(updateQuery);
+            db.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -173,7 +173,6 @@ public class HomeFragment extends CenesFragment {
             getActivity().getSharedPreferences("CenesPrefs", getActivity().MODE_PRIVATE).edit().putString("userId", loggedInUser.getUserId() + "").apply();
             getActivity().getSharedPreferences("CenesPrefs", getActivity().MODE_PRIVATE).edit().putString("authToken", loggedInUser.getAuthToken()).apply();
         }
-        CenesUtils.logEntries(loggedInUser, "User Lands On Home Screen Page", getActivity().getApplicationContext());
 
         pullToRefresh = (SwipeRefreshLayout)v.findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

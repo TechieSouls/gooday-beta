@@ -122,7 +122,6 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
 
         init(v);
 
-        CenesUtils.logEntries(loggedInUser, "Landing at Calendar Sync Screen", getCenesActivity().getApplicationContext());
 
         mAuthClient = new LiveAuthClient(getCenesActivity(), CenesConstants.OutlookClientId);
 
@@ -149,7 +148,6 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btn_sign_in:
-                    CenesUtils.logEntries(loggedInUser, "Google Calendar Sync Clicked", getCenesActivity().getApplicationContext());
                     //showProgressDialog();
                     proceedWithGoogleSync();
 
@@ -550,7 +548,6 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
         @Override
         protected String doInBackground(String... urls) {
             try {
-                CenesUtils.logEntries(loggedInUser, "Google Sync Processing STARTS", getCenesActivity().getApplicationContext());
 
                 String authCode = urls[0];
                 googleAccessToken = GoogleAuthUtil.getToken(
@@ -561,8 +558,6 @@ public class CalenderSyncFragment extends CenesFragment implements GoogleApiClie
                 user.setApiUrl(urlManager.getApiUrl("dev"));
                 String queryStr = "?access_token=" + googleAccessToken + "&user_id=" + user.getUserId()+"&serverAuthCode="+authCode;
                 JSONArray events = apiManager.googleEvents(user, queryStr, getCenesActivity());
-
-                CenesUtils.logEntries(loggedInUser, "Google Sync Processing ENDS", getCenesActivity().getApplicationContext());
 
             } catch (Exception e) {
                 this.exception = e;

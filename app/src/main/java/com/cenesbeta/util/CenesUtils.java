@@ -11,7 +11,6 @@ import android.util.TypedValue;
 import com.cenesbeta.R;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.materialcalendarview.CalendarDay;
-import com.logentries.logger.AndroidLogger;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONObject;
@@ -114,21 +113,6 @@ public class CenesUtils {
 
     public static int spToPx(int sp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, Resources.getSystem().getDisplayMetrics());
-    }
-
-    public static void logEntries(User user, String message, Context context) {
-        if (context.getResources().getBoolean(R.bool.loggingOn)) {
-            try {
-                AndroidLogger logger = AndroidLogger.createInstance(context, false, true, false, null, 0, "8ce9f484-0b22-4803-9b7d-6f244b01fbf3", true);
-                String info = "";
-                if (user != null) {
-                    info = "User Id : "+user.getUserId()+", Name : "+user.getName()+" ,";
-                }
-                logger.log(info+" Message : "+ message);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public static Boolean isEmpty(String text) {
