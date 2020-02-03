@@ -27,6 +27,8 @@ public class HomeScreenDto {
     private Map<String, List<Event>> invitationDataListMap = new HashMap<>();
 
     private HomeTabs tabSelected = HomeTabs.Calendar;
+    private InvitationTabs invitationTabSelected = InvitationTabs.Accepted;
+
     public static int calendarTabPageNumber = 0;
     public static int offsetToFetchData = 20;
     public static int totalCalendarDataCounts = 0;
@@ -130,5 +132,13 @@ public class HomeScreenDto {
 
     public void setInvitationDataListMap(Map<String, List<Event>> invitationDataListMap) {
         this.invitationDataListMap = invitationDataListMap;
+    }
+
+    public InvitationTabs getInvitationTabSelected() {
+        return invitationTabSelected;
+    }
+
+    public void setInvitationTabSelected(InvitationTabs invitationTabSelected) {
+        this.invitationTabSelected = invitationTabSelected;
     }
 }

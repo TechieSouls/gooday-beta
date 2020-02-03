@@ -47,6 +47,8 @@ public class CalendarSyncTokenManagerImpl {
                 }
                 if (CenesUtils.isEmpty(calenadarSyncToken.getEmailId())) {
                     calenadarSyncToken.setEmailId("");
+                } else {
+                    calenadarSyncToken.setEmailId(calenadarSyncToken.getEmailId().replaceAll("'", "''"));
                 }
 
                 if (CenesUtils.isEmpty(calenadarSyncToken.getRefreshToken())) {

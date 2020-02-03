@@ -196,7 +196,7 @@ public class HomeFragmentV2 extends CenesFragment {
 
             System.out.println("Broadcaster Processing");
             //do other stuff here
-            loadCalendarTabData();
+            loadHomeScreenData();
         }
     };
 
@@ -328,7 +328,7 @@ public class HomeFragmentV2 extends CenesFragment {
         rlNoGatheringText.setVisibility(View.GONE);
         processInvitationEvents(homeScreenDto.getAcceptedEvents());
         llInvitationTabView.setVisibility(View.VISIBLE);
-
+        highlightInvitationTabs(tvConfirmedBtn);
     }
 
     public void plusButtonPressed() {
@@ -358,13 +358,16 @@ public class HomeFragmentV2 extends CenesFragment {
         if (invitationTabName.equals(HomeScreenDto.InvitationTabs.Accepted)) {
             processInvitationEvents(homeScreenDto.getAcceptedEvents());
             highlightInvitationTabs(tvConfirmedBtn);
+            homeScreenDto.setInvitationTabSelected(HomeScreenDto.InvitationTabs.Accepted);
         } else if (invitationTabName.equals(HomeScreenDto.InvitationTabs.Pending)) {
             processInvitationEvents(homeScreenDto.getPendingEvents());
             highlightInvitationTabs(tvPendingBtn);
+            homeScreenDto.setInvitationTabSelected(HomeScreenDto.InvitationTabs.Pending);
 
         } else if (invitationTabName.equals(HomeScreenDto.InvitationTabs.Declined)) {
             processInvitationEvents(homeScreenDto.getDeclinedEvents());
             highlightInvitationTabs(tvDeclinedBtn);
+            homeScreenDto.setInvitationTabSelected(HomeScreenDto.InvitationTabs.Declined);
         }
     }
 
@@ -483,13 +486,15 @@ public class HomeFragmentV2 extends CenesFragment {
 
             if (eventList.size() == 0) {
                 homeDataListMap.remove(key);
+                List<String> tableHeaders = homeScreenDto.getHomeDataHeaders();
+                tableHeaders.remove(key);
+                homeScreenDto.setHomeDataHeaders(tableHeaders);
             } else {
                 homeDataListMap.put(key, eventList);
             }
             homeScreenDto.setHomeDataListMap(homeDataListMap);
             calendarTabExpandableListAdapter.notifyDataSetChanged();
         }
-
 
         AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
         asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
@@ -537,9 +542,30 @@ public class HomeFragmentV2 extends CenesFragment {
 
     public void loadHomeScreenData() {
 
-        loadPastEvents();
+        HomeScreenDto.HomeTabs tabSelected = homeScreenDto.getTabSelected();
+        HomeScreenDto.InvitationTabs invitationTabSelected = homeScreenDto.getInvitationTabSelected();
+        //Java Variables
+        homeScreenDto = new HomeScreenDto();
+        homeScreenDto.setTabSelected(tabSelected);
+        if (tabSelected.equals(HomeScreenDto.HomeTabs.Invitation)) {
+            homeScreenDto.setInvitationTabSelected(invitationTabSelected);
+        }
+        HomeScreenDto.currentDateGroupPosition = 0;
+        HomeScreenDto.calendarTabPageNumber = 0;
+        HomeScreenDto.calendarDataHeaders = new ArrayList<>();
+        HomeScreenDto.totalCalendarDataCounts = 0;
+        HomeScreenDto.madeApiCall = false;
 
-        loadInvitationTabData();
+        if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
+
+            loadPastEvents();
+            loadInvitationTabData();
+
+        } else {
+
+            loadInvitationTabData();
+            loadPastEvents();
+        }
 
     }
 
@@ -612,8 +638,6 @@ public class HomeFragmentV2 extends CenesFragment {
         declinedAsyncTaskDto.setQueryStr("userId=" + loggedInUser.getUserId() + "&status=NotGoing&timestamp="+new Date().getTime()+"&pageNumber=0&offSet=20");
         declinedAsyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
         getAsyncDto(declinedAsyncTaskDto, HomeScreenDto.HomeScreenAPICall.Declined);
-
-        highlightInvitationTabs(tvConfirmedBtn);
     }
 
     public void getAsyncDto(AsyncTaskDto asyncTaskDto, final HomeScreenDto.HomeScreenAPICall homeScreenAPICall){
@@ -695,13 +719,8 @@ public class HomeFragmentV2 extends CenesFragment {
                                     System.out.println("Previoous Events Size : "+previousEvents.size());
                                     System.out.println("Home Events Size : "+homeScreenDto.getHomeEvents());
                                     if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
-                                        if (HomeScreenDto.calendarTabPageNumber == 0) {
-                                            calendarTabPressed();
-                                        } else {
-
-                                            System.out.println("ProcessCalendarTabData Called");
-                                            processCalendarTabData(events, false);
-                                        }
+                                        System.out.println("ProcessCalendarTabData Called");
+                                        processCalendarTabData(events, false);
                                     }
                                     HomeScreenDto.calendarTabPageNumber += 20;
                                 }
@@ -716,6 +735,11 @@ public class HomeFragmentV2 extends CenesFragment {
                                 });
                                 homeScreenDto.setAcceptedEvents(events);
                                 //invitationTabPressed();
+                                if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Invitation)) {
+                                    if (homeScreenDto.getInvitationTabSelected().equals(HomeScreenDto.InvitationTabs.Accepted)) {
+                                        processInvitationEvents(homeScreenDto.getAcceptedEvents());
+                                    }
+                                }
                             } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Pending)) {
 
                                 AsyncTask.execute(new Runnable() {
@@ -729,6 +753,11 @@ public class HomeFragmentV2 extends CenesFragment {
 
                                 homeScreenDto.setPendingEvents(events);
                                 //invitationTabPressed();
+                                if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Invitation)) {
+                                    if (homeScreenDto.getInvitationTabSelected().equals(HomeScreenDto.InvitationTabs.Pending)) {
+                                        processInvitationEvents(homeScreenDto.getPendingEvents());
+                                    }
+                                }
                             } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Declined)) {
 
                                 AsyncTask.execute(new Runnable() {
@@ -740,6 +769,11 @@ public class HomeFragmentV2 extends CenesFragment {
                                 });
                                 homeScreenDto.setDeclinedEvents(events);
                                 //invitationTabPressed();
+                                if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Invitation)) {
+                                    if (homeScreenDto.getInvitationTabSelected().equals(HomeScreenDto.InvitationTabs.Declined)) {
+                                        processInvitationEvents(homeScreenDto.getDeclinedEvents());
+                                    }
+                                }
                             }
                         }
                     } catch (Exception e) {
@@ -965,9 +999,11 @@ public class HomeFragmentV2 extends CenesFragment {
 
                     shimmerFrameLayout.hideShimmer();
                     shimmerFrameLayout.setVisibility(View.GONE);
-                    elvHomeListView.setVisibility(View.VISIBLE);
 
-                    homeButtonPressed();
+                    if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
+                        elvHomeListView.setVisibility(View.VISIBLE);
+                        homeButtonPressed();
+                    }
                 }
             });
         }

@@ -191,6 +191,12 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
 
             viewHolder.slCenesEvent.setVisibility(View.VISIBLE);
             viewHolder.rlCenesEvents.setVisibility(View.VISIBLE);
+
+            if (event.getExpired() == true) {
+                viewHolder.slCenesEvent.setRightSwipeEnabled(false);
+            } else {
+                viewHolder.slCenesEvent.setRightSwipeEnabled(true);
+            }
             viewHolder.rlCenesEvents.setTag("January");
             viewHolder.tvEventTitle.setText(event.getTitle());
             if (CenesUtils.isEmpty(event.getLocation())) {

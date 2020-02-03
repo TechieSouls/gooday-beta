@@ -249,18 +249,18 @@ public class CenesBaseActivity extends CenesActivity {
                     System.out.println("MeTime Clicked From Base");
                     //clearBackStackInclusive(null);
                     //notificationCountCall();
-                    replaceFragment(new MeTimeFragment(), null);
+                    replaceFragment(new MeTimeFragment(), HomeFragmentV2.TAG);
                     break;
 
                 case R.id.iv_notification_floating_icon:
                     //clearBackStackInclusive(null);
-                    replaceFragment(new NotificationFragment(), null);
+                    replaceFragment(new NotificationFragment(), HomeFragmentV2.TAG);
                     break;
 
                 case R.id.footer_profile_icon:
                     //clearBackStackInclusive(null);
                     //notificationCountCall();
-                    replaceFragment(new ProfileFragmentV2(), null);
+                    replaceFragment(new ProfileFragmentV2(), HomeFragmentV2.TAG);
                     break;
                 case R.id.footer_notification_icon:
                     //clearBackStackInclusive(null);
@@ -278,7 +278,7 @@ public class CenesBaseActivity extends CenesActivity {
                         setBadgeCountsToZero();
                         rlBadgeCountDot.setVisibility(View.GONE);
                     }
-                    replaceFragment(notificationFragment, null);
+                    replaceFragment(notificationFragment, HomeFragmentV2.TAG);
                     break;
             }
         }
@@ -460,8 +460,13 @@ public class CenesBaseActivity extends CenesActivity {
     }
 
     public void homeScreenReloadBroadcaster() {
-        Intent newintent = new Intent("homescreenrefresh");
-        getApplicationContext().sendBroadcast(newintent);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent newintent = new Intent("homescreenrefresh");
+                getApplicationContext().sendBroadcast(newintent);
+            }
+        }, 500);
     }
 
 

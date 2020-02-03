@@ -392,7 +392,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                 case R.id.iv_delete_icon:
 
-                    deleteGathering();
+                    deleteGathering(event);
                     ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
                     break;
 
@@ -784,15 +784,17 @@ public class GatheringPreviewFragment extends CenesFragment {
         }).execute(queryStr);
     }
 
-    public void deleteGathering() {
+    public void deleteGathering(Event event) {
 
-        new GatheringAsyncTask(cenesApplication, (CenesBaseActivity)getActivity());
+        /*new GatheringAsyncTask(cenesApplication, (CenesBaseActivity)getActivity());
         new GatheringAsyncTask.DeleteGatheringTask(new GatheringAsyncTask.DeleteGatheringTask.AsyncResponse() {
             @Override
             public void processFinish(JSONObject response) {
 
             }
-        }).execute(event.getEventId());
+        }).execute(event.getEventId());*/
+
+        ((CenesBaseActivity)getActivity()).homeFragmentV2.eventDeleteButtonPressed(event);
 
     }
 
@@ -850,7 +852,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            ((CenesBaseActivity) getActivity()) .homeScreenReloadBroadcaster();
+                            ((CenesBaseActivity) getActivity()).homeScreenReloadBroadcaster();
                             ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
                         }
                     }, 500);
