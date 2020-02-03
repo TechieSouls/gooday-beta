@@ -12,6 +12,5 @@ public class HomeScreenAPI {
     public static String get_homescreen_events = "/api/getEvents"; //user_id, date(in millis)
     public static String get_gathering_evnets =  "/api/user/gatherings/v2";
     public static String get_homescreen_events_v2 = "/api/getEvents/android/v2"; //user_id, timestamp, pagenumber, offset
-
-
+    public static String get_homescreen_past_events = "/api/getEventsMonthWise/v3"; //userId, startTimestamp, endtimeStamp, pastEvents
 }

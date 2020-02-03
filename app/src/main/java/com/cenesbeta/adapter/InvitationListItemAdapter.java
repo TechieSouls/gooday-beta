@@ -46,22 +46,22 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-        return homeScreenDto.getHomeDataHeaders().size();
+        return homeScreenDto.getInvitaitonDataHeaders().size();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(groupPosition)).size();
+        return homeScreenDto.getInvitationDataListMap().get(homeScreenDto.getInvitaitonDataHeaders().get(groupPosition)).size();
     }
 
     @Override
     public String getGroup(int groupPosition) {
-        return homeScreenDto.getHomeDataHeaders().get(groupPosition);
+        return homeScreenDto.getInvitaitonDataHeaders().get(groupPosition);
     }
 
     @Override
     public Event getChild(int groupPosition, int childPosition) {
-        return homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(groupPosition)).get(childPosition);
+        return homeScreenDto.getInvitationDataListMap().get(homeScreenDto.getInvitaitonDataHeaders().get(groupPosition)).get(childPosition);
     }
 
     @Override

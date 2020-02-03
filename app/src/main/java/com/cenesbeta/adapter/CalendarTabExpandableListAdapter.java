@@ -45,7 +45,7 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        if (groupPosition <= homeScreenDto.getHomeDataListMap().size() - 1) {
+        if (groupPosition <= homeScreenDto.getHomeDataListMap().size() - 1 && homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(groupPosition)) != null) {
             return homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(groupPosition)).size();
         }
         return 0;
@@ -89,10 +89,14 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
             convertView = inflter.inflate(R.layout.adapter_home_data_headers_v2, null);
             holder = new HeaderViewHolder();
             holder.tvHeader = (TextView) convertView.findViewById(R.id.tv_calendar_data_header);
-            convertView.setTag(holder);
+            convertView.setTag(R.layout.adapter_home_data_headers_v2, holder);
         } else {
-            holder = (HeaderViewHolder) convertView.getTag();
+            holder = (HeaderViewHolder) convertView.getTag(R.layout.adapter_home_data_headers_v2);
         };
+
+        if (holder == null) {
+            return convertView;
+        }
 
         String header = getGroup(groupPosition);
         String dateKey = "";
@@ -115,6 +119,9 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        ExpandableListView mExpandableListView = (ExpandableListView) parent;
+        mExpandableListView.expandGroup(groupPosition);
+
         final RowViewHolder viewHolder;
         if (convertView == null) {
             convertView = inflter.inflate(R.layout.adapter_calendar_data_rows, null);
@@ -137,9 +144,13 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
             viewHolder.dividerView = (View) convertView.findViewById(R.id.view_divider);
             viewHolder.rlMonthSeparator = (RelativeLayout) convertView.findViewById(R.id.rl_month_separator);
 
-            convertView.setTag(viewHolder);
+            convertView.setTag(R.layout.adapter_calendar_data_rows, viewHolder);
         } else {
-            viewHolder = (RowViewHolder) convertView.getTag();
+            viewHolder = (RowViewHolder) convertView.getTag(R.layout.adapter_calendar_data_rows);
+        }
+
+        if (viewHolder == null) {
+            return convertView;
         }
         viewHolder.rlCenesEvents.setVisibility(View.GONE);
         viewHolder.rlTpEvents.setVisibility(View.GONE);
