@@ -753,9 +753,12 @@ public class GatheringPreviewFragment extends CenesFragment {
                             } */
 
                             if (nonCenesMember.size() > 0) {
+
+                                System.out.println("Firing Broadcaster");
+
                                 if (getActivity() != null) {
                                     ((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
-                                    ((CenesBaseActivity) getActivity()).homeScreenReloadBroadcaster();
+                                    ((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
                                     ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
                                 }
                                 sendSmsToNonCenesMembers(nonCenesMember, eve);
@@ -811,8 +814,9 @@ public class GatheringPreviewFragment extends CenesFragment {
                     @Override
                     public void run() {
 
+                        System.out.println("Firing Broadcaster");
                         //((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
-                        ((CenesBaseActivity) getActivity()).homeScreenReloadBroadcaster();
+                        ((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
                         ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
                     }
                 }, 1000);

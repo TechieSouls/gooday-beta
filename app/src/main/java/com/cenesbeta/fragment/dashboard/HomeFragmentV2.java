@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ import com.cenesbeta.Manager.UrlManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.adapter.CalendarTabExpandableListAdapter;
+import com.cenesbeta.adapter.CalendarTabListViewAdapter;
 import com.cenesbeta.adapter.HomeScreenAdapter;
 import com.cenesbeta.adapter.InvitationListItemAdapter;
 import com.cenesbeta.api.GatheringAPI;
@@ -82,6 +84,7 @@ public class HomeFragmentV2 extends CenesFragment {
     private MaterialCalendarView mcvHomeCalendar;
     private ExpandableListView elvHomeListView;
     private ExpandableListView elvInvitationListView;
+    private ListView lvHomeListView;
     private View homeFragementView;
     private RelativeLayout rlNoGatheringText;
     private Button btCreateGathering, btSyncCalendar;
@@ -93,6 +96,7 @@ public class HomeFragmentV2 extends CenesFragment {
     private UserManager userManager;
     public  User loggedInUser;
     private CalendarTabExpandableListAdapter calendarTabExpandableListAdapter;
+    private CalendarTabListViewAdapter calendarTabListViewAdapter;
     private InvitationListItemAdapter invitationListItemAdapter;
     private Map<SyncCallFor, Boolean> calendarRefreshed = new HashMap<>();
     private ShimmerFrameLayout shimmerFrameLayout, shimmerViewOnscroll;
@@ -137,6 +141,7 @@ public class HomeFragmentV2 extends CenesFragment {
         mcvHomeCalendar = (MaterialCalendarView) view.findViewById(R.id.mcv_home_calendar);
         elvHomeListView = (ExpandableListView) view.findViewById(R.id.elv_home_list_view);
         elvInvitationListView = (ExpandableListView)view.findViewById(R.id.elv_invitation_list_view);
+        lvHomeListView = (ListView) view.findViewById(R.id.lv_home_list_view);
 
         //Click Listeners
         tvCalendarTab.setOnClickListener(onClickListener);
@@ -149,7 +154,8 @@ public class HomeFragmentV2 extends CenesFragment {
         llCalendarDateBar.setOnClickListener(onClickListener);
         btCreateGathering.setOnClickListener(onClickListener);
         btSyncCalendar.setOnClickListener(onClickListener);
-        elvHomeListView.setOnScrollListener(calendarTabListScrollListener);
+        //elvHomeListView.setOnScrollListener(calendarTabListScrollListener);
+        lvHomeListView.setOnScrollListener(calendarTabListScrollListener);
 
         //Java Variables
         homeScreenDto = new HomeScreenDto();
@@ -159,6 +165,8 @@ public class HomeFragmentV2 extends CenesFragment {
         userManager = coreManager.getUserManager();
         loggedInUser = userManager.getUser();
         eventManagerImpl = new EventManagerImpl(cenesApplication);
+        //elvHomeListView.setNestedScrollingEnabled(true);
+
 
         mcvHomeCalendar.sourceFragment = this;
 
@@ -166,6 +174,7 @@ public class HomeFragmentV2 extends CenesFragment {
         eventManagerImpl.deleteAllEvents();
         firstTimeLoadData();
         if (internetManager.isInternetConnection((CenesBaseActivity)getActivity())) {
+            System.out.println("Inside On create View");
             loadHomeScreenData();
         }
 
@@ -180,7 +189,7 @@ public class HomeFragmentV2 extends CenesFragment {
         super.onResume();
         ((CenesBaseActivity) getActivity()).showFooter();
         ((CenesBaseActivity)  getActivity()).activateFooterIcon(HomeFragmentV2.TAG);
-        getActivity().registerReceiver(mMessageReceiver, new IntentFilter("homescreenrefresh"));
+        //getActivity().registerReceiver(mMessageReceiver, new IntentFilter("homescreenrefresh"));
     }
 
     @Override
@@ -249,7 +258,7 @@ public class HomeFragmentV2 extends CenesFragment {
         }
     };
 
-    ExpandableListView.OnScrollListener calendarTabListScrollListener = new AbsListView.OnScrollListener() {
+    ListView.OnScrollListener calendarTabListScrollListener = new AbsListView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
 
@@ -261,12 +270,13 @@ public class HomeFragmentV2 extends CenesFragment {
             try {
                 //Algorithm to check if the last item is visible or not
                 final int lastItem = firstVisibleItem + visibleItemCount;
+                System.out.println("lastItem : "+lastItem+", firstVisibleItem : "+firstVisibleItem+", "+visibleItemCount);
 
                 //System.out.println("firstVisibleItem , visibleItemCount, totalItemCount : "+firstVisibleItem+" -- "+visibleItemCount+" -- "+totalItemCount);
                 if(lastItem == totalItemCount && totalItemCount != 0) {
                     // you have reached end of list, load more data
 
-                    System.out.println("Home Screen Events Size : "+homeScreenDto.getHomeEvents().size());
+                    System.out.println("Home Screen Events Size : "+homeScreenDto.getHomeEvents().size()+", Total Counts : "+HomeScreenDto.totalCalendarDataCounts);
                     if (homeScreenDto.getHomeEvents().size() < HomeScreenDto.totalCalendarDataCounts) {
                         if (HomeScreenDto.madeApiCall) {
                             shimmerViewOnscroll.setVisibility(View.VISIBLE);
@@ -290,9 +300,9 @@ public class HomeFragmentV2 extends CenesFragment {
         System.out.println("Current Month : "+monthTitle);
         if (HomeScreenDto.homeListGroupAndMonthHolder.containsKey(monthTitle)) {
             int groupPosition = HomeScreenDto.homeListGroupAndMonthHolder.get(monthTitle);
-            elvHomeListView.setSelectedGroup(groupPosition);
+            //elvHomeListView.setSelectedGroup(groupPosition);
         } else if (monthTitle == CenesUtils.MMMM_yyyy.format(new Date()))  {
-            elvHomeListView.smoothScrollToPosition(0);
+            //elvHomeListView.smoothScrollToPosition(0);
         }
     }
 
@@ -305,15 +315,18 @@ public class HomeFragmentV2 extends CenesFragment {
         homeScreenDto.setTabSelected(HomeScreenDto.HomeTabs.Calendar);
         tvCalendarTab.setBackground(getResources().getDrawable(R.drawable.xml_border_bottom_black));
         tvInvitationTab.setBackground(null);
-        elvInvitationListView.scrollTo(0, 0);
+        //elvInvitationListView.scrollTo(0, 0);
         llInvitationTabView.setVisibility(View.GONE);
         if(homeScreenDto.getHomeEvents().size() == 0 && homeScreenDto.getPastEvents().size() == 0){
             rlNoGatheringText.setVisibility(View.VISIBLE);
         }else{
             rlNoGatheringText.setVisibility(View.GONE);
         }
-        processCalendarTabData(homeScreenDto.getHomeEvents(), false);
-        elvHomeListView.setVisibility(View.VISIBLE);
+        //processCalendarTabData(homeScreenDto.getHomeEvents(), false);
+        //elvHomeListView.setVisibility(View.VISIBLE);
+
+        lvHomeListView.setVisibility(View.VISIBLE);
+
     }
 
     public void invitationTabPressed() {
@@ -322,9 +335,10 @@ public class HomeFragmentV2 extends CenesFragment {
         homeScreenDto.setTabSelected(HomeScreenDto.HomeTabs.Invitation);
         tvInvitationTab.setBackground(getResources().getDrawable(R.drawable.xml_border_bottom_black));
         tvCalendarTab.setBackground(null);
-        elvHomeListView.scrollTo(0, 0);
-        calendarTabExpandableListAdapter = null;
-        elvHomeListView.setVisibility(View.GONE);
+        //elvHomeListView.scrollTo(0, 0);
+        //calendarTabExpandableListAdapter = null;
+        //elvHomeListView.setVisibility(View.GONE);
+        lvHomeListView.setVisibility(View.GONE);
         rlNoGatheringText.setVisibility(View.GONE);
         processInvitationEvents(homeScreenDto.getAcceptedEvents());
         llInvitationTabView.setVisibility(View.VISIBLE);
@@ -391,14 +405,21 @@ public class HomeFragmentV2 extends CenesFragment {
 
     public void homeButtonPressed() {
 
-        elvHomeListView.setSelectedGroup(HomeScreenDto.currentDateGroupPosition);
+        //elvHomeListView.setSelectedGroup(HomeScreenDto.currentDateGroupPosition);
+        /*int position = 0;
+        for (int i=0; i < HomeScreenDto.currentDateGroupPosition; i++) {
+            position = position + (calendarTabExpandableListAdapter.getChildrenCount(i));
 
-        String groupStr = homeScreenDto.getHomeDataHeaders().get(HomeScreenDto.currentDateGroupPosition);
+        }
+
+        elvHomeListView.smoothScrollToPositionFromTop(position, 0, 500);*/
+        lvHomeListView.smoothScrollToPositionFromTop(HomeScreenDto.currentDateGroupPosition, 0, 200);
+        /*String groupStr = homeScreenDto.getHomeDataHeaders().get(HomeScreenDto.currentDateGroupPosition);
         Event event = homeScreenDto.getHomeDataListMap().get(groupStr).get(0);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(event.getStartTime());
-        mcvHomeCalendar.setCurrentDate(calendar.getTime());
+        mcvHomeCalendar.setCurrentDate(calendar.getTime());*/
     }
 
     public void refreshCalBtnPressed() {
@@ -436,15 +457,31 @@ public class HomeFragmentV2 extends CenesFragment {
             key = CenesUtils.EEEMMMMddcmyyyy.format(event.getStartTime());
         }
         List<Event> eventList = homeDataListMap.get(key);
-        for (Event evenToDelete: eventList) {
-            if (evenToDelete.getEventId().equals(event.getEventId())) {
-                eventList.remove(event);
-                break;
+        if (eventList != null) {
+            for (Event evenToDelete: eventList) {
+                if (evenToDelete.getEventId().equals(event.getEventId())) {
+                    eventList.remove(event);
+                    List<Object> listViewWithHeaders = homeScreenDto.getHomelistViewWithHeaders();
+                    listViewWithHeaders.remove(event);
+                    homeScreenDto.setHomelistViewWithHeaders(listViewWithHeaders);
+                    break;
+                }
+            }
+            if (eventList.size() == 0) {
+                homeDataListMap.remove(key);
+                List<String> tableHeaders = homeScreenDto.getHomeDataHeaders();
+                tableHeaders.remove(key);
+                List<Object> listViewWithHeaders = homeScreenDto.getHomelistViewWithHeaders();
+                listViewWithHeaders.remove(key);
+                homeScreenDto.setHomelistViewWithHeaders(listViewWithHeaders);
+                homeScreenDto.setHomeDataHeaders(tableHeaders);
+            } else {
+                homeDataListMap.put(key, eventList);
             }
         }
-        homeDataListMap.put(key, eventList);
         homeScreenDto.setHomeDataListMap(homeDataListMap);
-        calendarTabExpandableListAdapter.notifyDataSetChanged();
+        //calendarTabExpandableListAdapter.notifyDataSetChanged();
+        calendarTabListViewAdapter.notifyDataSetChanged();
 
         AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
         asyncTaskDto.setQueryStr("event_id="+event.getEventId());
@@ -556,16 +593,19 @@ public class HomeFragmentV2 extends CenesFragment {
         HomeScreenDto.totalCalendarDataCounts = 0;
         HomeScreenDto.madeApiCall = false;
 
-        if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
-
-            loadPastEvents();
-            loadInvitationTabData();
-
-        } else {
-
-            loadInvitationTabData();
-            loadPastEvents();
+        if (calendarTabExpandableListAdapter != null) {
+            calendarTabExpandableListAdapter.notifyDataSetChanged();
         }
+        //if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
+
+            loadPastEvents();
+            loadInvitationTabData();
+
+        /*} else {
+
+            loadInvitationTabData();
+            loadPastEvents();
+        }*/
 
     }
 
@@ -663,23 +703,24 @@ public class HomeFragmentV2 extends CenesFragment {
                             Gson gson = new GsonBuilder().create();
                             Type listType = new TypeToken<List<Event>>() {
                             }.getType();
-                            final List<Event> events = gson.fromJson(response.getJSONArray("data").toString(), listType);
+                            List<Event> events = gson.fromJson(response.getJSONArray("data").toString(), listType);
 
                             if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.PastEvents)) {
 
                                 if (HomeScreenDto.calendarTabPageNumber == 0) {
+                                    final List<Event> eventsToAdd = events;
                                     AsyncTask.execute(new Runnable() {
                                         @Override
                                         public void run() {
                                             homeScreenDto.setHomeEvents(new ArrayList<Event>());
-                                            eventManagerImpl.deleteAllEventsByDisplayAtScreen(Event.EventDisplayScreen.HOME.toString());
-                                            eventManagerImpl.addEvent(events, Event.EventDisplayScreen.HOME.toString());
+                                            //eventManagerImpl.deleteAllEventsByDisplayAtScreen(Event.EventDisplayScreen.HOME.toString());
+                                            //eventManagerImpl.addEvent(eventsToAdd, Event.EventDisplayScreen.HOME.toString());
                                         }
                                     });
                                 }
 
                                 homeScreenDto.setPastEvents(events);
-                                processCalendarDotEvents(events);
+                                //processCalendarDotEvents(events);
 
                                 System.out.println("ProcessPrevious CalendarTabData Called");
                                 processCalendarTabData(events, true);
@@ -692,6 +733,13 @@ public class HomeFragmentV2 extends CenesFragment {
 
                                 //If there are no post Events and the current Events List is also empty
                                 //Then we will hide shimer and show message
+                                List<Event> newEvents = new ArrayList<>();
+                                if (HomeScreenDto.calendarTabPageNumber == 0) {
+                                 //   newEvents.addAll(homeScreenDto.getPastEvents());
+                                 //   newEvents.addAll(events);
+                               //     events = newEvents;
+                                }
+
                                 if (HomeScreenDto.calendarTabPageNumber == 0 && events.size() == 0 && homeScreenDto.getPastEvents().size() == 0) {
 
                                     elvHomeListView.setVisibility(View.GONE);
@@ -705,10 +753,11 @@ public class HomeFragmentV2 extends CenesFragment {
                                     processCalendarDotEvents(events);
 
                                     //Saving Data Locally
+                                    final List<Event> eventsToAdd = events;
                                     AsyncTask.execute(new Runnable() {
                                         @Override
                                         public void run() {
-                                            eventManagerImpl.addEvent(events, Event.EventDisplayScreen.HOME.toString());
+                                            eventManagerImpl.addEvent(eventsToAdd, Event.EventDisplayScreen.HOME.toString());
                                         }
                                     });
 
@@ -726,11 +775,13 @@ public class HomeFragmentV2 extends CenesFragment {
                                 }
                                 HomeScreenDto.madeApiCall = true;
                             } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Accepted)) {
+
+                                final List<Event> eventsToAdd = events;
                                 AsyncTask.execute(new Runnable() {
                                     @Override
                                     public void run() {
                                         eventManagerImpl.deleteAllEventsByDisplayAtScreen(Event.EventDisplayScreen.ACCEPTED.toString());
-                                        eventManagerImpl.addEvent(events, Event.EventDisplayScreen.ACCEPTED.toString());
+                                        eventManagerImpl.addEvent(eventsToAdd, Event.EventDisplayScreen.ACCEPTED.toString());
                                     }
                                 });
                                 homeScreenDto.setAcceptedEvents(events);
@@ -742,11 +793,12 @@ public class HomeFragmentV2 extends CenesFragment {
                                 }
                             } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Pending)) {
 
+                                final List<Event> eventsToAdd = events;
                                 AsyncTask.execute(new Runnable() {
                                     @Override
                                     public void run() {
                                         eventManagerImpl.deleteAllEventsByDisplayAtScreen(Event.EventDisplayScreen.PENDING.toString());
-                                        eventManagerImpl.addEvent(events, Event.EventDisplayScreen.PENDING.toString());
+                                        eventManagerImpl.addEvent(eventsToAdd, Event.EventDisplayScreen.PENDING.toString());
 
                                     }
                                 });
@@ -760,11 +812,12 @@ public class HomeFragmentV2 extends CenesFragment {
                                 }
                             } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Declined)) {
 
+                                final List<Event> eventsToAdd = events;
                                 AsyncTask.execute(new Runnable() {
                                     @Override
                                     public void run() {
                                         eventManagerImpl.deleteAllEventsByDisplayAtScreen(Event.EventDisplayScreen.DECLINED.toString());
-                                        eventManagerImpl.addEvent(events, Event.EventDisplayScreen.DECLINED.toString());
+                                        eventManagerImpl.addEvent(eventsToAdd, Event.EventDisplayScreen.DECLINED.toString());
                                     }
                                 });
                                 homeScreenDto.setDeclinedEvents(events);
@@ -882,8 +935,74 @@ public class HomeFragmentV2 extends CenesFragment {
         }
 
         //Lets check the position of the first event group to be added.
+        //this is just to find out the position at which list should scroll
         if (pastEvents == false && HomeScreenDto.calendarTabPageNumber == 0) {
+            findListViewScrollPosition(events);
+        }
 
+        homeScreenDto.setHomeDataHeaders(headers);
+        homeScreenDto.setHomeDataListMap(mapListEvent);
+
+        if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
+            //Lets add Month Separator At Home Screen Events
+            addMonthSeparatorToList();
+        }
+
+        //PAST EVENTS CALL
+        //For Past Events we will initialize the adapter.
+        if (pastEvents == false && HomeScreenDto.calendarTabPageNumber == 0) {
+            //calendarTabExpandableListAdapter = new CalendarTabExpandableListAdapter(this, homeScreenDto);
+            //elvHomeListView.setAdapter(calendarTabExpandableListAdapter);
+            homeScreenDto.setHomelistViewWithHeaders(new ArrayList<Object>());
+            shimmerFrameLayout.hideShimmer();
+            shimmerFrameLayout.setVisibility(View.GONE);
+
+            List<Object> listView = homeScreenDto.getHomelistViewWithHeaders();
+            for (String str: headers) {
+
+                listView.add(str);
+                List<Event> eventList = mapListEvent.get(str);
+                listView.addAll(eventList);
+            }
+
+            homeScreenDto.setHomelistViewWithHeaders(listView);
+            lvHomeListView.setVisibility(View.VISIBLE);
+            calendarTabListViewAdapter =  new CalendarTabListViewAdapter(this, homeScreenDto);
+            lvHomeListView.setAdapter(calendarTabListViewAdapter);
+
+            lvHomeListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    homeButtonPressed();
+                }
+            });
+
+        } else {
+            //For Current and future events we will just notify the Adapter for
+            //Any Change
+            List<Object> listView = new ArrayList<>();
+            for (String str: headers) {
+
+                listView.add(str);
+                List<Event> eventList = mapListEvent.get(str);
+                listView.addAll(eventList);
+            }
+
+            homeScreenDto.setHomelistViewWithHeaders(listView);
+            if (calendarTabListViewAdapter != null) {
+                calendarTabListViewAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    public void findListViewScrollPosition(List<Event> events) {
+
+        Calendar currentDateCal = Calendar.getInstance();
+
+        List<String> headers = homeScreenDto.getHomeDataHeaders();
+        Map<String, List<Event>> mapListEvent = homeScreenDto.getHomeDataListMap();
+
+        try {
             Collections.sort(events, new Comparator<Event>() {
                 @Override
                 public int compare(Event o1, Event o2) {
@@ -900,112 +1019,84 @@ public class HomeFragmentV2 extends CenesFragment {
                 headerTitle = CenesUtils.EEEMMMMddcmyyyy.format(new Date(events.get(0).getStartTime()));
             }
             eventCal = null;
+            int itemPosition = 0;
             for (int i=0; i<headers.size(); i++) {
+
                 if (headerTitle.equals(headers.get(i))) {
-                    HomeScreenDto.currentDateGroupPosition = i;
+                    HomeScreenDto.currentDateGroupPosition = itemPosition;
                     break;
                 }
+
+                itemPosition += 1 + mapListEvent.get(headers.get(i)).size();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-
-        if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
-            //Lets add Month Separator At Home Screen Events
-            for (int i=0; i < headers.size(); i++) {
-
-                if (i != 0) {
-
-                    List<Event> previousListEvents = mapListEvent.get(headers.get(i-1));
-
-                    List<Event> currentListEvents = mapListEvent.get(headers.get(i));
+    }
+    public void addMonthSeparatorToList() {
 
 
-                    Event previoustListFirstEvent = previousListEvents.get(0);
-                    Event currentListFirstEvent = currentListEvents.get(0);
+        List<String> headers = homeScreenDto.getHomeDataHeaders();
+        Map<String, List<Event>> mapListEvent = homeScreenDto.getHomeDataListMap();
 
-                    Calendar previstListEventDateCal = Calendar.getInstance();
-                    previstListEventDateCal.setTimeInMillis(previoustListFirstEvent.getStartTime());
+        for (int i=0; i < headers.size(); i++) {
 
-                    Calendar currentListEventDateCal = Calendar.getInstance();
-                    currentListEventDateCal.setTimeInMillis(currentListFirstEvent.getStartTime());
+            if (i != 0) {
 
-                    if (previstListEventDateCal.get(Calendar.MONTH) != currentListEventDateCal.get(Calendar.MONTH) ) {
+                List<Event> previousListEvents = mapListEvent.get(headers.get(i-1));
 
-                        String monthTitle = CenesUtils.MMMM_yyyy.format(new Date(currentListFirstEvent.getStartTime()));
+                List<Event> currentListEvents = mapListEvent.get(headers.get(i));
 
 
-                        //Lets make it at the end of the day
-                        Calendar monthSeparatorCal = Calendar.getInstance();
-                        monthSeparatorCal.setTimeInMillis(previoustListFirstEvent.getStartTime());
-                        monthSeparatorCal.set(Calendar.HOUR_OF_DAY, 23);
-                        monthSeparatorCal.set(Calendar.MINUTE, 59);
-                        monthSeparatorCal.set(Calendar.SECOND, 59);
-                        monthSeparatorCal.set(Calendar.MILLISECOND, 59);
+                Event previoustListFirstEvent = previousListEvents.get(0);
+                Event currentListFirstEvent = currentListEvents.get(0);
 
-                        //This case will happen, when we have 30 events and pageable evnts are 0,20.
-                        //In this case we will already have MonthSeparator and the month separator
-                        //Lets find out if the month separator already exists in the list
-                        //then we will remove it and add the new one at the end.
-                        boolean monthSeparatorExists = false;
-                        for (Event lastEvent: previousListEvents) {
-                            if (lastEvent.getScheduleAs().equals("MonthSeparator")) {
-                                monthSeparatorExists = true;
-                            }
-                        }
+                Calendar previstListEventDateCal = Calendar.getInstance();
+                previstListEventDateCal.setTimeInMillis(previoustListFirstEvent.getStartTime());
 
-                        if (!monthSeparatorExists) {
-                            //Lets create new event
-                            Event event = new Event();
-                            event.setScheduleAs("MonthSeparator");
-                            event.setTitle(monthTitle);
-                            event.setStartTime(monthSeparatorCal.getTimeInMillis());
-                            previousListEvents.add(event);
-                            mapListEvent.put(headers.get(i-1), previousListEvents);
+                Calendar currentListEventDateCal = Calendar.getInstance();
+                currentListEventDateCal.setTimeInMillis(currentListFirstEvent.getStartTime());
+
+                if (previstListEventDateCal.get(Calendar.MONTH) != currentListEventDateCal.get(Calendar.MONTH) ) {
+
+                    String monthTitle = CenesUtils.MMMM_yyyy.format(new Date(currentListFirstEvent.getStartTime()));
 
 
-                            HomeScreenDto.homeListGroupAndMonthHolder.put(monthTitle, i);
+                    //Lets make it at the end of the day
+                    Calendar monthSeparatorCal = Calendar.getInstance();
+                    monthSeparatorCal.setTimeInMillis(previoustListFirstEvent.getStartTime());
+                    monthSeparatorCal.set(Calendar.HOUR_OF_DAY, 23);
+                    monthSeparatorCal.set(Calendar.MINUTE, 59);
+                    monthSeparatorCal.set(Calendar.SECOND, 59);
+                    monthSeparatorCal.set(Calendar.MILLISECOND, 59);
+
+                    //This case will happen, when we have 30 events and pageable evnts are 0,20.
+                    //In this case we will already have MonthSeparator and the month separator
+                    //Lets find out if the month separator already exists in the list
+                    //then we will remove it and add the new one at the end.
+                    boolean monthSeparatorExists = false;
+                    for (Event lastEvent: previousListEvents) {
+                        if (lastEvent.getScheduleAs().equals("MonthSeparator")) {
+                            monthSeparatorExists = true;
                         }
                     }
-                } else{
 
-                }
-            }
-        }
+                    if (!monthSeparatorExists) {
+                        //Lets create new event
+                        Event event = new Event();
+                        event.setScheduleAs("MonthSeparator");
+                        event.setTitle(monthTitle);
+                        event.setStartTime(monthSeparatorCal.getTimeInMillis());
+                        previousListEvents.add(event);
+                        mapListEvent.put(headers.get(i-1), previousListEvents);
 
-        homeScreenDto.setHomeDataHeaders(headers);
-        homeScreenDto.setHomeDataListMap(mapListEvent);
+                        HomeScreenDto.homeListGroupAndMonthHolder.put(monthTitle, i);
 
-        //PAST EVENTS CALL
-        //For Past Events we will initialize the adapter.
-        if (pastEvents == true && HomeScreenDto.calendarTabPageNumber == 0) {
-            calendarTabExpandableListAdapter = new CalendarTabExpandableListAdapter(this, homeScreenDto);
-            elvHomeListView.setAdapter(calendarTabExpandableListAdapter);
-
-        } else {
-
-            //For Current and future events we will just notify the Adapter for
-            //Any Change
-            if (calendarTabExpandableListAdapter != null) {
-                calendarTabExpandableListAdapter.notifyDataSetChanged();
-            }
-        }
-
-        //This is when the past events and current date events are fetched..
-        //Then we will hide shimmer and scroll home screen to current date..
-        if (pastEvents == false && HomeScreenDto.calendarTabPageNumber == 0) {
-            elvHomeListView.post(new Runnable() {
-                @Override
-                public void run() {
-
-                    shimmerFrameLayout.hideShimmer();
-                    shimmerFrameLayout.setVisibility(View.GONE);
-
-                    if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
-                        elvHomeListView.setVisibility(View.VISIBLE);
-                        homeButtonPressed();
+                        homeScreenDto.setHomeDataListMap(mapListEvent);
                     }
                 }
-            });
+            }
         }
     }
 

@@ -1,10 +1,10 @@
 package com.cenesbeta.adapter;
 
+import android.animation.ObjectAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
+import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,106 +27,58 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter {
+import androidx.annotation.NonNull;
+
+public class CalendarTabListViewAdapter extends BaseAdapter {
+
+    private static final int VIEW_TYPE_NONE = 0;
+    private static final int VIEW_TYPE_SECTION = 1;
+    private static final int VIEW_TYPE_ITEM = 2;
 
     private HomeFragmentV2 homeFragmentV2;
+    private LayoutInflater layoutInflater;
     private HomeScreenDto homeScreenDto;
-    private LayoutInflater inflter;
 
-    public CalendarTabExpandableListAdapter(HomeFragmentV2 homeFragmentV2, HomeScreenDto homeScreenDto) {
+    public CalendarTabListViewAdapter(HomeFragmentV2 homeFragmentV2, HomeScreenDto homeScreenDto) {
+
         this.homeFragmentV2 = homeFragmentV2;
         this.homeScreenDto = homeScreenDto;
-        this.inflter = (LayoutInflater.from(homeFragmentV2.getContext()));
+        this.layoutInflater = LayoutInflater.from(homeFragmentV2.getContext());
 
-    }
-    @Override
-    public int getGroupCount() {
-        return homeScreenDto.getHomeDataHeaders().size();
     }
 
     @Override
-    public int getChildrenCount(int groupPosition) {
-        if (groupPosition <= homeScreenDto.getHomeDataListMap().size() - 1 && homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(groupPosition)) != null) {
-            return homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(groupPosition)).size();
-        }
-        return 0;
+    public int getCount() {
+        return homeScreenDto.getHomelistViewWithHeaders().size();
     }
 
     @Override
-    public String getGroup(int groupPosition) {
-        if (groupPosition <= homeScreenDto.getHomeDataHeaders().size() - 1) {
-            return homeScreenDto.getHomeDataHeaders().get(groupPosition);
-        }
-        return null;
+    public Object getItem(int position) {
+        return homeScreenDto.getHomelistViewWithHeaders().get(position);
     }
 
     @Override
-    public Event getChild(int groupPosition, int childPosition) {
-        return homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(groupPosition)).get(childPosition);
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
-    public long getGroupId(int groupPosition) {
-        return groupPosition;
-    }
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-    @Override
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return false;
-    }
-
-    @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-
-        ExpandableListView mExpandableListView = (ExpandableListView) parent;
-        mExpandableListView.expandGroup(groupPosition);
-
-        HeaderViewHolder holder;
-        if (convertView == null) {
-            convertView = inflter.inflate(R.layout.adapter_home_data_headers_v2, null);
-            holder = new HeaderViewHolder();
-            holder.tvHeader = (TextView) convertView.findViewById(R.id.tv_calendar_data_header);
-            convertView.setTag(R.layout.adapter_home_data_headers_v2, holder);
-        } else {
-            holder = (HeaderViewHolder) convertView.getTag(R.layout.adapter_home_data_headers_v2);
-        };
-
-        if (holder == null) {
-            return convertView;
+        if (getItemViewType(position) == VIEW_TYPE_SECTION) {
+            return getSectionView(position, convertView, parent);
+        } else if (getItemViewType(position) == VIEW_TYPE_ITEM) {
+            return getItemView(position, convertView, parent);
         }
 
-        String header = getGroup(groupPosition);
-        String dateKey = "";
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.add(Calendar.DATE, 1);
-
-        if (header != null) {
-            if (header.equals(CenesUtils.EEEMMMMdd.format(new Date()))) {
-
-                dateKey = "Today ";
-            } else  if (header.equals(CenesUtils.EEEMMMMdd.format(cal.getTime()))) {
-
-                dateKey = "Tomorrow ";
-            }
-            holder.tvHeader.setText(dateKey + header);
-        }
         return convertView;
     }
 
-    @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        //ExpandableListView mExpandableListView = (ExpandableListView) parent;
-        //mExpandableListView.expandGroup(groupPosition);
-
+    @NonNull
+    private View getItemView(int position, View convertView, ViewGroup parent) {
         final RowViewHolder viewHolder;
         if (convertView == null) {
-            convertView = inflter.inflate(R.layout.adapter_calendar_data_rows, null);
+            convertView = layoutInflater.inflate(R.layout.adapter_calendar_data_rows, parent, false);
             viewHolder = new RowViewHolder();
 
             viewHolder.ivEventHost = (RoundedImageView) convertView.findViewById(R.id.iv_event_host);
@@ -150,14 +102,39 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
             viewHolder.slCenesEvent = (SwipeLayout) convertView.findViewById(R.id.sl_cenes_event);
             viewHolder.slSocilaEvent = (SwipeLayout) convertView.findViewById(R.id.sl_social_event);
 
-            convertView.setTag(R.layout.adapter_calendar_data_rows, viewHolder);
+
+            convertView.setTag(R.layout.adapter_calendar_data_rows);
+        } else if (convertView.getTag(R.layout.adapter_calendar_data_rows) == null) {
+            convertView = layoutInflater.inflate(R.layout.adapter_calendar_data_rows, parent, false);
+            viewHolder = new RowViewHolder();
+
+            viewHolder.ivEventHost = (RoundedImageView) convertView.findViewById(R.id.iv_event_host);
+            viewHolder.tvEventTitle = (CenesTextView) convertView.findViewById(R.id.tv_event_title);
+            viewHolder.tvEventLocation = (CenesTextView) convertView.findViewById(R.id.tv_event_location);
+            viewHolder.llEventLocationSection = (LinearLayout) convertView.findViewById(R.id.ll_event_location_section);
+            viewHolder.rlCenesEvents = (RelativeLayout) convertView.findViewById(R.id.rl_cenes_events);
+            viewHolder.rlTpEvents = (RelativeLayout) convertView.findViewById(R.id.rl_tp_events);
+            viewHolder.llHoliday = (LinearLayout) convertView.findViewById(R.id.ll_holiday);
+            viewHolder.tvStartTime = (TextView) convertView.findViewById(R.id.tv_start_time);
+            viewHolder.tvTpStartTime = (TextView) convertView.findViewById(R.id.tv_tp_start_time);
+            viewHolder.tvHolidayTitle = (TextView) convertView.findViewById(R.id.tv_holiday_title);
+            viewHolder.tvMonthSeparator = (TextView) convertView.findViewById(R.id.tv_month_separator);
+            viewHolder.tvSwipeDelete = (TextView) convertView.findViewById(R.id.tv_swipe_delete);
+            viewHolder.tvSwipeHide = (TextView) convertView.findViewById(R.id.tv_swipe_hide);
+            viewHolder.tvThirdPartLabel = (CenesTextView) convertView.findViewById(R.id.tv_third_part_label);
+            viewHolder.tvTpEventTitle = (CenesTextView) convertView.findViewById(R.id.tv_tp_event_title);
+            viewHolder.tvTpSource = (CenesTextView) convertView.findViewById(R.id.tv_tp_source);
+            viewHolder.dividerView = (View) convertView.findViewById(R.id.view_divider);
+            viewHolder.rlMonthSeparator = (RelativeLayout) convertView.findViewById(R.id.rl_month_separator);
+            viewHolder.slCenesEvent = (SwipeLayout) convertView.findViewById(R.id.sl_cenes_event);
+            viewHolder.slSocilaEvent = (SwipeLayout) convertView.findViewById(R.id.sl_social_event);
+
+
+            convertView.setTag(R.layout.adapter_calendar_data_rows);
         } else {
             viewHolder = (RowViewHolder) convertView.getTag(R.layout.adapter_calendar_data_rows);
         }
 
-        if (viewHolder == null) {
-            return convertView;
-        }
         viewHolder.rlCenesEvents.setVisibility(View.GONE);
         viewHolder.rlTpEvents.setVisibility(View.GONE);
         viewHolder.llHoliday.setVisibility(View.GONE);
@@ -165,14 +142,14 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
         viewHolder.slCenesEvent.setVisibility(View.GONE);
         viewHolder.slSocilaEvent.setVisibility(View.GONE);
 
-        final Event event = getChild(groupPosition, childPosition);
+        final Event event = (Event) getItem(position);
         List<EventMember> eventMembers = event.getEventMembers();
 
-        if ( isLastChild ) {
+        /*if ( isLastChild ) {
             viewHolder.dividerView.setVisibility(View.GONE);
         }else {
             viewHolder.dividerView.setVisibility(View.VISIBLE);
-        }
+        }*/
 
         System.out.println("Event Schdedule As : "+event.getTitle()+" ----- "+event.getScheduleAs());
 
@@ -208,7 +185,7 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
             }
             viewHolder.tvStartTime.setText(CenesUtils.hmmaa.format(new Date(event.getStartTime())));
             //Lets find Event Host
-           EventMember eventHost = null;
+            EventMember eventHost = null;
             for (EventMember eventMember: eventMembers) {
                 if (eventMember.getUserId() != null && eventMember.getUserId().equals(event.getCreatedById())) {
                     eventHost = eventMember;
@@ -302,9 +279,64 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
         return convertView;
     }
 
+    @NonNull
+    private View getSectionView(int position, View convertView, ViewGroup parent) {
+        HeaderViewHolder sectionViewHolder;
+        if (convertView == null) {
+            convertView = layoutInflater.inflate(R.layout.adapter_home_data_headers_v2, parent, false);
+            sectionViewHolder = new HeaderViewHolder();
+
+            sectionViewHolder.tvHeader = (TextView) convertView.findViewById(R.id.tv_calendar_data_header);
+
+            convertView.setTag(R.layout.adapter_home_data_headers_v2);
+
+        } else if (convertView.getTag(R.layout.adapter_home_data_headers_v2) == null) {
+
+            convertView = layoutInflater.inflate(R.layout.adapter_home_data_headers_v2, parent, false);
+            sectionViewHolder = new HeaderViewHolder();
+
+            sectionViewHolder.tvHeader = (TextView) convertView.findViewById(R.id.tv_calendar_data_header);
+
+            convertView.setTag(R.layout.adapter_home_data_headers_v2);
+
+        } else {
+            sectionViewHolder = (HeaderViewHolder) convertView.getTag(R.layout.adapter_home_data_headers_v2);
+        }
+
+
+        String header = (String)getItem(position);
+        String dateKey = "";
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, 1);
+
+        if (header != null) {
+            if (header.equals(CenesUtils.EEEMMMMdd.format(new Date()))) {
+
+                dateKey = "Today ";
+            } else if (header.equals(CenesUtils.EEEMMMMdd.format(cal.getTime()))) {
+
+                dateKey = "Tomorrow ";
+            }
+
+            sectionViewHolder.tvHeader.setText(dateKey + header);
+        }
+        return convertView;
+    }
+
+
     @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
+    public int getItemViewType(int position) {
+        super.getItemViewType(position);
+
+        Object listItem = getItem(position);
+        if (listItem instanceof Event) {
+            return VIEW_TYPE_ITEM;
+        } else if (listItem instanceof String) {
+            return VIEW_TYPE_SECTION;
+        }
+
+        return VIEW_TYPE_NONE;
     }
 
     class HeaderViewHolder {
