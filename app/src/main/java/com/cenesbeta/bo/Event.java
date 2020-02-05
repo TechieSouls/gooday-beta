@@ -43,6 +43,7 @@ public class Event {
     private String predictiveData;
     private Boolean isPredictiveOn = false;
     private String timezone;
+    private String recurringEventId;
     private String fullDayStartTime;
     private String displayAtScreen;
     private boolean isEditMode;
@@ -272,6 +273,14 @@ public class Event {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public String getRecurringEventId() {
+        return recurringEventId;
+    }
+
+    public void setRecurringEventId(String recurringEventId) {
+        this.recurringEventId = recurringEventId;
     }
 
     public String getPredictiveData() {

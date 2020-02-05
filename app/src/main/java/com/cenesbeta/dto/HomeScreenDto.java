@@ -36,8 +36,6 @@ public class HomeScreenDto {
     public static int currentDateGroupPosition = 0;
     public static boolean madeApiCall = false;
     public static Map<String, Integer> homeListGroupAndMonthHolder = new HashMap<>();
-    public static List<String> calendarDataHeaders = new ArrayList<>();
-
 
     public List<String> getHomeDataHeaders() {
         return homeDataHeaders;

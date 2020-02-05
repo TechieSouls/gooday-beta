@@ -137,7 +137,7 @@ public class FriendListFragment  extends CenesFragment {
             }
         });
         addLoggedInUserAsMember(view);
-        //loadFriends();
+        loadFriends();
         return view;
     }
 

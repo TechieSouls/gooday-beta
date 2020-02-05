@@ -255,9 +255,9 @@ public class CalendarTabExpandableListAdapter extends BaseExpandableListAdapter 
                 @Override
                 public void onClick(View v) {
                     if (event.getCreatedById().equals(homeFragmentV2.loggedInUser.getUserId())) {
-                        homeFragmentV2.eventDeleteButtonPressed(event);
+                        //homeFragmentV2.eventDeleteButtonPressed(event);
                     } else {
-                        homeFragmentV2.updateAttendingStatus(event);
+                        //homeFragmentV2.updateAttendingStatus(event);
                     }
                 }
             });

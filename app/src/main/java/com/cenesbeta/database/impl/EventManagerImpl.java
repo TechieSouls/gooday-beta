@@ -31,6 +31,7 @@ public class EventManagerImpl {
             "latitude TEXT," +
             "longitude TEXT," +
             "source TEXT," +
+            "recurring_event_id TEXT," +
             "display_at_screen TEXT," +
             "key TEXT)";
 
@@ -60,10 +61,15 @@ public class EventManagerImpl {
             if (!CenesUtils.isEmpty(event.getLocation())) {
                 location = event.getLocation().replaceAll("'","''");
             }
+
+            String recurringEventId = "";
+            if (!CenesUtils.isEmpty(event.getRecurringEventId())) {
+                recurringEventId = event.getRecurringEventId().replaceAll("'","''");
+            }
             String insertQuery = "insert into events values("+event.getEventId()+", '"+event.getTitle().replaceAll("'","''")+"', '"+description+"'," +
                     " "+event.getStartTime()+", "+event.getEndTime()+", '"+event.getEventPicture()+"', '"+event.getScheduleAs()+"', " +
                     ""+event.getCreatedById()+", '"+location+"', '"+event.getLatitude()+"', '"+event.getLongitude()+"', " +
-                    "'"+event.getSource()+"', '"+event.getDisplayAtScreen()+"', '"+event.getKey()+"')";
+                    "'"+event.getSource()+"', '"+recurringEventId+"', '"+event.getDisplayAtScreen()+"', '"+event.getKey()+"')";
 
             System.out.println(insertQuery);
             db.execSQL(insertQuery);
@@ -86,26 +92,7 @@ public class EventManagerImpl {
             Cursor cursor = db.rawQuery(query, null);
 
             while (cursor.moveToNext()) {
-                Event event = new Event();
-                event.setEventId(cursor.getLong(cursor.getColumnIndex("event_id")));
-                event.setTitle(cursor.getString(cursor.getColumnIndex("title")));
-                event.setDescription(cursor.getString(cursor.getColumnIndex("description")));
-                event.setStartTime(cursor.getLong(cursor.getColumnIndex("start_time")));
-                event.setEndTime(cursor.getLong(cursor.getColumnIndex("end_time")));
-                event.setEventPicture(cursor.getString(cursor.getColumnIndex("photo")));
-                event.setScheduleAs(cursor.getString(cursor.getColumnIndex("schedule_as")));
-                event.setCreatedById(cursor.getInt(cursor.getColumnIndex("created_by_id")));
-                event.setLocation(cursor.getString(cursor.getColumnIndex("location")));
-                event.setLatitude(cursor.getString(cursor.getColumnIndex("latitude")));
-                event.setLongitude(cursor.getString(cursor.getColumnIndex("longitude")));
-                event.setSource(cursor.getString(cursor.getColumnIndex("source")));
-                event.setKey(cursor.getString(cursor.getColumnIndex("key")));
-                event.setDisplayAtScreen(cursor.getString(cursor.getColumnIndex("display_at_screen")));
-
-                EventMemberManagerImpl eventMemberManagerImpl = new EventMemberManagerImpl(cenesApplication);
-                List<EventMember> eventMembers = eventMemberManagerImpl.fetchEventMembersByEventId(event.getEventId());
-                //List<EventMember> eventMembers = eventMemberManagerImpl.fetchEventMembersByEventAtScreen(displayAtScreen);
-                event.setEventMembers(eventMembers);
+                Event event = populateEventObject(cursor);
                 events.add(event);
             }
             cursor.close();
@@ -127,27 +114,7 @@ public class EventManagerImpl {
             String query = "select * from events where event_id = "+eventId+"";
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
-                event = new Event();
-                event.setEventId(cursor.getLong(cursor.getColumnIndex("event_id")));
-                event.setTitle(cursor.getString(cursor.getColumnIndex("title")));
-                event.setDescription(cursor.getString(cursor.getColumnIndex("description")));
-                event.setStartTime(cursor.getLong(cursor.getColumnIndex("start_time")));
-                event.setEndTime(cursor.getLong(cursor.getColumnIndex("end_time")));
-                event.setEventPicture(cursor.getString(cursor.getColumnIndex("photo")));
-                event.setScheduleAs(cursor.getString(cursor.getColumnIndex("schedule_as")));
-                event.setCreatedById(cursor.getInt(cursor.getColumnIndex("created_by_id")));
-                event.setLocation(cursor.getString(cursor.getColumnIndex("location")));
-                event.setLatitude(cursor.getString(cursor.getColumnIndex("latitude")));
-                event.setLongitude(cursor.getString(cursor.getColumnIndex("longitude")));
-                event.setSource(cursor.getString(cursor.getColumnIndex("source")));
-                event.setKey(cursor.getString(cursor.getColumnIndex("key")));
-                event.setDisplayAtScreen(cursor.getString(cursor.getColumnIndex("display_at_screen")));
-
-                EventMemberManagerImpl eventMemberManagerImpl = new EventMemberManagerImpl(cenesApplication);
-                List<EventMember> eventMembers = eventMemberManagerImpl.fetchEventMembersByEventId(event.getEventId());
-                //List<EventMember> eventMembers = eventMemberManagerImpl.fetchEventMembersByEventAtScreen(Event.EventDisplayScreen.HOME.toString());
-
-                event.setEventMembers(eventMembers);
+                event = populateEventObject(cursor);
 
                 cursor.close();
                 db.close();
@@ -157,6 +124,95 @@ public class EventManagerImpl {
             e.printStackTrace();
         }
 
+        return event;
+    }
+
+    public List<Event> findAllEventsByEventId(Long eventId) {
+        this.db = cenesDatabase.getReadableDatabase();
+        List<Event> events = new ArrayList<>();
+        try {
+            String query = "select * from events where event_id = "+eventId+"";
+            Cursor cursor = db.rawQuery(query, null);
+
+            while (cursor.moveToNext()) {
+                Event event = populateEventObject(cursor);
+                events.add(event);
+            }
+            cursor.close();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+        return events;
+    }
+
+    public List<Event> findAllEventsByRecurringEventId(String recurringEventId) {
+        this.db = cenesDatabase.getReadableDatabase();
+        List<Event> events = new ArrayList<>();
+        try {
+            String query = "select * from events where recurring_event_id = '"+recurringEventId+"'";
+            Cursor cursor = db.rawQuery(query, null);
+
+            while (cursor.moveToNext()) {
+                Event event = populateEventObject(cursor);
+                events.add(event);
+            }
+            cursor.close();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+        return events;
+    }
+
+    public List<Event> findAllEventsByTitleAndSource(String title, String source) {
+        this.db = cenesDatabase.getReadableDatabase();
+        List<Event> events = new ArrayList<>();
+        try {
+            String query = "select * from events where title like '"+title+"' and source = '"+source+"' ";
+            Cursor cursor = db.rawQuery(query, null);
+
+            while (cursor.moveToNext()) {
+                Event event = populateEventObject(cursor);
+                events.add(event);
+            }
+            cursor.close();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+        return events;
+    }
+
+    public Event populateEventObject(Cursor cursor) {
+        Event event = new Event();
+        event.setEventId(cursor.getLong(cursor.getColumnIndex("event_id")));
+        event.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+        event.setDescription(cursor.getString(cursor.getColumnIndex("description")));
+        event.setStartTime(cursor.getLong(cursor.getColumnIndex("start_time")));
+        event.setEndTime(cursor.getLong(cursor.getColumnIndex("end_time")));
+        event.setEventPicture(cursor.getString(cursor.getColumnIndex("photo")));
+        event.setScheduleAs(cursor.getString(cursor.getColumnIndex("schedule_as")));
+        event.setCreatedById(cursor.getInt(cursor.getColumnIndex("created_by_id")));
+        event.setLocation(cursor.getString(cursor.getColumnIndex("location")));
+        event.setLatitude(cursor.getString(cursor.getColumnIndex("latitude")));
+        event.setLongitude(cursor.getString(cursor.getColumnIndex("longitude")));
+        event.setSource(cursor.getString(cursor.getColumnIndex("source")));
+        event.setRecurringEventId(cursor.getString(cursor.getColumnIndex("recurring_event_id")));
+        event.setKey(cursor.getString(cursor.getColumnIndex("key")));
+        event.setDisplayAtScreen(cursor.getString(cursor.getColumnIndex("display_at_screen")));
+
+        EventMemberManagerImpl eventMemberManagerImpl = new EventMemberManagerImpl(cenesApplication);
+        List<EventMember> eventMembers = eventMemberManagerImpl.fetchEventMembersByEventId(event.getEventId());
+        //List<EventMember> eventMembers = eventMemberManagerImpl.fetchEventMembersByEventAtScreen(Event.EventDisplayScreen.HOME.toString());
+
+        event.setEventMembers(eventMembers);
         return event;
     }
 

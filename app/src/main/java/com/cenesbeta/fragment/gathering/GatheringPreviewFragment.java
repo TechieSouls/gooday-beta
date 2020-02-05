@@ -41,6 +41,7 @@ import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
+import com.cenesbeta.database.impl.EventManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.dto.GatheringPreviewDto;
 import com.cenesbeta.fragment.CenesFragment;
@@ -83,6 +84,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     public Fragment sourceFragment;
     private CenesApplication cenesApplication;
     private InternetManager internetManager;
+    private EventManagerImpl eventManagerImpl;
     private User loggedInUser;
     public Event event;
     public List<Event> pendingEvents;
@@ -182,6 +184,8 @@ public class GatheringPreviewFragment extends CenesFragment {
         UserManager userManager = coreManager.getUserManager();
         internetManager = coreManager.getInternetManager();
         loggedInUser = userManager.getUser();
+        eventManagerImpl = new EventManagerImpl(cenesApplication);
+
         new GatheringPreviewDto();
 
         windowWidth = getActivity().getWindowManager().getDefaultDisplay().getWidth();
@@ -191,10 +195,8 @@ public class GatheringPreviewFragment extends CenesFragment {
         invitationAcceptSpinner.setVisibility(View.GONE);
         invitationRejectSpinner.setVisibility(View.GONE);
 
-
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
 
         RelativeLayout.LayoutParams bubbleBarParams = new RelativeLayout.LayoutParams(CenesUtils.dpToPx(290), CenesUtils.dpToPx(50));
         bubbleBarParams.setMargins(0    ,metrics.heightPixels - CenesUtils.dpToPx(100), 0, 0);
@@ -249,10 +251,6 @@ public class GatheringPreviewFragment extends CenesFragment {
     public void onResume() {
         super.onResume();
     }
-
-
-
-
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -715,7 +713,12 @@ public class GatheringPreviewFragment extends CenesFragment {
                     break;
                 }
             }
+        } else if (event.getEventId() != null) {
+
+            //Lets delete this event from home screen.
+            ((CenesBaseActivity)getActivity()).homeFragmentV2.addOrRejectEvent(event, "Refresh");
         }
+
         System.out.println("Going to create Gathering.");
         Gson gson = new Gson();
         try {
@@ -738,7 +741,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                             JSONObject data = response.getJSONObject("data");
                             Event eve = new Gson().fromJson(data.toString(), Event.class);
 
-                            /*if (isNewEvent) {
+                            if (isNewEvent) {
                                 MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
                                 try {
                                     JSONObject props = new JSONObject();
@@ -750,7 +753,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                            } */
+                            }
 
                             if (nonCenesMember.size() > 0) {
 
@@ -797,7 +800,7 @@ public class GatheringPreviewFragment extends CenesFragment {
             }
         }).execute(event.getEventId());*/
 
-        ((CenesBaseActivity)getActivity()).homeFragmentV2.eventDeleteButtonPressed(event);
+        ((CenesBaseActivity)getActivity()).homeFragmentV2.addOrRejectEvent(event, "Delete");
 
     }
 
@@ -843,8 +846,8 @@ public class GatheringPreviewFragment extends CenesFragment {
                 }, 500);
             } else if (GatheringPreviewFragment.this.event != null && GatheringPreviewFragment.this.event.getEventId() != null && loggedInUser.getUserId() != null) {
 
-                String queryStr = "eventId="+GatheringPreviewFragment.this.event.getEventId()+"&userId="+loggedInUser.getUserId()+"&status=Going";
-                updateAttendingStatus(queryStr);
+                /*String queryStr = "eventId="+GatheringPreviewFragment.this.event.getEventId()+"&userId="+loggedInUser.getUserId()+"&status=Going";
+                updateAttendingStatus(queryStr);*/
 
                 if (pendingEvents != null && pendingEvents.size() > 0 && pendingEventIndex < pendingEvents.size()) {
 
@@ -856,7 +859,8 @@ public class GatheringPreviewFragment extends CenesFragment {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            ((CenesBaseActivity) getActivity()).homeScreenReloadBroadcaster();
+                            ((CenesBaseActivity) getActivity()).homeFragmentV2.addOrRejectEvent(event, "Going");
+                            //((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
                             ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
                         }
                     }, 500);
@@ -884,8 +888,8 @@ public class GatheringPreviewFragment extends CenesFragment {
                     }
                 }, 500);
             } else {
-                String queryStr = "eventId="+GatheringPreviewFragment.this.event.getEventId()+"&userId="+loggedInUser.getUserId()+"&status=NotGoing";
-                updateAttendingStatus(queryStr);
+                /*String queryStr = "eventId="+GatheringPreviewFragment.this.event.getEventId()+"&userId="+loggedInUser.getUserId()+"&status=NotGoing";
+                updateAttendingStatus(queryStr);*/
 
                 if (pendingEvents != null && pendingEvents.size() > 0 && pendingEventIndex < pendingEvents.size()) {
 
@@ -898,7 +902,8 @@ public class GatheringPreviewFragment extends CenesFragment {
                         @Override
                         public void run() {
 
-                            ((CenesBaseActivity) getActivity()).homeScreenReloadBroadcaster();
+                            ((CenesBaseActivity) getActivity()).homeFragmentV2.addOrRejectEvent(event, "NotGoing");
+                            //((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
                             ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
                         }
                     }, 500);
@@ -944,7 +949,7 @@ public class GatheringPreviewFragment extends CenesFragment {
             rlWelcomeInvitation.setVisibility(View.GONE);
 
             if (!CenesUtils.isEmpty(event.getEventPicture())) {
-                if (((CenesBaseActivity)getActivity()) != null) {
+                if (getActivity() != null) {
 
                     Glide.with(getContext())
                             .load(event.getThumbnail())
@@ -954,14 +959,15 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                                     ivEventPicture.setImageDrawable(resource);
 
-                                    Glide.with(getContext())
-                                            .load(event.getEventPicture()).into(new SimpleTarget<Drawable>() {
-                                        @Override
-                                        public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
-                                            ivEventPicture.setImageDrawable(resource);
-                                        }
-                                    });
-
+                                    if (getActivity() != null) {
+                                        Glide.with(getContext())
+                                                .load(event.getEventPicture()).into(new SimpleTarget<Drawable>() {
+                                            @Override
+                                            public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+                                                ivEventPicture.setImageDrawable(resource);
+                                            }
+                                        });
+                                    }
                                 }
                             });
                 }
