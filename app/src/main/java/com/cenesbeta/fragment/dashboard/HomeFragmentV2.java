@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +41,7 @@ import com.cenesbeta.api.HomeScreenAPI;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventMember;
+import com.cenesbeta.bo.Notification;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.impl.EventManagerImpl;
@@ -46,6 +49,7 @@ import com.cenesbeta.database.impl.EventMemberManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.dto.AsyncTaskDto;
 import com.cenesbeta.dto.HomeScreenDto;
+import com.cenesbeta.dto.NotificationDto;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.friend.FriendListFragment;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
@@ -91,6 +95,7 @@ public class HomeFragmentV2 extends CenesFragment {
     private View homeFragementView;
     private RelativeLayout rlNoGatheringText;
     private Button btCreateGathering, btSyncCalendar;
+    private SwipeRefreshLayout swiperefreshInvitations;
 
 
     private HomeScreenDto homeScreenDto;
@@ -145,6 +150,7 @@ public class HomeFragmentV2 extends CenesFragment {
         elvHomeListView = (ExpandableListView) view.findViewById(R.id.elv_home_list_view);
         elvInvitationListView = (ExpandableListView)view.findViewById(R.id.elv_invitation_list_view);
         lvHomeListView = (ListView) view.findViewById(R.id.lv_home_list_view);
+        swiperefreshInvitations = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_invitations);
 
         //Click Listeners
         tvCalendarTab.setOnClickListener(onClickListener);
@@ -160,6 +166,7 @@ public class HomeFragmentV2 extends CenesFragment {
         //elvHomeListView.setOnScrollListener(calendarTabListScrollListener);
         lvHomeListView.setOnScrollListener(calendarTabListScrollListener);
         mcvHomeCalendar.setOnDateChangedListener(onDateSelectedListener);
+        swiperefreshInvitations.setOnRefreshListener(swipeDownInvitationListener);
 
         //Java Variables
         homeScreenDto = new HomeScreenDto();
@@ -210,6 +217,29 @@ public class HomeFragmentV2 extends CenesFragment {
             System.out.println("Broadcaster Processing");
             //do other stuff here
             loadHomeScreenData();
+        }
+    };
+
+    SwipeRefreshLayout.OnRefreshListener swipeDownInvitationListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+
+            homeScreenDto.setInvitationDataListMap(new HashMap<String, List<Event>>());
+            homeScreenDto.setInvitaitonDataHeaders(new ArrayList<String>());
+            homeScreenDto.setAcceptedEvents(new ArrayList<Event>());
+            homeScreenDto.setPendingEvents(new ArrayList<Event>());
+            homeScreenDto.setDeclinedEvents(new ArrayList<Event>());
+
+            invitationListItemAdapter = null;
+
+            loadInvitationTabData();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    swiperefreshInvitations.setRefreshing(false);
+                }
+            }, 2000);
         }
     };
 

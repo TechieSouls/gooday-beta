@@ -415,7 +415,6 @@ public class CreateGatheringFragment extends CenesFragment {
 
                 case R.id.rl_gath_msg_bar:
 
-                    materialCalendarView.setPagingEnabled(false);
                     GatheirngMessageFragment gatheirngMessageFragment = new GatheirngMessageFragment();
                     gatheirngMessageFragment.setTargetFragment(CreateGatheringFragment.this, MESSAGE_FRAGMENT_CODE);
                     gatheirngMessageFragment.message = event.getDescription();
@@ -1211,7 +1210,10 @@ public class CreateGatheringFragment extends CenesFragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                callPredictiveCalendarTask(predictiveStartCal.getTimeInMillis(), predictiveEndCal.getTimeInMillis());
+
+                if (llPredictiveCalCell.getVisibility() == View.VISIBLE) {
+                    callPredictiveCalendarTask(predictiveStartCal.getTimeInMillis(), predictiveEndCal.getTimeInMillis());
+                }
             } else {
                 if (((CenesBaseActivity)getActivity()) != null && ((CenesBaseActivity)getActivity()).parentEvent == null) {
                     Set<CalendarDay> drawableDates = CenesUtils.getDrawableMonthDateList(CreateGatheringFragment.this.currentMonth);

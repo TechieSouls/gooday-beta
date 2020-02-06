@@ -295,12 +295,19 @@
 
             </LinearLayout>
 
-            <ExpandableListView
-                android:id="@+id/elv_invitation_list_view"
+            <android.support.v4.widget.SwipeRefreshLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/swiperefresh_invitations"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:groupIndicator="@null"
-                />
+                android:layout_height="match_parent">
+
+                <ExpandableListView
+                    android:id="@+id/elv_invitation_list_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:groupIndicator="@null"
+                    />
+            </android.support.v4.widget.SwipeRefreshLayout>
 
         </LinearLayout>
 
