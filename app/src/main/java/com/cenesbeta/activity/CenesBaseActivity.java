@@ -47,6 +47,7 @@ import com.cenesbeta.bo.NotificationCountData;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.dto.AsyncTaskDto;
+import com.cenesbeta.fragment.ImageZoomerFragment;
 import com.cenesbeta.fragment.NavigationFragment;
 import com.cenesbeta.fragment.NotificationFragment;
 import com.cenesbeta.fragment.dashboard.HomeFragment;
@@ -57,6 +58,7 @@ import com.cenesbeta.fragment.metime.MeTimeCardFragment;
 import com.cenesbeta.fragment.metime.MeTimeFragment;
 import com.cenesbeta.fragment.profile.ProfileFragment;
 import com.cenesbeta.fragment.profile.ProfileFragmentV2;
+import com.cenesbeta.zoom.image.PhotoView;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -83,6 +85,7 @@ public class CenesBaseActivity extends CenesActivity {
     private InternetManager internetManager;
     public HomeFragmentV2 homeFragmentV2;
     public NotificationFragment notificationFragment;
+    public PhotoView photoViewZoomer;
 
     public Event parentEvent;
     private Fragment initialFragment;
@@ -136,6 +139,8 @@ public class CenesBaseActivity extends CenesActivity {
         rlLoadingBlock = (RelativeLayout) findViewById(R.id.rl_loading_block);
         rlBadgeCountDot = (RelativeLayout) findViewById(R.id.rl_badge_count_dot);
         tvLoadingMsg = (TextView) findViewById(R.id.tv_loading_msg);
+
+        photoViewZoomer = (PhotoView) findViewById(R.id.photo_view_zoomer);
 
         //Click Listeners
         footerHomeIcon.setOnClickListener(onClickListener);
@@ -469,8 +474,18 @@ public class CenesBaseActivity extends CenesActivity {
         }, 500);
     }
 
-
+    public void zoomViaPhotoZoomer(String imageUrl) {
+        ImageZoomerFragment imageZoomerFragment = new ImageZoomerFragment();
+        imageZoomerFragment.imageUrl = imageUrl;
+        ((CenesBaseActivity)homeFragmentV2.getActivity()).replaceFragment(imageZoomerFragment, HomeFragmentV2.TAG);
+    }
     public void zoomImageFromThumb(final ImageView thumbView, String imageUrl) {
+
+        zoomViaPhotoZoomer(imageUrl);
+    }
+
+
+    /*public void zoomImageFromThumb(final ImageView thumbView, String imageUrl) {
         // If there's an animation in progress, cancel it
         // immediately and proceed with this one.
         if (currentAnimator != null) {
@@ -610,7 +625,7 @@ public class CenesBaseActivity extends CenesActivity {
                 currentAnimator = set;
             }
         });
-    }
+    }*/
 
     public void getContacts() {
         // Check the SDK version and whether the permission is already granted or not.

@@ -16,11 +16,13 @@ import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.dto.HomeScreenDto;
+import com.cenesbeta.fragment.ImageZoomerFragment;
 import com.cenesbeta.fragment.dashboard.HomeFragmentV2;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
 import com.cenesbeta.util.CenesTextView;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
+import com.cenesbeta.zoom.image.PhotoView;
 import com.daimajia.swipe.SwipeLayout;
 
 import java.util.Calendar;
@@ -194,6 +196,7 @@ public class CalendarTabListViewAdapter extends BaseAdapter {
             }
             if (eventHost != null) {
                 if (eventHost.getUser() != null && !CenesUtils.isEmpty(eventHost.getUser().getPicture())) {
+
                     RequestOptions requestOptions = new RequestOptions();
                     requestOptions.placeholder(R.drawable.profile_pic_no_image);
                     requestOptions.circleCrop();
@@ -205,10 +208,10 @@ public class CalendarTabListViewAdapter extends BaseAdapter {
                 viewHolder.ivEventHost.setImageResource(R.drawable.profile_pic_no_image);
             }
             final EventMember eventMemberHost = eventHost;
-
             viewHolder.ivEventHost.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     ((CenesBaseActivity)homeFragmentV2.getActivity()).zoomImageFromThumb(viewHolder.ivEventHost, eventMemberHost.getUser().getPicture());
                 }
             });
