@@ -176,7 +176,7 @@ public class UserManagerImpl implements UserManager {
             if (cursor.moveToFirst()) {
                 user = new User();
                 user.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
-                user.setUserId(812);//Neha
+                //user.setUserId(812);//Neha
                 //user.setUserId(143);//Creed
                 //user.setUserId(761);
                 //user.setUserId(616); //Louisa
