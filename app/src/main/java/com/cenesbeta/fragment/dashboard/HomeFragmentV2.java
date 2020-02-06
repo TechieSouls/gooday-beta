@@ -193,13 +193,13 @@ public class HomeFragmentV2 extends CenesFragment {
         super.onResume();
         ((CenesBaseActivity) getActivity()).showFooter();
         ((CenesBaseActivity)  getActivity()).activateFooterIcon(HomeFragmentV2.TAG);
-        //getActivity().registerReceiver(mMessageReceiver, new IntentFilter("homescreenrefresh"));
+        getActivity().registerReceiver(mMessageReceiver, new IntentFilter("homescreenrefresh"));
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //getActivity().unregisterReceiver(mMessageReceiver);
+        getActivity().unregisterReceiver(mMessageReceiver);
     }
 
     //This is the handler that will manager to process the broadcast intent

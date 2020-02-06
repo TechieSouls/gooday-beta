@@ -105,6 +105,11 @@ public class CenesFirebaseMessagingService extends FirebaseMessagingService {
                 pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             }
             //Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+            Intent newintent = new Intent("homescreenrefresh");
+            //send broadcast
+            getApplicationContext().sendBroadcast(newintent);
+
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                     //.setLargeIcon(R.drawable.ic_ceneslogos_push)
                     .setSmallIcon(R.drawable.ic_ceneslogos)
