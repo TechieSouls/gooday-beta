@@ -74,6 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/rl_header"
+        android:layout_marginTop="15dp"
         android:orientation="vertical">
 
         <TextView
