@@ -240,6 +240,37 @@ public class NotificationFragment extends CenesFragment {
 
         }
     }
+
+    public void markNotificationAsReadInMap(Notification notification) {
+
+        List<Notification> newNotifications = new ArrayList<>();
+        if (notificationMapList.containsKey(NEW_NOTIFICATION)) {
+            newNotifications = notificationMapList.get(NEW_NOTIFICATION);
+        }
+        newNotifications.remove(notification);
+
+        List<Notification> seenNotifications = new ArrayList<>();
+        seenNotifications.add(notification);
+        if (notificationMapList.containsKey(SEEN_NOTIFICATION)) {
+            seenNotifications.addAll(notificationMapList.get(SEEN_NOTIFICATION));
+        }
+
+        if (newNotifications.size() > 0) {
+            notificationMapList.put(NEW_NOTIFICATION, newNotifications);
+            if (headers.size() == 0) {
+                headers.add(NEW_NOTIFICATION);
+            }
+        }
+
+        if (seenNotifications.size() > 0) {
+            notificationMapList.put(SEEN_NOTIFICATION, seenNotifications);
+            if (headers.size() == 1) {
+                headers.add(SEEN_NOTIFICATION);
+            }
+        }
+        notificationExpandableAdapter.notifyDataSetChanged();
+    }
+
     public void filterNotification(List<Notification> notifications) {
 
         List<Notification> newNotifications = new ArrayList<>();
@@ -280,8 +311,13 @@ public class NotificationFragment extends CenesFragment {
         shimmerFrameLayout.hideShimmer();
         shimmerFrameLayout.setVisibility(View.GONE);
         if (notificationDto.getPageNumber() == 0) {
-            notificationExpandableAdapter = new NotificationExpandableAdapter(NotificationFragment.this, headers, notificationMapList);
-            elvNotificationList.setAdapter(notificationExpandableAdapter);
+
+            if (notificationExpandableAdapter != null) {
+                notificationExpandableAdapter.notifyDataSetChanged();
+            } else {
+                notificationExpandableAdapter = new NotificationExpandableAdapter(NotificationFragment.this, headers, notificationMapList);
+                elvNotificationList.setAdapter(notificationExpandableAdapter);
+            }
         } else {
             notificationExpandableAdapter.notifyDataSetChanged();
         }

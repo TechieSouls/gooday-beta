@@ -302,44 +302,61 @@ public class HomeFragmentV2 extends CenesFragment {
         @Override
         public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
-            Calendar currentDateCal = Calendar.getInstance();
+            try {
+                if (homeScreenDto.getHomeDataHeaders() != null && homeScreenDto.getHomeDataHeaders().size() > 0 &&
+                        homeScreenDto.getHomeDataListMap() != null && homeScreenDto.getHomeDataListMap().size() > 0) {
 
-            Calendar selectedDate = Calendar.getInstance();
-            selectedDate.setTime(date.getDate());
+                    Calendar currentDateCal = Calendar.getInstance();
 
-            String headerTitle = "";
-            if (currentDateCal.get(Calendar.YEAR) == selectedDate.get(Calendar.YEAR)) {
-                headerTitle = CenesUtils.EEEMMMMdd.format(new Date(selectedDate.getTimeInMillis()));
-            } else {
-                headerTitle = CenesUtils.EEEMMMMddcmyyyy.format(new Date(selectedDate.getTimeInMillis()));
-            }
+                    Calendar selectedDate = Calendar.getInstance();
+                    selectedDate.setTime(date.getDate());
 
-            if (homeScreenDto.getHomeDataHeaders().contains(headerTitle)) {
+                    String headerTitle = "";
+                    if (currentDateCal.get(Calendar.YEAR) == selectedDate.get(Calendar.YEAR)) {
+                        headerTitle = CenesUtils.EEEMMMMdd.format(new Date(selectedDate.getTimeInMillis()));
+                    } else {
+                        headerTitle = CenesUtils.EEEMMMMddcmyyyy.format(new Date(selectedDate.getTimeInMillis()));
+                    }
 
-                int groupPosition = homeScreenDto.getHomeDataHeaders().indexOf(headerTitle);
-                int listViewScrollPosition = 0;
-                for (int i=0; i < groupPosition; i++) {
-                    listViewScrollPosition += 1 + homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(i)).size();
+                    if (homeScreenDto.getHomeDataHeaders().contains(headerTitle)) {
+
+                        int groupPosition = homeScreenDto.getHomeDataHeaders().indexOf(headerTitle);
+                        int listViewScrollPosition = 0;
+                        for (int i=0; i < groupPosition; i++) {
+                            if (i < homeScreenDto.getHomeDataHeaders().size() &&
+                                    homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(i)) != null) {
+                                listViewScrollPosition += 1 + homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(i)).size();
+                            }                        }
+                        lvHomeListView.smoothScrollToPositionFromTop(listViewScrollPosition, 0, 200);
+                    }
                 }
-                lvHomeListView.smoothScrollToPositionFromTop(listViewScrollPosition, 0, 200);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     };
 
     public void onCalendarPageChangeListener(CalendarDay currentPage) {
 
-        String monthTitle = CenesUtils.MMMM_yyyy.format(currentPage.getDate());
-        System.out.println("Current Month : "+monthTitle);
-        if (HomeScreenDto.homeListGroupAndMonthHolder.containsKey(monthTitle)) {
-            int groupPosition = HomeScreenDto.homeListGroupAndMonthHolder.get(monthTitle);
-            int listViewScrollPosition = 0;
-            for (int i=0; i < groupPosition; i++) {
-                listViewScrollPosition += 1 + homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(i)).size();
+        if (homeScreenDto.getHomeDataListMap() != null && homeScreenDto.getHomeDataHeaders() != null &&
+                homeScreenDto.getHomeDataListMap().size() > 0 && homeScreenDto.getHomeDataHeaders().size() > 0) {
+
+            String monthTitle = CenesUtils.MMMM_yyyy.format(currentPage.getDate());
+            System.out.println("Current Month : "+monthTitle);
+            if (HomeScreenDto.homeListGroupAndMonthHolder.containsKey(monthTitle)) {
+                int groupPosition = HomeScreenDto.homeListGroupAndMonthHolder.get(monthTitle);
+                int listViewScrollPosition = 0;
+                for (int i=0; i < groupPosition; i++) {
+                    if (i < homeScreenDto.getHomeDataHeaders().size() && homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(i)) != null) {
+                        listViewScrollPosition += 1 + homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(i)).size();
+                    }
+                }
+                lvHomeListView.smoothScrollToPositionFromTop(listViewScrollPosition, 0, 200);
+            } else if (monthTitle == CenesUtils.MMMM_yyyy.format(new Date()))  {
+                //elvHomeListView.smoothScrollToPosition(0);
             }
-            lvHomeListView.smoothScrollToPositionFromTop(listViewScrollPosition, 0, 200);
-        } else if (monthTitle == CenesUtils.MMMM_yyyy.format(new Date()))  {
-            //elvHomeListView.smoothScrollToPosition(0);
         }
+
     }
 
     public void updateCalendarLabelDate(String calHeaderDate) {

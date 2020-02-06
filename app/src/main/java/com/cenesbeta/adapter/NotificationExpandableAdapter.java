@@ -234,26 +234,27 @@ public class NotificationExpandableAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
 
-                    holder.notificationTime.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_selectedText_color));
-                    holder.notificationDay.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_selectedText_color));
+                if (notification.getReadStatus().equals("UnRead")) {
+                    notification.setReadStatus("Read");
+                    notificationFragment.notificationManagerImpl.updateNotificationReadStatus(notification);
+                    List<Notification> notifications = notificationFragment.notificationManagerImpl.fetchAllNotifications();
 
+                    notificationFragment.markNotificationAsReadInMap(notification);
 
-                notificationFragment.notificationManagerImpl.updateNotificationReadStatus(notification);
-                List<Notification> notifications = notificationFragment.notificationManagerImpl.fetchAllNotifications();
-                notificationFragment.filterNotification(notifications);
+                    if (notificationFragment.internetManager.isInternetConnection(notificationFragment.getCenesActivity())) {
 
-                if (notificationFragment.internetManager.isInternetConnection(notificationFragment.getCenesActivity())) {
+                        new NotificationAsyncTask(((CenesBaseActivity)notificationFragment.getActivity()).getCenesApplication(), notificationFragment.getActivity());
+                        new NotificationAsyncTask.MarkNotificationReadTask(new NotificationAsyncTask.MarkNotificationReadTask.AsyncResponse() {
+                            @Override
+                            public void processFinish(JSONObject response) {
+                                System.out.println(response);
+                            }
+                        }).execute(notification.getNotificationTypeId());
 
-                    new NotificationAsyncTask(((CenesBaseActivity)notificationFragment.getActivity()).getCenesApplication(), notificationFragment.getActivity());
-                    new NotificationAsyncTask.MarkNotificationReadTask(new NotificationAsyncTask.MarkNotificationReadTask.AsyncResponse() {
-                        @Override
-                        public void processFinish(JSONObject response) {
-                            System.out.println(response);
-                        }
-                    }).execute(notification.getNotificationTypeId());
+                    }
 
+                    notifyDataSetChanged();
                 }
-
 
                 if(notification.getEvent() != null) {
                     GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();

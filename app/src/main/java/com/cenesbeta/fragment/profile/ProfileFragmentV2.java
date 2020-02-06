@@ -496,7 +496,7 @@ public class ProfileFragmentV2  extends CenesFragment {
                     //Update Ptofile Pic in Local Database
                     loggedInUser.setPicture(null);
                     userManager.updateProfilePic(loggedInUser);
-
+                    ((CenesBaseActivity)getActivity()).homeFragmentV2.loadHomeScreenData();
                 }
             }).execute(asyncTaskDto);
 
@@ -529,10 +529,9 @@ public class ProfileFragmentV2  extends CenesFragment {
                             //Reload Home Screen
                             if (getActivity() != null) {
                                 //((CenesBaseActivity)getActivity()).homeScreenReloadBroadcaster();
-                                ((CenesBaseActivity)getActivity()).homeFragmentV2.loadCalendarTabData();
+                                ((CenesBaseActivity)getActivity()).homeFragmentV2.loadHomeScreenData();
                             }
                         }
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

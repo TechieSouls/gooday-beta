@@ -123,7 +123,8 @@
             android:id="@+id/gath_search_location_list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@color/transparent"></ListView>
+            android:divider="@color/transparent"
+            android:listSelector="@android:color/transparent"></ListView>
 
     </LinearLayout>
 
