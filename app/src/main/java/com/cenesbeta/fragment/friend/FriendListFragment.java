@@ -3,7 +3,9 @@ package com.cenesbeta.fragment.friend;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,10 +34,12 @@ import com.cenesbeta.adapter.FriendListAdapter;
 import com.cenesbeta.adapter.FriendsCollectionViewAdapter;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.EventMember;
+import com.cenesbeta.bo.Notification;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.impl.EventManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
+import com.cenesbeta.dto.NotificationDto;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.gathering.CreateGatheringFragment;
 import com.cenesbeta.service.SearchFriendService;
@@ -67,6 +71,7 @@ public class FriendListFragment  extends CenesFragment {
     private Button btnDoneInviteFriend;
     private RelativeLayout cenesNoncenesSelectBar;
     private TextView tvSelectBarTitle;
+    private SwipeRefreshLayout swiperefreshFriends;
 
     private CenesApplication cenesApplication;
     private CoreManager coreManager;
@@ -106,6 +111,7 @@ public class FriendListFragment  extends CenesFragment {
         cenesNoncenesSelectBar = (RelativeLayout) view.findViewById(R.id.cenes_noncenes_select_bar);
         tvSelectBarTitle = (TextView) view.findViewById(R.id.tv_select_bar_title);
         expandableFriendListView = (ExpandableListView) view.findViewById(R.id.elv_friend_list);
+        swiperefreshFriends = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_friends);
 
         cenesApplication = ((CenesBaseActivity) getActivity()).getCenesApplication();
         coreManager = cenesApplication.getCoreManager();
@@ -118,6 +124,7 @@ public class FriendListFragment  extends CenesFragment {
         searchFriendEditText.setOnClickListener(onClickListener);
         btnDoneInviteFriend.setOnClickListener(onClickListener);
         cenesNoncenesSelectBar.setOnClickListener(onClickListener);
+        swiperefreshFriends.setOnRefreshListener(swipeDownListener);
 
         ((CenesBaseActivity)getActivity()).hideFooter();
 
@@ -331,6 +338,25 @@ public class FriendListFragment  extends CenesFragment {
         }
     };
 
+    SwipeRefreshLayout.OnRefreshListener swipeDownListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+
+            ((CenesBaseActivity)getActivity()).getContacts();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    swiperefreshFriends.setRefreshing(false);
+
+                    allFriends = new ArrayList<>();
+                    cenesFriends = new ArrayList<>();
+
+                    loadFriends();
+                }
+            }, 4000);
+        }
+    };
     public void loadFriends() {
         shimmerFrameLayout.setVisibility(View.VISIBLE);
         new FriendAsyncTask(cenesApplication);
@@ -349,8 +375,22 @@ public class FriendListFragment  extends CenesFragment {
 
                         Gson gson = new GsonBuilder().create();
                         Type listType = new TypeToken<List<EventMember>>(){}.getType();
-                        allFriends = gson.fromJson( response.getJSONArray("data").toString(), listType);
+                        List<EventMember> serverFriends = gson.fromJson( response.getJSONArray("data").toString(), listType);
+                        List<EventMember> uniqueFriends = new ArrayList<>();
 
+                        List<String> phoneTrackingList = new ArrayList<>();
+                        for (EventMember serverEventMember: serverFriends) {
+
+                            if (phoneTrackingList.contains(serverEventMember.getPhone())) {
+                                continue;
+                            }
+
+                            phoneTrackingList.add(serverEventMember.getPhone());
+                            uniqueFriends.add(serverEventMember);
+                        }
+
+
+                        allFriends = uniqueFriends;
                         List<EventMember> allFriendsTemp = new ArrayList<>();
                         for (EventMember eventMember: allFriends) {
                             if (eventMember.getFriendId() != null && !eventMember.getFriendId().equals(0) && eventMember.getFriendId().equals(loggedInUser.getUserId())) {
