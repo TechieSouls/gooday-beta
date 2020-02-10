@@ -179,7 +179,7 @@ public class UserManagerImpl implements UserManager {
                 //user.setUserId(812);//Neha
                 //user.setUserId(143);//Creed
                 //user.setUserId(761);
-                user.setUserId(616); //Louisa
+                //user.setUserId(616); //Louisa
                 //user.setUserId(230); //Fuad
                 user.setEmail(cursor.getString(cursor.getColumnIndex("email")));
                 user.setPassword(cursor.getString(cursor.getColumnIndex("password")));
