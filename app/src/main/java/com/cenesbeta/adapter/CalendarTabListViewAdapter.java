@@ -234,7 +234,9 @@ public class CalendarTabListViewAdapter extends BaseAdapter {
             viewHolder.tvSwipeDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     if (event.getCreatedById().equals(homeFragmentV2.loggedInUser.getUserId())) {
+
                         homeFragmentV2.addOrRejectEvent(event, "Delete");
                     } else {
                         homeFragmentV2.addOrRejectEvent(event, "NotGoing");
@@ -264,6 +266,7 @@ public class CalendarTabListViewAdapter extends BaseAdapter {
             viewHolder.tvSwipeHide.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     homeFragmentV2.removeCalendarEvents(event);
                 }
             });

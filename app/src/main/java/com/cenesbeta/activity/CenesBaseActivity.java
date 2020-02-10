@@ -23,6 +23,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
@@ -58,6 +59,7 @@ import com.cenesbeta.fragment.metime.MeTimeCardFragment;
 import com.cenesbeta.fragment.metime.MeTimeFragment;
 import com.cenesbeta.fragment.profile.ProfileFragment;
 import com.cenesbeta.fragment.profile.ProfileFragmentV2;
+import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.zoom.image.PhotoView;
 import com.google.gson.Gson;
 
@@ -77,7 +79,7 @@ public class CenesBaseActivity extends CenesActivity {
     public FragmentManager fragmentManager;
     public ImageView footerHomeIcon, footerGatheringIcon, footerMeTimeIcon, footerProfileIcon, footerNotificationIcon;
     LinearLayout llFooter;
-    public RelativeLayout rlLoadingBlock, rlBadgeCountDot;
+    public RelativeLayout rlLoadingBlock, rlBadgeCountDot, rlFooterLayout;
     public TextView tvLoadingMsg;
     public ImageView ivNotificationFloatingIcon;
     private CenesApplication cenesApplication;
@@ -138,6 +140,7 @@ public class CenesBaseActivity extends CenesActivity {
 
         rlLoadingBlock = (RelativeLayout) findViewById(R.id.rl_loading_block);
         rlBadgeCountDot = (RelativeLayout) findViewById(R.id.rl_badge_count_dot);
+        rlFooterLayout = (RelativeLayout) findViewById(R.id.rl_footer_layout);
         tvLoadingMsg = (TextView) findViewById(R.id.tv_loading_msg);
 
         photoViewZoomer = (PhotoView) findViewById(R.id.photo_view_zoomer);
@@ -149,6 +152,13 @@ public class CenesBaseActivity extends CenesActivity {
         footerMeTimeIcon.setOnClickListener(onClickListener);
         footerNotificationIcon.setOnClickListener(onClickListener);
         ivNotificationFloatingIcon.setOnClickListener(onClickListener);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        rlBadgeCountDot.setX(footerNotificationIcon.getX() + (width/4)/2);
 
         shortAnimationDuration = getResources().getInteger(
                 android.R.integer.config_shortAnimTime);

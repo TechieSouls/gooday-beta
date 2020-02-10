@@ -24,8 +24,8 @@ public class Event {
     private String latitude;
     private String longitude;
     private String status;
-    private String source;
-    private String scheduleAs;
+    private String source = "Cenes";
+    private String scheduleAs = "Gathering";
     private String type;
     private String key;
     private Long startTimeMillis;
@@ -47,9 +47,10 @@ public class Event {
     private String fullDayStartTime;
     private String displayAtScreen;
     private boolean isEditMode;
+    private boolean isSynced = true;
 
     @SerializedName("expired")
-    private Boolean isExpired;
+    private Boolean expired = false;
 
     public Long getEventId() {
         return eventId;
@@ -324,11 +325,11 @@ public class Event {
     }
 
     public Boolean getExpired() {
-        return isExpired;
+        return expired;
     }
 
     public void setExpired(Boolean expired) {
-        isExpired = expired;
+        this.expired = expired;
     }
 
     public boolean isEditMode() {
@@ -345,6 +346,14 @@ public class Event {
 
     public void setDisplayAtScreen(String displayAtScreen) {
         this.displayAtScreen = displayAtScreen;
+    }
+
+    public boolean isSynced() {
+        return isSynced;
+    }
+
+    public void setSynced(boolean synced) {
+        isSynced = synced;
     }
 
     @Override

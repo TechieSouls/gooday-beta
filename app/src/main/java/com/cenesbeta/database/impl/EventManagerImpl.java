@@ -31,6 +31,8 @@ public class EventManagerImpl {
             "latitude TEXT," +
             "longitude TEXT," +
             "source TEXT," +
+            "expired INTEGER," +
+            "synced INTEGER," +
             "recurring_event_id TEXT," +
             "display_at_screen TEXT," +
             "key TEXT)";
@@ -66,15 +68,20 @@ public class EventManagerImpl {
             if (!CenesUtils.isEmpty(event.getRecurringEventId())) {
                 recurringEventId = event.getRecurringEventId().replaceAll("'","''");
             }
+
+            int expired = event.getExpired() ? 1 : 0;
+
+            int isSynced = event.isSynced() ? 1 : 0;
+
             String insertQuery = "insert into events values("+event.getEventId()+", '"+event.getTitle().replaceAll("'","''")+"', '"+description+"'," +
                     " "+event.getStartTime()+", "+event.getEndTime()+", '"+event.getEventPicture()+"', '"+event.getScheduleAs()+"', " +
                     ""+event.getCreatedById()+", '"+location+"', '"+event.getLatitude()+"', '"+event.getLongitude()+"', " +
-                    "'"+event.getSource()+"', '"+recurringEventId+"', '"+event.getDisplayAtScreen()+"', '"+event.getKey()+"')";
+                    "'"+event.getSource()+"', "+expired+", "+isSynced+",'"+recurringEventId+"', '"+event.getDisplayAtScreen()+"', '"+event.getKey()+"')";
 
             System.out.println(insertQuery);
             db.execSQL(insertQuery);
             EventMemberManagerImpl eventMemberManagerImpl = new EventMemberManagerImpl(cenesApplication);
-            eventMemberManagerImpl.addEventMember(event.getEventMembers());
+            eventMemberManagerImpl.addEventMember(event.getEventMembers(), event.getDisplayAtScreen());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -148,6 +155,27 @@ public class EventManagerImpl {
         return events;
     }
 
+    public List<Event> findAllOfflineEvents() {
+        this.db = cenesDatabase.getReadableDatabase();
+        List<Event> events = new ArrayList<>();
+        try {
+
+            String query = "select * from events where synced = 0";
+            Cursor cursor = db.rawQuery(query, null);
+
+            while (cursor.moveToNext()) {
+                Event event = populateEventObject(cursor);
+                events.add(event);
+            }
+            cursor.close();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+        return events;
+    }
     public List<Event> findAllEventsByRecurringEventId(String recurringEventId) {
         this.db = cenesDatabase.getReadableDatabase();
         List<Event> events = new ArrayList<>();
@@ -204,12 +232,14 @@ public class EventManagerImpl {
         event.setLatitude(cursor.getString(cursor.getColumnIndex("latitude")));
         event.setLongitude(cursor.getString(cursor.getColumnIndex("longitude")));
         event.setSource(cursor.getString(cursor.getColumnIndex("source")));
+        event.setExpired(cursor.getString(cursor.getColumnIndex("expired")).equals("1"));
+        event.setSynced(cursor.getString(cursor.getColumnIndex("synced")).equals("1"));
         event.setRecurringEventId(cursor.getString(cursor.getColumnIndex("recurring_event_id")));
         event.setKey(cursor.getString(cursor.getColumnIndex("key")));
         event.setDisplayAtScreen(cursor.getString(cursor.getColumnIndex("display_at_screen")));
 
         EventMemberManagerImpl eventMemberManagerImpl = new EventMemberManagerImpl(cenesApplication);
-        List<EventMember> eventMembers = eventMemberManagerImpl.fetchEventMembersByEventId(event.getEventId());
+        List<EventMember> eventMembers = eventMemberManagerImpl.fetchEventMembersByEventIdAndDisplayAtScreen(event.getEventId(), event.getDisplayAtScreen());
         //List<EventMember> eventMembers = eventMemberManagerImpl.fetchEventMembersByEventAtScreen(Event.EventDisplayScreen.HOME.toString());
 
         event.setEventMembers(eventMembers);
@@ -252,7 +282,7 @@ public class EventManagerImpl {
 
             EventMemberManagerImpl eventMemberManagerImpl = new EventMemberManagerImpl(cenesApplication);
             if (eventIds.length() == 0) {
-                eventMemberManagerImpl.deleteAllFromEventMembers();
+                //eventMemberManagerImpl.deleteAllFromEventMembers();
             } else {
                 eventMemberManagerImpl.deleteFromEventMembersByEventIdsIn(eventIds.substring(0, eventIds.length() - 1));
             }

@@ -810,8 +810,29 @@ public class GatheringPreviewFragment extends CenesFragment {
             invitationAcceptSpinner.setVisibility(View.VISIBLE);
             rotate(360, invitationAcceptSpinner);
 
-            createGathering();
-            if (nonCenesMember.size() == 0) {
+            if (internetManager.isInternetConnection((CenesBaseActivity)getActivity())) {
+
+                createGathering();
+                if (nonCenesMember.size() == 0) {
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            System.out.println("Firing Broadcaster");
+                            //((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
+                            ((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
+                            ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
+                        }
+                    }, 1000);
+                }
+            } else {
+
+                event.setSynced(false);
+                if (event.getEventId() == null) {
+                    event.setEventId(new Date().getTime());
+                }
+                ((CenesBaseActivity) getActivity()).homeFragmentV2.addEventLocally(event, "Going");
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -819,11 +840,12 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                         System.out.println("Firing Broadcaster");
                         //((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
-                        ((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
+                        ((CenesBaseActivity) getActivity()).homeFragmentV2.firstTimeLoadData();
                         ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
                     }
                 }, 1000);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1034,7 +1056,10 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                 if (((CenesBaseActivity)getActivity()) != null) {
 
-                    Glide.with(getContext()).load(eventOwner.getUser().getPicture()).apply(RequestOptions.centerCropTransform()).into(ivProfilePicView);
+                    RequestOptions options = new RequestOptions();
+                    options.placeholder(R.drawable.profile_pic_no_image);
+                    options.centerCrop();
+                    Glide.with(getContext()).load(eventOwner.getUser().getPicture()).apply(options).into(ivProfilePicView);
 
                 }
 

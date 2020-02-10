@@ -14,6 +14,7 @@ public class EventMember {
     private String picture;
     private String status;
     private Long eventId;
+    private String displayScreenAt;
 
     //@SerializedName("memberId")
     private Integer userId;
@@ -136,6 +137,14 @@ public class EventMember {
         if (friendId != null) {
             this.userId = friendId;
         }
+    }
+
+    public String getDisplayScreenAt() {
+        return displayScreenAt;
+    }
+
+    public void setDisplayScreenAt(String displayScreenAt) {
+        this.displayScreenAt = displayScreenAt;
     }
 
     public String getCenesMember() {

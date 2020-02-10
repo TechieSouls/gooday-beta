@@ -241,6 +241,14 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
 
                     if (locations != null && locations.size() > 0) {
                         recentLocations = locations;
+
+                        if (currentLocation != null && currentLocation.getLatitude() != null && currentLocation.getLongitude() != null) {
+                            for (com.cenesbeta.bo.Location loc: recentLocations) {
+                                float kms = getKmFromLatLong(Float.valueOf(currentLocation.getLatitude()), Float.valueOf(currentLocation.getLongitude()), Float.valueOf(loc.getLatitude()), Float.valueOf(loc.getLongitude()));
+                                loc.setKilometers(String.valueOf((kms))+"Km");
+                            }
+                        }
+
                         searchLocationAdapter = new SearchLocationAdapter(SearchLocationActivity.this,recentLocations);
                         gathSearchLocationListView.setAdapter(searchLocationAdapter);
 

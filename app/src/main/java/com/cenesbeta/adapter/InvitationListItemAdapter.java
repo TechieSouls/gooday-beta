@@ -194,11 +194,15 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
         //Lets show Event Members without images
         List<EventMember> eventMembersWithoutHostAsCenesMember = new ArrayList<>();
         for (EventMember eventMember: eventMembers) {
+
+            //Removing host from list
             if (eventMember.getUserId() != null && eventMember.getUserId().equals(event.getCreatedById())) {
                 continue;
             }
-            //Lets exclude who are not cenes member
-            if (eventMember.getUserId() == null || eventMember.getStatus() == null) {
+
+            //Lets exclude who are not cenes member and also those who have not accepted the invitation
+            if (eventMember.getUserId() == null || (eventMember.getUserId() != null &&
+                    (eventMember.getStatus() == null || !eventMember.getStatus().equals("Going")))) {
                 continue;
             }
             eventMembersWithoutHostAsCenesMember.add(eventMember);
@@ -232,17 +236,21 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
             eventViewHolder.recyclerViewGuests.setVisibility(View.GONE);
         }
 
-        //Lets show Event Members without images
-        List<EventMember> eventMembersAsNonCenesMember = new ArrayList<>();
+        //Lets find who are not cenes member
+        int countOfNonCenesMembers = 0;
         for (EventMember eventMember: eventMembers) {
             //Lets find who are not cenes member
-            if (eventMember.getUserId() == null || eventMember.getStatus() == null) {
-                eventMembersAsNonCenesMember.add(eventMember);
+            if (eventMember.getUserId() == null && eventMember.getStatus() == null) {
+                countOfNonCenesMembers++;
+            } else if (eventMember.getUserId() != null &&
+                    (eventMember.getStatus() == null || !eventMember.getStatus().equals("Going"))) {
+                countOfNonCenesMembers++;
             }
         }
-        if (eventMembersAsNonCenesMember.size() > 0) {
+
+        if (countOfNonCenesMembers > 0) {
             eventViewHolder.rlNonCenesCountView.setVisibility(View.VISIBLE);
-            eventViewHolder.tvNonCenesCount.setText("+"+eventMembersAsNonCenesMember.size());
+            eventViewHolder.tvNonCenesCount.setText("+"+countOfNonCenesMembers);
         } else {
             eventViewHolder.rlNonCenesCountView.setVisibility(View.GONE);
         }

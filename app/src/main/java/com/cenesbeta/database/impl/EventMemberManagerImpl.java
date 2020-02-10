@@ -29,6 +29,7 @@ public class EventMemberManagerImpl  {
             "user_id INTEGER, " +
             "phone TEXT," +
             "cenes_member TEXT," +
+            "display_screen_at TEXT," +
             "user_contact_id INTEGER)";
 
     public EventMemberManagerImpl(CenesApplication cenesApplication){
@@ -39,9 +40,10 @@ public class EventMemberManagerImpl  {
         this.userContactManagerImpl = new UserContactManagerImpl(cenesApplication);
     }
 
-    public void addEventMember(List<EventMember> eventMembers) {
+    public void addEventMember(List<EventMember> eventMembers, String displayAtScreen) {
         try {
             for (EventMember eventMember: eventMembers) {
+                eventMember.setDisplayScreenAt(displayAtScreen);
                 addEventMember(eventMember);
             }
         } catch (Exception e){
@@ -63,7 +65,7 @@ public class EventMemberManagerImpl  {
             }
             String insertQuery = "insert into event_members values("+eventMember.getEventMemberId()+", "+eventMember.getEventId()+", '"+eventMember.getName()+"'," +
                     " '"+eventMember.getPicture()+"', '"+eventMember.getStatus()+"', "+eventMember.getUserId()+", '"+eventMember.getPhone()+"', " +
-                    "'"+eventMember.getCenesMember()+"', "+eventMember.getUserContactId()+")";
+                    "'"+eventMember.getCenesMember()+"', '"+eventMember.getDisplayScreenAt()+"', "+eventMember.getUserContactId()+")";
             db.execSQL(insertQuery);
             db.close();
             if (eventMember.getUser() != null) {
@@ -91,13 +93,7 @@ public class EventMemberManagerImpl  {
 
             while (cursor.moveToNext()) {
 
-                EventMember eventMember = new EventMember();
-                eventMember.setEventId(cursor.getLong(cursor.getColumnIndex("event_id")));
-                eventMember.setEventMemberId(cursor.getLong(cursor.getColumnIndex("event_member_id")));
-                eventMember.setName(cursor.getString(cursor.getColumnIndex("name")));
-                eventMember.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
-                eventMember.setUserContactId(cursor.getInt(cursor.getColumnIndex("user_contact_id")));
-                eventMember.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
+                EventMember eventMember = populateEventMember(cursor);
 
                 if (eventMember.getUserId() != null) {
                     User user = this.cenesUserManagerImpl.fetchCenesUserByUserId(eventMember.getUserId());
@@ -120,22 +116,18 @@ public class EventMemberManagerImpl  {
         return eventMembers;
     }
 
-    public List<EventMember> fetchEventMembersByEventAtScreen(String displayAtScreen) {
+    public List<EventMember> fetchEventMembersByEventIdAndDisplayAtScreen(Long eventId, String displayAtScreen) {
         this.db = cenesDatabase.getReadableDatabase();
         List<EventMember> eventMembers = new ArrayList<>();
-        try {
-            String query = "select * from event_members where event_id in (select event_id from events where display_at_screen = '"+displayAtScreen+"' )";
-            Cursor cursor = db.rawQuery(query, null);
 
+        try {
+            String query = "select * from event_members where event_id = "+eventId+" and display_screen_at = '"+displayAtScreen+"' ";
+            System.out.printf("EventMember Query : "+query);
+            Cursor cursor = db.rawQuery(query, null);
+            System.out.println("Results counts : "+cursor.getCount());
             while (cursor.moveToNext()) {
 
-                EventMember eventMember = new EventMember();
-                eventMember.setEventId(cursor.getLong(cursor.getColumnIndex("event_id")));
-                eventMember.setEventMemberId(cursor.getLong(cursor.getColumnIndex("event_member_id")));
-                eventMember.setName(cursor.getString(cursor.getColumnIndex("name")));
-                eventMember.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
-                eventMember.setUserContactId(cursor.getInt(cursor.getColumnIndex("user_contact_id")));
-                eventMember.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
+                EventMember eventMember = populateEventMember(cursor);
 
                 if (eventMember.getUserId() != null) {
                     User user = this.cenesUserManagerImpl.fetchCenesUserByUserId(eventMember.getUserId());
@@ -146,13 +138,14 @@ public class EventMemberManagerImpl  {
                     UserContact userContact = this.userContactManagerImpl.fetchUserContactByUserContactId(eventMember.getUserContactId());
                     eventMember.setUserContact(userContact);
                 }
-
                 eventMembers.add(eventMember);
             }
             cursor.close();
             db.close();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            db.close();
         }
         return eventMembers;
     }
@@ -204,5 +197,20 @@ public class EventMemberManagerImpl  {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public EventMember populateEventMember(Cursor cursor) {
+
+        EventMember eventMember = new EventMember();
+        eventMember.setEventId(cursor.getLong(cursor.getColumnIndex("event_id")));
+        eventMember.setEventMemberId(cursor.getLong(cursor.getColumnIndex("event_member_id")));
+        eventMember.setName(cursor.getString(cursor.getColumnIndex("name")));
+        eventMember.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
+        eventMember.setUserContactId(cursor.getInt(cursor.getColumnIndex("user_contact_id")));
+        eventMember.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
+        eventMember.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+        eventMember.setDisplayScreenAt(cursor.getString(cursor.getColumnIndex("display_screen_at")));
+        return eventMember;
+
     }
 }

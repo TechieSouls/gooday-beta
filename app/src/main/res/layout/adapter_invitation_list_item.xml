@@ -128,13 +128,13 @@
                     android:id="@+id/ll_member_images_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="20dp">
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recycler_view_guests"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
                         android:background="@color/transparent"
                         android:paddingStart="10dp"
                         android:paddingEnd="5dp"

@@ -224,7 +224,7 @@ public class NotificationFragment extends CenesFragment {
 
         }
     }
-    public void loadNotifications(){
+    public void loadNotifications() {
 
         //If its an offline mode
         if (!internetManager.isInternetConnection(getCenesActivity())) {

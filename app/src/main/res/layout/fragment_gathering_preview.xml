@@ -119,7 +119,7 @@
                             android:id="@+id/iv_event_picture_overlay"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="#50000000"/>
+                            android:background="@drawable/xml_gradient_topbottom_blackwhite"/>
 
                         <LinearLayout
                             android:id="@+id/ll_event_details"
