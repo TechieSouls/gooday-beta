@@ -138,17 +138,25 @@
     <ListView
         android:id="@+id/gath_search_friend_list_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:groupIndicator="@null"
         android:layout_below="@+id/cenes_noncenes_select_bar"
         android:visibility="gone"
         ></ListView>
 
-    <ExpandableListView
-        android:id="@+id/elv_friend_list"
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swiperefresh_friends"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cenes_noncenes_select_bar"
-        android:groupIndicator="@android:color/transparent"
-        ></ExpandableListView>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/cenes_noncenes_select_bar">
+
+
+        <ExpandableListView
+            android:id="@+id/elv_friend_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/cenes_noncenes_select_bar"
+            android:groupIndicator="@android:color/transparent"></ExpandableListView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 </RelativeLayout>

@@ -650,6 +650,7 @@ public class CenesBaseActivity extends CenesActivity {
     public void fetchDeviceContactList() {
 
         AsyncTask contactSyncTask = new AsyncTask() {
+
             @Override
             protected Object doInBackground(Object[] objects) {
                 Map<String, String> contactsArrayMap = new HashMap<>();

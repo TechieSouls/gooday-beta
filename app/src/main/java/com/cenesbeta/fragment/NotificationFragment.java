@@ -210,7 +210,7 @@ public class NotificationFragment extends CenesFragment {
             notificationDto.setAllNotifications(new ArrayList<Notification>());
             notificationDto.setNewNotifications(new ArrayList<Notification>());
             notificationDto.setSeenNotifications(new ArrayList<Notification>());
-            prepareNotificationCountCall();
+            onRefreshCalled();
         }
     };
 

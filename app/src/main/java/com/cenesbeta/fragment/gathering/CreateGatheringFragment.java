@@ -584,7 +584,7 @@ public class CreateGatheringFragment extends CenesFragment {
         }
     };
 
-    TimePickerDialog.OnTimeSetListener startTimePickerLisener = new TimePickerDialog.OnTimeSetListener() {
+            TimePickerDialog.OnTimeSetListener startTimePickerLisener = new TimePickerDialog.OnTimeSetListener() {
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
@@ -1093,7 +1093,9 @@ public class CreateGatheringFragment extends CenesFragment {
                     showAlert("Alert","Please select Start and End Time.");
                     predictiveCalSwitch.setChecked(false);
                 }
+
             } else {
+
                 event.setPredictiveOn(false);
                 Set<CalendarDay> drawableDates = CenesUtils.getDrawableMonthDateList(currentMonth);
                 BackgroundDecorator calBgDecorator = new BackgroundDecorator(getContext(), R.drawable.mcv_white_color, drawableDates, false, false);
@@ -1120,13 +1122,25 @@ public class CreateGatheringFragment extends CenesFragment {
                 predictiveStartCal.setTimeInMillis(event.getStartTime());
                 predictiveStartCal.set(Calendar.DAY_OF_MONTH, 15);
                 predictiveStartCal.set(Calendar.MILLISECOND, 0);
+                predictiveStartCal.set(Calendar.SECOND, 0);
                 predictiveStartCal.set(Calendar.MONTH, currentMonth.get(Calendar.MONTH));
 
                 Calendar predictiveEndCal = Calendar.getInstance();
                 predictiveEndCal.setTimeInMillis(event.getEndTime());
                 predictiveEndCal.set(Calendar.DAY_OF_MONTH, 15);
                 predictiveEndCal.set(Calendar.MILLISECOND, 0);
+                predictiveEndCal.set(Calendar.SECOND, 0);
                 predictiveEndCal.set(Calendar.MONTH, currentMonth.get(Calendar.MONTH));
+
+                Calendar predictiveStartCalTemp = Calendar.getInstance();
+                predictiveStartCalTemp.setTimeInMillis(event.getStartTime());
+
+                Calendar predictiveEndCalTemp = Calendar.getInstance();
+                predictiveEndCalTemp.setTimeInMillis(event.getEndTime());
+
+                if (predictiveStartCalTemp.get(Calendar.DAY_OF_MONTH) < predictiveEndCalTemp.get(Calendar.DAY_OF_MONTH)) {
+                    predictiveEndCal.add(Calendar.DAY_OF_MONTH, 1);
+                }
 
                 JSONObject job = new JSONObject();
                 job.put("startTimeMilliseconds", predictiveStartCal.getTimeInMillis());
@@ -1186,6 +1200,7 @@ public class CreateGatheringFragment extends CenesFragment {
                 predictiveStartCal.set(Calendar.DAY_OF_MONTH, 15);
                 predictiveStartCal.set(Calendar.YEAR, currentMonth.getYear());
                 predictiveStartCal.set(Calendar.MONTH, currentMonth.getMonth());
+                predictiveStartCal.set(Calendar.SECOND, 0);
                 predictiveStartCal.set(Calendar.MILLISECOND, 0);
 
 
@@ -1201,7 +1216,18 @@ public class CreateGatheringFragment extends CenesFragment {
                 predictiveEndCal.set(Calendar.DAY_OF_MONTH, 15);
                 predictiveEndCal.set(Calendar.MONTH, currentMonth.getMonth());
                 predictiveEndCal.set(Calendar.YEAR, currentMonth.getYear());
+                predictiveEndCal.set(Calendar.SECOND, 0);
                 predictiveEndCal.set(Calendar.MILLISECOND, 0);
+
+                Calendar predictiveStartCalTemp = Calendar.getInstance();
+                predictiveStartCalTemp.setTimeInMillis(event.getStartTime());
+
+                Calendar predictiveEndCalTemp = Calendar.getInstance();
+                predictiveEndCalTemp.setTimeInMillis(event.getEndTime());
+
+                if (predictiveStartCalTemp.get(Calendar.DAY_OF_MONTH) < predictiveEndCalTemp.get(Calendar.DAY_OF_MONTH)) {
+                    predictiveEndCal.add(Calendar.DAY_OF_MONTH, 1);
+                }
 
                 JSONObject job = new JSONObject();
                 try {
@@ -1464,6 +1490,19 @@ public class CreateGatheringFragment extends CenesFragment {
             predictiveDataForDate = null;
             populateFriendCollectionView();
 
+            if (event.getPredictiveOn()) {
+                if (llPredictiveCalCell.getVisibility() != View.VISIBLE) {
+
+                    if (currentMonth == null) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(event.getStartTime());
+                        currentMonth = calendar;
+                    }
+
+                    event.setPredictiveOn(false);
+                    predictiveCalSwitch.performClick();
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

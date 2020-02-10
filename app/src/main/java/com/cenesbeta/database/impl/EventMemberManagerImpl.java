@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cenesbeta.application.CenesApplication;
+import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.bo.UserContact;
@@ -91,9 +92,26 @@ public class EventMemberManagerImpl  {
             String query = "select * from event_members where event_id = "+eventId;
             Cursor cursor = db.rawQuery(query, null);
 
+            List<Integer> userIdTracking = new ArrayList<>();
+            List<Long> eventMemberIdList = new ArrayList<>();
+
             while (cursor.moveToNext()) {
 
                 EventMember eventMember = populateEventMember(cursor);
+
+                if (eventMemberIdList.contains(eventMember.getEventMemberId())) {
+                    continue;
+                } else {
+                    eventMemberIdList.add(eventMember.getEventMemberId());
+                }
+
+                if (eventMember.getUserId() != null && userIdTracking.contains(eventMember.getUserId()) ) {
+                    continue;
+                } else {
+                    if (eventMember.getUserId() != null) {
+                        userIdTracking.add(eventMember.getUserId());
+                    }
+                }
 
                 if (eventMember.getUserId() != null) {
                     User user = this.cenesUserManagerImpl.fetchCenesUserByUserId(eventMember.getUserId());
@@ -125,9 +143,28 @@ public class EventMemberManagerImpl  {
             System.out.printf("EventMember Query : "+query);
             Cursor cursor = db.rawQuery(query, null);
             System.out.println("Results counts : "+cursor.getCount());
+
+            List<Integer> userIdTracking = new ArrayList<>();
+            List<Long> eventMemberIdList = new ArrayList<>();
+
+
             while (cursor.moveToNext()) {
 
                 EventMember eventMember = populateEventMember(cursor);
+
+                if (eventMemberIdList.contains(eventMember.getEventMemberId())) {
+                    continue;
+                } else {
+                    eventMemberIdList.add(eventMember.getEventMemberId());
+                }
+
+                if (eventMember.getUserId() != null && userIdTracking.contains(eventMember.getUserId()) ) {
+                    continue;
+                } else {
+                    if (eventMember.getUserId() != null) {
+                        userIdTracking.add(eventMember.getUserId());
+                    }
+                }
 
                 if (eventMember.getUserId() != null) {
                     User user = this.cenesUserManagerImpl.fetchCenesUserByUserId(eventMember.getUserId());

@@ -1001,6 +1001,34 @@ public class HomeFragmentV2 extends CenesFragment {
                             }.getType();
                             List<Event> events = gson.fromJson(response.getJSONArray("data").toString(), listType);
 
+                             if (events != null) {
+
+                                for (Event eventToFix: events) {
+
+                                    List<EventMember> eventMembersAfterFix = new ArrayList<>();
+                                    List<Long> eventMemberIdList = new ArrayList<>();
+                                    List<Integer> userIdList = new ArrayList<>();
+
+                                    List<EventMember> eventMembsToFix = eventToFix.getEventMembers();
+                                    for (EventMember eventMemToFix : eventMembsToFix) {
+                                        if (eventMemberIdList.contains(eventMemToFix.getEventMemberId())) {
+                                            continue;
+                                        }
+
+                                        if (eventMemToFix.getUserId() != null && userIdList.contains(eventMemToFix.getUserId())) {
+                                            continue;
+                                        }
+
+                                        if (eventMemToFix.getUserId() != null) {
+                                            userIdList.add(eventMemToFix.getUserId());
+                                        }
+                                        eventMemberIdList.add(eventMemToFix.getEventMemberId());
+                                        eventMembersAfterFix.add(eventMemToFix);
+                                    }
+                                    eventToFix.setEventMembers(eventMembersAfterFix);
+                                }
+                            }
+
                             if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.PastEvents)) {
 
                                 if (HomeScreenDto.calendarTabPageNumber == 0) {
@@ -1016,7 +1044,7 @@ public class HomeFragmentV2 extends CenesFragment {
                                 }
 
                                 homeScreenDto.setPastEvents(events);
-                                //processCalendarDotEvents(events);
+                                processCalendarDotEvents(events);
 
                                 System.out.println("ProcessPrevious CalendarTabData Called");
                                 processCalendarTabData(events, true);

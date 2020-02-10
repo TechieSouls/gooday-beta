@@ -347,8 +347,8 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
 
                 currentLocation = new com.cenesbeta.bo.Location();
 
-                Log.e("Current Longitude:", bestLocation.getLongitude() + "");
-                Log.e("Current Latitude:", bestLocation.getLatitude() + "");
+                //Log.e("Current Longitude:", bestLocation.getLongitude() + "");
+                //Log.e("Current Latitude:", bestLocation.getLatitude() + "");
 
                 currentLocation.setLatitude(String.valueOf(bestLocation.getLatitude()));
                 currentLocation.setLongitude(String.valueOf(bestLocation.getLongitude()));
@@ -404,8 +404,8 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
 
             currentLocation = new com.cenesbeta.bo.Location();
 
-            Log.e("Current Longitude:", bestLocation.getLongitude() + "");
-            Log.e("Current Latitude:", bestLocation.getLatitude() + "");
+            //Log.e("Current Longitude:", bestLocation.getLongitude() + "");
+            //Log.e("Current Latitude:", bestLocation.getLatitude() + "");
 
             currentLocation.setLatitude(String.valueOf(bestLocation.getLatitude()));
             currentLocation.setLongitude(String.valueOf(bestLocation.getLongitude()));
