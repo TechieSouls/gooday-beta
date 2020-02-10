@@ -275,8 +275,8 @@ public class GatheringPreviewFragment extends CenesFragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         // Create a Uri from an intent string. Use the result to create an Intent.
-                                        Uri gmmIntentUri = Uri.parse("google.streetview:cbll="+event.getLongitude()+","+event.getLongitude()+"");
-
+                                      //  Uri gmmIntentUri = Uri.parse("google.streetview:cbll="+event.getLatitude()+","+event.getLongitude()+"");
+                                        Uri gmmIntentUri = Uri.parse("geo:0,0?q="+event.getLatitude()+","+event.getLongitude()+"(label)");
                                         // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
                                         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                                         // Make the Intent explicit by setting the Google Maps package
