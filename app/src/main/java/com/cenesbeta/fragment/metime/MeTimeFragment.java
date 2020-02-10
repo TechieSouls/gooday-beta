@@ -207,12 +207,21 @@ public class MeTimeFragment extends CenesFragment {
     }
 
     public void processMeTimeList(List<MeTime> meTimes, boolean refresh) {
+
+        Map<String, String> daysStrMap= new HashMap<>();
+        daysStrMap.put("1234567", "EVERYDAY");
+        daysStrMap.put("123456", "SUN-FRI");
+        daysStrMap.put("234567", "MON-SAT");
+        daysStrMap.put("12345", "SUN-THUR");
+        daysStrMap.put("23456", "WEEKDAYS");
+        daysStrMap.put("34567", "TUE-SAT");
+        daysStrMap.put("17", "WEEKEND");
+
         for (final MeTime metime: meTimes) {
             if (metime.getItems().size() > 0) {
                 String daysStr = "";
 
                 Integer daysInStrList[] = new Integer[metime.getItems().size()];
-
                 int index = 0;
                 for(MeTimeItem meTimeItem: metime.getItems()) {
 
@@ -222,10 +231,26 @@ public class MeTimeFragment extends CenesFragment {
                     index++;
                 }
                 Arrays.sort(daysInStrList);
-                boolean allDaysMeTime = false;
+
+                String mapKey = "";
+                for (Integer day: daysInStrList) {
+                    mapKey += day;
+                }
+                System.out.println("Days in Str Arra : "+mapKey);
+
+                /*boolean allDaysMeTime = false;
                 if (allDaysMeTime) {
                     daysStr = "MON-FRI";
                     metime.setDays(daysStr);
+                } else {
+                    for(int j=0; j < daysInStrList.length; j++) {
+                        //JSONObject recJson = recurringPatterns.getJSONObject(j);
+                        daysStr += meTimeService.IndexDayMap().get(daysInStrList[j]).substring(0,3).toUpperCase() +",";
+                    }
+                    metime.setDays(daysStr.substring(0, daysStr.length() - 1));
+                }*/
+                if (daysStrMap.containsKey(mapKey)) {
+                    metime.setDays(daysStrMap.get(mapKey));
                 } else {
                     for(int j=0; j < daysInStrList.length; j++) {
                         //JSONObject recJson = recurringPatterns.getJSONObject(j);

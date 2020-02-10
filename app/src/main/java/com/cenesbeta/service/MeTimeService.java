@@ -231,6 +231,7 @@ public class MeTimeService {
 
         if (meTime.getStartTime() != null && meTime.getStartTime() != 0) {
             TextView metimeDays = new TextView(activity);
+
             if (meTime.getDays() != null && meTime.getDays().length() > 0) {
                 metimeDays.setText(meTime.getDays().replaceAll("-", ""));
             }
@@ -245,14 +246,15 @@ public class MeTimeService {
             endCal.setTimeInMillis(meTime.getEndTime());
 
             TextView metimeHours = new TextView(activity);
-            metimeHours.setText(CenesUtils.hmm_aa.format(startCal.getTime()).toUpperCase() +" - "+CenesUtils.hmm_aa.format(endCal.getTime()).toUpperCase());
+            metimeHours.setText(CenesUtils.hmmaa.format(startCal.getTime()).toUpperCase() +" - "+CenesUtils.hmmaa.format(endCal.getTime()).toUpperCase());
             metimeHours.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+            metimeHours.setTextColor(activity.getResources().getColor(R.color.cenes_new_orange));
             detailsLayout.addView(metimeHours);
 
         } else {
             TextView metimeDays = new TextView(activity);
             metimeDays.setText("Not Scheduled");
-            metimeDays.setTextColor(activity.getResources().getColor(R.color.cenes_light_gray));
+            metimeDays.setTextColor(activity.getResources().getColor(R.color.cenes_new_orange));
             metimeDays.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             detailsLayout.addView(metimeDays);
         }
