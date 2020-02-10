@@ -15,6 +15,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -46,6 +47,7 @@ import java.util.TimerTask;
 
 public class SearchLocationActivity extends CenesActivity implements LocationListener {
 
+    private static Integer LOCATION_PERMISSION_CODE = 1001;
     private ImageView closeSearchLocationBtn;
     private ListView gathSearchLocationListView;
     private EditText locationSearchEditText;
@@ -140,7 +142,7 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
                                                             JSONObject geomateryLocation = geomatery.getJSONObject("location");
 
                                                             float kms = getKmFromLatLong(Float.valueOf(currentLocation.getLatitude()), Float.valueOf(currentLocation.getLongitude()), Float.valueOf(geomateryLocation.getString("lat")), Float.valueOf(geomateryLocation.getString("lng")));
-                                                            location.setKilometers(String.valueOf((kms))+"Km");
+                                                            location.setKilometers(String.valueOf((kms)) + "Km");
                                                             locations.add(location);
                                                         }
 
@@ -226,38 +228,9 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
             btnCustomLocation.setVisibility(View.GONE);
 
             new LocationAsyncTask(cenesApplication);
-            new LocationAsyncTask.RecentLocationTask(new LocationAsyncTask.RecentLocationTask.AsyncResponse() {
-                @Override
-                public void processFinish(List<com.cenesbeta.bo.Location> locations) {
-
-                    recentLocations = new ArrayList<>();
-
-                    tvPreviousSearchHeader.setVisibility(View.VISIBLE);
-
-                    if (locations.size() == 0) {
-                        tvPreviousSearchHeader.setVisibility(View.GONE);
-                    }
 
 
-                    if (locations != null && locations.size() > 0) {
-                        recentLocations = locations;
-
-                        if (currentLocation != null && currentLocation.getLatitude() != null && currentLocation.getLongitude() != null) {
-                            for (com.cenesbeta.bo.Location loc: recentLocations) {
-                                float kms = getKmFromLatLong(Float.valueOf(currentLocation.getLatitude()), Float.valueOf(currentLocation.getLongitude()), Float.valueOf(loc.getLatitude()), Float.valueOf(loc.getLongitude()));
-                                loc.setKilometers(String.valueOf((kms))+"Km");
-                            }
-                        }
-
-                        searchLocationAdapter = new SearchLocationAdapter(SearchLocationActivity.this,recentLocations);
-                        gathSearchLocationListView.setAdapter(searchLocationAdapter);
-
-
-                    }
-                }
-            }).execute();
-
-            checkUserLocationServiceOn();
+            checkLocationPermission();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -265,7 +238,7 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
 
     public void fetchWorldWideLocations(String text) {
 
-        String queryStr = "input=" + text.replaceAll(" ","+");
+        String queryStr = "input=" + text.replaceAll(" ", "+");
 
         new LocationAsyncTask.SearchWorldWideLocationTask(new LocationAsyncTask.SearchWorldWideLocationTask.AsyncResponse() {
             @Override
@@ -308,7 +281,39 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
 
             }
         }).execute(queryStr);
+    }
 
+    public void recentLocationCall() {
+        new LocationAsyncTask.RecentLocationTask(new LocationAsyncTask.RecentLocationTask.AsyncResponse() {
+            @Override
+            public void processFinish(List<com.cenesbeta.bo.Location> locations) {
+
+                recentLocations = new ArrayList<>();
+
+                tvPreviousSearchHeader.setVisibility(View.VISIBLE);
+
+                if (locations.size() == 0) {
+                    tvPreviousSearchHeader.setVisibility(View.GONE);
+                }
+
+
+                if (locations != null && locations.size() > 0) {
+                    recentLocations = locations;
+
+                    if (currentLocation != null && currentLocation.getLatitude() != null && currentLocation.getLongitude() != null) {
+                        for (com.cenesbeta.bo.Location loc : recentLocations) {
+                            float kms = getKmFromLatLong(Float.valueOf(currentLocation.getLatitude()), Float.valueOf(currentLocation.getLongitude()), Float.valueOf(loc.getLatitude()), Float.valueOf(loc.getLongitude()));
+                            loc.setKilometers(String.valueOf((kms)) + "Km");
+                        }
+                    }
+
+                    searchLocationAdapter = new SearchLocationAdapter(SearchLocationActivity.this, recentLocations);
+                    gathSearchLocationListView.setAdapter(searchLocationAdapter);
+
+
+                }
+            }
+        }).execute();
     }
 
     public void addClickListeners() {
@@ -316,36 +321,42 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
         btnCustomLocation.setOnClickListener(onClickListener);
     }
 
-    public void checkUserLocationServiceOn() {
-        // Get the location manager
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        // Define the criteria how to select the locatioin provider -> use
-        // default
-        Criteria criteria = new Criteria();
-        mprovider = locationManager.getBestProvider(criteria, false);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            ActivityCompat.requestPermissions(this, new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION},
-                    1001);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        if (requestCode == LOCATION_PERMISSION_CODE) {
 
-            //return;
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+                List<String> providers = locationManager.getProviders(true);
+                Location bestLocation = null;
+                for (String provider : providers) {
+
+                    Location l = locationManager.getLastKnownLocation(provider);
+                    if (l == null) {
+                        continue;
+                    }
+                    if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                        // Found best last known location: %s", l);
+                        bestLocation = l;
+                    }
+                }
+
+                currentLocation = new com.cenesbeta.bo.Location();
+
+                Log.e("Current Longitude:", bestLocation.getLongitude() + "");
+                Log.e("Current Latitude:", bestLocation.getLatitude() + "");
+
+                currentLocation.setLatitude(String.valueOf(bestLocation.getLatitude()));
+                currentLocation.setLongitude(String.valueOf(bestLocation.getLongitude()));
+
+                recentLocationCall();
+            }
+
         }
-        Location location = locationManager.getLastKnownLocation(mprovider);
-        // Initialize the location fields
-        if (location != null) {
-            System.out.println("Provider " + mprovider + " has been selected.");
-            onLocationChanged(location);
-        }
-
     }
 
     public float getKmFromLatLong(float lat1, float lng1, float lat2, float lng2){
@@ -364,6 +375,44 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
         return Float.valueOf(decimalFormat.format(dist)); // output is 102.24
     }
 
+    public void checkLocationPermission() {
+
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},
+                    LOCATION_PERMISSION_CODE);
+
+        } else {
+
+            locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+            List<String> providers = locationManager.getProviders(true);
+            Location bestLocation = null;
+            for (String provider : providers) {
+
+                Location l = locationManager.getLastKnownLocation(provider);
+                if (l == null) {
+                    continue;
+                }
+                if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                    // Found best last known location: %s", l);
+                    bestLocation = l;
+                }
+            }
+
+            currentLocation = new com.cenesbeta.bo.Location();
+
+            Log.e("Current Longitude:", bestLocation.getLongitude() + "");
+            Log.e("Current Latitude:", bestLocation.getLatitude() + "");
+
+            currentLocation.setLatitude(String.valueOf(bestLocation.getLatitude()));
+            currentLocation.setLongitude(String.valueOf(bestLocation.getLongitude()));
+
+            recentLocationCall();
+        }
+    }
 
     @Override
     public void onLocationChanged(final Location location) {
