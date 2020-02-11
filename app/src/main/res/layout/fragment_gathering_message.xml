@@ -57,7 +57,7 @@
             android:id="@+id/tv_characters_count"
             android:layout_width="wrap_content"
             android:layout_height="21dp"
-            android:text="150 Characters Remaining"
+            android:text="150 Characters Remain"
             android:layout_gravity="right"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"

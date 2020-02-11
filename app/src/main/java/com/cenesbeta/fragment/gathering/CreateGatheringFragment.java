@@ -73,6 +73,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.model.AspectRatio;
+import com.yalantis.ucrop.view.CropImageView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -606,7 +608,7 @@ public class CreateGatheringFragment extends CenesFragment {
             predictedDateStartCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
             predictedDateStartCal.set(Calendar.MINUTE, minute);
 
-            startTimePickerLabel.setText(CenesUtils.hmm_aa.format(predictedDateStartCal.getTime()).toUpperCase());
+            startTimePickerLabel.setText(CenesUtils.hmmaa.format(predictedDateStartCal.getTime()).toUpperCase());
             Log.e("Start Date : ", predictedDateStartCal.getTime().toString());
             event.setStartTime(predictedDateStartCal.getTimeInMillis());
 
@@ -615,7 +617,7 @@ public class CreateGatheringFragment extends CenesFragment {
                 Calendar predictedDateEndCal = Calendar.getInstance();
                 predictedDateEndCal.setTimeInMillis(predictedDateStartCal.getTimeInMillis());
                 predictedDateEndCal.add(Calendar.MINUTE, 60);
-                endTimePickerLabel.setText(CenesUtils.hmm_aa.format(predictedDateEndCal.getTime()).toUpperCase());
+                endTimePickerLabel.setText(CenesUtils.hmmaa.format(predictedDateEndCal.getTime()).toUpperCase());
                 Log.e("End Date : ", predictedDateEndCal.getTime().toString());
                 event.setEndTime(predictedDateEndCal.getTimeInMillis());
 
@@ -624,7 +626,7 @@ public class CreateGatheringFragment extends CenesFragment {
                 Calendar predictedDateEndCal = Calendar.getInstance();
                 predictedDateEndCal.setTimeInMillis(event.getEndTime());
                 predictedDateEndCal.add(Calendar.DAY_OF_MONTH, 1);
-                endTimePickerLabel.setText(CenesUtils.hmm_aa.format(predictedDateEndCal.getTime()).toUpperCase());
+                endTimePickerLabel.setText(CenesUtils.hmmaa.format(predictedDateEndCal.getTime()).toUpperCase());
                 Log.e("End Date : ", predictedDateEndCal.getTime().toString());
                 event.setEndTime(predictedDateEndCal.getTimeInMillis());
             }
@@ -655,7 +657,7 @@ public class CreateGatheringFragment extends CenesFragment {
             Calendar predictedDateEndCal = Calendar.getInstance();
             predictedDateEndCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
             predictedDateEndCal.set(Calendar.MINUTE, minute);
-            endTimePickerLabel.setText(CenesUtils.hmm_aa.format(predictedDateEndCal.getTime()).toUpperCase());
+            endTimePickerLabel.setText(CenesUtils.hmmaa.format(predictedDateEndCal.getTime()).toUpperCase());
             Log.e("End Date : ", predictedDateEndCal.getTime().toString());
 
             if (predictedDateEndCal.getTimeInMillis() <= event.getStartTime()) {
@@ -664,7 +666,7 @@ public class CreateGatheringFragment extends CenesFragment {
                 predictedDateEndCal.add(Calendar.DAY_OF_MONTH, 1);
                 Log.e("End Date After Adding: ",predictedDateEndCal.getTime().toString());
             }
-            endTimePickerLabel.setText(CenesUtils.hmm_aa.format(predictedDateEndCal.getTime()).toUpperCase());
+            endTimePickerLabel.setText(CenesUtils.hmmaa.format(predictedDateEndCal.getTime()).toUpperCase());
             Log.e("End Date : ", predictedDateEndCal.getTime().toString());
             event.setEndTime(predictedDateEndCal.getTimeInMillis());
 
@@ -683,6 +685,7 @@ public class CreateGatheringFragment extends CenesFragment {
         public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
             try {
+                ivDateBarArrow.setImageResource(R.drawable.date_panel_right_arrow);
 
                 System.out.println("Calendar Date Clicked.");
                 //ivDateBarArrow.setImageResource(R.drawable.date_panel_right_arrow);
@@ -861,7 +864,13 @@ public class CreateGatheringFragment extends CenesFragment {
                 ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), rotatedBitmap), this, 1280, 512);*/
                     Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
                     UCrop.Options options = new UCrop.Options();
-                    UCrop.of(imageUri, resultUri)
+                    options.setAspectRatioOptions(1,
+                            new AspectRatio("1:2", 1, 2),
+                            new AspectRatio("3:4", 3, 4),
+                            new AspectRatio("Original", CropImageView.DEFAULT_ASPECT_RATIO, CropImageView.DEFAULT_ASPECT_RATIO),
+                            new AspectRatio("16:9", 16, 9),
+                            new AspectRatio("1:1", 1, 1));
+                    UCrop.of(imageUri, resultUri).withOptions(options)
                             //.withAspectRatio(3, 4)
                             .withMaxResultSize(1600, 1000)
                             .start(getContext(), CreateGatheringFragment.this, UCrop.REQUEST_CROP);
@@ -873,7 +882,15 @@ public class CreateGatheringFragment extends CenesFragment {
 
                    try {
                         Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
-                        UCrop.of(cameraFileUri, resultUri)
+                       UCrop.Options options = new UCrop.Options();
+                       options.setAspectRatioOptions(1,
+                               new AspectRatio("1:2", 1, 2),
+                               new AspectRatio("3:4", 3, 4),
+                               new AspectRatio("Original", CropImageView.DEFAULT_ASPECT_RATIO, CropImageView.DEFAULT_ASPECT_RATIO),
+                               new AspectRatio("16:9", 16, 9),
+                               new AspectRatio("1:1", 1, 1));
+
+                       UCrop.of(cameraFileUri, resultUri).withOptions(options)
                                         //.withAspectRatio(3, 4)
                                         .withMaxResultSize(1600, 1000)
                                         .start(getContext(), CreateGatheringFragment.this, UCrop.REQUEST_CROP);

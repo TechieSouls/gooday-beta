@@ -326,7 +326,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                             RequestOptions requestOptions = new RequestOptions();
                             requestOptions.circleCrop();
                             requestOptions.placeholder(R.drawable.profile_pic_no_image);
-                            if (eventOwner.getUser() != null) {
+                            if (eventOwner != null && eventOwner.getUser() != null) {
                                 Glide.with(getContext()).load(eventOwner.getUser().getPicture()).apply(requestOptions).into(ivDescProfilePic);
                             }
 

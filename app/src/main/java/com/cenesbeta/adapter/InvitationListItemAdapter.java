@@ -237,17 +237,26 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
         }
 
         //Lets find who are not cenes member
+        System.out.println("Title : "+event.getTitle());
         int countOfNonCenesMembers = 0;
         for (EventMember eventMember: eventMembers) {
+            System.out.println("Name : "+eventMember.getName());
+
             //Lets find who are not cenes member
             if (eventMember.getUserId() == null && eventMember.getStatus() == null) {
-                countOfNonCenesMembers++;
+                countOfNonCenesMembers += 1;
+                System.out.println("Name : "+eventMember.getName()+", Excluded");
+
             } else if (eventMember.getUserId() != null &&
                     (eventMember.getStatus() == null || !eventMember.getStatus().equals("Going"))) {
-                countOfNonCenesMembers++;
+                countOfNonCenesMembers += 1;
+                System.out.println("Name : "+eventMember.getName()+", Excluded");
             }
         }
 
+        if (eventMembersWithoutHostAsCenesMember.size() > 3) {
+            countOfNonCenesMembers += eventMembersWithoutHostAsCenesMember.size() - 3;
+        }
         if (countOfNonCenesMembers > 0) {
             eventViewHolder.rlNonCenesCountView.setVisibility(View.VISIBLE);
             eventViewHolder.tvNonCenesCount.setText("+"+countOfNonCenesMembers);

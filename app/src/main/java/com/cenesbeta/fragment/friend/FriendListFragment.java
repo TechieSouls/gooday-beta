@@ -69,7 +69,7 @@ public class FriendListFragment  extends CenesFragment {
     private ListView gathSearchFriendListView;
     private ExpandableListView expandableFriendListView;
     private Button btnDoneInviteFriend;
-    private RelativeLayout cenesNoncenesSelectBar;
+    private RelativeLayout cenesNoncenesSelectBar, gathSearchFriendSubHeader, rlSelectedFriendsRecyclerView;
     private TextView tvSelectBarTitle;
     private SwipeRefreshLayout swiperefreshFriends;
 
@@ -109,6 +109,8 @@ public class FriendListFragment  extends CenesFragment {
         gathSearchFriendListView = (ListView) view.findViewById(R.id.gath_search_friend_list_view);
         btnDoneInviteFriend = (Button) view.findViewById(R.id.btn_done_invite_friend);
         cenesNoncenesSelectBar = (RelativeLayout) view.findViewById(R.id.cenes_noncenes_select_bar);
+        gathSearchFriendSubHeader = (RelativeLayout) view.findViewById(R.id.gath_search_friend_sub_header);
+        rlSelectedFriendsRecyclerView = (RelativeLayout) view.findViewById(R.id.rl_selected_friends_recycler_view);
         tvSelectBarTitle = (TextView) view.findViewById(R.id.tv_select_bar_title);
         expandableFriendListView = (ExpandableListView) view.findViewById(R.id.elv_friend_list);
         swiperefreshFriends = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_friends);
@@ -130,7 +132,10 @@ public class FriendListFragment  extends CenesFragment {
 
         searchFriendEditText.setOnEditorActionListener(onEditorActionListener);
         searchFriendEditText.addTextChangedListener(onTextChangeListener);
-
+        gathSearchFriendSubHeader.setOnTouchListener(layoutTouchListener);
+        rlSelectedFriendsRecyclerView.setOnTouchListener(layoutTouchListener);
+        cenesNoncenesSelectBar.setOnTouchListener(layoutTouchListener);
+        
         checkboxStateHolder = new LinkedHashMap<>();
         checkboxObjectHolder = new LinkedHashMap<>();
         checkboxButtonHolder = new LinkedHashMap<>();

@@ -14,6 +14,9 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
 import com.cenesbeta.fragment.CenesFragment;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -230,6 +233,15 @@ public class ImageUtils {
             Uri resultUri = Uri.fromFile(new File(getDefaultFile()));
             com.soundcloud.android.crop.Crop.of(uri, resultUri).withMaxSize(width, height).start(fragment.getActivity(), fragment);
         } catch (ActivityNotFoundException anfe) {
+            MixpanelAPI mixpanel = MixpanelAPI.getInstance(fragment.getContext(), CenesUtils.MIXPANEL_TOKEN);
+            try {
+                JSONObject props = new JSONObject();
+                props.put("Action","Inside Crop Function");
+                props.put("Logs","ActivityNotFoundException : "+anfe.getMessage());
+                mixpanel.track("MeTime", props);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

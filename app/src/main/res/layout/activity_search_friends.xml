@@ -7,6 +7,9 @@
         android:id="@+id/gath_search_friend_header"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:gravity="center_vertical">
 
         <Button
@@ -69,7 +72,10 @@
         android:layout_height="90dp"
         android:layout_marginTop="5dp"
         android:layout_below="@+id/gath_search_friend_sub_header"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"

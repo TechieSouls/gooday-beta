@@ -901,7 +901,7 @@ public class HomeFragmentV2 extends CenesFragment {
             invitationListItemAdapter = null;
             calendarTabListViewAdapter = null;
 
-        loadPastEvents();
+        loadCalendarTabData();
         loadInvitationTabData();
     }
 
@@ -1031,40 +1031,44 @@ public class HomeFragmentV2 extends CenesFragment {
 
                             if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.PastEvents)) {
 
-                                if (HomeScreenDto.calendarTabPageNumber == 0) {
-                                    final List<Event> eventsToAdd = events;
+                                /*if (HomeScreenDto.calendarTabPageNumber == 0) {
                                     AsyncTask.execute(new Runnable() {
                                         @Override
                                         public void run() {
-                                            homeScreenDto.setHomeEvents(new ArrayList<Event>());
                                             eventManagerImpl.deleteAllEventsByDisplayAtScreen(Event.EventDisplayScreen.HOME.toString());
                                             //eventManagerImpl.addEvent(eventsToAdd, Event.EventDisplayScreen.HOME.toString());
                                         }
                                     });
-                                }
+                                }*/
 
                                 homeScreenDto.setPastEvents(events);
                                 processCalendarDotEvents(events);
 
                                 System.out.println("ProcessPrevious CalendarTabData Called");
                                 processCalendarTabData(events, true);
-                                loadCalendarTabData();
 
                             } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Home)) {
 
                                 HomeScreenDto.totalCalendarDataCounts = response.getInt("totalCounts");
                                 System.out.println("Total Calendar Data Counts : "+HomeScreenDto.totalCalendarDataCounts);
 
-                                //If there are no post Events and the current Events List is also empty
-                                //Then we will hide shimer and show message
-                                List<Event> newEvents = new ArrayList<>();
                                 if (HomeScreenDto.calendarTabPageNumber == 0) {
-                                 //   newEvents.addAll(homeScreenDto.getPastEvents());
-                                 //   newEvents.addAll(events);
-                               //     events = newEvents;
+                                    homeScreenDto.setHomeEvents(new ArrayList<Event>());
+                                    AsyncTask.execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            eventManagerImpl.deleteAllEventsByDisplayAtScreen(Event.EventDisplayScreen.HOME.toString());
+                                            //eventManagerImpl.addEvent(eventsToAdd, Event.EventDisplayScreen.HOME.toString());
+                                        }
+                                    });
                                 }
+                                if (HomeScreenDto.calendarTabPageNumber == 0) {
 
-                                if (HomeScreenDto.calendarTabPageNumber == 0 && events.size() == 0 && homeScreenDto.getPastEvents().size() == 0) {
+                                    loadPastEvents();
+                                }
+                                //If there are no post Events and the current Events List is also empty
+                                //Then we will hide shimer and show message.
+                                if (HomeScreenDto.calendarTabPageNumber == 0 && events.size() == 0) {
 
                                     elvHomeListView.setVisibility(View.GONE);
                                     rlNoGatheringText.setVisibility(View.VISIBLE);
@@ -1318,15 +1322,14 @@ public class HomeFragmentV2 extends CenesFragment {
             }
         }
 
-        //Lets check the position of the first event group to be added.
-        //this is just to find out the position at which list should scroll
-        if (pastEvents == false && HomeScreenDto.calendarTabPageNumber == 0) {
-            findListViewScrollPosition();
-        }
-
         homeScreenDto.setHomeDataHeaders(headers);
         homeScreenDto.setHomeDataListMap(mapListEvent);
 
+        //Lets check the position of the first event group to be added.
+        //this is just to find out the position at which list should scroll
+        if (pastEvents == true) {
+            findListViewScrollPosition();
+        }
         if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
             //Lets add Month Separator At Home Screen Events
             addMonthSeparatorToList();
@@ -1381,6 +1384,15 @@ public class HomeFragmentV2 extends CenesFragment {
             if (calendarTabListViewAdapter != null) {
                 calendarTabListViewAdapter.notifyDataSetChanged();
             }
+
+            if (pastEvents == true) {
+                lvHomeListView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        homeButtonPressed();
+                    }
+                });
+            }
         }
     }
 
@@ -1418,6 +1430,8 @@ public class HomeFragmentV2 extends CenesFragment {
                 for (int i=0; i<headers.size(); i++) {
 
                     if (headerTitle.equals(headers.get(i))) {
+
+                        itemPosition += 1 + mapListEvent.get(headers.get(i)).size() + 1;
                         HomeScreenDto.currentDateGroupPosition = itemPosition;
                         break;
                     }
@@ -1601,7 +1615,7 @@ public class HomeFragmentV2 extends CenesFragment {
         calendarTabListViewAdapter = null;
 
         List<Event> homeEvents = eventManagerImpl.fetchAllEventsByScreen(Event.EventDisplayScreen.HOME.toString());
-        if(homeEvents.size() == 0){
+        if(homeEvents.size() == 0) {
             if (internetManager.isInternetConnection(getCenesActivity())) {
                     shimmerFrameLayout.setVisibility(View.VISIBLE);
             }
