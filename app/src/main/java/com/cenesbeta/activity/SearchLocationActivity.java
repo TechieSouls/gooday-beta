@@ -102,7 +102,7 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
                                 tvPreviousSearchHeader.setVisibility(View.VISIBLE);
 
                                 btnCustomLocation.setVisibility(View.GONE);
-                                if (recentLocations.size() == 0) {
+                                if (recentLocations != null && recentLocations.size() == 0) {
                                     tvPreviousSearchHeader.setVisibility(View.GONE);
                                 }
                                 searchLocationAdapter = new SearchLocationAdapter(SearchLocationActivity.this, recentLocations);
@@ -409,8 +409,10 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
             //Log.e("Current Longitude:", bestLocation.getLongitude() + "");
             //Log.e("Current Latitude:", bestLocation.getLatitude() + "");
 
-            currentLocation.setLatitude(String.valueOf(bestLocation.getLatitude()));
-            currentLocation.setLongitude(String.valueOf(bestLocation.getLongitude()));
+            if (bestLocation != null) {
+                currentLocation.setLatitude(String.valueOf(bestLocation.getLatitude()));
+                currentLocation.setLongitude(String.valueOf(bestLocation.getLongitude()));
+            }
 
             recentLocationCall();
         }
