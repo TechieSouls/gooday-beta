@@ -46,6 +46,7 @@ import com.cenesbeta.util.ImageUtils;
 import com.google.gson.Gson;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.soundcloud.android.crop.Crop;
+import com.yalantis.ucrop.UCrop;
 
 import org.json.JSONObject;
 
@@ -644,7 +645,17 @@ public class MeTimeCardFragment extends CenesFragment {
                         e.printStackTrace();
                     }
 
-                    if (isTakeOrUpload == "take_picture") {
+                    try {
+                        JSONObject props = new JSONObject();
+                        props.put("Action","TakePhoto Done");
+                        props.put("Logs","cameraFileUri : "+cameraFileUri == null ? "False" : "True");
+                        mixpanel.track("MeTime", props);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (isTakeOrUpload.equals("take_picture")) {
 
                         if (cameraFileUri != null) {
                             try {
@@ -656,21 +667,45 @@ public class MeTimeCardFragment extends CenesFragment {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            ImageUtils.cropImageWithAspect(cameraFileUri, this, 512, 512);
+                            //ImageUtils.cropImageWithAspect(cameraFileUri, this, 512, 512);
+
+                            Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
+
+                            UCrop.of(cameraFileUri, resultUri)
+                                    .withAspectRatio(3, 4)
+                                    .withMaxResultSize(512, 512)
+                                    .start((CenesBaseActivity)getActivity());
                         } else {
+
+                            try {
+                                JSONObject props = new JSONObject();
+                                props.put("Action","InSide Take Picture");
+                                props.put("Logs","Else condition");
+                                mixpanel.track("MeTime", props);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             
                             Bundle extras = data.getExtras();
                             Bitmap bmp = (Bitmap) extras.get("data"); // Set the bitmap to the bundle
                             // of data that was just
                             // received
-                            ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), bmp), this, 200, 200);
+                            //ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), bmp), this, 200, 200);
+                            Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
+
+                            UCrop.of(getImageUri(getContext().getApplicationContext(), bmp), resultUri)
+                                    .withAspectRatio(3, 4)
+                                    .withMaxResultSize(512, 512)
+                                    .start(getContext(), MeTimeCardFragment.this, UCrop.REQUEST_CROP);
+
                         }
 
-                    } else if (isTakeOrUpload == "upload_picture") {
+                    } else if (isTakeOrUpload.equals("upload_picture")) {
                         String filePath = ImageUtils.getPath(getCenesActivity().getApplicationContext(), data.getData());
 
                         Uri imageUri = data.getData();
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getCenesActivity().getContentResolver(), imageUri);
+                        /*Bitmap bitmap = MediaStore.Images.Media.getBitmap(getCenesActivity().getContentResolver(), imageUri);
                         ExifInterface ei = new ExifInterface(filePath);
                         int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                                 ExifInterface.ORIENTATION_UNDEFINED);
@@ -693,11 +728,14 @@ public class MeTimeCardFragment extends CenesFragment {
                             case ExifInterface.ORIENTATION_NORMAL:
                             default:
                                 rotatedBitmap = bitmap;
-                        }
+                        }*/
 
-
-                        ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), rotatedBitmap), this, 200, 200);
-
+                        Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
+                        //ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), rotatedBitmap), this, 200, 200);
+                        UCrop.of(imageUri, resultUri)
+                                .withAspectRatio(3, 4)
+                                .withMaxResultSize(200, 200)
+                                .start(getContext(), MeTimeCardFragment.this, UCrop.REQUEST_CROP);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

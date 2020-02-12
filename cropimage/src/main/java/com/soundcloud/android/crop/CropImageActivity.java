@@ -16,6 +16,7 @@
 
 package com.soundcloud.android.crop;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,6 +31,8 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -80,81 +83,99 @@ public class CropImageActivity extends MonitoredActivity {
     }
 
     private void initViews() {
-        imageView = (CropImageView) findViewById(R.id.crop_image);
-        imageView.context = this;
-        imageView.setRecycler(new ImageViewTouchBase.Recycler() {
-            @Override
-            public void recycle(Bitmap b) {
-                b.recycle();
-                System.gc();
-            }
-        });
+        try {
+            imageView = (CropImageView) findViewById(R.id.crop_image);
+            imageView.context = this;
+            imageView.setRecycler(new ImageViewTouchBase.Recycler() {
+                @Override
+                public void recycle(Bitmap b) {
+                    b.recycle();
+                    System.gc();
+                }
+            });
 
-        findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        });
+            findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    setResult(RESULT_CANCELED);
+                    finish();
+                }
+            });
 
-        findViewById(R.id.btn_done).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onSaveClicked();
-            }
-        });
+            findViewById(R.id.btn_done).setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    onSaveClicked();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("initViews", e.getMessage());
+        }
+
     }
 
     private void setupFromIntent() {
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
 
-        if (extras != null) {
-            aspectX = extras.getInt(Crop.Extra.ASPECT_X);
-            aspectY = extras.getInt(Crop.Extra.ASPECT_Y);
-            maxX = extras.getInt(Crop.Extra.MAX_X);
-            maxY = extras.getInt(Crop.Extra.MAX_Y);
-            saveUri = extras.getParcelable(MediaStore.EXTRA_OUTPUT);
+        try {
+            Intent intent = getIntent();
+            Bundle extras = intent.getExtras();
+
+            if (extras != null) {
+                aspectX = extras.getInt(Crop.Extra.ASPECT_X);
+                aspectY = extras.getInt(Crop.Extra.ASPECT_Y);
+                maxX = extras.getInt(Crop.Extra.MAX_X);
+                maxY = extras.getInt(Crop.Extra.MAX_Y);
+                saveUri = extras.getParcelable(MediaStore.EXTRA_OUTPUT);
+            }
+
+            sourceUri = intent.getData();
+            if (sourceUri != null) {
+                exifRotation = CropUtil.getExifRotation(CropUtil.getFromMediaUri(this, getContentResolver(), sourceUri));
+
+                InputStream is = null;
+                try {
+                    sampleSize = calculateBitmapSampleSize(sourceUri);
+                    is = getContentResolver().openInputStream(sourceUri);
+                    BitmapFactory.Options option = new BitmapFactory.Options();
+                    option.inSampleSize = sampleSize;
+                    rotateBitmap = new RotateBitmap(BitmapFactory.decodeStream(is, null, option), exifRotation);
+                } catch (IOException e) {
+                    Log.e("Error reading image: " + e.getMessage(), e);
+                    setResultException(e);
+                } catch (OutOfMemoryError e) {
+                    Log.e("OOM reading image: " + e.getMessage(), e);
+                    setResultException(e);
+                } finally {
+                    CropUtil.closeSilently(is);
+                }
+            }
+        } catch (Exception e) {
+            showAlert("setupFromIntent", e.getMessage());
         }
 
-        sourceUri = intent.getData();
-        if (sourceUri != null) {
-            exifRotation = CropUtil.getExifRotation(CropUtil.getFromMediaUri(this, getContentResolver(), sourceUri));
+    }
 
+    private int calculateBitmapSampleSize(Uri bitmapUri) {
+
+        try {
             InputStream is = null;
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
             try {
-                sampleSize = calculateBitmapSampleSize(sourceUri);
-                is = getContentResolver().openInputStream(sourceUri);
-                BitmapFactory.Options option = new BitmapFactory.Options();
-                option.inSampleSize = sampleSize;
-                rotateBitmap = new RotateBitmap(BitmapFactory.decodeStream(is, null, option), exifRotation);
-            } catch (IOException e) {
-                Log.e("Error reading image: " + e.getMessage(), e);
-                setResultException(e);
-            } catch (OutOfMemoryError e) {
-                Log.e("OOM reading image: " + e.getMessage(), e);
-                setResultException(e);
+                is = getContentResolver().openInputStream(bitmapUri);
+                BitmapFactory.decodeStream(is, null, options); // Just get image size
             } finally {
                 CropUtil.closeSilently(is);
             }
-        }
-    }
 
-    private int calculateBitmapSampleSize(Uri bitmapUri) throws IOException {
-        InputStream is = null;
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        try {
-            is = getContentResolver().openInputStream(bitmapUri);
-            BitmapFactory.decodeStream(is, null, options); // Just get image size
-        } finally {
-            CropUtil.closeSilently(is);
+            int maxSize = getMaxImageSize();
+            int sampleSize = 1;
+            while (options.outHeight / sampleSize > maxSize || options.outWidth / sampleSize > maxSize) {
+                sampleSize = sampleSize << 1;
+            }
+        } catch (Exception e) {
+            showAlert("calculateBitmapSampleSize", e.getMessage());
         }
 
-        int maxSize = getMaxImageSize();
-        int sampleSize = 1;
-        while (options.outHeight / sampleSize > maxSize || options.outWidth / sampleSize > maxSize) {
-            sampleSize = sampleSize << 1;
-        }
         return sampleSize;
     }
 
@@ -175,78 +196,96 @@ public class CropImageActivity extends MonitoredActivity {
     }
 
     private void startCrop() {
-        if (isFinishing()) {
-            return;
-        }
-        imageView.setImageRotateBitmapResetBase(rotateBitmap, true);
-        CropUtil.startBackgroundJob(this, null, getResources().getString(R.string.crop__wait),
-                new Runnable() {
-                    public void run() {
-                        final CountDownLatch latch = new CountDownLatch(1);
-                        handler.post(new Runnable() {
-                            public void run() {
-                                if (imageView.getScale() == 1F) {
-                                    imageView.center(true, true);
+        try {
+            imageView.setImageRotateBitmapResetBase(rotateBitmap, true);
+            CropUtil.startBackgroundJob(this, null, getResources().getString(R.string.crop__wait),
+                    new Runnable() {
+                        public void run() {
+                            final CountDownLatch latch = new CountDownLatch(1);
+                            handler.post(new Runnable() {
+                                public void run() {
+                                    if (imageView.getScale() == 1F) {
+                                        imageView.center(true, true);
+                                    }
+                                    latch.countDown();
                                 }
-                                latch.countDown();
+                            });
+                            try {
+                                latch.await();
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
                             }
-                        });
-                        try {
-                            latch.await();
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
+                            new Cropper().crop();
                         }
-                        new Cropper().crop();
-                    }
-                }, handler
-        );
+                    }, handler
+            );
+
+            if (isFinishing()) {
+                return;
+            }
+        } catch (Exception e) {
+            showAlert("startCrop", e.getMessage());
+        }
+
     }
 
     private class Cropper {
 
         private void makeDefault() {
-            if (rotateBitmap == null) {
-                return;
-            }
 
-            HighlightView hv = new HighlightView(imageView);
-            final int width = rotateBitmap.getWidth();
-            final int height = rotateBitmap.getHeight();
-
-            Rect imageRect = new Rect(0, 0, width, height);
-
-            // Make the default size about 4/5 of the width or height
-            int cropWidth = Math.min(width, height) * 4 / 5;
-            @SuppressWarnings("SuspiciousNameCombination")
-            int cropHeight = cropWidth;
-
-            if (aspectX != 0 && aspectY != 0) {
-                if (aspectX > aspectY) {
-                    cropHeight = cropWidth * aspectY / aspectX;
-                } else {
-                    cropWidth = cropHeight * aspectX / aspectY;
+            try {
+                if (rotateBitmap == null) {
+                    return;
                 }
+
+                HighlightView hv = new HighlightView(imageView);
+                final int width = rotateBitmap.getWidth();
+                final int height = rotateBitmap.getHeight();
+
+                Rect imageRect = new Rect(0, 0, width, height);
+
+                // Make the default size about 4/5 of the width or height
+                int cropWidth = Math.min(width, height) * 4 / 5;
+                @SuppressWarnings("SuspiciousNameCombination")
+                int cropHeight = cropWidth;
+
+                if (aspectX != 0 && aspectY != 0) {
+                    if (aspectX > aspectY) {
+                        cropHeight = cropWidth * aspectY / aspectX;
+                    } else {
+                        cropWidth = cropHeight * aspectX / aspectY;
+                    }
+                }
+
+                int x = (width - cropWidth) / 2;
+                int y = (height - cropHeight) / 2;
+
+                RectF cropRect = new RectF(x, y, x + cropWidth, y + cropHeight);
+                hv.setup(imageView.getUnrotatedMatrix(), imageRect, cropRect, aspectX != 0 && aspectY != 0);
+                imageView.add(hv);
+            } catch (Exception e) {
+                showAlert("Cropper:makeDefault", e.getMessage());
             }
 
-            int x = (width - cropWidth) / 2;
-            int y = (height - cropHeight) / 2;
-
-            RectF cropRect = new RectF(x, y, x + cropWidth, y + cropHeight);
-            hv.setup(imageView.getUnrotatedMatrix(), imageRect, cropRect, aspectX != 0 && aspectY != 0);
-            imageView.add(hv);
         }
 
         public void crop() {
-            handler.post(new Runnable() {
-                public void run() {
-                    makeDefault();
-                    imageView.invalidate();
-                    if (imageView.highlightViews.size() == 1) {
-                        cropView = imageView.highlightViews.get(0);
-                        cropView.setFocus(true);
+
+            try {
+                handler.post(new Runnable() {
+                    public void run() {
+                        makeDefault();
+                        imageView.invalidate();
+                        if (imageView.highlightViews.size() == 1) {
+                            cropView = imageView.highlightViews.get(0);
+                            cropView.setFocus(true);
+                        }
                     }
-                }
-            });
+                });
+            } catch (Exception e) {
+                showAlert("Cropper:crop", e.getMessage());
+            }
+
         }
     }
 
@@ -420,6 +459,16 @@ public class CropImageActivity extends MonitoredActivity {
 
     private void setResultException(Throwable throwable) {
         setResult(Crop.RESULT_ERROR, new Intent().putExtra(Crop.Extra.ERROR, throwable));
+    }
+
+    public void showAlert(String title, String message) {
+
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("Ok", null).show();
+
     }
 
 }

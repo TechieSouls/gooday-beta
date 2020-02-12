@@ -230,8 +230,28 @@ public class ImageUtils {
 
     public static void cropImageWithAspect(Uri uri, CenesFragment fragment, int width, int height) {
         try {
+            MixpanelAPI mixpanel = MixpanelAPI.getInstance(fragment.getContext(), CenesUtils.MIXPANEL_TOKEN);
+            try {
+                JSONObject props = new JSONObject();
+                props.put("Action","Inside Crop Function");
+                props.put("Logs","Before Cropping");
+                mixpanel.track("MeTime", props);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             Uri resultUri = Uri.fromFile(new File(getDefaultFile()));
-            com.soundcloud.android.crop.Crop.of(uri, resultUri).withMaxSize(width, height).start(fragment.getActivity(), fragment);
+
+            try {
+                JSONObject props = new JSONObject();
+                props.put("Action","After Result Uri");
+                props.put("Logs","Created Default File");
+                mixpanel.track("MeTime", props);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            com.soundcloud.android.crop.Crop.of(uri, resultUri).withMaxSize(width, height).start(fragment.getContext(), fragment);
         } catch (ActivityNotFoundException anfe) {
             MixpanelAPI mixpanel = MixpanelAPI.getInstance(fragment.getContext(), CenesUtils.MIXPANEL_TOKEN);
             try {

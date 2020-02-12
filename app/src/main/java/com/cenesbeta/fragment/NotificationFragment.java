@@ -436,7 +436,7 @@ public class NotificationFragment extends CenesFragment {
     }
 
     public void scrollToTop() {
-        elvNotificationList.smoothScrollToPositionFromTop(0, 0, 1);
+        elvNotificationList.smoothScrollToPositionFromTop(0, 0, 5);
     }
 
 }

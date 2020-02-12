@@ -135,7 +135,7 @@ public class FriendListFragment  extends CenesFragment {
         gathSearchFriendSubHeader.setOnTouchListener(layoutTouchListener);
         rlSelectedFriendsRecyclerView.setOnTouchListener(layoutTouchListener);
         cenesNoncenesSelectBar.setOnTouchListener(layoutTouchListener);
-        
+
         checkboxStateHolder = new LinkedHashMap<>();
         checkboxObjectHolder = new LinkedHashMap<>();
         checkboxButtonHolder = new LinkedHashMap<>();
