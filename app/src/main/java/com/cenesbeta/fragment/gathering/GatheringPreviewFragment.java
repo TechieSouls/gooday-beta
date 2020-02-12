@@ -761,7 +761,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                                 if (getActivity() != null) {
                                     ((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
-                                    ((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
+                                    //((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
                                     ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
                                 }
                                 sendSmsToNonCenesMembers(nonCenesMember, eve);
