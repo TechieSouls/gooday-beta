@@ -67,12 +67,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Title"
+                    android:inputType="textMultiLine"
                     android:textSize="30dp"
                     android:textColorHint="@color/white"
                     android:textColor="@color/white"
                     android:backgroundTint="@color/transparent"
-                    android:singleLine="true"
+                    android:singleLine="false"
                     android:imeOptions="actionDone"
+                    android:scrollHorizontally="false"
                     />
             </LinearLayout>
 
