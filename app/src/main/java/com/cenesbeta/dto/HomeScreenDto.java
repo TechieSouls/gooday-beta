@@ -23,6 +23,7 @@ public class HomeScreenDto {
     private List<Event> declinedEvents;
     private List<Event> pastEvents = new ArrayList<>();
     private List<Object> homelistViewWithHeaders = new ArrayList<>();
+    private List<Long> uniqueEventIdTracker = new ArrayList<>();
 
     private List<String> invitaitonDataHeaders = new ArrayList<>();
     private Map<String, List<Event>> invitationDataListMap = new HashMap<>();
@@ -147,5 +148,13 @@ public class HomeScreenDto {
 
     public void setHomelistViewWithHeaders(List<Object> homelistViewWithHeaders) {
         this.homelistViewWithHeaders = homelistViewWithHeaders;
+    }
+
+    public List<Long> getUniqueEventIdTracker() {
+        return uniqueEventIdTracker;
+    }
+
+    public void setUniqueEventIdTracker(List<Long> uniqueEventIdTracker) {
+        this.uniqueEventIdTracker = uniqueEventIdTracker;
     }
 }

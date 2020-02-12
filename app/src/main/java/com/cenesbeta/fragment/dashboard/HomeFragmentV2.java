@@ -1041,11 +1041,22 @@ public class HomeFragmentV2 extends CenesFragment {
                                     });
                                 }*/
 
-                                homeScreenDto.setPastEvents(events);
-                                processCalendarDotEvents(events);
+                                List<Long> uniqueEventIdList = homeScreenDto.getUniqueEventIdTracker();
+                                List<Event> pastEventList = homeScreenDto.getPastEvents();
+                                for (Event pastEvent: events) {
+
+                                    if (uniqueEventIdList.contains(pastEvent.getEventId())) {
+                                        events.remove(pastEvent);
+                                    } else {
+                                        uniqueEventIdList.add(pastEvent.getEventId());
+                                    }
+                                }
+                                pastEventList.addAll(events);
+                                homeScreenDto.setPastEvents(pastEventList);
+                                processCalendarDotEvents(homeScreenDto.getPastEvents());
 
                                 System.out.println("ProcessPrevious CalendarTabData Called");
-                                processCalendarTabData(events, true);
+                                processCalendarTabData(homeScreenDto.getPastEvents(), true);
 
                             } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Home)) {
 
@@ -1077,11 +1088,22 @@ public class HomeFragmentV2 extends CenesFragment {
 
                                 } else {
 
+                                    List<Long> uniqueEventIdList = homeScreenDto.getUniqueEventIdTracker();
+                                    List<Event> newEventsToAdd = new ArrayList<>();
+                                    for (Event currentEvent: events) {
+
+                                        if (uniqueEventIdList.contains(currentEvent.getEventId())) {
+                                            continue;
+                                        }
+                                        uniqueEventIdList.add(currentEvent.getEventId());
+                                        newEventsToAdd.add(currentEvent);
+                                    }
+
                                     rlNoGatheringText.setVisibility(View.GONE);
-                                    processCalendarDotEvents(events);
+                                    processCalendarDotEvents(newEventsToAdd);
 
                                     //Saving Data Locally
-                                    final List<Event> eventsToAdd = events;
+                                    final List<Event> eventsToAdd = newEventsToAdd;
                                     AsyncTask.execute(new Runnable() {
                                         @Override
                                         public void run() {
@@ -1090,7 +1112,7 @@ public class HomeFragmentV2 extends CenesFragment {
                                     });
 
                                     List<Event> previousEvents = homeScreenDto.getHomeEvents();
-                                    previousEvents.addAll(events);
+                                    previousEvents.addAll(newEventsToAdd);
                                     homeScreenDto.setHomeEvents(previousEvents);
 
                                     System.out.println("Previoous Events Size : "+previousEvents.size());
