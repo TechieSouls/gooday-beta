@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cenesbeta.R;
@@ -70,6 +71,7 @@ public class SearchLocationAdapter extends BaseAdapter {
             holder.locTitle = (TextView) view.findViewById(R.id.loc_title);
             holder.locAddress = (TextView) view.findViewById(R.id.loc_add);
             holder.tvDistance = (TextView) view.findViewById(R.id.tv_distance);
+            holder.rlLocationListItem = (RelativeLayout) view.findViewById(R.id.rl_location_list_item);
             holder.placeId = "";
             view.setTag(holder);
         } else {
@@ -92,6 +94,8 @@ public class SearchLocationAdapter extends BaseAdapter {
                 holder.tvDistance.setVisibility(View.VISIBLE);
                 holder.tvDistance.setText(location.getKilometers());
             }
+
+            holder.rlLocationListItem.setOnTouchListener(mActivity.layoutTouchListener);
             holder.linerLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -119,6 +123,7 @@ public class SearchLocationAdapter extends BaseAdapter {
         LinearLayout linerLayout;
         String placeId;
         TextView tvDistance;
+        RelativeLayout rlLocationListItem;
     }
 
     public void hideKeyBoard(View view) {

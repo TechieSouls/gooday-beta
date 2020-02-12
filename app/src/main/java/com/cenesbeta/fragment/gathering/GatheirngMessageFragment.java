@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cenesbeta.R;
@@ -23,6 +24,7 @@ public class GatheirngMessageFragment extends CenesFragment {
     private Button btnCancel, btnDone;
     private EditText etMessageArea;
     private TextView tvCharactersCount;
+    private RelativeLayout rlEmptySpaceTap;
 
     String message = null;
     @Nullable
@@ -36,10 +38,11 @@ public class GatheirngMessageFragment extends CenesFragment {
 
         etMessageArea = (EditText) view.findViewById(R.id.et_message_area);
         tvCharactersCount = (TextView) view.findViewById(R.id.tv_characters_count);
+        rlEmptySpaceTap = (RelativeLayout) view.findViewById(R.id.rl_empty_space_tap);
 
         btnCancel.setOnClickListener(onClickListener);
         btnDone.setOnClickListener(onClickListener);
-
+        rlEmptySpaceTap.setOnTouchListener(layoutTouchListener);
         etMessageArea.addTextChangedListener(textWatcherListener);
 
         if (message != null) {

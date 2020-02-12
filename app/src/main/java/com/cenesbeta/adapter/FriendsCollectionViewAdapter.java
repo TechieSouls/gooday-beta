@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ public class FriendsCollectionViewAdapter extends RecyclerView.Adapter<FriendsCo
         RelativeLayout container;
         ImageView ibDeleteMember, ivDeleteNonCenesMember;
         ImageView ivHostCircleMember;
+        LinearLayout llListItemLayout;
 
         public MyViewHolder(View view) {
             super(view);
@@ -46,7 +48,7 @@ public class FriendsCollectionViewAdapter extends RecyclerView.Adapter<FriendsCo
             ibDeleteMember = (ImageView) view.findViewById(R.id.ib_delete_member);
             ivDeleteNonCenesMember = (ImageView) view.findViewById(R.id.ib_delete_nonmember);
             ivHostCircleMember = (ImageView) view.findViewById(R.id.iv_host_circle_member);
-
+            llListItemLayout = (LinearLayout)view.findViewById(R.id.ll_list_item_layout);
             rvNonCenesLayout = (RelativeLayout) view.findViewById(R.id.rv_non_cenes_layout);
             rvCenesLayout = (RelativeLayout) view.findViewById(R.id.rv_cenes_layout);
         }
@@ -133,6 +135,7 @@ public class FriendsCollectionViewAdapter extends RecyclerView.Adapter<FriendsCo
                 holder.rvNonCenesLayout.setVisibility(View.VISIBLE);
             }
 
+            holder.llListItemLayout.setOnTouchListener(context.layoutTouchListener);
             holder.ibDeleteMember.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

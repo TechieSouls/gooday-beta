@@ -211,6 +211,7 @@ public class AllContactsExpandableAdapter extends BaseExpandableListAdapter {
             public void onClick(View v) {
                 try {
                     System.out.println("User Contact Id : "+child.toString());
+                    friendListFragment.hideKeyboard();
                     if (friendListFragment.checkboxStateHolder.containsKey(child.getUserContactId())) {
                         friendListFragment.selectedEventMembers.remove(child);
                         friendListFragment.checkboxStateHolder.remove(child.getUserContactId());

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -49,5 +50,19 @@ public class CenesActivity extends AppCompatActivity {
     public void showRequestTimeoutDialog() {
         getCenesApplication().getCoreManager().getAlertManager().getAlert(this, "Request Timed Out.", "Network Error", null, false, "OK");
     }
-
+    public View.OnTouchListener layoutTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            hideKeyboard();
+            return true;
+        }
+    };
+    public void hideKeyboard() {
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

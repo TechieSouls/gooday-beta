@@ -24,7 +24,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cenesbeta.AsyncTasks.LocationAsyncTask;
@@ -53,6 +55,8 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
     private EditText locationSearchEditText;
     private TextView tvPreviousSearchHeader;
     private Button btnCustomLocation;
+    private LinearLayout llLocationContainer;
+    private RelativeLayout rlMainLayout;
 
     private CenesApplication cenesApplication;
 
@@ -221,12 +225,16 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
             locationSearchEditText = (EditText) findViewById(R.id.search_location_edit_text);
             btnCustomLocation = (Button) findViewById(R.id.btn_custom_location);
             tvPreviousSearchHeader = (TextView) findViewById(R.id.tv_previous_search_header);
+            llLocationContainer = (LinearLayout) findViewById(R.id.ll_location_container);
+            rlMainLayout = (RelativeLayout) findViewById(R.id.rl_main_layout);
             //recyclerViewRecentLocations = (RecyclerView) findViewById(R.id.rv_recent_places);
             cenesApplication = getCenesApplication();
 
             customLocation = "";
             btnCustomLocation.setVisibility(View.GONE);
-
+            gathSearchLocationListView.setOnTouchListener(layoutTouchListener);
+            llLocationContainer.setOnTouchListener(layoutTouchListener);
+            rlMainLayout.setOnTouchListener(layoutTouchListener);
             new LocationAsyncTask(cenesApplication);
 
 

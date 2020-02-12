@@ -114,6 +114,7 @@ public class FriendListFragment  extends CenesFragment {
         tvSelectBarTitle = (TextView) view.findViewById(R.id.tv_select_bar_title);
         expandableFriendListView = (ExpandableListView) view.findViewById(R.id.elv_friend_list);
         swiperefreshFriends = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_friends);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
         cenesApplication = ((CenesBaseActivity) getActivity()).getCenesApplication();
         coreManager = cenesApplication.getCoreManager();
@@ -134,6 +135,7 @@ public class FriendListFragment  extends CenesFragment {
         searchFriendEditText.addTextChangedListener(onTextChangeListener);
         gathSearchFriendSubHeader.setOnTouchListener(layoutTouchListener);
         rlSelectedFriendsRecyclerView.setOnTouchListener(layoutTouchListener);
+        recyclerView.setOnTouchListener(layoutTouchListener);
 
         checkboxStateHolder = new LinkedHashMap<>();
         checkboxObjectHolder = new LinkedHashMap<>();
@@ -192,7 +194,7 @@ public class FriendListFragment  extends CenesFragment {
                     break;
 
                 case R.id.cenes_noncenes_select_bar:
-
+                    hideKeyboard();
                     if (cenesFriendsVisible == false) {
                         if (allFriends.size() > 0) {
 
@@ -474,7 +476,6 @@ public class FriendListFragment  extends CenesFragment {
 
             }
 
-            recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
             recyclerView.setVisibility(View.VISIBLE);
 
             view.findViewById(R.id.rl_selected_friends_recycler_view).setVisibility(View.VISIBLE);

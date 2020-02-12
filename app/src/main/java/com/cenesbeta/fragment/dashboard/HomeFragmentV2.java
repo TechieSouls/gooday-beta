@@ -125,6 +125,7 @@ public class HomeFragmentV2 extends CenesFragment {
 
         homeFragementView = view;
 
+
         shimmerFrameLayout = (ShimmerFrameLayout) view.findViewById(R.id.shimmer_view_container);
         shimmerViewOnscroll = (ShimmerFrameLayout) view.findViewById(R.id.shimmer_view_onscroll);
 
@@ -200,7 +201,6 @@ public class HomeFragmentV2 extends CenesFragment {
         super.onResume();
         ((CenesBaseActivity) getActivity()).showFooter();
         ((CenesBaseActivity)  getActivity()).activateFooterIcon(HomeFragmentV2.TAG);
-
         getActivity().registerReceiver(mMessageReceiver, new IntentFilter("homescreenrefresh"));
 
         //Post Offline events to Server

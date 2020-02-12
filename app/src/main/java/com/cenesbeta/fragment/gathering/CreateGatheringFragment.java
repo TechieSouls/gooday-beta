@@ -37,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -120,7 +121,7 @@ public class CreateGatheringFragment extends CenesFragment {
     private RelativeLayout rlStartBar, rlEndBar, rlDateBar;
     private RelativeLayout rlHeader, gathSearchLocationButton, rlGatheringMessageBar, rlCoverImageBar, rlSelectedFriendsRecyclerView;
     private RelativeLayout rlPreviewInvitationButton, rlPhotoActionSheet;
-
+    private ScrollView svGatheringScrollview;
     private LinearLayout llGatheringDateBars, llGatheringInfoBars;
     private LinearLayout llPredictiveCalCell, llPredictiveCalInfo;
     public static RecyclerView recyclerView;
@@ -292,6 +293,8 @@ public class CreateGatheringFragment extends CenesFragment {
         endTimePickerLabel = (TextView) fragmentView.findViewById(R.id.end_time_picker_label);
 
         materialCalendarView = (MaterialCalendarView) fragmentView.findViewById(R.id.material_calendar_view);
+        svGatheringScrollview = (ScrollView) fragmentView.findViewById(R.id.sv_gathering_scrollview);
+        recyclerView = (RecyclerView) fragmentView.findViewById(R.id.recycler_view);
 
 
         createGatheringDto = new CreateGatheringDto();
@@ -320,6 +323,8 @@ public class CreateGatheringFragment extends CenesFragment {
         tvTakePhoto.setOnClickListener(onClickListener);
         tvPhotoCancel.setOnClickListener(onClickListener);
         predictiveCalSwitch.setOnCheckedChangeListener(onCheckedChangeListener);
+        recyclerView.setOnTouchListener(layoutTouchListener);
+        svGatheringScrollview.setOnTouchListener(layoutTouchListener);
     }
 
     private View.OnFocusChangeListener focusListener = new View.OnFocusChangeListener() {
@@ -449,11 +454,17 @@ public class CreateGatheringFragment extends CenesFragment {
                             .setTitle("Abandon Event?")
                             .setMessage("If you decide to leave this page, all progress will be lost.")
                             .setCancelable(false)
-                            .setPositiveButton("Leave", new DialogInterface.OnClickListener() {
+                            .setPositiveButton("Stay", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
-                                    ((CenesBaseActivity)getActivity()).replaceFragment(((CenesBaseActivity)getActivity()).homeFragmentV2, null);
+
+
+                                }
+                            }).setNegativeButton("Leave", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ((CenesBaseActivity)getActivity()).replaceFragment(((CenesBaseActivity)getActivity()).homeFragmentV2, null);
                                     /*if (event.getEventId() != null && event.getEventId() != 0) {
 
                                         ((CenesBaseActivity)getActivity()).clearAllFragmentsInBackstack();
@@ -465,12 +476,6 @@ public class CreateGatheringFragment extends CenesFragment {
                                         ((CenesBaseActivity)getActivity()).replaceFragment(new GatheringsFragment(), null);
 
                                     }*/
-
-                                }
-                            }).setNegativeButton("Stay", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
                         }
                     }).show();
                     break;
@@ -1445,7 +1450,6 @@ public class CreateGatheringFragment extends CenesFragment {
             }
             event.setEventMembers(membersSelected);
             System.out.println("Event Member Size : "+membersSelected.size());
-            recyclerView = (RecyclerView) fragmentView.findViewById(R.id.recycler_view);
             recyclerView.setVisibility(View.VISIBLE);
 
             friendHorizontalScrollAdapter = new FriendHorizontalScrollAdapter(CreateGatheringFragment.this, membersSelected);

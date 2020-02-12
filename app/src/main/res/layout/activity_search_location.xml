@@ -3,145 +3,159 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#CCF7F7F7">
+
     <RelativeLayout
-        android:id="@+id/gath_search_location_header"
+        android:id="@+id/rl_main_layout"
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
-        <ImageView
-            android:id="@+id/close_search_location_btn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentLeft="true"
-            android:padding="5dp"
-            android:src="@drawable/abondan_event_icon"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"/>
 
-        <EditText
-            android:id="@+id/search_location_edit_text"
+        <RelativeLayout
+            android:id="@+id/gath_search_location_header"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@drawable/curved_search_edit_text_whitebg"
-            android:drawableLeft="@drawable/search_icon"
-            android:paddingLeft="10dp"
-            android:drawablePadding="5dp"
-            android:singleLine="true"
-            android:hint="Search Location"
-            android:layout_marginLeft="50dp"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
-            />
-    </RelativeLayout>
-    <!-- <RelativeLayout
-        android:id="@+id/gath_search_location_sub_header"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="20px"
-        android:layout_below="@+id/gath_search_location_header">
+            android:layout_height="60dp">
 
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/close_search_location_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentLeft="true"
+                android:padding="5dp"
+                android:src="@drawable/abondan_event_icon"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"/>
 
-     <LinearLayout
-        android:id="@+id/ll_suggested_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/gath_search_location_sub_header"
-        android:orientation="vertical"
-        android:visibility="gone">
+            <EditText
+                android:id="@+id/search_location_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/curved_search_edit_text_whitebg"
+                android:drawableLeft="@drawable/search_icon"
+                android:paddingLeft="10dp"
+                android:drawablePadding="5dp"
+                android:singleLine="true"
+                android:hint="Search Location"
+                android:layout_marginLeft="50dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                />
+        </RelativeLayout>
+        <!-- <RelativeLayout
+            android:id="@+id/gath_search_location_sub_header"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20px"
+            android:layout_below="@+id/gath_search_location_header">
 
-        <TextView
+        </RelativeLayout>
+
+         <LinearLayout
+            android:id="@+id/ll_suggested_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Suggested Location"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:textStyle="bold"
-            android:textSize="27sp"
-            android:textColor="#FF545352"/>
+            android:layout_below="@+id/gath_search_location_sub_header"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_suggested_places"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Suggested Location"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:textStyle="bold"
+                android:textSize="27sp"
+                android:textColor="#FF545352"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_suggested_places"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:paddingEnd="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingStart="20dp"
+                    android:scrollbars="none"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_recent_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_suggested_recycler_view"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Previous Location"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:textStyle="bold"
+                android:textSize="27sp"
+                android:textColor="#FF545352"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_recent_places"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
                 android:background="@color/transparent"
                 android:paddingEnd="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="20dp"
+                android:paddingStart="5dp"
+                android:layout_marginTop="10dp"
                 android:scrollbars="none"/>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll_recent_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_suggested_recycler_view"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
+        </LinearLayout>
+    -->
+        <LinearLayout
+            android:id="@+id/ll_location_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Previous Location"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:textStyle="bold"
-            android:textSize="27sp"
-            android:textColor="#FF545352"/>
+            android:orientation="vertical"
+            android:layout_below="@+id/gath_search_location_header"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            >
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_recent_places"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:background="@color/transparent"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp"
-            android:paddingStart="5dp"
-            android:layout_marginTop="10dp"
-            android:scrollbars="none"/>
-    </LinearLayout>
--->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_below="@+id/gath_search_location_header"
-        >
+            <TextView
+                android:id="@+id/tv_previous_search_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Previous Locations"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:layout_marginLeft="15dp"
+                android:visibility="gone"/>
+            <ListView
+                android:id="@+id/gath_search_location_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@color/transparent"
+                android:listSelector="@android:color/transparent"
+                android:focusableInTouchMode="true"
+                android:focusable="true"></ListView>
 
-        <TextView
-            android:id="@+id/tv_previous_search_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Previous Locations"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="17sp"
-            android:layout_marginLeft="15dp"
-            android:visibility="gone"/>
-        <ListView
-            android:id="@+id/gath_search_location_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@color/transparent"
-            android:listSelector="@android:color/transparent"></ListView>
+        </LinearLayout>
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/btn_custom_location"
+            android:layout_width="wrap_content"
+            android:layout_height="33dp"
+            android:text="Create Custom Location [CL]"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:textSize="15sp"
+            android:textColor="#0096FF"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/xml_curved_corner_white_skyblue_border">
+        </Button>
+    </RelativeLayout>
 
-    <Button
-        android:id="@+id/btn_custom_location"
-        android:layout_width="wrap_content"
-        android:layout_height="33dp"
-        android:text="Create Custom Location [CL]"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:textSize="15sp"
-        android:textColor="#0096FF"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:background="@drawable/xml_curved_corner_white_skyblue_border">
-
-
-    </Button>
 </RelativeLayout>
