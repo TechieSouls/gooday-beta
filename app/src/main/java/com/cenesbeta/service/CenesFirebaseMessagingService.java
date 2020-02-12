@@ -135,7 +135,10 @@ public class CenesFirebaseMessagingService extends FirebaseMessagingService {
             }
 
 
-            notificationManager.notify(0, notificationObj);
+           // notificationManager.notify(0, notificationObj);
+            //Multiple notifications
+            int id = (int) System.currentTimeMillis();
+            notificationManager.notify(id, notificationObj);
 
         } catch (Exception e) {
             e.printStackTrace();
