@@ -1495,10 +1495,10 @@ public class CreateGatheringFragment extends CenesFragment {
             }
             createGatheringDto.setDate(true);
 
-            startTimePickerLabel.setText(CenesUtils.hmm_aa.format(new Date(event.getStartTime())));
+            startTimePickerLabel.setText(CenesUtils.hmmaa.format(new Date(event.getStartTime())).toUpperCase());
             createGatheringDto.setStartTime(true);
 
-            endTimePickerLabel.setText(CenesUtils.hmm_aa.format(new Date(event.getEndTime())));
+            endTimePickerLabel.setText(CenesUtils.hmmaa.format(new Date(event.getEndTime())).toUpperCase());
             createGatheringDto.setEndTime(true);
 
             if (event.getPredictiveOn()) {

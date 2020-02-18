@@ -17,6 +17,9 @@ public class UrlManagerImpl implements UrlManager {
     String devApiUrl=url;//http://cenes.test2.redblink.net";
     String stageApiUrl=url;
     //public static String prodAPIUrl = "http://ec2-18-216-7-227.us-east-2.compute.amazonaws.com";
+    //public static String prodAPIUrl = "https://api.cenesgroup.com";
+
+
     public static String prodAPIUrl = "https://api.cenesgroup.com";
     public static String prodImageApiDomain = "https://images.cenesgroup.com";
 

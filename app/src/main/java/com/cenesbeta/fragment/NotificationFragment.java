@@ -296,14 +296,14 @@ public class NotificationFragment extends CenesFragment {
 
         if (newNotifications.size() > 0) {
             notificationMapList.put(NEW_NOTIFICATION, newNotifications);
-            if (headers.size() == 0) {
+            if (!headers.contains(NEW_NOTIFICATION)) {
                 headers.add(NEW_NOTIFICATION);
             }
         }
 
         if (seenNotifications.size() > 0) {
             notificationMapList.put(SEEN_NOTIFICATION, seenNotifications);
-            if (headers.size() == 1) {
+            if (!headers.contains(SEEN_NOTIFICATION)) {
                 headers.add(SEEN_NOTIFICATION);
             }
         }

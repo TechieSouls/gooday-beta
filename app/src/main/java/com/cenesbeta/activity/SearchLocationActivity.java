@@ -232,7 +232,7 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
 
             customLocation = "";
             btnCustomLocation.setVisibility(View.GONE);
-            gathSearchLocationListView.setOnTouchListener(layoutTouchListener);
+            //gathSearchLocationListView.setOnTouchListener(layoutTouchListener);
             llLocationContainer.setOnTouchListener(layoutTouchListener);
             rlMainLayout.setOnTouchListener(layoutTouchListener);
             new LocationAsyncTask(cenesApplication);

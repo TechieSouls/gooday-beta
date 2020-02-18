@@ -123,8 +123,8 @@
                             android:ellipsize="end"
                             android:lines="1"
                             android:text="Seahawks at Rams"
-                            android:textColor="#FF9B9B9B"
-                            android:textSize="16sp" />
+                            android:textColor="@color/cenes_light_gray"
+                            android:textSize="14dp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -150,7 +150,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:text="23:25PM" />
+                    android:text="23:25PM"
+                    android:textColor="@color/cenes_light_gray"/>
             </RelativeLayout>
         </com.daimajia.swipe.SwipeLayout>
 
@@ -202,7 +203,7 @@
                         android:lines="1"
                         android:text="Seahawks at Rams"
                         android:textColor="#FF9B9B9B"
-                        android:textSize="16sp" />
+                        android:textSize="16dp" />
 
                     <com.cenesbeta.util.CenesTextView
                         android:id="@+id/tv_tp_source"
@@ -211,8 +212,8 @@
                         android:drawablePadding="5dp"
                         android:lines="1"
                         android:text="Outlook"
-                        android:textColor="#FF9B9B9B"
-                        android:textSize="14sp"
+                        android:textColor="@color/cenes_light_gray"
+                        android:textSize="14dp"
                         android:textStyle="italic" />
 
                 </LinearLayout>
@@ -242,7 +243,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:text="22:25PM" />
+                    android:text="22:25PM"
+                    android:textColor="@color/cenes_light_gray" />
             </RelativeLayout>
 
         </com.daimajia.swipe.SwipeLayout>

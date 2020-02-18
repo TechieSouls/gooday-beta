@@ -12,9 +12,11 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +45,7 @@ import com.cenesbeta.service.MeTimeService;
 import com.cenesbeta.util.CenesConstants;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.ImageUtils;
+import com.cenesbeta.util.RoundedDrawable;
 import com.google.gson.Gson;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.soundcloud.android.crop.Crop;
@@ -52,7 +55,9 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -634,78 +639,16 @@ public class MeTimeCardFragment extends CenesFragment {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == OPEN_CAMERA_REQUEST_CODE || requestCode == OPEN_GALLERY_REQUEST_CODE) {
                 try {
-                    MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
-                    try {
-                        JSONObject props = new JSONObject();
-                        props.put("Action","TakePhoto Done");
-                        props.put("Logs","isTakeOrUpload : "+isTakeOrUpload);
-                        mixpanel.track("MeTime", props);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    try {
-                        JSONObject props = new JSONObject();
-                        props.put("Action","TakePhoto Done");
-                        props.put("Logs","cameraFileUri : "+cameraFileUri == null ? "False" : "True");
-                        mixpanel.track("MeTime", props);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
                     if (isTakeOrUpload.equals("take_picture")) {
 
-                        if (cameraFileUri != null) {
-                            try {
-                                JSONObject props = new JSONObject();
-                                props.put("Action","InSide Take Picture");
-                                props.put("Logs","cameraFileUri : "+cameraFileUri == null ? "False" : "True");
-                                mixpanel.track("MeTime", props);
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            //ImageUtils.cropImageWithAspect(cameraFileUri, this, 512, 512);
-
-                            Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
-
-                            UCrop.of(cameraFileUri, resultUri)
-                                    .withAspectRatio(3, 4)
-                                    .withMaxResultSize(512, 512)
-                                    .start((CenesBaseActivity)getActivity());
-                        } else {
-
-                            try {
-                                JSONObject props = new JSONObject();
-                                props.put("Action","InSide Take Picture");
-                                props.put("Logs","Else condition");
-                                mixpanel.track("MeTime", props);
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            
-                            Bundle extras = data.getExtras();
-                            Bitmap bmp = (Bitmap) extras.get("data"); // Set the bitmap to the bundle
-                            // of data that was just
-                            // received
-                            //ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), bmp), this, 200, 200);
-                            Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
-
-                            UCrop.of(getImageUri(getContext().getApplicationContext(), bmp), resultUri)
-                                    .withAspectRatio(3, 4)
-                                    .withMaxResultSize(512, 512)
-                                    .start(getContext(), MeTimeCardFragment.this, UCrop.REQUEST_CROP);
-
-                        }
+                        ImageUtils.cropImageWithAspect(cameraFileUri, this, 512, 512);
 
                     } else if (isTakeOrUpload.equals("upload_picture")) {
+
                         String filePath = ImageUtils.getPath(getCenesActivity().getApplicationContext(), data.getData());
 
                         Uri imageUri = data.getData();
-                        /*Bitmap bitmap = MediaStore.Images.Media.getBitmap(getCenesActivity().getContentResolver(), imageUri);
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getCenesActivity().getContentResolver(), imageUri);
                         ExifInterface ei = new ExifInterface(filePath);
                         int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                                 ExifInterface.ORIENTATION_UNDEFINED);
@@ -728,21 +671,22 @@ public class MeTimeCardFragment extends CenesFragment {
                             case ExifInterface.ORIENTATION_NORMAL:
                             default:
                                 rotatedBitmap = bitmap;
-                        }*/
+                        }
 
-                        Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
-                        //ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), rotatedBitmap), this, 200, 200);
-                        UCrop.of(imageUri, resultUri)
-                                .withAspectRatio(3, 4)
-                                .withMaxResultSize(200, 200)
-                                .start(getContext(), MeTimeCardFragment.this, UCrop.REQUEST_CROP);
+                        //Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
+                        ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), rotatedBitmap), this, 200, 200);
+                        //UCrop.of(imageUri, resultUri)
+                                //.withAspectRatio(3, 4)
+                                //.withMaxResultSize(200, 200)
+                                //.start(getContext(), MeTimeCardFragment.this, UCrop.REQUEST_CROP);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else if (requestCode == Crop.REQUEST_CROP) {
                 try {
-                    String filePath = ImageUtils.getPath(getCenesActivity().getApplicationContext(), Crop.getOutput(data));
+                    metimePhotoFile = null;
+                    final String filePath = ImageUtils.getPath(getCenesActivity().getApplicationContext(), Crop.getOutput(data));
                     metimePhotoFile = new File(filePath);
 
                     Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getCenesActivity().getContentResolver(), Crop.getOutput(data));
@@ -771,18 +715,47 @@ public class MeTimeCardFragment extends CenesFragment {
                             rotatedBitmap = imageBitmap;
                     }
 
-                    // rlUploadMetimeImg.setVisibility(View.GONE);
-                    //rivMeTimeImg.setVisibility(View.VISIBLE);
-
                     rivMeTimeImg.getLayoutParams().height = CenesUtils.dpToPx(90);
                     rivMeTimeImg.getLayoutParams().width = CenesUtils.dpToPx(90);
-                    Glide.with(getContext()).load(metimePhotoFile).apply(RequestOptions.circleCropTransform()).into(rivMeTimeImg);
+
+                    persistImage(rotatedBitmap, filePath.substring(filePath.lastIndexOf("/"), filePath.length()));
+
+                    final Bitmap bitImage = imageBitmap;
+                    final RoundedDrawable drawable = new RoundedDrawable(ImageUtils.getRotatedBitmap(bitImage, filePath));
+
+                    //Do something after 100ms
+                    rivMeTimeImg.invalidate();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            rivMeTimeImg.setImageDrawable(drawable);
+                        }
+                    }, 500);
                     rivMeTimeImg.requestLayout();
+
+                    //rivMeTimeImg.setImageURI(getImageUri(getContext().getApplicationContext(), rotatedBitmap));
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    public void persistImage(Bitmap bitmap, String name) {
+        File filesDir = getActivity().getApplicationContext().getFilesDir();
+        file = new File(filesDir, name + ".jpg");
+
+        OutputStream os;
+        try {
+            os = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
         }
     }
 
@@ -840,21 +813,8 @@ public class MeTimeCardFragment extends CenesFragment {
                 e.printStackTrace();
             }
 
-            MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
-            try {
-                JSONObject props = new JSONObject();
-                props.put("Action","TakePhoto Begins");
-                props.put("Logs","cameraFileUri : "+cameraFileUri == null ? "FALSE": "TRUE");
-                mixpanel.track("MeTime", props);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (cameraFileUri != null) {
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraFileUri);
-            }
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraFileUri);
             startActivityForResult(takePictureIntent, OPEN_CAMERA_REQUEST_CODE);
 
         } else if (isTakeOrUpload == "upload_picture") {

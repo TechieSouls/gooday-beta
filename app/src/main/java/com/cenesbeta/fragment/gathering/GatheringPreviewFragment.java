@@ -44,6 +44,7 @@ import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.impl.EventManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.dto.GatheringPreviewDto;
+import com.cenesbeta.extension.InvitationScrollView;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.util.CenesConstants;
 import com.cenesbeta.util.CenesUtils;
@@ -79,7 +80,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     private RoundedImageView ivProfilePicView;
     private ImageView invitationAcceptSpinner, invitationRejectSpinner;
     private LinearLayout llBottomButtons, llEventDetails, llInvitationFooter, llInvitationImageLayout;
-    private ScrollView svCard;
+    private InvitationScrollView svCard;
 
     public Fragment sourceFragment;
     private CenesApplication cenesApplication;
@@ -137,7 +138,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         ivCardSwipeArrow = (ImageView) view.findViewById(R.id.iv_card_swipe_arrow);
 
         tinderCardView = (CardView) view.findViewById(R.id.tinderCardView);
-        svCard = (ScrollView) view.findViewById(R.id.sv_card);
+        svCard = (InvitationScrollView) view.findViewById(R.id.sv_card);
         rlParentVew = (RelativeLayout) view.findViewById(R.id.rl_parent_vew);
         rlWelcomeInvitation = (RelativeLayout) view.findViewById(R.id.rl_welcome_invitation);
         rlInvitationView = (RelativeLayout) view.findViewById(R.id.rl_invitation_view);
@@ -157,6 +158,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         ivEditRejectIcon.setOnClickListener(onClickListener);
         tinderCardView.setOnTouchListener(onTouchListener);
         svCard.setOnTouchListener(onTouchListener);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             svCard.setOnScrollChangeListener(new View.OnScrollChangeListener() {
                 @Override
@@ -471,28 +473,40 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                 case MotionEvent.ACTION_DOWN:
 
+                    GatheringPreviewDto.userCanSwipe = true;
+
                     x = (int) event.getX();
                     y = (int) event.getY();
-                    xCord = 0;
-                    tinderCardView.setX(0);
-                    tinderCardView.setY(0);
-                    tinderCardView.setRotation(0);
-                    GatheringPreviewDto.ifSwipedRightToLeft = false;
 
-                    if (x < screenCenter) {
-                        leftPartClicked = true;
+                    System.out.println("[ACTION_DOWN] : User Tap Finger of Card");
+                    System.out.println("[ACTION_DOWN] : Rotation : "+tinderCardView.getRotation());
+
+                    if (Math.abs(tinderCardView.getRotation()) != 20) {
+
+                        System.out.println("[ACTION_DOWN] : Card was at initial stage");
+
+                        xCord = 0;
+                        tinderCardView.setX(0);
+                        tinderCardView.setY(0);
+                        tinderCardView.setRotation(0);
+                        GatheringPreviewDto.ifSwipedRightToLeft = false;
+
+                        if (x < screenCenter) {
+                            leftPartClicked = true;
+                        } else {
+                            leftPartClicked = false;
+                        }
+                        if (y > (windowHeight - 200)) {
+                            bottomBarClicked = true;
+                        }
+
+                        Log.d("Bottom : ", (y > (windowHeight - 100))+"");
+                        Log.v("On touch", x + " " + y+ " Screen Center : "+screenCenter);
+
+                        GatheringPreviewDto.cardSwipedToExtent = false;
                     } else {
-                        leftPartClicked = false;
+                        GatheringPreviewDto.userClickedToCloseCard = true;
                     }
-                    if (y > (windowHeight - 200)) {
-                        bottomBarClicked = true;
-                    }
-
-                    Log.d("Bottom : ", (y > (windowHeight - 100))+"");
-                    Log.v("On touch", x + " " + y+ " Screen Center : "+screenCenter);
-
-                    GatheringPreviewDto.cardSwipedToExtent = false;
-
                     break;
 
                 case MotionEvent.ACTION_UP:
@@ -509,22 +523,28 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                             System.out.println("[ACTION_UP] : Card was swiped to left");
 
-                            tinderCardView.setRotation(-20);
-                            tinderCardView.setX(-300);
 
-                            if (!isNewOrEditMode) {
-                                if (pendingEvents != null && pendingEvents.size() > 0) {
-                                    new Handler().postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            resetCardPosition();
-                                            populateInvitationCard((GatheringPreviewFragment.this).event);
-                                        }
-                                    }, 500);
-                                } else {
-                                    rejectGathering();
+                                System.out.println("[ACTION_UP] : User Tap Finger of Card");
+                            System.out.println("[ACTION_UP] : Rotatoin : "+tinderCardView.getRotation());
+
+                                tinderCardView.setRotation(-20);
+                                tinderCardView.setX(-300);
+
+                                if (!isNewOrEditMode) {
+                                    if (pendingEvents != null && pendingEvents.size() > 0) {
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                resetCardPosition();
+                                                populateInvitationCard((GatheringPreviewFragment.this).event);
+                                            }
+                                        }, 500);
+                                    } else {
+                                        rejectGathering();
+                                    }
                                 }
-                            }
+
+
                         } else if (GatheringPreviewDto.ifSwipedLeftToRight) {
 
                             System.out.println("[ACTION_UP] : Card was swiped to Right");
@@ -553,6 +573,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                     } else {
                         System.out.println("[ACTION_UP] : Reset Card To Initial Position");
+                        svCard.scrollTo(0, 0);
                         resetCardPosition();
                     }
                     break;
@@ -561,6 +582,10 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                 case MotionEvent.ACTION_MOVE:
 
+                    if (GatheringPreviewDto.userCanSwipe == false) {
+
+                        return false;
+                    }
                     xCord = (int) event.getRawX();
                     yCord = (int) event.getRawY();
 
@@ -600,7 +625,6 @@ public class GatheringPreviewFragment extends CenesFragment {
                         System.out.println("[ACTION_MOVE] -- INSIDE LEFT TO RIGHT SWIPE");
                         GatheringPreviewDto.ifSwipedLeftToRight = true;
                         if (newXcord > 0) {
-
                             if (GatheringPreviewDto.cardSwipedToExtent == false) {
 
                                 tinderCardView.setX(newXcord);
@@ -638,12 +662,14 @@ public class GatheringPreviewFragment extends CenesFragment {
                             if (GatheringPreviewDto.cardSwipedToExtent == false) {
 
                                 if (GatheringPreviewDto.userClickedToCloseCard) {
-                                    tinderCardView.setX(0);
-                                    tinderCardView.setRotation(0);
+                                    resetCardPosition();
                                     GatheringPreviewDto.userClickedToCloseCard = false;
 
-                                    System.out.println("X Cordinates after card closed : " + (tinderCardView.getX()));
+                                    System.out.println("X Cordinates after card closed : " + (tinderCardView.getX())+" And newXcord : "+newXcord);
                                 } else {
+
+                                    System.out.println("X Cordinates On Tap : " + (newXcord));
+
                                     tinderCardView.setX(newXcord);
 
                                     if (Math.abs(newXcord) < 300) {
@@ -687,11 +713,29 @@ public class GatheringPreviewFragment extends CenesFragment {
         tinderCardView.setX(0);
         tinderCardView.setY(0);
         tinderCardView.setRotation(0);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                svCard.fullScroll(View.FOCUS_UP);
+            }
+        }, 100);
         GatheringPreviewDto.userClickedToCloseCard = false;
         GatheringPreviewDto.cardSwipedToExtent = false;
         GatheringPreviewDto.ifSwipedLeftToRight = false;
         GatheringPreviewDto.ifSwipedRightToLeft = false;
         GatheringPreviewDto.ifSwipedUp = false;
+        GatheringPreviewDto.userCanSwipe = false;
+        tinderCardView.setOnTouchListener(null);
+        svCard.setOnTouchListener(null);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tinderCardView.setOnTouchListener(onTouchListener);
+                svCard.setOnTouchListener(onTouchListener);
+                GatheringPreviewDto.userCanSwipe = true;
+            }
+        }, 500);
     }
 
     public void hideDescriptionMessage() {
@@ -756,15 +800,9 @@ public class GatheringPreviewFragment extends CenesFragment {
                             }
 
                             if (nonCenesMember.size() > 0) {
-
-                                System.out.println("Firing Broadcaster");
-
-                                if (getActivity() != null) {
-                                    ((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
-                                    //((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
-                                    ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
-                                }
+                                ((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
                                 sendSmsToNonCenesMembers(nonCenesMember, eve);
+                                ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
                             }
                         }
 
@@ -821,10 +859,10 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                             System.out.println("Firing Broadcaster");
                             //((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
-                            ((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
+                            //((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
                             ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
                         }
-                    }, 1000);
+                    }, 2000);
                 }
             } else {
 
@@ -942,7 +980,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     public void populateInvitationCard(final Event event) {
         tvEventTitle.setText(event.getTitle());
 
-        final String eventDate = CenesUtils.EEEMMMMdd.format(new Date(event.getStartTime())) + "," + CenesUtils.hmm_aa.format(new Date(event.getStartTime())) + "-" + CenesUtils.hmm_aa.format(new Date(event.getEndTime()));
+        final String eventDate = CenesUtils.EEEMMMMdd.format(new Date(event.getStartTime())) + ", " + CenesUtils.hmmaa.format(new Date(event.getStartTime())).toUpperCase() + "-" + CenesUtils.hmmaa.format(new Date(event.getEndTime())).toUpperCase();
         tvEventDate.setText(eventDate);
 
         if (event.getScheduleAs() != null && event.getScheduleAs().equals("Notification")) {
@@ -1235,6 +1273,4 @@ public class GatheringPreviewFragment extends CenesFragment {
             return -1;
         }
     }
-
-
 }

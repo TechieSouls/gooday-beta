@@ -32,9 +32,10 @@
 
                 <ImageView
                     android:id="@+id/iv_invitation_accept_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:src="@drawable/invitation_loader_spinner"
+                    android:layout_centerInParent="true"
 
                     />
             </RelativeLayout>
@@ -58,19 +59,20 @@
                 android:layout_marginRight="20dp">
 
                 <ImageView
-                    android:id="@+id/iv_invitation_decline_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/invitation_loader_spinner"
-                    />
-
-
-                <ImageView
                     android:id="@+id/iv_edit_reject_icon"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:src="@drawable/invitation_edit_button"
                     android:layout_centerInParent="true"/>
+                <ImageView
+                    android:id="@+id/iv_invitation_decline_spinner"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/invitation_loader_spinner"
+                    android:layout_centerInParent="true"
+                    />
+
+
             </RelativeLayout>
 
 
@@ -90,7 +92,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-            <ScrollView
+            <com.cenesbeta.extension.InvitationScrollView
                 android:id="@+id/sv_card"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -435,7 +437,7 @@
 
                 </LinearLayout>
 
-            </ScrollView>
+            </com.cenesbeta.extension.InvitationScrollView>
 
 
      <!-- Welcome Invitation Card STARTS  -->

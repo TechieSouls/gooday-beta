@@ -4,6 +4,13 @@
     android:layout_height="match_parent"
     android:background="@color/black">
 
+
+    <com.cenesbeta.zoom.image.PhotoView
+        android:id="@+id/photo_view_zoomer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"/>
+
     <RelativeLayout
         android:id="@+id/rl_header"
         android:layout_width="match_parent"
@@ -19,9 +26,4 @@
             android:layout_marginLeft="5dp"/>
 
     </RelativeLayout>
-    <com.cenesbeta.zoom.image.PhotoView
-        android:layout_below="@+id/rl_header"
-        android:id="@+id/photo_view_zoomer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 </RelativeLayout>

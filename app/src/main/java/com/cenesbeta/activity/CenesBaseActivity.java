@@ -330,7 +330,7 @@ public class CenesBaseActivity extends CenesActivity {
             } else {
                 fragmentTransaction.replace(R.id.fragment_container, fragment);
             }
-            fragmentTransaction.commit();
+            fragmentTransaction.commitAllowingStateLoss();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -406,6 +406,19 @@ public class CenesBaseActivity extends CenesActivity {
         return null;
     }
 
+    public void moveToDesiredFragment(Fragment destFragment) {
+        fragmentManager = getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if (fragments != null) {
+            for (Fragment fragment : fragments) {
+                if (fragment != null && fragment == destFragment) {
+                    break;
+                } else {
+                    fragmentManager.popBackStack();
+                }
+            }
+        }
+    }
     public void clearBackStackInclusive(String tag) {
         getSupportFragmentManager().popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
@@ -754,9 +767,12 @@ public class CenesBaseActivity extends CenesActivity {
         super.onNewIntent(intent);
 
         try {
+            System.out.println("[onNewIntent] Inside On New Content");
             Bundle bundle = getIntent().getExtras();
             Long eventId = bundle.getLong("eventId");
             if (eventId != null && eventId != 0) {
+
+                System.out.println("[onNewIntent] eventId ! null");
 
                 new GatheringAsyncTask(cenesApplication, this);
                 new GatheringAsyncTask.EventInfoTask(new GatheringAsyncTask.EventInfoTask.AsyncResponse() {
@@ -764,6 +780,7 @@ public class CenesBaseActivity extends CenesActivity {
                     public void processFinish(JSONObject response) {
 
                         try {
+                            System.out.println("[onNewIntent] Event Response");
 
                             boolean success = response.getBoolean("success");
 

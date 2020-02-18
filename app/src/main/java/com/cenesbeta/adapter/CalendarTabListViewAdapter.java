@@ -204,17 +204,19 @@ public class CalendarTabListViewAdapter extends BaseAdapter {
                 } else {
                     viewHolder.ivEventHost.setImageResource(R.drawable.profile_pic_no_image);
                 }
+
+                final EventMember eventMemberHost = eventHost;
+                viewHolder.ivEventHost.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        ((CenesBaseActivity)homeFragmentV2.getActivity()).zoomImageFromThumb(viewHolder.ivEventHost, eventMemberHost.getUser().getPicture());
+                    }
+                });
             } else {
                 viewHolder.ivEventHost.setImageResource(R.drawable.profile_pic_no_image);
             }
-            final EventMember eventMemberHost = eventHost;
-            viewHolder.ivEventHost.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    ((CenesBaseActivity)homeFragmentV2.getActivity()).zoomImageFromThumb(viewHolder.ivEventHost, eventMemberHost.getUser().getPicture());
-                }
-            });
             viewHolder.rlCenesEvents.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

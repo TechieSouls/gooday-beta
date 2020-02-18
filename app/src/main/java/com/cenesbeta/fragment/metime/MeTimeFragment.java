@@ -70,7 +70,7 @@ public class MeTimeFragment extends CenesFragment {
     LinearLayout llMetimeTilesContainer;
     RoundedImageView homeProfilePic;
 
-
+    private View fragmentView;
     private FragmentManager fragmentManager;
     Map<String, MeTimeItem> meTimeItemMap;
     List<String> meTimeCategoryHeaders;
@@ -87,8 +87,11 @@ public class MeTimeFragment extends CenesFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        if (fragmentView != null) {
+            return fragmentView;
+        }
         View v = inflater.inflate(R.layout.fragment_metime, container, false);
-
+        fragmentView = v;
         ((CenesBaseActivity) getActivity()).showFooter();
         ((CenesBaseActivity) getActivity()).activateFooterIcon(MeTimeFragment.TAG);
 
@@ -123,6 +126,8 @@ public class MeTimeFragment extends CenesFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        loadMeTimes();
         return v;
     }
 
@@ -153,7 +158,7 @@ public class MeTimeFragment extends CenesFragment {
     @Override
     public void onResume() {
         super.onResume();
-        loadMeTimes();
+        //loadMeTimes();
     }
 
     public void loadMeTimes() {
