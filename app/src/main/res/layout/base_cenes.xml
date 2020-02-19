@@ -10,6 +10,9 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"> -->
 
+
+
+
     <RelativeLayout
         android:id="@+id/ll_fragment_container"
         android:layout_width="match_parent"
@@ -173,6 +176,8 @@
             android:visibility="gone"/>
 
     </RelativeLayout>
-
+    <include android:id="@+id/alert_layout_xml"
+        layout="@layout/alert_update_layout"
+        android:visibility="gone"></include>
 
 </RelativeLayout>

@@ -116,6 +116,7 @@ public class CenesBaseActivity extends CenesActivity {
         }
         setContentView(R.layout.base_cenes);
 
+
         //mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         cenesApplication = getCenesApplication();
