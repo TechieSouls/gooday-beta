@@ -129,4 +129,5 @@ time for everyone to meet.\n\n\nNo more back and forth messaging.\nNo more time 
 
     <!-- Cenes Constants  -->
     <string name="cenesWebDomain">https://www.cenesgroup.com</string>
+    <string name="alert_update_message">We are sunsetting this version. Update the CENES app to its latest version now to try the newest features!</string>
 </resources>
