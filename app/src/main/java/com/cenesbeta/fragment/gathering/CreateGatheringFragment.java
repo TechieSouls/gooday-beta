@@ -464,6 +464,18 @@ public class CreateGatheringFragment extends CenesFragment {
                             }).setNegativeButton("Leave", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+
+                            membersSelected = new ArrayList<EventMember>();
+                            List<EventMember> mebersToRemove = new ArrayList<>();
+
+                            int loopSize = event.getEventMembers().size();
+                            for (int i=0; i < loopSize; i++) {
+                                EventMember eveMem = event.getEventMembers().get(i);
+                                if (eveMem.getEventMemberId() != null) {
+                                    mebersToRemove.add(event.getEventMembers().get(i));
+                                }
+                            }
+                            event.setEventMembers(mebersToRemove);
                             ((CenesBaseActivity)getActivity()).replaceFragment(((CenesBaseActivity)getActivity()).homeFragmentV2, null);
                                     /*if (event.getEventId() != null && event.getEventId() != 0) {
 
