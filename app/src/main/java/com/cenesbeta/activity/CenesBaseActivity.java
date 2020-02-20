@@ -66,6 +66,7 @@ import com.cenesbeta.fragment.profile.ProfileFragmentV2;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.zoom.image.PhotoView;
 import com.google.gson.Gson;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -84,7 +85,7 @@ public class CenesBaseActivity extends CenesActivity {
     public ImageView footerHomeIcon, footerGatheringIcon, footerMeTimeIcon, footerProfileIcon, footerNotificationIcon;
     LinearLayout llFooter;
     public RelativeLayout rlLoadingBlock, rlBadgeCountDot, rlFooterLayout, alertUpdateLayout;
-    public TextView tvLoadingMsg;
+    public TextView tvLoadingMsg, tvUpdateAppTitle, tvAlertUpdateMessage;
     public ImageView ivNotificationFloatingIcon;
     private CenesApplication cenesApplication;
     private CoreManager coreManager;
@@ -150,6 +151,8 @@ public class CenesBaseActivity extends CenesActivity {
         rlFooterLayout = (RelativeLayout) findViewById(R.id.rl_footer_layout);
         alertUpdateLayout = (RelativeLayout) findViewById(R.id.alert_layout_xml);
         tvLoadingMsg = (TextView) findViewById(R.id.tv_loading_msg);
+        tvUpdateAppTitle = (TextView) findViewById(R.id.update_app_title);
+        tvAlertUpdateMessage = (TextView) findViewById(R.id.alert_update_message);
 
         photoViewZoomer = (PhotoView) findViewById(R.id.photo_view_zoomer);
         alertRedirectUrlButton = (Button) findViewById(R.id.redirect_url_click);
@@ -703,6 +706,11 @@ public class CenesBaseActivity extends CenesActivity {
                         JSONObject dataObj= response.getJSONObject("data");
 
                         String appVersion = dataObj.getString("appVersion");
+
+                        tvUpdateAppTitle.setText(dataObj.getString("alertTitle"));
+                        tvAlertUpdateMessage.setText(dataObj.getString("alertDescription"));
+                        alertRedirectUrlButton.setText(dataObj.getString("alertButtonLabel"));
+
                        final String alertRedirectUrl = dataObj.getString("alertRedirectUrl");
 
                         String[] splitServerVersion = appVersion.split("\\.");
@@ -724,6 +732,8 @@ public class CenesBaseActivity extends CenesActivity {
 
                         if (latestAppInstalled == false) {
 
+
+
                             System.out.println("PAGAL MAD DOGGIE");
                             //Make alert visible here
                             alertUpdateLayout.setVisibility(View.VISIBLE);
@@ -734,6 +744,20 @@ public class CenesBaseActivity extends CenesActivity {
                                     startActivity(mapIntent);
                                 }
                             });
+
+                                //Mix Panel Tracking
+                                MixpanelAPI mixpanel = MixpanelAPI.getInstance(getApplicationContext(), CenesUtils.MIXPANEL_TOKEN);
+                                try {
+                                    JSONObject props = new JSONObject();
+                                    props.put("Action","Alert Visible Version : "+ localVersion);
+                                    props.put("UserEmail",loggedInUser.getEmail());
+                                    props.put("UserName",loggedInUser.getName());
+                                    props.put("Device","Android");
+                                    mixpanel.track("VersionUpdateAlert", props);
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
                         } else {
                             System.out.println("DANGAR MULLA");

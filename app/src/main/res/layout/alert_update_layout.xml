@@ -12,21 +12,21 @@
         android:gravity="center"
         android:background="@drawable/xml_curved_white">
         <TextView
+            android:id="@+id/update_app_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Update App"
             android:textSize="20dp"
             android:textStyle="bold"
             android:textColor="#595757"
             android:gravity="center"></TextView>
 
         <TextView
+            android:id="@+id/alert_update_message"
             android:layout_marginTop="18dp"
             android:textSize="18dp"
             android:textColor="#898989"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/alert_update_message"
             android:gravity="center_horizontal"
             android:layout_marginLeft="13dp"
             android:layout_marginRight="13dp"
