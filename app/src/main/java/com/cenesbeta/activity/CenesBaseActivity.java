@@ -7,6 +7,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Point;
@@ -40,6 +41,7 @@ import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
 import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
+import com.cenesbeta.api.CenesCommonAPI;
 import com.cenesbeta.api.NotificationAPI;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
@@ -79,7 +81,7 @@ public class CenesBaseActivity extends CenesActivity {
     public FragmentManager fragmentManager;
     public ImageView footerHomeIcon, footerGatheringIcon, footerMeTimeIcon, footerProfileIcon, footerNotificationIcon;
     LinearLayout llFooter;
-    public RelativeLayout rlLoadingBlock, rlBadgeCountDot, rlFooterLayout;
+    public RelativeLayout rlLoadingBlock, rlBadgeCountDot, rlFooterLayout, alertUpdateLayout;
     public TextView tvLoadingMsg;
     public ImageView ivNotificationFloatingIcon;
     private CenesApplication cenesApplication;
@@ -117,6 +119,7 @@ public class CenesBaseActivity extends CenesActivity {
         setContentView(R.layout.base_cenes);
 
 
+
         //mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         cenesApplication = getCenesApplication();
@@ -142,6 +145,7 @@ public class CenesBaseActivity extends CenesActivity {
         rlLoadingBlock = (RelativeLayout) findViewById(R.id.rl_loading_block);
         rlBadgeCountDot = (RelativeLayout) findViewById(R.id.rl_badge_count_dot);
         rlFooterLayout = (RelativeLayout) findViewById(R.id.rl_footer_layout);
+        alertUpdateLayout = (RelativeLayout) findViewById(R.id.alert_layout_xml);
         tvLoadingMsg = (TextView) findViewById(R.id.tv_loading_msg);
 
         photoViewZoomer = (PhotoView) findViewById(R.id.photo_view_zoomer);
@@ -166,7 +170,7 @@ public class CenesBaseActivity extends CenesActivity {
 
         new ProfileAsyncTask(cenesApplication, this);
         notificationCountCall();
-
+        fetchLatestAppVersion();
         /*mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View view, float v) {
@@ -197,7 +201,7 @@ public class CenesBaseActivity extends CenesActivity {
                     String params = "";
                     if (data.indexOf("https://betaweb.cenesgroup.com/event/invitation") != -1) {
                         params = data.substring(data.lastIndexOf("/"), data.length());
-                    } else if (data.indexOf("https://dev.cenesgroup.com/app/signupOptions") != -1) {
+                    } else if (data.indexOf("https://betaweb.cenesgroup.com/app/signupOptions") != -1) {
                         String parameters = data.split("\\?")[1];
                         if (parameters != null && parameters.split("=").length > 1) {
                             params = parameters.split("=")[1];
@@ -661,6 +665,78 @@ public class CenesBaseActivity extends CenesActivity {
         }
     }
 
+    public void fetchLatestAppVersion(){
+        JSONObject postData = new JSONObject();
+        try {
+
+            postData.put("device","Android");
+            postData.put("type","VersionUpdate");
+
+            AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+            asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+            asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ CenesCommonAPI.get_latest_app_version_api);
+            asyncTaskDto.setPostData(postData);
+
+
+            new ProfileAsyncTask.CommonPostRequestTask(new ProfileAsyncTask.CommonPostRequestTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+                    try {
+
+
+                             /* code for fetching app version */
+
+                            PackageInfo pInfo = getApplicationContext().getPackageManager().getPackageInfo(getPackageName(), 0);
+                            String localVersion = pInfo.versionName;
+                            String[] splitlocalVersion = localVersion.split("\\.");
+                            System.out.println("gandabull *::::::* " + localVersion);
+                            /* code for fetching app version */
+
+                        System.out.println("response-gandabull : :");
+                        System.out.println(response);
+
+                        JSONObject dataObj= response.getJSONObject("data");
+
+                        String appVersion = dataObj.getString("appVersion");
+
+                        String[] splitServerVersion = appVersion.split("\\.");
+
+
+                        Boolean latestAppInstalled = true;
+                        if (Integer.parseInt(splitlocalVersion[0]) < Integer.parseInt(splitServerVersion[0])) {
+                            latestAppInstalled = false;
+                        }
+
+                        if(Integer.parseInt(splitlocalVersion[0]) <= Integer.parseInt(splitServerVersion[0]) && Integer.parseInt(splitlocalVersion[1]) < Integer.parseInt(splitServerVersion[1])) {
+                            latestAppInstalled = false;
+                        }
+                        if (Integer.parseInt(splitlocalVersion[0]) <= Integer.parseInt(splitServerVersion[0]) &&
+                                Integer.parseInt(splitlocalVersion[1]) <= Integer.parseInt(splitServerVersion[1]) &&
+                                Integer.parseInt(splitlocalVersion[2]) < Integer.parseInt(splitServerVersion[2])) {
+                            latestAppInstalled = false;
+                        }
+
+                        if (latestAppInstalled == false) {
+
+                            System.out.println("PAGAL MAD DOGGIE");
+                            //Make alert visible here
+                            alertUpdateLayout.setVisibility(View.VISIBLE);
+
+                        } else {
+                            System.out.println("DANGAR MULLA");
+                            alertUpdateLayout.setVisibility(View.GONE);
+                        }
+
+
+                    } catch(Exception e) {}
+                }
+            }).execute(asyncTaskDto);
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void fetchDeviceContactList() {
 
         AsyncTask contactSyncTask = new AsyncTask() {
@@ -807,5 +883,6 @@ public class CenesBaseActivity extends CenesActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 }
