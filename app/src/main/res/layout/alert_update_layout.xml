@@ -33,6 +33,7 @@
             ></TextView>
 
         <Button
+            android:id="@+id/redirect_url_click"
             android:background="@drawable/xml_circle_white_orange_border"
             android:textSize="16dp"
             android:textColor="@color/cenes_mcv_orange"

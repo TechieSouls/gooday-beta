@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -90,6 +92,7 @@ public class CenesBaseActivity extends CenesActivity {
     public HomeFragmentV2 homeFragmentV2;
     public NotificationFragment notificationFragment;
     public PhotoView photoViewZoomer;
+    public Button alertRedirectUrlButton;
 
     public Event parentEvent;
     private Fragment initialFragment;
@@ -149,6 +152,7 @@ public class CenesBaseActivity extends CenesActivity {
         tvLoadingMsg = (TextView) findViewById(R.id.tv_loading_msg);
 
         photoViewZoomer = (PhotoView) findViewById(R.id.photo_view_zoomer);
+        alertRedirectUrlButton = (Button) findViewById(R.id.redirect_url_click);
 
         //Click Listeners
         footerHomeIcon.setOnClickListener(onClickListener);
@@ -157,6 +161,7 @@ public class CenesBaseActivity extends CenesActivity {
         footerMeTimeIcon.setOnClickListener(onClickListener);
         footerNotificationIcon.setOnClickListener(onClickListener);
         ivNotificationFloatingIcon.setOnClickListener(onClickListener);
+        alertRedirectUrlButton.setOnClickListener(onClickListener);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -170,7 +175,7 @@ public class CenesBaseActivity extends CenesActivity {
 
         new ProfileAsyncTask(cenesApplication, this);
         notificationCountCall();
-        fetchLatestAppVersion();
+        processLatestAppVersion();
         /*mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View view, float v) {
@@ -665,7 +670,7 @@ public class CenesBaseActivity extends CenesActivity {
         }
     }
 
-    public void fetchLatestAppVersion(){
+    public void processLatestAppVersion(){
         JSONObject postData = new JSONObject();
         try {
 
@@ -698,6 +703,7 @@ public class CenesBaseActivity extends CenesActivity {
                         JSONObject dataObj= response.getJSONObject("data");
 
                         String appVersion = dataObj.getString("appVersion");
+                       final String alertRedirectUrl = dataObj.getString("alertRedirectUrl");
 
                         String[] splitServerVersion = appVersion.split("\\.");
 
@@ -721,6 +727,13 @@ public class CenesBaseActivity extends CenesActivity {
                             System.out.println("PAGAL MAD DOGGIE");
                             //Make alert visible here
                             alertUpdateLayout.setVisibility(View.VISIBLE);
+                            alertRedirectUrlButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(alertRedirectUrl));
+                                    startActivity(mapIntent);
+                                }
+                            });
 
                         } else {
                             System.out.println("DANGAR MULLA");
