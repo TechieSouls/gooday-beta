@@ -83,7 +83,6 @@ public class CropImageActivity extends MonitoredActivity {
     }
 
     private void initViews() {
-        try {
             imageView = (CropImageView) findViewById(R.id.crop_image);
             imageView.context = this;
             imageView.setRecycler(new ImageViewTouchBase.Recycler() {
@@ -106,17 +105,11 @@ public class CropImageActivity extends MonitoredActivity {
                     onSaveClicked();
                 }
             });
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("initViews", e.getMessage());
-        }
-
     }
 
     private void setupFromIntent() {
 
-        try {
-            Intent intent = getIntent();
+        Intent intent = getIntent();
             Bundle extras = intent.getExtras();
 
             if (extras != null) {
@@ -148,15 +141,11 @@ public class CropImageActivity extends MonitoredActivity {
                     CropUtil.closeSilently(is);
                 }
             }
-        } catch (Exception e) {
-            showAlert("setupFromIntent", e.getMessage());
-        }
 
     }
 
-    private int calculateBitmapSampleSize(Uri bitmapUri) {
+    private int calculateBitmapSampleSize(Uri bitmapUri) throws IOException {
 
-        try {
             InputStream is = null;
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
@@ -172,9 +161,6 @@ public class CropImageActivity extends MonitoredActivity {
             while (options.outHeight / sampleSize > maxSize || options.outWidth / sampleSize > maxSize) {
                 sampleSize = sampleSize << 1;
             }
-        } catch (Exception e) {
-            showAlert("calculateBitmapSampleSize", e.getMessage());
-        }
 
         return sampleSize;
     }
@@ -196,7 +182,6 @@ public class CropImageActivity extends MonitoredActivity {
     }
 
     private void startCrop() {
-        try {
             imageView.setImageRotateBitmapResetBase(rotateBitmap, true);
             CropUtil.startBackgroundJob(this, null, getResources().getString(R.string.crop__wait),
                     new Runnable() {
@@ -223,9 +208,6 @@ public class CropImageActivity extends MonitoredActivity {
             if (isFinishing()) {
                 return;
             }
-        } catch (Exception e) {
-            showAlert("startCrop", e.getMessage());
-        }
 
     }
 
@@ -233,7 +215,6 @@ public class CropImageActivity extends MonitoredActivity {
 
         private void makeDefault() {
 
-            try {
                 if (rotateBitmap == null) {
                     return;
                 }
@@ -263,9 +244,6 @@ public class CropImageActivity extends MonitoredActivity {
                 RectF cropRect = new RectF(x, y, x + cropWidth, y + cropHeight);
                 hv.setup(imageView.getUnrotatedMatrix(), imageRect, cropRect, aspectX != 0 && aspectY != 0);
                 imageView.add(hv);
-            } catch (Exception e) {
-                showAlert("Cropper:makeDefault", e.getMessage());
-            }
 
         }
 
