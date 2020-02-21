@@ -84,7 +84,7 @@ public class CenesBaseActivity extends CenesActivity {
     public FragmentManager fragmentManager;
     public ImageView footerHomeIcon, footerGatheringIcon, footerMeTimeIcon, footerProfileIcon, footerNotificationIcon;
     LinearLayout llFooter;
-    public RelativeLayout rlLoadingBlock, rlBadgeCountDot, rlFooterLayout, alertUpdateLayout;
+    public RelativeLayout rlLoadingBlock, rlBadgeCountDot, rlFooterLayout, alertUpdateLayout, rlFragmentContainer;
     public TextView tvLoadingMsg, tvUpdateAppTitle, tvAlertUpdateMessage;
     public ImageView ivNotificationFloatingIcon;
     private CenesApplication cenesApplication;
@@ -150,6 +150,7 @@ public class CenesBaseActivity extends CenesActivity {
         rlBadgeCountDot = (RelativeLayout) findViewById(R.id.rl_badge_count_dot);
         rlFooterLayout = (RelativeLayout) findViewById(R.id.rl_footer_layout);
         alertUpdateLayout = (RelativeLayout) findViewById(R.id.alert_layout_xml);
+        rlFragmentContainer = (RelativeLayout) findViewById(R.id.ll_fragment_container);
         tvLoadingMsg = (TextView) findViewById(R.id.tv_loading_msg);
         tvUpdateAppTitle = (TextView) findViewById(R.id.update_app_title);
         tvAlertUpdateMessage = (TextView) findViewById(R.id.alert_update_message);
@@ -734,7 +735,6 @@ public class CenesBaseActivity extends CenesActivity {
 
 
 
-                            System.out.println("PAGAL MAD DOGGIE");
                             //Make alert visible here
                             alertUpdateLayout.setVisibility(View.VISIBLE);
                             alertRedirectUrlButton.setOnClickListener(new View.OnClickListener() {
@@ -760,7 +760,6 @@ public class CenesBaseActivity extends CenesActivity {
                                 }
 
                         } else {
-                            System.out.println("DANGAR MULLA");
                             alertUpdateLayout.setVisibility(View.GONE);
                         }
 
