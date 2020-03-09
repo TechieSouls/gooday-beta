@@ -44,9 +44,7 @@
         android:layout_height="fill_parent"
         android:layout_below="@+id/rl_header"
         android:fillViewport="true"
-        android:scrollbars="vertical"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:scrollbars="vertical">
 
         <LinearLayout
             android:id="@+id/ll_container"

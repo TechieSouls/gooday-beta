@@ -24,6 +24,8 @@ public class Location {
 
     private String kilometers;
 
+    private Float kilometersInDouble;
+
     public String getLocation() {
         return location;
     }
@@ -78,5 +80,13 @@ public class Location {
 
     public void setKilometers(String kilometers) {
         this.kilometers = kilometers;
+    }
+
+    public Float getKilometersInDouble() {
+        return kilometersInDouble;
+    }
+
+    public void setKilometersInDouble(Float kilometersInDouble) {
+        this.kilometersInDouble = kilometersInDouble;
     }
 }

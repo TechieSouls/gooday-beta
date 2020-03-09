@@ -115,7 +115,7 @@ public class CenesFirebaseMessagingService extends FirebaseMessagingService {
                     //.setLargeIcon(R.drawable.ic_ceneslogos_push)
                     .setSmallIcon(R.drawable.ic_ceneslogos)
                     .setContentTitle(notification.get("title"))
-                    .setContentText(notification.get("body"))
+                    .setContentText(notification.get("body")).setStyle(new NotificationCompat.BigTextStyle().bigText(notification.get("body").toString()))
                     .setPriority(Notification.PRIORITY_DEFAULT)
                     .setAutoCancel(true).setChannelId(CHANNEL_ID)
                     .setSound(Uri.parse("android.resource://"

@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -57,6 +58,7 @@ import com.cenesbeta.fragment.NavigationFragment;
 import com.cenesbeta.fragment.NotificationFragment;
 import com.cenesbeta.fragment.dashboard.HomeFragment;
 import com.cenesbeta.fragment.dashboard.HomeFragmentV2;
+import com.cenesbeta.fragment.gathering.CreateGatheringFragment;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
 import com.cenesbeta.fragment.gathering.GatheringsFragment;
 import com.cenesbeta.fragment.metime.MeTimeCardFragment;
@@ -278,7 +280,7 @@ public class CenesBaseActivity extends CenesActivity {
                     System.out.println("MeTime Clicked From Base");
                     //clearBackStackInclusive(null);
                     //notificationCountCall();
-                    replaceFragment(new MeTimeFragment(), HomeFragmentV2.TAG);
+                    replaceFragment(new MeTimeFragment(), MeTimeFragment.TAG);
                     break;
 
                 case R.id.iv_notification_floating_icon:
@@ -289,7 +291,7 @@ public class CenesBaseActivity extends CenesActivity {
                 case R.id.footer_profile_icon:
                     //clearBackStackInclusive(null);
                     //notificationCountCall();
-                    replaceFragment(new ProfileFragmentV2(), HomeFragmentV2.TAG);
+                    replaceFragment(new ProfileFragmentV2(), ProfileFragmentV2.TAG);
                     break;
                 case R.id.footer_notification_icon:
                     //clearBackStackInclusive(null);
@@ -307,11 +309,18 @@ public class CenesBaseActivity extends CenesActivity {
                         setBadgeCountsToZero();
                         rlBadgeCountDot.setVisibility(View.GONE);
                     }
-                    replaceFragment(notificationFragment, HomeFragmentV2.TAG);
+                    replaceFragment(notificationFragment, NotificationFragment.TAG);
                     break;
             }
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        System.out.println("On Activity Result of Base Activity Called......");
+    }
 
     public void hideFooter() {
         llFooter.setVisibility(View.GONE);
@@ -323,15 +332,30 @@ public class CenesBaseActivity extends CenesActivity {
 
     @Override
     public void onBackPressed() {
+
+        boolean isVisibleFragmentPresent = false;
         for (Fragment fragment: fragmentManager.getFragments()) {
 
-            System.out.println("Back Pressed");
+            System.out.println("Back Pressed : "+fragment.getTag());
             if (fragment instanceof MeTimeCardFragment) {
                 showFooter();
                 activateFooterIcon(MeTimeFragment.TAG);
+            } else if (fragment instanceof CreateGatheringFragment) {
+                ((CreateGatheringFragment)fragment).ivAbandonEvent.performClick();
+                isVisibleFragmentPresent = true;
+            }  else if (fragment instanceof HomeFragmentV2) {
+                isVisibleFragmentPresent = true;
+                Intent startMain = new Intent(Intent.ACTION_MAIN);
+                startMain.addCategory(Intent.CATEGORY_HOME);
+                startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(startMain);
+
             }
         }
-        super.onBackPressed();
+
+        if (!isVisibleFragmentPresent) {
+            super.onBackPressed();
+        }
     }
 
     public void replaceFragment(Fragment fragment , String tag) {

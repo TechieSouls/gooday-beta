@@ -146,8 +146,16 @@ public class JsonParsing {
             return jObj;
         } catch(Exception e) {
             e.printStackTrace();
+            JSONObject jObj = new JSONObject();
+            try {
+                jObj.put("success", false);
+                jObj.put("message", e.getMessage());
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return jObj;
         }
-        return null;
     }
 
     public JSONArray httpGet(String url,String authToken) {

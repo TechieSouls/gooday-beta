@@ -89,7 +89,7 @@ public class GatheirngMessageFragment extends CenesFragment {
                 int typedInCharsCount = s.toString().length();
                 int remainigChars = totalCount - typedInCharsCount;
                 if (remainigChars >= 0) {
-                    tvCharactersCount.setText(remainigChars+" Characters Remaining");
+                    tvCharactersCount.setText(remainigChars+" Characters Remain");
                 }
         }
     };

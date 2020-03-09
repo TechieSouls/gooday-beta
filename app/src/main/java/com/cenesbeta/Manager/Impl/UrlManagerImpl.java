@@ -20,7 +20,7 @@ public class UrlManagerImpl implements UrlManager {
     //public static String prodAPIUrl = "https://api.cenesgroup.com";
 
 
-    public static String prodAPIUrl = "https://api2.cenesgroup.com";
+    public static String prodAPIUrl = "https://api.cenesgroup.com";
     public static String prodImageApiDomain = "https://images.cenesgroup.com";
 
     public UrlManagerImpl(CenesApplication cenesApplication){

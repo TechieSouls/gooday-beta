@@ -178,6 +178,7 @@
     </RelativeLayout>
     <include android:id="@+id/alert_layout_xml"
         layout="@layout/alert_update_layout"
-        android:visibility="gone"></include>
+        android:visibility="gone"
+        ></include>
 
 </RelativeLayout>

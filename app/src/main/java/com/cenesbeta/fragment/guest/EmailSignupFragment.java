@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
 import com.cenesbeta.Manager.AlertManager;
@@ -36,6 +37,7 @@ public class EmailSignupFragment extends CenesFragment {
     private ImageView ivBackButton;
     private Button btnLogin, btnEmailSignup;
     private EditText etEmailField, etPasswordField, etConfirmPasswordField;
+    private RelativeLayout rlSignupContainer;
 
     private CenesApplication cenesApplication;
     private AlertManager alertManager;
@@ -53,6 +55,7 @@ public class EmailSignupFragment extends CenesFragment {
         ivBackButton = (ImageView) view.findViewById(R.id.iv_back_button);
         btnLogin = (Button) view.findViewById(R.id.btn_login);
         btnEmailSignup = (Button) view.findViewById(R.id.bt_email_signup);
+        rlSignupContainer = (RelativeLayout) view.findViewById(R.id.rl_signup_container);
 
 
         etEmailField = (EditText) view.findViewById(R.id.et_email_field);
@@ -74,7 +77,7 @@ public class EmailSignupFragment extends CenesFragment {
             loggedInUser = new User();
         }
 
-
+        rlSignupContainer.setOnTouchListener(layoutTouchListener);
         new ProfileAsyncTask(cenesApplication, getActivity());
 
 

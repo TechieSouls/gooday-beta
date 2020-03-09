@@ -116,6 +116,7 @@ public class NotificationFragment extends CenesFragment {
     public void onResume() {
         super.onResume();
        try {
+           System.out.println("Notification On Resume Called");
            ((CenesBaseActivity) getActivity()).showFooter();
            ((CenesBaseActivity)  getActivity()).activateFooterIcon(NotificationFragment.TAG);
         } catch (Exception e) {

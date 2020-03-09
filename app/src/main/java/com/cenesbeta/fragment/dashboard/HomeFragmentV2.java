@@ -87,7 +87,7 @@ public class HomeFragmentV2 extends CenesFragment {
 
     private TextView tvCalendarTab, tvInvitationTab, tvCalDate, tvConfirmedBtn, tvPendingBtn, tvDeclinedBtn, tvSyncCalToastText;
     private ImageView ivPlusBtn, ivCalDateBarArrow, ivRefreshCalsBtn, ivIosSpinner;
-    private LinearLayout llCalendarDateBar, llInvitationTabView, llSyncCalToast;
+    private LinearLayout llCalendarDateBar, llInvitationTabView, llSyncCalToast, llSwitchableHeadres;
     private MaterialCalendarView mcvHomeCalendar;
     private ExpandableListView elvHomeListView;
     private ExpandableListView elvInvitationListView;
@@ -126,7 +126,6 @@ public class HomeFragmentV2 extends CenesFragment {
         homeFragementView = view;
         System.out.println("onCreateView Called");
 
-
         shimmerFrameLayout = (ShimmerFrameLayout) view.findViewById(R.id.shimmer_view_container);
         shimmerViewOnscroll = (ShimmerFrameLayout) view.findViewById(R.id.shimmer_view_onscroll);
 
@@ -144,6 +143,8 @@ public class HomeFragmentV2 extends CenesFragment {
         llCalendarDateBar = (LinearLayout) view.findViewById(R.id.ll_calendar_date_bar);
         llInvitationTabView= (LinearLayout)view.findViewById(R.id.ll_invitation_tab_view);
         llSyncCalToast = (LinearLayout) view.findViewById(R.id.ll_sync_cal_toast);
+        llSwitchableHeadres = (LinearLayout) view.findViewById(R.id.ll_switchable_headres);
+
         rlNoGatheringText = (RelativeLayout) view.findViewById(R.id.rl_no_gathering_text);
         btCreateGathering = (Button) view.findViewById(R.id.bt_create_gathering);
         btSyncCalendar = (Button) view.findViewById(R.id.bt_sync_calendar);
@@ -179,7 +180,6 @@ public class HomeFragmentV2 extends CenesFragment {
         loggedInUser = userManager.getUser();
         eventManagerImpl = new EventManagerImpl(cenesApplication);
         //elvHomeListView.setNestedScrollingEnabled(true);
-
 
         mcvHomeCalendar.sourceFragment = this;
 
@@ -395,16 +395,56 @@ public class HomeFragmentV2 extends CenesFragment {
                             listViewScrollPosition += 1 + homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(i)).size();
                         }
                     }
-                    lvHomeListView.smoothScrollToPositionFromTop(listViewScrollPosition, 0, 200);
-                } else if (monthTitle == CenesUtils.MMMM_yyyy.format(new Date()))  {
+                    lvHomeListView.smoothScrollToPositionFromTop(listViewScrollPosition, 0, 100);
+                } else {
                     //elvHomeListView.smoothScrollToPosition(0);
+
+                    Calendar currentDate = Calendar.getInstance();
+
+                    if (currentPage.getCalendar().get(Calendar.MONTH) < currentDate.get(Calendar.MONTH)
+                    && currentPage.getCalendar().get(Calendar.YEAR) <= currentDate.get(Calendar.YEAR)) {
+                        lvHomeListView.smoothScrollToPositionFromTop(0, 0, 100);
+                    } else {
+
+                        /*if (HomeScreenDto.calendarPreviousPage.getCalendar() != null) {
+                            Calendar topCalendar = HomeScreenDto.calendarPreviousPage.getCalendar();
+
+                            if (topCalendar.get(Calendar.MONTH) < currentPage.getCalendar().get(Calendar.MONTH)
+                                    && topCalendar.get(Calendar.YEAR) <= currentPage.getCalendar().get(Calendar.YEAR)) {
+                                int listViewScrollPosition = 0;
+                                for (int i=0; i < homeScreenDto.getHomeDataHeaders().size(); i++) {
+                                    if (i < homeScreenDto.getHomeDataHeaders().size() && homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(i)) != null) {
+                                        listViewScrollPosition += 1 + homeScreenDto.getHomeDataListMap().get(homeScreenDto.getHomeDataHeaders().get(i)).size();
+                                    }
+                                }
+                                lvHomeListView.smoothScrollToPositionFromTop(listViewScrollPosition, 0, 100);
+
+                            }
+                        }*/
+                        loadCalendarTabData();
+
+                    }
                 }
+                final CalendarDay currentPageTemp = currentPage;
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Calendar currentYearCal = Calendar.getInstance();
+                        if (currentYearCal.get(Calendar.YEAR) == currentPageTemp.getCalendar().get(Calendar.YEAR)) {
+                            updateCalendarLabelDate(CenesUtils.MMMM.format(currentPageTemp.getDate()));
+                        } else {
+                            updateCalendarLabelDate(CenesUtils.MMMM_yyyy.format(currentPageTemp.getDate()));
+                        }
+                    }
+                }, 500);
+                HomeScreenDto.calendarPreviousPage = currentPage;
             }
         }
     }
 
-    public void updateCalendarLabelDate(String calHeaderDate) {
-        tvCalDate.setText(calHeaderDate);
+    public void updateCalendarLabelDate(String headerCalTitle) {
+        System.out.println("updateCalendarLabelDate  called ******* ");
+        tvCalDate.setText(headerCalTitle);
     }
 
     public void calendarTabPressed() {
@@ -415,7 +455,9 @@ public class HomeFragmentV2 extends CenesFragment {
         //elvInvitationListView.scrollTo(0, 0);
 
         llInvitationTabView.setVisibility(View.GONE);
-        if(homeScreenDto.getHomeEvents().size() == 0 && homeScreenDto.getPastEvents().size() == 0){
+        llSwitchableHeadres.setVisibility(View.GONE);
+
+        if (homeScreenDto.getHomeEvents().size() == 0 && homeScreenDto.getPastEvents().size() == 0) {
             rlNoGatheringText.setVisibility(View.VISIBLE);
             lvHomeListView.setVisibility(View.GONE);
         }else{
@@ -439,7 +481,10 @@ public class HomeFragmentV2 extends CenesFragment {
         rlNoGatheringText.setVisibility(View.GONE);
         processInvitationEvents(homeScreenDto.getAcceptedEvents());
         llInvitationTabView.setVisibility(View.VISIBLE);
+        llSwitchableHeadres.setVisibility(View.VISIBLE);
         highlightInvitationTabs(tvConfirmedBtn);
+
+        homeButtonPressed();
     }
 
     public void plusButtonPressed() {
@@ -461,7 +506,18 @@ public class HomeFragmentV2 extends CenesFragment {
             ivCalDateBarArrow.setImageResource(R.drawable.open_calendar);
             homeScreenDto.setCalendarOpen(true);
             mcvHomeCalendar.setVisibility(View.VISIBLE);
-            mcvHomeCalendar.setCurrentDate(new Date());
+            mcvHomeCalendar.setCurrentDate(homeScreenDto.calendarPageDate);
+            final Calendar calendar = Calendar.getInstance();
+
+            calendar.setTimeInMillis(homeScreenDto.calendarPageDate.getTime());
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    tvCalDate.setText(CenesUtils.MMMM.format(calendar.getTime()));
+                }
+            }, 100);
+
+
         }
     }
 
@@ -511,8 +567,16 @@ public class HomeFragmentV2 extends CenesFragment {
         }
 
         elvHomeListView.smoothScrollToPositionFromTop(position, 0, 500);*/
-
-                lvHomeListView.smoothScrollToPositionFromTop(HomeScreenDto.currentDateGroupPosition, 0, 200);
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(HomeScreenDto.currentDateGroupPositionTimestamp);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tvCalDate.setText(CenesUtils.MMMM.format(calendar.getTime()));
+            }
+        }, 700);
+        lvHomeListView.smoothScrollToPositionFromTop(HomeScreenDto.currentDateGroupPosition, 0, 200);
+        mcvHomeCalendar.setCurrentDate(calendar.getTime());
 
         /*String groupStr = homeScreenDto.getHomeDataHeaders().get(HomeScreenDto.currentDateGroupPosition);
         Event event = homeScreenDto.getHomeDataListMap().get(groupStr).get(0);
@@ -897,6 +961,9 @@ public class HomeFragmentV2 extends CenesFragment {
             if (tabSelected.equals(HomeScreenDto.HomeTabs.Invitation)) {
                 homeScreenDto.setInvitationTabSelected(invitationTabSelected);
             }
+
+            HomeScreenDto.calendarPreviousPage = null;
+            HomeScreenDto.currentDateGroupPositionTimestamp = 0;
             HomeScreenDto.currentDateGroupPosition = 0;
             HomeScreenDto.calendarTabPageNumber = 0;
             HomeScreenDto.totalCalendarDataCounts = 0;
@@ -926,9 +993,9 @@ public class HomeFragmentV2 extends CenesFragment {
 
         Calendar yesterdayDate = Calendar.getInstance();
         yesterdayDate.set(Calendar.DAY_OF_MONTH, todayDate.get(Calendar.DAY_OF_MONTH) - 1);
-        yesterdayDate.set(Calendar.HOUR_OF_DAY, 0);
-        yesterdayDate.set(Calendar.MINUTE, 0);
-        yesterdayDate.set(Calendar.SECOND, 0);
+        yesterdayDate.set(Calendar.HOUR_OF_DAY, 23);
+        yesterdayDate.set(Calendar.MINUTE, 59);
+        yesterdayDate.set(Calendar.SECOND, 59);
         yesterdayDate.set(Calendar.MILLISECOND, 0);
 
         String queryStr = "userId="+loggedInUser.getUserId()+"&startimeStamp="+sixMonthsBackDate.getTimeInMillis()+"" +
@@ -963,19 +1030,19 @@ public class HomeFragmentV2 extends CenesFragment {
 
         AsyncTaskDto acceptedAsyncTaskDto = new AsyncTaskDto();
         acceptedAsyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl + HomeScreenAPI.get_gathering_evnets);
-        acceptedAsyncTaskDto.setQueryStr("userId=" + loggedInUser.getUserId() + "&status=Going&timestamp="+new Date().getTime()+"&pageNumber=0&offSet=20");
+        acceptedAsyncTaskDto.setQueryStr("userId=" + loggedInUser.getUserId() + "&status=Going&timestamp="+new Date().getTime()+"&pageNumber=0&offSet="+HomeScreenDto.offsetToFetchData);
         acceptedAsyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
         getAsyncDto(acceptedAsyncTaskDto, HomeScreenDto.HomeScreenAPICall.Accepted);
 
         AsyncTaskDto penidngAsyncTaskDto = new AsyncTaskDto();
         penidngAsyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl + HomeScreenAPI.get_gathering_evnets);
-        penidngAsyncTaskDto.setQueryStr("userId=" + loggedInUser.getUserId() + "&status=Pending&timestamp="+new Date().getTime()+"&pageNumber=0&offSet=20");
+        penidngAsyncTaskDto.setQueryStr("userId=" + loggedInUser.getUserId() + "&status=Pending&timestamp="+new Date().getTime()+"&pageNumber=0&offSet="+HomeScreenDto.offsetToFetchData);
         penidngAsyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
         getAsyncDto(penidngAsyncTaskDto, HomeScreenDto.HomeScreenAPICall.Pending);
 
         AsyncTaskDto declinedAsyncTaskDto = new AsyncTaskDto();
         declinedAsyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl + HomeScreenAPI.get_gathering_evnets);
-        declinedAsyncTaskDto.setQueryStr("userId=" + loggedInUser.getUserId() + "&status=NotGoing&timestamp="+new Date().getTime()+"&pageNumber=0&offSet=20");
+        declinedAsyncTaskDto.setQueryStr("userId=" + loggedInUser.getUserId() + "&status=NotGoing&timestamp="+new Date().getTime()+"&pageNumber=0&offSet="+HomeScreenDto.offsetToFetchData);
         declinedAsyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
         getAsyncDto(declinedAsyncTaskDto, HomeScreenDto.HomeScreenAPICall.Declined);
     }
@@ -1094,41 +1161,44 @@ public class HomeFragmentV2 extends CenesFragment {
                                     shimmerFrameLayout.setVisibility(View.GONE);
 
                                 } else {
+                                    if (events.size() != 0) {
 
-                                    List<Long> uniqueEventIdList = homeScreenDto.getUniqueEventIdTracker();
-                                    List<Event> newEventsToAdd = new ArrayList<>();
-                                    for (Event currentEvent: events) {
+                                        List<Long> uniqueEventIdList = homeScreenDto.getUniqueEventIdTracker();
+                                        List<Event> newEventsToAdd = new ArrayList<>();
+                                        for (Event currentEvent: events) {
 
-                                        if (uniqueEventIdList.contains(currentEvent.getEventId())) {
-                                            continue;
+                                            if (uniqueEventIdList.contains(currentEvent.getEventId())) {
+                                                continue;
+                                            }
+                                            uniqueEventIdList.add(currentEvent.getEventId());
+                                            newEventsToAdd.add(currentEvent);
                                         }
-                                        uniqueEventIdList.add(currentEvent.getEventId());
-                                        newEventsToAdd.add(currentEvent);
-                                    }
 
-                                    rlNoGatheringText.setVisibility(View.GONE);
-                                    processCalendarDotEvents(newEventsToAdd);
+                                        rlNoGatheringText.setVisibility(View.GONE);
+                                        processCalendarDotEvents(newEventsToAdd);
 
-                                    //Saving Data Locally
-                                    final List<Event> eventsToAdd = newEventsToAdd;
-                                    AsyncTask.execute(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            eventManagerImpl.addEvent(eventsToAdd, Event.EventDisplayScreen.HOME.toString());
+                                        //Saving Data Locally
+                                        final List<Event> eventsToAdd = newEventsToAdd;
+                                        AsyncTask.execute(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                eventManagerImpl.addEvent(eventsToAdd, Event.EventDisplayScreen.HOME.toString());
+                                            }
+                                        });
+
+                                        List<Event> previousEvents = homeScreenDto.getHomeEvents();
+                                        previousEvents.addAll(newEventsToAdd);
+                                        homeScreenDto.setHomeEvents(previousEvents);
+
+                                        System.out.println("Previoous Events Size : "+previousEvents.size());
+                                        System.out.println("Home Events Size : "+homeScreenDto.getHomeEvents());
+
+                                        if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
+                                            System.out.println("ProcessCalendarTabData Called");
+                                            processCalendarTabData(events, false);
                                         }
-                                    });
-
-                                    List<Event> previousEvents = homeScreenDto.getHomeEvents();
-                                    previousEvents.addAll(newEventsToAdd);
-                                    homeScreenDto.setHomeEvents(previousEvents);
-
-                                    System.out.println("Previoous Events Size : "+previousEvents.size());
-                                    System.out.println("Home Events Size : "+homeScreenDto.getHomeEvents());
-                                    if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
-                                        System.out.println("ProcessCalendarTabData Called");
-                                        processCalendarTabData(events, false);
+                                        HomeScreenDto.calendarTabPageNumber += HomeScreenDto.offsetToFetchData;
                                     }
-                                    HomeScreenDto.calendarTabPageNumber += 20;
                                 }
                                 HomeScreenDto.madeApiCall = true;
                             } else if (homeScreenAPICall.equals(HomeScreenDto.HomeScreenAPICall.Accepted)) {
@@ -1367,10 +1437,17 @@ public class HomeFragmentV2 extends CenesFragment {
         //this is just to find out the position at which list should scroll
         if (pastEvents == true) {
             findListViewScrollPosition();
+            if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
+                //Lets add Month Separator At Home Screen Events
+                addMonthSeparatorToList();
+            }
         }
-        if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
-            //Lets add Month Separator At Home Screen Events
-            addMonthSeparatorToList();
+
+        if (pastEvents == false && HomeScreenDto.calendarTabPageNumber > 0) {
+            if (homeScreenDto.getTabSelected().equals(HomeScreenDto.HomeTabs.Calendar)) {
+                //Lets add Month Separator At Home Screen Events
+                addMonthSeparatorToList();
+            }
         }
 
         //PAST EVENTS CALL
@@ -1395,6 +1472,21 @@ public class HomeFragmentV2 extends CenesFragment {
 
             if (calendarTabListViewAdapter != null) {
                 calendarTabListViewAdapter.notifyDataSetChanged();
+                if (mcvHomeCalendar.getVisibility() == View.VISIBLE) {
+                    final CalendarDay currentPageTemp = mcvHomeCalendar.getCurrentDate();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Calendar currentYearCal = Calendar.getInstance();
+                            if (currentYearCal.get(Calendar.YEAR) == currentPageTemp.getCalendar().get(Calendar.YEAR)) {
+                                updateCalendarLabelDate(CenesUtils.MMMM.format(currentPageTemp.getDate()));
+                            } else {
+                                updateCalendarLabelDate(CenesUtils.MMMM_yyyy.format(currentPageTemp.getDate()));
+                            }
+                        }
+                    }, 200);
+
+                }
             } else {
 
                 calendarTabListViewAdapter =  new CalendarTabListViewAdapter(this, homeScreenDto);
@@ -1421,6 +1513,21 @@ public class HomeFragmentV2 extends CenesFragment {
             homeScreenDto.setHomelistViewWithHeaders(listView);
             if (calendarTabListViewAdapter != null) {
                 calendarTabListViewAdapter.notifyDataSetChanged();
+                if (mcvHomeCalendar.getVisibility() == View.VISIBLE) {
+                    final CalendarDay currentPageTemp = mcvHomeCalendar.getCurrentDate();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Calendar currentYearCal = Calendar.getInstance();
+                            if (currentYearCal.get(Calendar.YEAR) == currentPageTemp.getCalendar().get(Calendar.YEAR)) {
+                                updateCalendarLabelDate(CenesUtils.MMMM.format(currentPageTemp.getDate()));
+                            } else {
+                                updateCalendarLabelDate(CenesUtils.MMMM_yyyy.format(currentPageTemp.getDate()));
+                            }
+                        }
+                    }, 200);
+
+                }
             } else {
                 calendarTabListViewAdapter =  new CalendarTabListViewAdapter(this, homeScreenDto);
                 lvHomeListView.setAdapter(calendarTabListViewAdapter);
@@ -1506,6 +1613,9 @@ public class HomeFragmentV2 extends CenesFragment {
                             itemPosition += 1 + mapListEvent.get(headers.get(i)).size() + 1;
                             itemPosition += positionOfEventToScrollAt;
 
+                            if (headers.get(i+1) != null) {
+                                HomeScreenDto.currentDateGroupPositionTimestamp = mapListEvent.get(headers.get(i+1)).get(0).getStartTime();
+                            }
                             HomeScreenDto.currentDateGroupPosition = itemPosition;
                             break;
                         }

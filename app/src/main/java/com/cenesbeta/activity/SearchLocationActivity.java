@@ -39,6 +39,8 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -312,8 +314,17 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
                         for (com.cenesbeta.bo.Location loc : recentLocations) {
                             float kms = getKmFromLatLong(Float.valueOf(currentLocation.getLatitude()), Float.valueOf(currentLocation.getLongitude()), Float.valueOf(loc.getLatitude()), Float.valueOf(loc.getLongitude()));
                             loc.setKilometers(String.valueOf((kms)) + "Km");
+                            loc.setKilometersInDouble(kms);
                         }
+
+                        Collections.sort(recentLocations, new Comparator<com.cenesbeta.bo.Location>() {
+                            @Override
+                            public int compare(com.cenesbeta.bo.Location o1, com.cenesbeta.bo.Location o2) {
+                                return o1.getKilometersInDouble() < o2.getKilometersInDouble() ? 1 : -1;
+                            }
+                        });
                     }
+
 
                     searchLocationAdapter = new SearchLocationAdapter(SearchLocationActivity.this, recentLocations);
                     gathSearchLocationListView.setAdapter(searchLocationAdapter);

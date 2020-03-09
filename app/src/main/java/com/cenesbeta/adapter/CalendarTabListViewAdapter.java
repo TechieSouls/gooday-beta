@@ -156,13 +156,21 @@ public class CalendarTabListViewAdapter extends BaseAdapter {
         System.out.println("Event Schdedule As : "+event.getTitle()+" ----- "+event.getScheduleAs());
 
 
-        Calendar currentDateCal = Calendar.getInstance();
-        Calendar eventDateCal = Calendar.getInstance();
-        eventDateCal.setTimeInMillis(event.getStartTime());
-        if (currentDateCal.get(Calendar.YEAR) == eventDateCal.get(Calendar.YEAR)) {
-            homeFragmentV2.updateCalendarLabelDate(CenesUtils.MMMM.format(new Date(event.getStartTime())));
-        } else {
-            homeFragmentV2.updateCalendarLabelDate(CenesUtils.MMMM_yyyy.format(new Date(event.getStartTime())));
+        if (event.getScheduleAs().equals("MonthSeparator")) {
+
+            Calendar currentDateCal = Calendar.getInstance();
+            Calendar eventDateCal = Calendar.getInstance();
+            eventDateCal.setTimeInMillis(event.getStartTime());
+            homeScreenDto.calendarPageDate = eventDateCal.getTime();
+
+            System.out.println("Calendar Label : "+CenesUtils.MMMM.format(new Date(event.getStartTime())));
+
+            if (currentDateCal.get(Calendar.YEAR) == eventDateCal.get(Calendar.YEAR)) {
+                homeFragmentV2.updateCalendarLabelDate(CenesUtils.MMMM.format(new Date(event.getStartTime())));
+            } else {
+                homeFragmentV2.updateCalendarLabelDate(CenesUtils.MMMM_yyyy.format(new Date(event.getStartTime())));
+            }
+
         }
 
 

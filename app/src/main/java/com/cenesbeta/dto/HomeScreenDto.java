@@ -1,8 +1,10 @@
 package com.cenesbeta.dto;
 
 import com.cenesbeta.bo.Event;
+import com.cenesbeta.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +29,18 @@ public class HomeScreenDto {
 
     private List<String> invitaitonDataHeaders = new ArrayList<>();
     private Map<String, List<Event>> invitationDataListMap = new HashMap<>();
+    public Date calendarPageDate = new Date();
 
     private HomeTabs tabSelected = HomeTabs.Calendar;
     private InvitationTabs invitationTabSelected = InvitationTabs.Accepted;
 
     public static int calendarTabPageNumber = 0;
-    public static int offsetToFetchData = 20;
+    public static int offsetToFetchData = 30;
     public static int totalCalendarDataCounts = 0;
     public static int currentDateGroupPosition = 0;
+    public static long currentDateGroupPositionTimestamp = 0;
+    public static CalendarDay calendarPreviousPage = null;
+
     public static boolean madeApiCall = false;
     public static Map<String, Integer> homeListGroupAndMonthHolder = new HashMap<>();
 

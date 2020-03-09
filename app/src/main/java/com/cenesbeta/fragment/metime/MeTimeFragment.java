@@ -29,6 +29,7 @@ import com.cenesbeta.database.impl.MeTimePatternManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.NavigationFragment;
+import com.cenesbeta.fragment.NotificationFragment;
 import com.cenesbeta.service.MeTimeService;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
@@ -159,6 +160,9 @@ public class MeTimeFragment extends CenesFragment {
     public void onResume() {
         super.onResume();
         //loadMeTimes();
+        System.out.println("MeTime On Resume Called");
+        ((CenesBaseActivity) getActivity()).showFooter();
+        ((CenesBaseActivity)  getActivity()).activateFooterIcon(MeTimeFragment.TAG);
     }
 
     public void loadMeTimes() {
@@ -492,10 +496,35 @@ public class MeTimeFragment extends CenesFragment {
                                                   }
                                               });
 
+                                            try {
+                                                JSONObject props = new JSONObject();
+                                                props.put("Action","MeTime Image Befor Upload");
+                                                props.put("Logs","PostData File : "+metimePhotoFile.getAbsolutePath());
+                                                props.put("UserEmail",loggedInUser.getEmail());
+                                                props.put("UserName",loggedInUser.getName());
+                                                mixpanel.track("MeTime", props);
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+
                                             new MeTimeAsyncTask.UploadPhotoTask(new MeTimeAsyncTask.UploadPhotoTask.AsyncResponse() {
                                                 @Override
                                                 public void processFinish(final JSONObject response) {
-                                                    System.out.println(response.toString());
+                                                    //System.out.println(response.toString());
+                                                    MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                                                    try {
+                                                        JSONObject props = new JSONObject();
+                                                        props.put("Action","MeTime Image Upload");
+                                                        props.put("Logs",response != null ? response : "Response is empty");
+                                                        props.put("UserEmail",loggedInUser.getEmail());
+                                                        props.put("UserName",loggedInUser.getName());
+                                                        mixpanel.track("MeTime", props);
+
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
 
                                                     //To Run Code of block in background
                                                     AsyncTask.execute(new Runnable() {

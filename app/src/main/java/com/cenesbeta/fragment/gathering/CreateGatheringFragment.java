@@ -3,11 +3,9 @@ package com.cenesbeta.fragment.gathering;
 import android.Manifest;
 import android.app.Activity;
 import android.app.TimePickerDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -21,7 +19,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -116,7 +113,8 @@ public class CreateGatheringFragment extends CenesFragment {
     private TextView startTimePickerLabel, endTimePickerLabel;
     private ProgressBar progressBar;
 
-    private ImageView ivAbandonEvent, ivPredictiveInfo, gathInviteFrndsBtn, ivDateBarArrow;
+    public ImageView ivAbandonEvent;
+    private ImageView ivPredictiveInfo, gathInviteFrndsBtn, ivDateBarArrow;
     private TextView tvLocationLabel, tvGatheringMessage, tvCoverImageStatus, tvEventDate, tvChooseLibrary, tvTakePhoto, tvPhotoCancel;
     private RelativeLayout rlStartBar, rlEndBar, rlDateBar;
     private RelativeLayout rlHeader, gathSearchLocationButton, rlGatheringMessageBar, rlCoverImageBar, rlSelectedFriendsRecyclerView;
@@ -135,7 +133,7 @@ public class CreateGatheringFragment extends CenesFragment {
     private DeviceManager deviceManager;
     private Long eventId;
     public User loggedInUser;
-    public Event event;
+    public Event event, eventTemp;
     public List<EventMember> membersSelected;
     public List<PredictiveData> predictiveDataList;
     public PredictiveData predictiveDataForDate;
@@ -324,7 +322,7 @@ public class CreateGatheringFragment extends CenesFragment {
         tvPhotoCancel.setOnClickListener(onClickListener);
         predictiveCalSwitch.setOnCheckedChangeListener(onCheckedChangeListener);
         recyclerView.setOnTouchListener(layoutTouchListener);
-        svGatheringScrollview.setOnTouchListener(layoutTouchListener);
+        //svGatheringScrollview.setOnTouchListener(layoutTouchListener);
     }
 
     private View.OnFocusChangeListener focusListener = new View.OnFocusChangeListener() {
@@ -422,6 +420,7 @@ public class CreateGatheringFragment extends CenesFragment {
 
                 case R.id.rl_gath_msg_bar:
 
+                    hideKeyboardAndClearFocus(gathEventTitleEditView);
                     GatheirngMessageFragment gatheirngMessageFragment = new GatheirngMessageFragment();
                     gatheirngMessageFragment.setTargetFragment(CreateGatheringFragment.this, MESSAGE_FRAGMENT_CODE);
                     gatheirngMessageFragment.message = event.getDescription();
@@ -429,22 +428,30 @@ public class CreateGatheringFragment extends CenesFragment {
                     break;
 
                 case R.id.rl_cover_image_bar:
+                    hideKeyboardAndClearFocus(gathEventTitleEditView);
+
                     rlPreviewInvitationButton.setVisibility(View.GONE);
                     rlPhotoActionSheet.setVisibility(View.VISIBLE);
 
                     break;
                 case R.id.tv_choose_library:
+                    hideKeyboardAndClearFocus(gathEventTitleEditView);
+
                     isTakeOrUpload = "Upload";
                     chooseFromGalleryPressed();
                     rlPreviewInvitationButton.setVisibility(View.VISIBLE);
                     break;
 
                 case R.id.tv_take_photo:
+                    hideKeyboardAndClearFocus(gathEventTitleEditView);
+
                     isTakeOrUpload = "Take";
                     checkCameraPermissiosn();
                     rlPreviewInvitationButton.setVisibility(View.VISIBLE);
                     break;
                 case R.id.tv_photo_cancel:
+                    hideKeyboardAndClearFocus(gathEventTitleEditView);
+
                     rlPreviewInvitationButton.setVisibility(View.VISIBLE);
                     rlPhotoActionSheet.setVisibility(View.GONE);
                     break;
@@ -476,6 +483,16 @@ public class CreateGatheringFragment extends CenesFragment {
                                 }
                             }
                             event.setEventMembers(mebersToRemove);
+
+                            if (event.getEventId() != null) {
+                                event.setTitle(eventTemp.getTitle());
+                                event.setStartTime(eventTemp.getStartTime());
+                                event.setEndTime(eventTemp.getEndTime());
+                                event.setDescription(eventTemp.getDescription());
+                                event.setLocation(eventTemp.getLocation());
+                                event.setEventPicture(eventTemp.getEventPicture());
+                            }
+
                             ((CenesBaseActivity)getActivity()).replaceFragment(((CenesBaseActivity)getActivity()).homeFragmentV2, null);
                                     /*if (event.getEventId() != null && event.getEventId() != 0) {
 
@@ -493,6 +510,7 @@ public class CreateGatheringFragment extends CenesFragment {
                     break;
 
                 case R.id.rl_date_bar:
+                    hideKeyboardAndClearFocus(gathEventTitleEditView);
 
                     if (llPredictiveCalCell.getVisibility() == View.GONE) {
 
@@ -500,7 +518,6 @@ public class CreateGatheringFragment extends CenesFragment {
                         llGatheringInfoBars.setVisibility(View.GONE);
                         rlPreviewInvitationButton.setVisibility(View.GONE);
                         ivDateBarArrow.setImageResource(R.drawable.date_panel_down_arrow);
-                        hideKeyboardAndClearFocus(gathEventTitleEditView);
 
                     } else {
 
@@ -588,6 +605,8 @@ public class CreateGatheringFragment extends CenesFragment {
                     break;
 
                 case R.id.gath_invite_frnds_btn:
+                    hideKeyboardAndClearFocus(gathEventTitleEditView);
+
                     FriendListFragment friendListFragment = new FriendListFragment();
                     friendListFragment.setTargetFragment(CreateGatheringFragment.this, SEARCH_FRIEND_RESULT_CODE);
                     friendListFragment.selectedEventMembers = membersSelected;
@@ -597,6 +616,7 @@ public class CreateGatheringFragment extends CenesFragment {
                     break;
 
                 case R.id.gath_search_location_button:
+                    hideKeyboardAndClearFocus(gathEventTitleEditView);
                     startActivityForResult(new Intent(getActivity(), SearchLocationActivity.class), SEACRH_LOCATION_RESULT_CODE);
                     break;
             }
@@ -608,6 +628,7 @@ public class CreateGatheringFragment extends CenesFragment {
         @Override
         public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
 
+            hideKeyboardAndClearFocus(gathEventTitleEditView);
             //Setting time to an interval of 5 when creating the gatheirng
             //minute = minute + (5 - (minute % 5));
             //minute = minute + (5 - (((minute % 5) != 0) ? (minute % 5) : 5));
@@ -661,6 +682,8 @@ public class CreateGatheringFragment extends CenesFragment {
         @Override
         public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
 
+            hideKeyboardAndClearFocus(gathEventTitleEditView);
+
             //Setting the time to interval of 5 minutes
             //minute = minute + (5 - (((minute % 5) != 0) ? (minute % 5) : 5));
             if (minute % 5 != 0) {
@@ -702,6 +725,8 @@ public class CreateGatheringFragment extends CenesFragment {
         public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
             try {
+                hideKeyboardAndClearFocus(gathEventTitleEditView);
+
                 ivDateBarArrow.setImageResource(R.drawable.date_panel_right_arrow);
 
                 System.out.println("Calendar Date Clicked.");
@@ -845,6 +870,7 @@ public class CreateGatheringFragment extends CenesFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        System.out.println("On Activity Result of Base Activity Called : Inside Fragment");
         if  (resultCode == Activity.RESULT_OK ) {
             if (requestCode == UPLOAD_IMAGE_REQUEST_CODE) {
                 try {
@@ -924,6 +950,20 @@ public class CreateGatheringFragment extends CenesFragment {
                     System.out.println("File Path String : " + filePath);
                     System.out.println("File Path : " + eventImageFile.getPath());
                     event.setEventImageURI(eventImageFile.getPath());
+
+                   MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                   try {
+                       JSONObject props = new JSONObject();
+                       props.put("Action","After Cropping Success");
+                       props.put("Logs", "FilePath: "+filePath);
+                       props.put("UserEmail",loggedInUser.getEmail());
+                       props.put("UserName",loggedInUser.getName());
+                       mixpanel.track("Gathering", props);
+
+                   } catch (Exception e) {
+                       e.printStackTrace();
+                   }
+
                     //Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getCenesActivity().getContentResolver(), resultUri);
 
                     /*ExifInterface ei = new ExifInterface(filePath);
@@ -960,6 +1000,19 @@ public class CreateGatheringFragment extends CenesFragment {
                     }, 500);*/
                 } catch (Exception e) {
                     e.printStackTrace();
+
+                   MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                   try {
+                       JSONObject props = new JSONObject();
+                       props.put("Action","After Cropping Exception");
+                       props.put("Logs", e.getMessage());
+                       props.put("UserEmail",loggedInUser.getEmail());
+                       props.put("UserName",loggedInUser.getName());
+                       mixpanel.track("Gathering", props);
+
+                   } catch (Exception ex) {
+                       ex.printStackTrace();
+                   }
                 }
 
                 progressBar.setVisibility(View.VISIBLE);
@@ -970,6 +1023,7 @@ public class CreateGatheringFragment extends CenesFragment {
                 createGatheringDto.setPicture(true);
             } else if (requestCode == SEACRH_LOCATION_RESULT_CODE) {
 
+                hideKeyboardAndClearFocus(gathEventTitleEditView);
                 createGatheringDto.setLocation(true);
 
                 if (data.hasExtra("selection")) {
@@ -1053,6 +1107,7 @@ public class CreateGatheringFragment extends CenesFragment {
                 }
             }  else if (requestCode == SEARCH_FRIEND_RESULT_CODE) {
 
+                hideKeyboardAndClearFocus(gathEventTitleEditView);
                 System.out.println("Inside Activity result : ");
                 String selectedFriendsJsonArrayStr = data.getExtras().getString("selectedFriendJsonArray");
                 try {
@@ -1082,6 +1137,7 @@ public class CreateGatheringFragment extends CenesFragment {
 
             }  else if (requestCode == MESSAGE_FRAGMENT_CODE && resultCode == Activity.RESULT_OK) {
 
+                hideKeyboardAndClearFocus(gathEventTitleEditView);
                 final String message = data.getStringExtra("message");
                 if (message != null && message.length() != 0) {
 
@@ -1110,6 +1166,19 @@ public class CreateGatheringFragment extends CenesFragment {
         }
 
         //materialCalendarView.setPagingEnabled(true);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelable("cameraMediaOutputUri", cameraFileUri);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState !=null && savedInstanceState.containsKey("cameraMediaOutputUri"))
+            cameraFileUri = savedInstanceState.getParcelable("cameraMediaOutputUri");
     }
 
     CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
@@ -1310,26 +1379,31 @@ public class CreateGatheringFragment extends CenesFragment {
     }
 
     public void openCamera() {
-        final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Cenes";
-        File newdir = new File(dir);
-        newdir.mkdirs();
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File file = new File(dir + File.separator + "IMG_" + timeStamp + ".jpg");
-
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        cameraFileUri = null;
-        cameraFileUri = Uri.fromFile(file);
-
-
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraFileUri);
-        startActivityForResult(takePictureIntent, CLICK_IMAGE_REQUEST_CODE);
+        //takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraFileUri);
+        //startActivityForResult(takePictureIntent, CLICK_IMAGE_REQUEST_CODE);
+        if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
+
+            final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Cenes";
+            File newdir = new File(dir);
+            newdir.mkdirs();
+
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            File file = new File(dir + File.separator + "IMG_" + timeStamp + ".jpg");
+
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            cameraFileUri = null;
+            cameraFileUri = Uri.fromFile(file);
+            //takePictureIntent.putExtra( android.provider.MediaStore.EXTRA_SIZE_LIMIT, "720000");
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraFileUri);
+            //takePictureIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, 180);
+            this.startActivityForResult(takePictureIntent, CLICK_IMAGE_REQUEST_CODE);
+        }
     }
     public void uploadEventPicture(File file) {
 
@@ -1535,6 +1609,16 @@ public class CreateGatheringFragment extends CenesFragment {
                     event.setPredictiveOn(false);
                     predictiveCalSwitch.performClick();
                 }
+            }
+
+            if (event.getEventId() != null) {
+                eventTemp = new Event();
+                eventTemp.setTitle(event.getTitle());
+                eventTemp.setStartTime(event.getStartTime());
+                eventTemp.setEndTime(event.getEndTime());
+                eventTemp.setLocation(event.getLocation());
+                eventTemp.setDescription(event.getDescription());
+                eventTemp.setEventPicture(event.getEventPicture());
             }
         } catch (Exception e) {
             e.printStackTrace();

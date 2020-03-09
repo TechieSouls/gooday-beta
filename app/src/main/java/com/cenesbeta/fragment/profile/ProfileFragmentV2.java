@@ -561,14 +561,28 @@ public class ProfileFragmentV2  extends CenesFragment {
 
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraFileUri);
-            startActivityForResult(takePictureIntent, OPEN_CAMERA_REQUEST_CODE);
+            this.startActivityForResult(takePictureIntent, OPEN_CAMERA_REQUEST_CODE);
 
         } else if (isTakeOrUpload == "upload_picture") {
             Intent browseIntent = new Intent(Intent.ACTION_GET_CONTENT);
             browseIntent.setType("image/*");
-            startActivityForResult(browseIntent, OPEN_GALLERY_REQUEST_CODE);
+            this.startActivityForResult(browseIntent, OPEN_GALLERY_REQUEST_CODE);
         }
     }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelable("cameraMediaOutputUri", cameraFileUri);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState !=null && savedInstanceState.containsKey("cameraMediaOutputUri"))
+            cameraFileUri = savedInstanceState.getParcelable("cameraMediaOutputUri");
+    }
+
     public void checkCameraPermissiosn() {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
