@@ -17,4 +17,5 @@ public class GatheringAPI {
     public static String post_create_gathering = "/api/event/create"; //Event Data
     public static String post_upload_image = "/api/event/upload"; //File
     public static String post_upload_image_v2 = "/api/event/uploadv2";
+    public static String post_event_chat_api = "/api/eventchat/create";
 }

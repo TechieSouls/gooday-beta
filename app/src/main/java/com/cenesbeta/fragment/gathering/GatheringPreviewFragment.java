@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -33,16 +35,25 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.cenesbeta.AsyncTasks.GatheringAsyncTask;
+import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
+import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.InternetManager;
+import com.cenesbeta.Manager.UrlManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
+import com.cenesbeta.api.GatheringAPI;
+import com.cenesbeta.api.UserAPI;
 import com.cenesbeta.application.CenesApplication;
+import com.cenesbeta.backendManager.UserApiManager;
 import com.cenesbeta.bo.Event;
+import com.cenesbeta.bo.EventChat;
 import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.impl.EventManagerImpl;
+import com.cenesbeta.database.impl.UserManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
+import com.cenesbeta.dto.AsyncTaskDto;
 import com.cenesbeta.dto.GatheringPreviewDto;
 import com.cenesbeta.extension.InvitationScrollView;
 import com.cenesbeta.fragment.CenesFragment;
@@ -540,7 +551,8 @@ public class GatheringPreviewFragment extends CenesFragment {
                                             }
                                         }, 500);
                                     } else {
-                                        rejectGathering();
+                                        //rejectGathering();
+                                        rejectGatheringConfirmAlert();
                                     }
                                 }
 
@@ -976,6 +988,101 @@ public class GatheringPreviewFragment extends CenesFragment {
 
     }
 
+
+    public void rejectGatheringConfirmAlert() {
+
+        try {
+            new AlertDialog.Builder(getContext()).setCancelable(false)
+                    .setTitle("Message")
+                    .setMessage("Are you sure to decline this event?")
+                    //.setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int whichButton) {
+
+                            rejectGatheringSendMessageAlert();
+                        }})
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            resetCardPosition();
+                        }
+                    }).show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void rejectGatheringSendMessageAlert() {
+
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Decline Event").setMessage("Do you want to leave a note to ");
+
+            // Set up the input
+            final EditText input = new EditText(getContext());
+            input.setHint("Write a message");
+            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            builder.setView(input);
+
+            // Set up the buttons
+            builder.setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    System.out.println(input.getText().toString());
+                    if (input.getText().toString() != "") {
+                        postEventChat(input.getText().toString());
+                    }
+                }
+            });
+            builder.setNegativeButton("Skip", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    resetCardPosition();
+                }
+            });
+
+            builder.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void postEventChat(String message) {
+
+        try {
+            EventChat eventChat = new EventChat();
+            eventChat.setChat(message);
+            eventChat.setEventId(Integer.parseInt(event.getEventId().toString()));
+            eventChat.setSenderId(loggedInUser.getUserId());
+
+            AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+            asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ GatheringAPI.post_event_chat_api);
+            asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+            asyncTaskDto.setPostData(new JSONObject(new Gson().toJson(eventChat)));
+            new ProfileAsyncTask.CommonPostRequestTask(new ProfileAsyncTask.CommonPostRequestTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+
+                    try {
+                        boolean success = response.getBoolean("success");
+                        if (success == true) {
+
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).execute(asyncTaskDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void populateInvitationCard(final Event event) {
         tvEventTitle.setText(event.getTitle());

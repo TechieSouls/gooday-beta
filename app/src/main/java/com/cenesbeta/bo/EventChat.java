@@ -1,0 +1,54 @@
+package com.cenesbeta.bo;
+
+public class EventChat {
+
+    private Integer eventChatId;
+
+    private String chat;
+
+    private Integer eventId;
+
+    private Integer senderId;
+
+    private User user;
+
+    public Integer getEventChatId() {
+        return eventChatId;
+    }
+
+    public void setEventChatId(Integer eventChatId) {
+        this.eventChatId = eventChatId;
+    }
+
+    public String getChat() {
+        return chat;
+    }
+
+    public void setChat(String chat) {
+        this.chat = chat;
+    }
+
+    public Integer getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(Integer eventId) {
+        this.eventId = eventId;
+    }
+
+    public Integer getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(Integer senderId) {
+        this.senderId = senderId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+}
