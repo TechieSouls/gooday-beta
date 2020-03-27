@@ -1019,11 +1019,11 @@ public class GatheringPreviewFragment extends CenesFragment {
 
         try {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Decline Event").setMessage("Do you want to leave a note to ");
+            builder.setTitle("Decline Event").setMessage("Do you want to leave a note to "+eventOwner.getName());
 
             // Set up the input
             final EditText input = new EditText(getContext());
-            input.setHint("Write a message");
+            input.setHint(" Write a message");
             // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
             input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             builder.setView(input);
@@ -1035,6 +1035,9 @@ public class GatheringPreviewFragment extends CenesFragment {
                     System.out.println(input.getText().toString());
                     if (input.getText().toString() != "") {
                         postEventChat(input.getText().toString());
+                    }
+                    else{
+                        showAlert("error","Message cannot be empty");
                     }
                 }
             });
