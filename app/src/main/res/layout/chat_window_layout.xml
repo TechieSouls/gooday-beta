@@ -2,130 +2,105 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/light_tint_gray">
+    android:id="@+id/rl_chat_window_root"
+    android:background="@color/transparent">
 
     <RelativeLayout
         android:id="@+id/rl_chat"
         android:layout_width="match_parent"
-        android:layout_height="300dp">
+        android:layout_height="450dp">
 
-        <ScrollView
-            android:id="@+id/chat_scrollview"
+        <ExpandableListView
+            android:id="@+id/elv_chat_listView"
             android:layout_width="match_parent"
-            android:layout_height="300dp">
+            android:layout_height="300dp"
+            android:layout_marginBottom="20dp"
+            android:groupIndicator="@null"
+            android:divider="@color/transparent"
+            android:layout_alignParentBottom="true">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_gravity="right"
-                    android:orientation="horizontal"
-                    android:background="@drawable/xml_shape_bg_outgoing_bubble">
-                    <TextView
-                        android:id="@+id/from_chat_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="30dp"
-                        android:paddingBottom="10dp"
-                        android:paddingTop="10dp"
-                        android:text="Hey, How are you"
-                        android:textSize="14dp"></TextView>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="15dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="11dp"
-                        android:layout_marginRight="10dp"
-                        android:textColor="@color/light_gray_time"
-                        android:text="12:45 PM"></TextView>
-                    <ImageView
-                        android:id="@+id/img_read_status"
-                        android:layout_width="15dp"
-                        android:layout_height="11dp"
-                        android:layout_alignParentRight="true"
-                        android:src="@drawable/read_tick"></ImageView>
-                </LinearLayout>
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rl_outgoing"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:background="@drawable/xml_shape_bg_incoming_bubble"
-                    android:visibility="visible">
-                    <TextView
-                        android:id="@+id/to_chat_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="30dp"
-                        android:paddingBottom="10dp"
-                        android:paddingTop="10dp"                        android:text="Hey, How are you"
-                        android:textSize="14dp"
-                        android:layout_marginLeft="50dp"
-                        ></TextView>
-                </RelativeLayout>
-                <LinearLayout
-                    android:layout_below="@+id/rl_outgoing"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="-30dp">
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/xml_circle_light_grey_white_border"></ImageView>
-                </LinearLayout>
-            </LinearLayout>
-
-        </ScrollView>
+        </ExpandableListView>
 
     </RelativeLayout>
+
     <RelativeLayout
-        android:id="@+id/rl_bubble"
+        android:id="@+id/rl_chat_bubble"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/rl_chat"
-        android:layout_width="179dp"
+        android:layout_width="match_parent"
         android:layout_height="75dp"
         android:textAlignment="center"
+        android:gravity="right"
+        android:windowSoftInputMode="adjustResize"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp">
 
         <TextView
-            android:id="@+id/enter_chat_tv"
+            android:id="@+id/send_chat_tv"
             android:padding="20dp"
-            android:layout_width="match_parent"
+            android:gravity="right"
+            android:layout_width="179dp"
             android:layout_height="wrap_content"
             android:text="Type a message"
+            android:layout_marginBottom="100dp"
             android:background="@drawable/xml_shape_bg_incoming_bubble"
             android:textAlignment="center"></TextView>
-
+        
 
     </RelativeLayout>
     <LinearLayout
-        android:layout_below="@+id/rl_bubble"
+        android:layout_below="@+id/rl_chat_bubble"
+        android:id="@+id/ll_sender_picture"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:gravity="right"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="-40dp"
-        android:layout_marginRight="10dp">
-        <ImageView
+        android:layout_marginTop="-50dp"
+        android:layout_marginRight="10dp"
+        android:visibility="visible">
+        <com.cenesbeta.util.RoundedImageView
+            android:id="@+id/enter_msg_picture"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/xml_circle_light_grey_white_border"></ImageView>
+            android:scaleType="centerCrop"
+            android:src="@drawable/profile_pic_no_image"
+            android:layout_centerInParent="true"/>
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_below="@+id/rl_chat"
+        android:id="@+id/rl_enter_chat"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_marginTop="50dp"
+        android:orientation="horizontal"
+        android:background="@color/white"
+            android:visibility="gone">
+        <com.cenesbeta.util.CenesEditText
+            android:id="@+id/enter_chat_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Type a message"
+            android:paddingLeft="20dp"
+            android:textSize="14dp"
+            android:imeOptions="actionDone"
+            android:textColor="@color/black"
+            android:windowSoftInputMode="stateVisible"
+            android:background="@color/transparent"
+            android:textColorHint="@color/apple_gray"
+            android:layout_marginRight="40dp"/>
+        <ImageView
+            android:id="@+id/enter_chat_button"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/send_chat_icon"></ImageView>
+        </RelativeLayout>
+
+
+
 </RelativeLayout>

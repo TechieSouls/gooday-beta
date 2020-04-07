@@ -66,5 +66,11 @@ public class CenesDatabase {
             // TODO Auto-generated method stub
         }
 
+        @Override
+        protected void finalize() throws Throwable {
+            this.close();
+            super.finalize();
+        }
+
     }
 }

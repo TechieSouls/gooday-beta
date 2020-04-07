@@ -1,5 +1,7 @@
 package com.cenesbeta.bo;
 
+import com.google.gson.annotations.SerializedName;
+
 public class EventChat {
 
     private Integer eventChatId;
@@ -9,6 +11,10 @@ public class EventChat {
     private Integer eventId;
 
     private Integer senderId;
+
+    private Long createdAt;
+
+    private String chatStatus = "Sent";
 
     private User user;
 
@@ -50,5 +56,21 @@ public class EventChat {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Long createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getChatStatus() {
+        return chatStatus;
+    }
+
+    public void setChatStatus(String chatStatus) {
+        this.chatStatus = chatStatus;
     }
 }

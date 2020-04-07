@@ -34,6 +34,7 @@ public class Event {
     private String sender;
     private String description;
     private Integer createdById;
+    private Long createdAt;
     private String eventImageURI;
     private boolean isOwner;
     private String placeId;
@@ -356,6 +357,14 @@ public class Event {
         isSynced = synced;
     }
 
+    public Long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Long createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
@@ -380,6 +389,7 @@ public class Event {
                 ", sender='" + sender + '\'' +
                 ", description='" + description + '\'' +
                 ", createdById=" + createdById +
+                ", createdAt='" + createdAt + '\'' +
                 ", eventImageURI='" + eventImageURI + '\'' +
                 ", isOwner=" + isOwner +
                 ", placeId='" + placeId + '\'' +
