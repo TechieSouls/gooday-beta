@@ -161,6 +161,11 @@ public class EventChatExpandableAdapter extends BaseExpandableListAdapter {
             holder.chatMessageTo.setText(eventChat.getChat());
             Glide.with(gatheringPreviewFragment.getContext()).load(eventChat.getUser().getPicture()).into(holder.chatFromPic);
 
+            if (eventChat.getSenderId().equals(gatheringPreviewFragment.event.getCreatedById())) {
+                holder.rlChatFromProfileContainer.setBackground(gatheringPreviewFragment.getResources().getDrawable(R.drawable.xml_circle_profile_pic_white_border));
+            } else {
+                holder.rlChatFromProfileContainer.setBackground(gatheringPreviewFragment.getResources().getDrawable(R.drawable.host_gradient_circle));
+            }
         }
         return convertView;
     }

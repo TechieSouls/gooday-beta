@@ -49,6 +49,7 @@ public class CenesUtils {
     public static SimpleDateFormat EEEMMMMddcmyyyy = new SimpleDateFormat("EEE MMMM dd, yyyy"); //Sat March 16, 2019
 
     public static SimpleDateFormat ddMMMYYYY = new SimpleDateFormat("dd MMM yyyy"); //7 Mar 1967
+    public static SimpleDateFormat MMM_dd_cmYYYY = new SimpleDateFormat("MMM dd, yyyy"); //7 Mar 1967
     public static SimpleDateFormat EEEE = new SimpleDateFormat("EEEE"); //THHURSDAY
     public static SimpleDateFormat ddMMM = new SimpleDateFormat("ddMMM");
     public static SimpleDateFormat MMMM_yyyy = new SimpleDateFormat("MMMM yyyy"); //January 2020
@@ -109,6 +110,10 @@ public class CenesUtils {
 
     public static int dpToPx(int dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    public static int pxToDp(int px) {
+        return (int) (px / Resources.getSystem().getDisplayMetrics().density);
     }
 
     public static int spToPx(int sp) {

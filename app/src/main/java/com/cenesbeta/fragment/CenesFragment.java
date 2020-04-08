@@ -58,7 +58,7 @@ public abstract class CenesFragment extends Fragment {
 
     public void hideKeyboard() {
         try {
-            if (getActivity().getCurrentFocus() != null) {
+            if (getActivity() != null && getActivity().getCurrentFocus() != null) {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
             }

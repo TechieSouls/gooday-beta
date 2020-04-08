@@ -8,7 +8,9 @@
     <RelativeLayout
         android:id="@+id/rl_chat"
         android:layout_width="match_parent"
-        android:layout_height="450dp">
+        android:layout_height="450dp"
+        android:layout_marginRight="14dp"
+        android:layout_marginLeft="14dp">
 
         <ExpandableListView
             android:id="@+id/elv_chat_listView"
@@ -28,46 +30,43 @@
         android:id="@+id/rl_chat_bubble"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/rl_chat"
-        android:layout_width="match_parent"
+        android:layout_width="179dp"
         android:layout_height="75dp"
-        android:textAlignment="center"
-        android:gravity="right"
         android:windowSoftInputMode="adjustResize"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="14dp">
 
         <TextView
             android:id="@+id/send_chat_tv"
-            android:padding="20dp"
-            android:gravity="right"
-            android:layout_width="179dp"
-            android:layout_height="wrap_content"
+            android:layout_width="155dp"
+            android:layout_height="52dp"
             android:text="Type a message"
-            android:layout_marginBottom="100dp"
+            android:layout_alignParentLeft="true"
             android:background="@drawable/xml_shape_bg_incoming_bubble"
-            android:textAlignment="center"></TextView>
-        
+            android:textAlignment="textStart"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:textColor="#9B9B9B"></TextView>
 
+
+        <LinearLayout
+            android:id="@+id/ll_sender_picture"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:visibility="visible"
+            android:background="@drawable/host_gradient_circle"
+            android:gravity="center">
+            <com.cenesbeta.util.RoundedImageView
+                android:id="@+id/enter_msg_picture"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile_pic_no_image"/>
+        </LinearLayout>
     </RelativeLayout>
-    <LinearLayout
-        android:layout_below="@+id/rl_chat_bubble"
-        android:id="@+id/ll_sender_picture"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:gravity="right"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="-50dp"
-        android:layout_marginRight="10dp"
-        android:visibility="visible">
-        <com.cenesbeta.util.RoundedImageView
-            android:id="@+id/enter_msg_picture"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/profile_pic_no_image"
-            android:layout_centerInParent="true"/>
-    </LinearLayout>
+
 
     <RelativeLayout
         android:layout_below="@+id/rl_chat"

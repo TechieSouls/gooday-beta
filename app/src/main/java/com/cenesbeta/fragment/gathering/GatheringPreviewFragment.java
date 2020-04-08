@@ -23,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -77,6 +78,7 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -132,6 +134,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     private List<EventMember> nonCenesMember;
     private boolean isNewEvent = false;
     private boolean isChatLoaded = false;
+    private boolean isDescriptionButtonOn = false;
 
     @Nullable
     @Override
@@ -293,6 +296,51 @@ public class GatheringPreviewFragment extends CenesFragment {
 
             }
         });
+
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int heightDiff = fragmentView.getRootView().getHeight() - fragmentView.getHeight();
+                // IF height diff is more then 150, consider keyboard as visible.
+                System.out.println("Ha ha ha ha hi Maaaa : "+heightDiff);
+
+                // TODO Auto-generated method stub
+                Rect r = new Rect();
+                fragmentView.getWindowVisibleDisplayFrame(r);
+
+                int screenHeight = fragmentView.getRootView().getHeight();
+                int heightDifference = screenHeight - (r.bottom - r.top);
+                Log.d("Keyboard Size", "Size: " + heightDifference);
+                Log.d("Keyboard Size in dp",  CenesUtils.pxToDp(heightDifference)+"");
+
+
+                if (heightDifference >= 149) {
+                    rlEnterChat.setVisibility(View.VISIBLE);
+                    rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 58));
+                    //got focus
+                    //RelativeLayout.LayoutParams newPara = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PrecastrUtils.convertDpToPx(getContext(),350));
+                    //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
+                    //relativeParams.;  // left, top, right, bottom
+                    //rlBottomText.setLayoutParams(relativeParams);
+                    //relativeParams.height = CenesUtils.convertDpToPx(getContext(), 350);
+
+                } else {
+                    //lost focus
+                    //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
+                    //relativeParams.height = PrecastrUtils.convertDpToPx(getContext(), 160);
+                    rlEnterChat.setVisibility(View.GONE);
+                    rlChatBubble.setVisibility(View.VISIBLE);
+                    llSenderPicture.setVisibility(View.VISIBLE);
+
+                    try {
+                        hideKeyboard();
+                    } catch (Exception e) {
+
+                    }
+                }
+
+            }
+        });
         return view;
     }
 
@@ -361,71 +409,19 @@ public class GatheringPreviewFragment extends CenesFragment {
                     break;
 
                 case R.id.rl_description_bubble:
+                    if(isDescriptionButtonOn == false) {
+
+                        isDescriptionButtonOn = true;
+
+                    }else {
+                        isDescriptionButtonOn = false;
+                    }
+
                     if (isChatLoaded == false) {
                         progressBar.setVisibility(View.VISIBLE);
                     } else {
 
-                        if (!CenesUtils.isEmpty(event.getDescription())) {
-
-                            if ((event.getExpired() != null && event.getExpired() == true) || event.getEndTime() < new Date().getTime()) {
-
-
-                                if (rvEventDescriptionDialog.getVisibility() == View.GONE) {
-
-                                    ivDescriptionBubbleIcon.setImageResource(R.drawable.message_on_icon);
-                                    rlDescriptionBubbleBackground.setAlpha(1);
-                                    rlDescriptionBubbleBackground.setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
-                                    tvEventDescriptionDialogText.setText(event.getDescription());
-                                    rvEventDescriptionDialog.setVisibility(View.VISIBLE);
-
-                                    RequestOptions requestOptions = new RequestOptions();
-                                    requestOptions.circleCrop();
-                                    requestOptions.placeholder(R.drawable.profile_pic_no_image);
-                                    if (eventOwner != null && eventOwner.getUser() != null) {
-                                        Glide.with(getContext()).load(eventOwner.getUser().getPicture()).apply(requestOptions).into(ivDescProfilePic);
-                                    }
-
-                                } else {
-                                    hideDescriptionMessage();
-                                }
-
-                            }else {
-                                if (rlIncludeChat.getVisibility() == View.GONE) {
-
-                                    rlIncludeChat.setVisibility(View.VISIBLE);
-                                    elvEventChatList.invalidate();
-                                    eventChatExpandableAdapter = new EventChatExpandableAdapter(GatheringPreviewFragment.this, headers, eventChatMapList);
-                                    elvEventChatList.setAdapter(eventChatExpandableAdapter);
-                                    RequestOptions options = new RequestOptions();
-                                    options.placeholder(R.drawable.profile_pic_no_image);
-                                    options.centerCrop();
-                                    Glide.with(getContext()).load(loggedInUser.getPicture()).apply(options).into(enterMsgPicture);
-
-                                    elvEventChatList.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            int scrollPosition = 0;
-                                            for (Map.Entry<String, List<EventChat>> entrySet : eventChatMapList.entrySet()) {
-                                                scrollPosition = scrollPosition + 1 + entrySet.getValue().size();
-                                            }
-                                            System.out.println("size event chat  list : : : " + eventChats.size());
-                                            // elvEventChatList.smoothScrollBy(eventChatExpandableAdapter.getGroupCount()-1,100);
-                                            //elvEventChatList.smoothScrollToPosition(rlChatBubble.getBottom());
-                                            elvEventChatList.setSelection(eventChats.size() + headers.size());
-                                        }
-                                    });
-                                } else {
-                                    rlIncludeChat.setVisibility(View.GONE);
-                                    //elvEventChatList.setAdapter(null);
-                                }
-                            }
-                        } else {
-                            new AlertDialog.Builder(getActivity())
-                                    .setTitle("Description Not Available.")
-                                    .setMessage("")
-                                    .setCancelable(false)
-                                    .setPositiveButton("Ok", null).show();
-                        }
+                       loadDescriptionData();
                         break;
 
                     }
@@ -565,8 +561,9 @@ public class GatheringPreviewFragment extends CenesFragment {
                     }
                     String chatMessage = enterChatTv.getText().toString();
                     enterChatTv.setText("");
-                    if(chatMessage != null && chatMessage != "") {
+                    if (chatMessage != null && chatMessage.length() > 0) {
 
+                        elvEventChatList.setSelection(eventChats.size() + headers.size());
                         postEventChat(chatMessage);
 
                     }
@@ -833,9 +830,11 @@ public class GatheringPreviewFragment extends CenesFragment {
      View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
+
+            System.out.println("On Back Button Pressed : ");
             if (hasFocus) {
                 rlEnterChat.setVisibility(View.VISIBLE);
-                rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - 500);
+                //rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - 500);
                 //got focus
                 //RelativeLayout.LayoutParams newPara = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PrecastrUtils.convertDpToPx(getContext(),350));
                 //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
@@ -1197,14 +1196,28 @@ public class GatheringPreviewFragment extends CenesFragment {
     public void postEventChat(String message) {
 
         try {
-            EventChat eventChat = new EventChat();
+            final EventChat eventChat = new EventChat();
             eventChat.setChat(message);
             eventChat.setEventId(Integer.parseInt(event.getEventId().toString()));
             eventChat.setSenderId(loggedInUser.getUserId());
             eventChat.setCreatedAt(new Date().getTime());
             eventChats.add(eventChat);
 
-            String key = CenesUtils.EEEEMMMdd.format(eventChat.getCreatedAt());
+            String key = CenesUtils.MMM_dd_cmYYYY.format(eventChat.getCreatedAt());
+
+            Calendar previousDateCal = Calendar.getInstance();
+            previousDateCal.add(Calendar.DAY_OF_MONTH, -1);
+
+            if (key != null) {
+                if (key.equals(CenesUtils.MMM_dd_cmYYYY.format(new Date()))) {
+
+                    key = "Today ";
+
+                } else if (key.equals(CenesUtils.MMM_dd_cmYYYY.format(previousDateCal.getTime()))) {
+
+                    key = "Yesterday ";
+                }
+            }
 
             if(!headers.contains(key)) {
                 System.out.println("Header key  : "+ key);
@@ -1238,7 +1251,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     try {
                         boolean success = response.getBoolean("success");
                         if (success == true) {
-                            elvEventChatList.setSelection(eventChats.size());
+                            elvEventChatList.setSelection(eventChats.size() + headers.size());
 
                             System.out.println("Message sent for chat ....");
                         }
@@ -1250,6 +1263,37 @@ public class GatheringPreviewFragment extends CenesFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void postReadChatStatus() {
+
+        try {
+            JSONObject postData = new JSONObject();
+            postData.put("userId", loggedInUser.getUserId());
+            postData.put("eventId", event.getEventId());
+            AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+            asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ GatheringAPI.post_read_event_chat_status);
+            asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+            asyncTaskDto.setPostData(new JSONObject(new Gson().toJson(postData)));
+            new ProfileAsyncTask.CommonPostRequestTask(new ProfileAsyncTask.CommonPostRequestTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+
+                    try {
+                        boolean success = response.getBoolean("success");
+                        if (success == true) {
+
+                            System.out.println("Message read for chat ....");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).execute(asyncTaskDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void populateInvitationCard(final Event event) {
@@ -1550,6 +1594,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     }
     public void getChatThread(Long eventId){
 
+        System.out.println("calling pagalpanti");
         try {
         AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
         asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ GatheringAPI.get_event_chat_api);
@@ -1584,8 +1629,21 @@ public class GatheringPreviewFragment extends CenesFragment {
                         for(EventChat  eventChat : eventChats) {
                             System.out.println(eventChat.getChat());
                             System.out.println(eventChat.getCreatedAt());
-                            String key = CenesUtils.EEEEMMMdd.format(eventChat.getCreatedAt());
+                            String key = CenesUtils.MMM_dd_cmYYYY.format(eventChat.getCreatedAt());
 
+                            Calendar previousDateCal = Calendar.getInstance();
+                            previousDateCal.add(Calendar.DAY_OF_MONTH, -1);
+
+                            if (key != null) {
+                                if (key.equals(CenesUtils.MMM_dd_cmYYYY.format(new Date()))) {
+
+                                    key = "Today ";
+
+                                } else if (key.equals(CenesUtils.MMM_dd_cmYYYY.format(previousDateCal.getTime()))) {
+
+                                    key = "Yesterday ";
+                                }
+                            }
                             if(!headers.contains(key)) {
                                 System.out.println("header key : +" + key);
                                 headers.add(key);
@@ -1606,6 +1664,10 @@ public class GatheringPreviewFragment extends CenesFragment {
                             eventChatMapList.put(key,eventChatTemp);
                         }
 
+                        if(isDescriptionButtonOn == true ) {
+                            System.out.println("fgdfgdgdfgf");
+                            loadDescriptionData();
+                        }
 
                         System.out.println(" headers : "+headers.size());
                         System.out.println(" eventChatMapList : "+eventChatMapList.size());
@@ -1621,7 +1683,82 @@ public class GatheringPreviewFragment extends CenesFragment {
         }
 
     }
-    public void setChatStuff(){
+    public void loadDescriptionData(){
+
+        if (!CenesUtils.isEmpty(event.getDescription())) {
+
+            if ((event.getExpired() != null && event.getExpired() == true) || event.getEndTime() < new Date().getTime()) {
+
+
+                if (rvEventDescriptionDialog.getVisibility() == View.GONE) {
+
+                    ivDescriptionBubbleIcon.setImageResource(R.drawable.message_on_icon);
+                    rlDescriptionBubbleBackground.setAlpha(1);
+                    rlDescriptionBubbleBackground.setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
+                    tvEventDescriptionDialogText.setText(event.getDescription());
+                    rvEventDescriptionDialog.setVisibility(View.VISIBLE);
+                    rlChatBubble.setVisibility(View.GONE);
+                    llSenderPicture.setVisibility(View.GONE);
+
+                    RequestOptions requestOptions = new RequestOptions();
+                    requestOptions.circleCrop();
+                    requestOptions.placeholder(R.drawable.profile_pic_no_image);
+                    if (eventOwner != null && eventOwner.getUser() != null) {
+                        Glide.with(getContext()).load(eventOwner.getUser().getPicture()).apply(requestOptions).into(ivDescProfilePic);
+                    }
+
+                } else {
+                    hideDescriptionMessage();
+                }
+
+            }else {
+                if (rlIncludeChat.getVisibility() == View.GONE) {
+
+                    postReadChatStatus();
+                    rlIncludeChat.setVisibility(View.VISIBLE);
+                    rlChatBubble.setVisibility(View.VISIBLE);
+                    llSenderPicture.setVisibility(View.VISIBLE);
+
+                    if (event.getCreatedById().equals(loggedInUser.getUserId())) {
+                        llSenderPicture.setBackground(getResources().getDrawable(R.drawable.host_gradient_circle));
+                    } else {
+                        llSenderPicture.setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
+                    }
+
+                    eventChatExpandableAdapter = new EventChatExpandableAdapter(GatheringPreviewFragment.this, headers, eventChatMapList);
+                    elvEventChatList.setAdapter(eventChatExpandableAdapter);
+                    RequestOptions options = new RequestOptions();
+                    options.placeholder(R.drawable.profile_pic_no_image);
+                    options.centerCrop();
+                    Glide.with(getContext()).load(loggedInUser.getPicture()).apply(options).into(enterMsgPicture);
+
+                    elvEventChatList.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            int scrollPosition = 0;
+                            for (Map.Entry<String, List<EventChat>> entrySet : eventChatMapList.entrySet()) {
+                                scrollPosition = scrollPosition + 1 + entrySet.getValue().size();
+                            }
+                            System.out.println("size event chat  list : : : " + eventChats.size());
+                            // elvEventChatList.smoothScrollBy(eventChatExpandableAdapter.getGroupCount()-1,100);
+                            //elvEventChatList.smoothScrollToPosition(rlChatBubble.getBottom());
+                            elvEventChatList.setSelection(scrollPosition);
+                        }
+                    });
+                } else {
+                    llSenderPicture.setVisibility(View.GONE);
+                    rlIncludeChat.setVisibility(View.GONE);
+                    rlChatBubble.setVisibility(View.GONE);
+                    //elvEventChatList.setAdapter(null);
+                }
+            }
+        } else {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Description Not Available.")
+                    .setMessage("")
+                    .setCancelable(false)
+                    .setPositiveButton("Ok", null).show();
+        }
 
     }
 }
