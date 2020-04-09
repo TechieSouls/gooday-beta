@@ -323,7 +323,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     //relativeParams.;  // left, top, right, bottom
                     //rlBottomText.setLayoutParams(relativeParams);
                     //relativeParams.height = CenesUtils.convertDpToPx(getContext(), 350);
-                    svCard.setScrollingEnabled(false);
+                    svCard.setScrollingEnabled(true);
 
                 } else {
                     //lost focus
@@ -339,7 +339,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                     }
 
-                    svCard.setScrollingEnabled(true);
+                    svCard.setScrollingEnabled(false);
                 }
 
             }

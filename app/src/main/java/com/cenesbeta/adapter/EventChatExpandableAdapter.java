@@ -139,7 +139,7 @@ public class EventChatExpandableAdapter extends BaseExpandableListAdapter {
 
             holder.chatMessageFrom.setText(eventChat.getChat());
             holder.chatSentTimeFrom.setText(CenesUtils.hhmmaa.format(new Date(eventChat.getCreatedAt())) );
-
+            System.out.println("Chat Status ::: " +eventChat.getChatStatus());
             if(eventChat.getChatStatus().equals("Read")) {
 
                 holder.chatReadStatus.setImageDrawable(gatheringPreviewFragment.getResources().getDrawable(R.drawable.read_tick));
