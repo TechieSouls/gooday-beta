@@ -323,6 +323,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     //relativeParams.;  // left, top, right, bottom
                     //rlBottomText.setLayoutParams(relativeParams);
                     //relativeParams.height = CenesUtils.convertDpToPx(getContext(), 350);
+                    svCard.setScrollingEnabled(false);
 
                 } else {
                     //lost focus
@@ -337,10 +338,13 @@ public class GatheringPreviewFragment extends CenesFragment {
                     } catch (Exception e) {
 
                     }
+
+                    svCard.setScrollingEnabled(true);
                 }
 
             }
         });
+
         return view;
     }
 
@@ -1274,7 +1278,7 @@ public class GatheringPreviewFragment extends CenesFragment {
             AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
             asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ GatheringAPI.post_read_event_chat_status);
             asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
-            asyncTaskDto.setPostData(new JSONObject(new Gson().toJson(postData)));
+            asyncTaskDto.setPostData(postData);
             new ProfileAsyncTask.CommonPostRequestTask(new ProfileAsyncTask.CommonPostRequestTask.AsyncResponse() {
                 @Override
                 public void processFinish(JSONObject response) {
