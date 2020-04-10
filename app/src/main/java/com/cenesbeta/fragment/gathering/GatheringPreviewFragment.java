@@ -323,7 +323,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     //relativeParams.;  // left, top, right, bottom
                     //rlBottomText.setLayoutParams(relativeParams);
                     //relativeParams.height = CenesUtils.convertDpToPx(getContext(), 350);
-                    svCard.setScrollingEnabled(true);
+                   // svCard.setScrollingEnabled(true);
 
                 } else {
                     //lost focus
@@ -339,7 +339,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                     }
 
-                    svCard.setScrollingEnabled(false);
+                  //  svCard.setScrollingEnabled(false);
                 }
 
             }
@@ -416,9 +416,18 @@ public class GatheringPreviewFragment extends CenesFragment {
                     if(isDescriptionButtonOn == false) {
 
                         isDescriptionButtonOn = true;
+                        scrollFeatureOff();
+                        ivDescriptionBubbleIcon.setImageResource(R.drawable.message_on_icon);
+                        rlDescriptionBubbleBackground.setAlpha(1);
+                        rlDescriptionBubbleBackground.setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
 
                     }else {
                         isDescriptionButtonOn = false;
+                        scrollFeatureOn();
+                        rlDescriptionBubbleBackground.setAlpha(0.3f);
+                        ivDescriptionBubbleIcon.setImageResource(R.drawable.message_off_icon);
+                        rlDescriptionBubbleBackground.setBackground(getResources().getDrawable(R.drawable.xml_circle_black_faded));
+
                     }
 
                     if (isChatLoaded == false) {
@@ -893,9 +902,8 @@ public class GatheringPreviewFragment extends CenesFragment {
 
     public void hideDescriptionMessage() {
         rvEventDescriptionDialog.setVisibility(View.GONE);
-        rlDescriptionBubbleBackground.setAlpha(0.3f);
-        ivDescriptionBubbleIcon.setImageResource(R.drawable.message_off_icon);
-        rlDescriptionBubbleBackground.setBackground(getResources().getDrawable(R.drawable.xml_circle_black_faded));
+        //scrollFeatureOn();
+        System.out.println("scroll enabled");
     }
 
 
@@ -1224,7 +1232,7 @@ public class GatheringPreviewFragment extends CenesFragment {
             }
 
             if(!headers.contains(key)) {
-                System.out.println("Header key  : "+ key);
+                //System.out.println("Header key  : "+ key);
                 headers.add(key);
             }
 
@@ -1598,7 +1606,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     }
     public void getChatThread(Long eventId){
 
-        System.out.println("calling pagalpanti");
+        //System.out.println("calling pagalpanti");
         try {
         AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
         asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ GatheringAPI.get_event_chat_api);
@@ -1631,8 +1639,8 @@ public class GatheringPreviewFragment extends CenesFragment {
                         }
 
                         for(EventChat  eventChat : eventChats) {
-                            System.out.println(eventChat.getChat());
-                            System.out.println(eventChat.getCreatedAt());
+                          //  System.out.println(eventChat.getChat());
+                           // System.out.println(eventChat.getCreatedAt());
                             String key = CenesUtils.MMM_dd_cmYYYY.format(eventChat.getCreatedAt());
 
                             Calendar previousDateCal = Calendar.getInstance();
@@ -1649,7 +1657,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                                 }
                             }
                             if(!headers.contains(key)) {
-                                System.out.println("header key : +" + key);
+                              //  System.out.println("header key : +" + key);
                                 headers.add(key);
                             }
 
@@ -1669,12 +1677,12 @@ public class GatheringPreviewFragment extends CenesFragment {
                         }
 
                         if(isDescriptionButtonOn == true ) {
-                            System.out.println("fgdfgdgdfgf");
+                           // System.out.println("fgdfgdgdfgf");
                             loadDescriptionData();
                         }
 
-                        System.out.println(" headers : "+headers.size());
-                        System.out.println(" eventChatMapList : "+eventChatMapList.size());
+                       // System.out.println(" headers : "+headers.size());
+                       // System.out.println(" eventChatMapList : "+eventChatMapList.size());
 
 
                     } catch (Exception e) {
@@ -1688,17 +1696,16 @@ public class GatheringPreviewFragment extends CenesFragment {
 
     }
     public void loadDescriptionData(){
-
+       // svCard.setOnTouchListener(null);
+       // tinderCardView.setOnTouchListener(null);
         if (!CenesUtils.isEmpty(event.getDescription())) {
+
 
             if ((event.getExpired() != null && event.getExpired() == true) || event.getEndTime() < new Date().getTime()) {
 
 
                 if (rvEventDescriptionDialog.getVisibility() == View.GONE) {
 
-                    ivDescriptionBubbleIcon.setImageResource(R.drawable.message_on_icon);
-                    rlDescriptionBubbleBackground.setAlpha(1);
-                    rlDescriptionBubbleBackground.setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
                     tvEventDescriptionDialogText.setText(event.getDescription());
                     rvEventDescriptionDialog.setVisibility(View.VISIBLE);
                     rlChatBubble.setVisibility(View.GONE);
@@ -1743,7 +1750,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                             for (Map.Entry<String, List<EventChat>> entrySet : eventChatMapList.entrySet()) {
                                 scrollPosition = scrollPosition + 1 + entrySet.getValue().size();
                             }
-                            System.out.println("size event chat  list : : : " + eventChats.size());
+                          //  System.out.println("size event chat  list : : : " + eventChats.size());
                             // elvEventChatList.smoothScrollBy(eventChatExpandableAdapter.getGroupCount()-1,100);
                             //elvEventChatList.smoothScrollToPosition(rlChatBubble.getBottom());
                             elvEventChatList.setSelection(scrollPosition);
@@ -1757,6 +1764,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                 }
             }
         } else {
+            svCard.setScrollingEnabled(true);
             new AlertDialog.Builder(getActivity())
                     .setTitle("Description Not Available.")
                     .setMessage("")
@@ -1764,5 +1772,20 @@ public class GatheringPreviewFragment extends CenesFragment {
                     .setPositiveButton("Ok", null).show();
         }
 
+    }
+
+    public void scrollFeatureOn() {
+
+        tinderCardView.setOnTouchListener(onTouchListener);
+        svCard.setOnTouchListener(onTouchListener);
+        svCard.setScrollingEnabled(true);
+
+
+    }
+    public void scrollFeatureOff() {
+
+        tinderCardView.setOnTouchListener(null);
+        svCard.setOnTouchListener(null);
+        svCard.setScrollingEnabled(false);
     }
 }

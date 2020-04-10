@@ -42,7 +42,7 @@ public class GatheirngMessageFragment extends CenesFragment {
 
         btnCancel.setOnClickListener(onClickListener);
         btnDone.setOnClickListener(onClickListener);
-        rlEmptySpaceTap.setOnTouchListener(layoutTouchListener);
+       // rlEmptySpaceTap.setOnTouchListener(layoutTouchListener);
         etMessageArea.addTextChangedListener(textWatcherListener);
 
         if (message != null) {
