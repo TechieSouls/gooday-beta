@@ -156,7 +156,7 @@ public class CalendarTabListViewAdapter extends BaseAdapter {
         System.out.println("Event Schdedule As : "+event.getTitle()+" ----- "+event.getScheduleAs());
 
 
-        if (event.getScheduleAs().equals("MonthSeparator")) {
+        //if (event.getScheduleAs().equals("MonthSeparator")) {
 
             Calendar currentDateCal = Calendar.getInstance();
             Calendar eventDateCal = Calendar.getInstance();
@@ -166,12 +166,14 @@ public class CalendarTabListViewAdapter extends BaseAdapter {
             System.out.println("Calendar Label : "+CenesUtils.MMMM.format(new Date(event.getStartTime())));
 
             if (currentDateCal.get(Calendar.YEAR) == eventDateCal.get(Calendar.YEAR)) {
+                System.out.println("IF updateCalendarLabelDate");
                 homeFragmentV2.updateCalendarLabelDate(CenesUtils.MMMM.format(new Date(event.getStartTime())));
             } else {
+                System.out.println("ELSE updateCalendarLabelDate");
                 homeFragmentV2.updateCalendarLabelDate(CenesUtils.MMMM_yyyy.format(new Date(event.getStartTime())));
             }
 
-        }
+        //}
 
 
         //Lets hanle the case of Event Type as Gatheirngs

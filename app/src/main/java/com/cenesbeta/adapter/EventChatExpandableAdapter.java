@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.R;
 import com.cenesbeta.bo.EventChat;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
@@ -115,6 +116,7 @@ public class EventChatExpandableAdapter extends BaseExpandableListAdapter {
             holder = new ViewHolder();
             holder.chatReadStatus = (ImageView) convertView.findViewById(R.id.chat_read_status);
             holder.chatSentTimeFrom = (TextView) convertView.findViewById(R.id.chat_created_time);
+            holder.chatSentTimeSender = (TextView) convertView.findViewById(R.id.chat_created_time_sender);
             holder.chatMessageTo = (TextView) convertView.findViewById(R.id.chat_msg_to);
             holder.chatMessageFrom = (TextView) convertView.findViewById(R.id.chat_msg_from);
             holder.chatFromPic = (RoundedImageView) convertView.findViewById(R.id.chat_from_picture);
@@ -138,7 +140,14 @@ public class EventChatExpandableAdapter extends BaseExpandableListAdapter {
             holder.rlChatFromProfileContainer.setVisibility(View.GONE);
 
             holder.chatMessageFrom.setText(eventChat.getChat());
-            holder.chatSentTimeFrom.setText(CenesUtils.hhmmaa.format(new Date(eventChat.getCreatedAt())) );
+            String editedText = "";
+            System.out.println("Edited : "+eventChat.getChatEdited());
+            if(eventChat.getChatEdited().equals("Yes")) {
+                editedText = "(Edited) ";
+            } else {
+                System.out.println("Edited NO");
+            }
+            holder.chatSentTimeFrom.setText(editedText + CenesUtils.hhmmaa.format(new Date(eventChat.getCreatedAt()))  );
             System.out.println("Chat Status ::: " +eventChat.getChatStatus());
             if(eventChat.getChatStatus().equals("Read")) {
 
@@ -159,12 +168,23 @@ public class EventChatExpandableAdapter extends BaseExpandableListAdapter {
             holder.rlChatFromProfileContainer.setVisibility(View.VISIBLE);
 
             holder.chatMessageTo.setText(eventChat.getChat());
-            Glide.with(gatheringPreviewFragment.getContext()).load(eventChat.getUser().getPicture()).into(holder.chatFromPic);
+            String editedText = "";
+            if(eventChat.getChatEdited().equals("Yes")) {
+                editedText = "(Edited) ";
+            } else {
+                System.out.println("Edited NO");
+            }
+            holder.chatSentTimeSender.setText(editedText + CenesUtils.hhmmaa.format(new Date(eventChat.getCreatedAt())) );
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions.placeholder(R.drawable.profile_pic_no_image);
+            requestOptions.circleCrop();
+
+            Glide.with(gatheringPreviewFragment.getContext()).load(eventChat.getUser().getPicture()).apply(requestOptions).into(holder.chatFromPic);
 
             if (eventChat.getSenderId().equals(gatheringPreviewFragment.event.getCreatedById())) {
-                holder.rlChatFromProfileContainer.setBackground(gatheringPreviewFragment.getResources().getDrawable(R.drawable.xml_circle_profile_pic_white_border));
-            } else {
                 holder.rlChatFromProfileContainer.setBackground(gatheringPreviewFragment.getResources().getDrawable(R.drawable.host_gradient_circle));
+            } else {
+                holder.rlChatFromProfileContainer.setBackground(gatheringPreviewFragment.getResources().getDrawable(R.drawable.xml_circle_profile_pic_white_border));
             }
         }
         return convertView;
@@ -177,7 +197,7 @@ public class EventChatExpandableAdapter extends BaseExpandableListAdapter {
     }
 
     class ViewHolder {
-        private TextView chatSentTimeFrom, chatMessageTo,chatMessageFrom;
+        private TextView chatSentTimeFrom, chatSentTimeSender, chatMessageTo,chatMessageFrom;
         private ImageView chatReadStatus;
         private RoundedImageView chatFromPic;
         private RelativeLayout rlToChat, rlChatFromProfileContainer;

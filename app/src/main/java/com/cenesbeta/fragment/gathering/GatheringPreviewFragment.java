@@ -93,7 +93,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     private ImageView ivEventPicture, ivAcceptSendIcon, ivEditRejectIcon, ivDeleteIcon, ivCardSwipeArrow;
     private TextView tvEventTitle, tvEventDate, tvEventDescriptionDialogText, sendChatTV, enterChatTv;
     private RelativeLayout rlGuestListBubble, rlLocationBubble, rlDescriptionBubble, rlShareBubble;
-    private RelativeLayout rvEventDescriptionDialog, rlIncludeChat;
+    private RelativeLayout rvEventDescriptionDialog, rlIncludeChat, rlChat;
     private RelativeLayout rlDescriptionBubbleBackground, ivEventPictureOverlay;
     private ImageView ivDescriptionBubbleIcon;
     private RoundedImageView ivDescProfilePic,enterMsgPicture;
@@ -135,6 +135,8 @@ public class GatheringPreviewFragment extends CenesFragment {
     private boolean isNewEvent = false;
     private boolean isChatLoaded = false;
     private boolean isDescriptionButtonOn = false;
+    private int chatListViewMarginBottom = 20;
+
 
     @Nullable
     @Override
@@ -160,6 +162,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         rlChatBubble = (RelativeLayout) view.findViewById(R.id.rl_chat_bubble);
         llSenderPicture = (LinearLayout) view.findViewById(R.id.ll_sender_picture);
         rlEnterChat = (RelativeLayout) view.findViewById(R.id.rl_enter_chat);
+        rlChat = (RelativeLayout) view.findViewById(R.id.rl_chat);
 
         rlSkipText = (RelativeLayout) view.findViewById(R.id.rl_skip_text);
         rvEventDescriptionDialog = (RelativeLayout) view.findViewById(R.id.rv_event_description_dialog);
@@ -300,46 +303,59 @@ public class GatheringPreviewFragment extends CenesFragment {
         view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                int heightDiff = fragmentView.getRootView().getHeight() - fragmentView.getHeight();
-                // IF height diff is more then 150, consider keyboard as visible.
-                System.out.println("Ha ha ha ha hi Maaaa : "+heightDiff);
 
-                // TODO Auto-generated method stub
-                Rect r = new Rect();
-                fragmentView.getWindowVisibleDisplayFrame(r);
+                if ( getActivity() != null) {
+                    Fragment visibleFragment = (((CenesBaseActivity) getActivity()).getVisibleFragment());
+                    if (visibleFragment instanceof GatheringPreviewFragment) {
+                        int heightDiff = fragmentView.getRootView().getHeight() - fragmentView.getHeight();
+                        // IF height diff is more then 150, consider keyboard as visible.
+                        System.out.println("Ha ha ha ha hi Maaaa : "+heightDiff);
 
-                int screenHeight = fragmentView.getRootView().getHeight();
-                int heightDifference = screenHeight - (r.bottom - r.top);
-                Log.d("Keyboard Size", "Size: " + heightDifference);
-                Log.d("Keyboard Size in dp",  CenesUtils.pxToDp(heightDifference)+"");
+                        // TODO Auto-generated method stub
+                        Rect r = new Rect();
+                        fragmentView.getWindowVisibleDisplayFrame(r);
+
+                        int screenHeight = fragmentView.getRootView().getHeight();
+                        int heightDifference = screenHeight - (r.bottom - r.top);
+                        Log.d("Keyboard Size", "Size: " + heightDifference);
+                        Log.d("Keyboard Size in dp",  CenesUtils.pxToDp(heightDifference)+"");
 
 
-                if (heightDifference >= 149) {
-                    rlEnterChat.setVisibility(View.VISIBLE);
-                    rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 58));
-                    //got focus
-                    //RelativeLayout.LayoutParams newPara = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PrecastrUtils.convertDpToPx(getContext(),350));
-                    //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
-                    //relativeParams.;  // left, top, right, bottom
-                    //rlBottomText.setLayoutParams(relativeParams);
-                    //relativeParams.height = CenesUtils.convertDpToPx(getContext(), 350);
-                   // svCard.setScrollingEnabled(true);
+                        if (heightDifference >= 150) {
+                            rlEnterChat.setVisibility(View.VISIBLE);
+                            rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 60));
+                            //got focus
+                            //RelativeLayout.LayoutParams newPara = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PrecastrUtils.convertDpToPx(getContext(),350));
+                            //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
+                            //relativeParams.;  // left, top, right, bottom
+                            //rlBottomText.setLayoutParams(relativeParams);
+                            //relativeParams.height = CenesUtils.convertDpToPx(getContext(), 350);
+                            // svCard.setScrollingEnabled(true);
+                            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)elvEventChatList.getLayoutParams();
+                            params.setMargins(0, 0, 0, CenesUtils.dpToPx(50));
+                            //elvEventChatList.setLayoutParams(params);
 
-                } else {
-                    //lost focus
-                    //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
-                    //relativeParams.height = PrecastrUtils.convertDpToPx(getContext(), 160);
-                    rlEnterChat.setVisibility(View.GONE);
-                    rlChatBubble.setVisibility(View.VISIBLE);
-                    llSenderPicture.setVisibility(View.VISIBLE);
 
-                    try {
-                        hideKeyboard();
-                    } catch (Exception e) {
+                        } else {
+                            //lost focus
+                            //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
+                            //relativeParams.height = PrecastrUtils.convertDpToPx(getContext(), 160);
+                            rlEnterChat.setVisibility(View.GONE);
+                            rlChatBubble.setVisibility(View.VISIBLE);
+                            llSenderPicture.setVisibility(View.VISIBLE);
+                            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)elvEventChatList.getLayoutParams();
+                            params.setMargins(0, 0, 0, CenesUtils.dpToPx(chatListViewMarginBottom));
+                            //elvEventChatList.setLayoutParams(params);
 
+                            try {
+                                hideKeyboard();
+                            } catch (Exception e) {
+
+                            }
+
+                            //  svCard.setScrollingEnabled(false);
+                        }
                     }
-
-                  //  svCard.setScrollingEnabled(false);
                 }
 
             }
@@ -435,7 +451,6 @@ public class GatheringPreviewFragment extends CenesFragment {
                     } else {
 
                        loadDescriptionData();
-                        break;
 
                     }
 
@@ -1256,6 +1271,8 @@ public class GatheringPreviewFragment extends CenesFragment {
             asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ GatheringAPI.post_event_chat_api);
             asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
             asyncTaskDto.setPostData(new JSONObject(new Gson().toJson(eventChat)));
+            elvEventChatList.setSelection(eventChats.size() + headers.size());
+
             new ProfileAsyncTask.CommonPostRequestTask(new ProfileAsyncTask.CommonPostRequestTask.AsyncResponse() {
                 @Override
                 public void processFinish(JSONObject response) {
@@ -1263,7 +1280,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     try {
                         boolean success = response.getBoolean("success");
                         if (success == true) {
-                            elvEventChatList.setSelection(eventChats.size() + headers.size());
+                          //  elvEventChatList.setSelection(eventChats.size() + headers.size());
 
                             System.out.println("Message sent for chat ....");
                         }
@@ -1626,13 +1643,13 @@ public class GatheringPreviewFragment extends CenesFragment {
                         eventChats = new ArrayList<>();
                         Type listType = new TypeToken<List<EventChat>>() {
                         }.getType();
-                        EventChat eventChatEvent = new EventChat();
+                       /* EventChat eventChatEvent = new EventChat();
                         eventChatEvent.setChat(event.getDescription());
                         eventChatEvent.setCreatedAt(event.getCreatedAt());
                         eventChatEvent.setChatStatus("Sent");
                         eventChatEvent.setSenderId(event.getCreatedById());
                         eventChatEvent.setUser(eventOwner.getUser());
-                        eventChats.add(eventChatEvent);
+                        eventChats.add(eventChatEvent); */
                         List<EventChat> eventChatsTmp = gson.fromJson(response.getJSONArray("data").toString(), listType);
                         for(EventChat  eventChat : eventChatsTmp) {
                             eventChats.add(eventChat);
@@ -1700,7 +1717,6 @@ public class GatheringPreviewFragment extends CenesFragment {
        // tinderCardView.setOnTouchListener(null);
         if (!CenesUtils.isEmpty(event.getDescription())) {
 
-
             if ((event.getExpired() != null && event.getExpired() == true) || event.getEndTime() < new Date().getTime()) {
 
 
@@ -1722,7 +1738,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     hideDescriptionMessage();
                 }
 
-            }else {
+            } else {
                 if (rlIncludeChat.getVisibility() == View.GONE) {
 
                     postReadChatStatus();

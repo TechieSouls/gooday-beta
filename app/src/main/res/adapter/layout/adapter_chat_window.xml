@@ -54,25 +54,36 @@
         android:id="@+id/rl_to_chat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="20dp"
+        android:padding="5dp"
         android:background="@drawable/xml_shape_bg_incoming_bubble"
         android:visibility="visible">
         <TextView
             android:id="@+id/chat_msg_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="30dp"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:text="Hey, How are you"
             android:textSize="14dp"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="40dp"
             android:textColor="@color/black"
             android:background="@color/transparent"
-            ></TextView>
+            android:paddingRight="60dp"
+            />
+
+        <TextView
+            android:id="@+id/chat_created_time_sender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:background="@color/transparent"
+            android:text="12:45 PM"
+            android:textColor="@color/light_gray_time"
+            android:textSize="11dp"
+            android:layout_alignEnd="@+id/chat_msg_to"
+            android:layout_alignBottom="@+id/chat_msg_to"></TextView>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rl_chat_from_profile_container"
@@ -80,7 +91,7 @@
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="-30dp"
+        android:layout_marginTop="-25dp"
         android:background="@drawable/xml_circle_profile_pic_white_border">
 
         <com.cenesbeta.util.RoundedImageView

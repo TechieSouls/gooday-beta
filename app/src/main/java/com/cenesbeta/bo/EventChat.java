@@ -16,6 +16,8 @@ public class EventChat {
 
     private String chatStatus = "Sent";
 
+    private String chatEdited = "No";
+
     private User user;
 
     public Integer getEventChatId() {
@@ -72,5 +74,13 @@ public class EventChat {
 
     public void setChatStatus(String chatStatus) {
         this.chatStatus = chatStatus;
+    }
+
+    public String getChatEdited() {
+        return chatEdited;
+    }
+
+    public void setChatEdited(String chatEdited) {
+        this.chatEdited = chatEdited;
     }
 }

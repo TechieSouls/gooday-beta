@@ -10,7 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="450dp"
         android:layout_marginRight="14dp"
-        android:layout_marginLeft="14dp">
+        android:layout_marginLeft="14dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <ExpandableListView
             android:id="@+id/elv_chat_listView"
@@ -69,8 +71,8 @@
 
 
     <RelativeLayout
-        android:layout_below="@+id/rl_chat"
         android:id="@+id/rl_enter_chat"
+        android:layout_below="@+id/rl_chat"
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:layout_marginTop="50dp"
@@ -99,7 +101,4 @@
             android:layout_marginRight="20dp"
             android:src="@drawable/send_chat_icon"></ImageView>
         </RelativeLayout>
-
-
-
 </RelativeLayout>

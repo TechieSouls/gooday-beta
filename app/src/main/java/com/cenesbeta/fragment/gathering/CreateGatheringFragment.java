@@ -322,7 +322,7 @@ public class CreateGatheringFragment extends CenesFragment {
         tvPhotoCancel.setOnClickListener(onClickListener);
         predictiveCalSwitch.setOnCheckedChangeListener(onCheckedChangeListener);
         recyclerView.setOnTouchListener(layoutTouchListener);
-        //svGatheringScrollview.setOnTouchListener(layoutTouchListener);
+        svGatheringScrollview.setOnTouchListener(layoutTouchListener);
     }
 
     private View.OnFocusChangeListener focusListener = new View.OnFocusChangeListener() {

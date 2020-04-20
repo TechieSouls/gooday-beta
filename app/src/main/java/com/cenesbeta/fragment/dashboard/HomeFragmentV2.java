@@ -319,6 +319,9 @@ public class HomeFragmentV2 extends CenesFragment {
                 final int lastItem = firstVisibleItem + visibleItemCount;
                 System.out.println("lastItem : "+lastItem+", firstVisibleItem : "+firstVisibleItem+", "+visibleItemCount);
 
+                //Event visibleEvent = homeScreenDto.getHomeEvents().get(firstVisibleItem  - homeScreenDto.getHomeDataHeaders().size() - 1);
+                //System.out.println("Visible Event : "+new Date(visibleEvent.getStartTime()));
+
                 //System.out.println("firstVisibleItem , visibleItemCount, totalItemCount : "+firstVisibleItem+" -- "+visibleItemCount+" -- "+totalItemCount);
                 if(lastItem == totalItemCount && totalItemCount != 0) {
                     // you have reached end of list, load more data
@@ -431,8 +434,10 @@ public class HomeFragmentV2 extends CenesFragment {
                     public void run() {
                         Calendar currentYearCal = Calendar.getInstance();
                         if (currentYearCal.get(Calendar.YEAR) == currentPageTemp.getCalendar().get(Calendar.YEAR)) {
+                            System.out.println("Stepxx_1 : "+currentPageTemp.getDate());
                             updateCalendarLabelDate(CenesUtils.MMMM.format(currentPageTemp.getDate()));
                         } else {
+                            System.out.println("Stepxx_2 : ");
                             updateCalendarLabelDate(CenesUtils.MMMM_yyyy.format(currentPageTemp.getDate()));
                         }
                     }
@@ -443,7 +448,8 @@ public class HomeFragmentV2 extends CenesFragment {
     }
 
     public void updateCalendarLabelDate(String headerCalTitle) {
-        System.out.println("updateCalendarLabelDate  called ******* ");
+        System.out.println("updateCalendarLabelDate  called ******* " + headerCalTitle);
+        System.out.println("tvCalDate updateCalendarLabelDate "+ headerCalTitle);
         tvCalDate.setText(headerCalTitle);
     }
 
@@ -470,6 +476,7 @@ public class HomeFragmentV2 extends CenesFragment {
 
     public void invitationTabPressed() {
 
+        System.out.println("tvCalDate invitationTabPressed " + CenesUtils.MMMM.format(new Date()));
         tvCalDate.setText(CenesUtils.MMMM.format(new Date()));
         homeScreenDto.setTabSelected(HomeScreenDto.HomeTabs.Invitation);
         tvInvitationTab.setBackground(getResources().getDrawable(R.drawable.xml_border_bottom_black));
@@ -514,6 +521,7 @@ public class HomeFragmentV2 extends CenesFragment {
                 @Override
                 public void run() {
                     tvCalDate.setText(CenesUtils.MMMM.format(calendar.getTime()));
+                    System.out.println("tvCalDate calendarDateBarPressed " + CenesUtils.MMMM.format(calendar.getTime()) );
                 }
             }, 100);
 
@@ -573,6 +581,7 @@ public class HomeFragmentV2 extends CenesFragment {
             @Override
             public void run() {
                 tvCalDate.setText(CenesUtils.MMMM.format(calendar.getTime()));
+                System.out.println("tvCalDate homeButtonPressed " + CenesUtils.MMMM.format(calendar.getTime()));
             }
         }, 700);
         lvHomeListView.smoothScrollToPositionFromTop(HomeScreenDto.currentDateGroupPosition, 0, 200);
@@ -1479,9 +1488,11 @@ public class HomeFragmentV2 extends CenesFragment {
                         public void run() {
                             Calendar currentYearCal = Calendar.getInstance();
                             if (currentYearCal.get(Calendar.YEAR) == currentPageTemp.getCalendar().get(Calendar.YEAR)) {
+                                System.out.println("Stepxx_3 : ");
                                 updateCalendarLabelDate(CenesUtils.MMMM.format(currentPageTemp.getDate()));
                             } else {
                                 updateCalendarLabelDate(CenesUtils.MMMM_yyyy.format(currentPageTemp.getDate()));
+                                System.out.println("Stepxx_4 : ");
                             }
                         }
                     }, 200);
@@ -1520,8 +1531,10 @@ public class HomeFragmentV2 extends CenesFragment {
                         public void run() {
                             Calendar currentYearCal = Calendar.getInstance();
                             if (currentYearCal.get(Calendar.YEAR) == currentPageTemp.getCalendar().get(Calendar.YEAR)) {
+                                System.out.println("Stepxx_5");
                                 updateCalendarLabelDate(CenesUtils.MMMM.format(currentPageTemp.getDate()));
                             } else {
+                                System.out.println("Stepxx_6");
                                 updateCalendarLabelDate(CenesUtils.MMMM_yyyy.format(currentPageTemp.getDate()));
                             }
                         }
