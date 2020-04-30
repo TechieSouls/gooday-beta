@@ -12,6 +12,7 @@ import com.cenesbeta.database.impl.EventMemberManagerImpl;
 import com.cenesbeta.database.impl.MeTimeManagerImpl;
 import com.cenesbeta.database.impl.MeTimePatternManagerImpl;
 import com.cenesbeta.database.impl.NotificationManagerImpl;
+import com.cenesbeta.database.impl.SplashManagerImpl;
 import com.cenesbeta.database.impl.UserContactManagerImpl;
 import com.cenesbeta.database.impl.UserManagerImpl;
 
@@ -58,6 +59,7 @@ public class CenesDatabase {
             db.execSQL(MeTimeManagerImpl.CreateTableQuery);
             db.execSQL(MeTimePatternManagerImpl.CreateTableQuery);
             db.execSQL(CalendarSyncTokenManagerImpl.createCalendarTableQuery);
+            db.execSQL(SplashManagerImpl.CreateTableQuery);
 
         }
 

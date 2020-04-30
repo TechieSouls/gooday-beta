@@ -18,4 +18,11 @@
         android:text="@string/first_predictive_intelligent_calendar"
         android:textColor="@color/white"
         android:textSize="17sp" />-->
+
+    <ImageView
+        android:id="@+id/splash_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:visibility="gone"/>
 </LinearLayout>

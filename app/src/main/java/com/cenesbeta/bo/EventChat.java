@@ -18,6 +18,8 @@ public class EventChat {
 
     private String chatEdited = "No";
 
+    private String chatType = "Chat";
+
     private User user;
 
     public Integer getEventChatId() {
@@ -82,5 +84,13 @@ public class EventChat {
 
     public void setChatEdited(String chatEdited) {
         this.chatEdited = chatEdited;
+    }
+
+    public String getChatType() {
+        return chatType;
+    }
+
+    public void setChatType(String chatType) {
+        this.chatType = chatType;
     }
 }

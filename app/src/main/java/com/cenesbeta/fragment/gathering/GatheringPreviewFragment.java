@@ -1,7 +1,10 @@
 package com.cenesbeta.fragment.gathering;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
@@ -93,7 +96,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     private ImageView ivEventPicture, ivAcceptSendIcon, ivEditRejectIcon, ivDeleteIcon, ivCardSwipeArrow;
     private TextView tvEventTitle, tvEventDate, tvEventDescriptionDialogText, sendChatTV, enterChatTv;
     private RelativeLayout rlGuestListBubble, rlLocationBubble, rlDescriptionBubble, rlShareBubble;
-    private RelativeLayout rvEventDescriptionDialog, rlIncludeChat, rlChat;
+    private RelativeLayout rvEventDescriptionDialog, rlIncludeChat, rlChatt;
     private RelativeLayout rlDescriptionBubbleBackground, ivEventPictureOverlay;
     private ImageView ivDescriptionBubbleIcon;
     private RoundedImageView ivDescProfilePic,enterMsgPicture;
@@ -123,6 +126,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     private EventMember eventOwner, loggedInUserAsEventMember;
     private boolean enableLeftToRightSwipe, enableRightToLeftSwipe;
     private boolean isNewOrEditMode;
+    private boolean isPushRequest = false;
     private int pendingEventIndex;
     int windowWidth, windowHeight;
     int screenCenter;
@@ -162,7 +166,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         rlChatBubble = (RelativeLayout) view.findViewById(R.id.rl_chat_bubble);
         llSenderPicture = (LinearLayout) view.findViewById(R.id.ll_sender_picture);
         rlEnterChat = (RelativeLayout) view.findViewById(R.id.rl_enter_chat);
-        rlChat = (RelativeLayout) view.findViewById(R.id.rl_chat);
+        rlChatt = (RelativeLayout) view.findViewById(R.id.rl_chat);
 
         rlSkipText = (RelativeLayout) view.findViewById(R.id.rl_skip_text);
         rvEventDescriptionDialog = (RelativeLayout) view.findViewById(R.id.rv_event_description_dialog);
@@ -289,7 +293,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                 }
             }
 
-            getChatThread(event.getEventId());
+            getChatThread();
             populateInvitationCard(event);
         }
         ivProfilePicView.setOnClickListener(new View.OnClickListener() {
@@ -364,9 +368,31 @@ public class GatheringPreviewFragment extends CenesFragment {
         return view;
     }
 
+    //This is the handler that will manager to process the broadcast intent
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            System.out.println("Broadcaster Processing");
+            isPushRequest = true;
+            getChatThread();
+
+        }
+    };
+
+
     @Override
     public void onResume() {
         super.onResume();
+        getActivity().registerReceiver(mMessageReceiver, new IntentFilter("eventchatrefresh"));
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(mMessageReceiver);
+
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -429,6 +455,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     break;
 
                 case R.id.rl_description_bubble:
+                    System.out.println("rl_description_bubble");
                     if(isDescriptionButtonOn == false) {
 
                         isDescriptionButtonOn = true;
@@ -582,6 +609,11 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                     break;
                 case  R.id.enter_chat_button :
+
+                    if (!internetManager.isInternetConnection((CenesBaseActivity)getActivity())) {
+                        showAlert("Error", "Network Connection Error");
+                        return;
+                    }
                     System.out.println("typing message...");
                     int scrollPosition = 0;
                     for (Map.Entry<String, List<EventChat>> entrySet: eventChatMapList.entrySet()) {
@@ -590,7 +622,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     String chatMessage = enterChatTv.getText().toString();
                     enterChatTv.setText("");
                     if (chatMessage != null && chatMessage.length() > 0) {
-
+                        System.out.println(eventChats.size() +" gggggg enter "+ headers.size());
                         elvEventChatList.setSelection(eventChats.size() + headers.size());
                         postEventChat(chatMessage);
 
@@ -1262,6 +1294,11 @@ public class GatheringPreviewFragment extends CenesFragment {
                 eventChatTemp = new ArrayList<>();
 
             }
+
+            if (!internetManager.isInternetConnection((CenesBaseActivity)getActivity())) {
+                showAlert("Error","Network Connection Error");
+                return;
+            }
             eventChatTemp.add(eventChat);
             eventChatMapList.put(key,eventChatTemp);
             eventChatExpandableAdapter.notifyDataSetChanged();
@@ -1271,6 +1308,7 @@ public class GatheringPreviewFragment extends CenesFragment {
             asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ GatheringAPI.post_event_chat_api);
             asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
             asyncTaskDto.setPostData(new JSONObject(new Gson().toJson(eventChat)));
+            System.out.println("gggggggtttttt "+ eventChats.size() +" : "+ headers.size());
             elvEventChatList.setSelection(eventChats.size() + headers.size());
 
             new ProfileAsyncTask.CommonPostRequestTask(new ProfileAsyncTask.CommonPostRequestTask.AsyncResponse() {
@@ -1621,14 +1659,14 @@ public class GatheringPreviewFragment extends CenesFragment {
             return -1;
         }
     }
-    public void getChatThread(Long eventId){
+    public void getChatThread(){
 
-        //System.out.println("calling pagalpanti");
+        System.out.println("getChatThread");
         try {
         AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
         asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ GatheringAPI.get_event_chat_api);
         asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
-        asyncTaskDto.setQueryStr("eventId="+eventId);
+        asyncTaskDto.setQueryStr("eventId="+event.getEventId());
             new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
                 @Override
                 public void processFinish(JSONObject response) {
@@ -1652,6 +1690,11 @@ public class GatheringPreviewFragment extends CenesFragment {
                         eventChats.add(eventChatEvent); */
                         List<EventChat> eventChatsTmp = gson.fromJson(response.getJSONArray("data").toString(), listType);
                         for(EventChat  eventChat : eventChatsTmp) {
+                            if(eventChat.getChatType().equals("Description")) {
+                                if(!eventChat.getChat().equals(event.getDescription())) {
+                                    eventChat.setChat(event.getDescription());
+                                }
+                            }
                             eventChats.add(eventChat);
                         }
 
@@ -1717,11 +1760,12 @@ public class GatheringPreviewFragment extends CenesFragment {
        // tinderCardView.setOnTouchListener(null);
         if (!CenesUtils.isEmpty(event.getDescription())) {
 
-            if ((event.getExpired() != null && event.getExpired() == true) || event.getEndTime() < new Date().getTime()) {
+            if ((event.getExpired() != null && event.getExpired() == true) || event.getEndTime() < new Date().getTime() ||  event.getEventMembers().size() == 1 ) {
 
 
                 if (rvEventDescriptionDialog.getVisibility() == View.GONE) {
 
+                    System.out.println("Stepxx_1 ");
                     tvEventDescriptionDialogText.setText(event.getDescription());
                     rvEventDescriptionDialog.setVisibility(View.VISIBLE);
                     rlChatBubble.setVisibility(View.GONE);
@@ -1735,44 +1779,77 @@ public class GatheringPreviewFragment extends CenesFragment {
                     }
 
                 } else {
+                    System.out.println("Stepxx_2 ");
                     hideDescriptionMessage();
                 }
 
             } else {
-                if (rlIncludeChat.getVisibility() == View.GONE) {
+                if (rlIncludeChat.getVisibility() == View.GONE || isPushRequest == true) {
 
+                    System.out.println("Stepxx_3 ");
                     postReadChatStatus();
-                    rlIncludeChat.setVisibility(View.VISIBLE);
-                    rlChatBubble.setVisibility(View.VISIBLE);
-                    llSenderPicture.setVisibility(View.VISIBLE);
 
-                    if (event.getCreatedById().equals(loggedInUser.getUserId())) {
-                        llSenderPicture.setBackground(getResources().getDrawable(R.drawable.host_gradient_circle));
-                    } else {
-                        llSenderPicture.setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
-                    }
-
-                    eventChatExpandableAdapter = new EventChatExpandableAdapter(GatheringPreviewFragment.this, headers, eventChatMapList);
-                    elvEventChatList.setAdapter(eventChatExpandableAdapter);
-                    RequestOptions options = new RequestOptions();
-                    options.placeholder(R.drawable.profile_pic_no_image);
-                    options.centerCrop();
-                    Glide.with(getContext()).load(loggedInUser.getPicture()).apply(options).into(enterMsgPicture);
-
-                    elvEventChatList.post(new Runnable() {
+                    new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            int scrollPosition = 0;
+                            rlIncludeChat.setVisibility(View.VISIBLE);
+                            rlChatBubble.setVisibility(View.VISIBLE);
+                            llSenderPicture.setVisibility(View.VISIBLE);
+
+                            if (event.getCreatedById().equals(loggedInUser.getUserId())) {
+                                llSenderPicture.setBackground(getResources().getDrawable(R.drawable.host_gradient_circle));
+                            } else {
+                                llSenderPicture.setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
+                            }
+
+                            //elvEventChatList.invalidate();
+                            if (eventChatExpandableAdapter == null) {
+                                eventChatExpandableAdapter = new EventChatExpandableAdapter(GatheringPreviewFragment.this, headers, eventChatMapList);
+                                elvEventChatList.setAdapter(eventChatExpandableAdapter);
+                            } else {
+                                eventChatExpandableAdapter.notifyDataSetChanged();
+                            }
+                            //
+
+                            RequestOptions options = new RequestOptions();
+                            options.placeholder(R.drawable.profile_pic_no_image);
+                            options.centerCrop();
+                            Glide.with(getContext()).load(loggedInUser.getPicture()).apply(options).into(enterMsgPicture);
+
+                            elvEventChatList.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                          /*  int scrollPosition = 0;
                             for (Map.Entry<String, List<EventChat>> entrySet : eventChatMapList.entrySet()) {
                                 scrollPosition = scrollPosition + 1 + entrySet.getValue().size();
-                            }
-                          //  System.out.println("size event chat  list : : : " + eventChats.size());
-                            // elvEventChatList.smoothScrollBy(eventChatExpandableAdapter.getGroupCount()-1,100);
-                            //elvEventChatList.smoothScrollToPosition(rlChatBubble.getBottom());
-                            elvEventChatList.setSelection(scrollPosition);
+                            } */
+                                    System.out.println("size event chat  list : : : " + eventChats.size() + headers.size());
+                                    // elvEventChatList.smoothScrollBy(eventChatExpandableAdapter.getGroupCount()-1,100);
+                                    //elvEventChatList.smoothScrollToPosition(rlChatBubble.getBottom());
+                                    //elvEventChatList.setSelection(scrollPosition);
+                                    //elvEventChatList.setSelection(eventChats.size() + headers.size());
+                                    //for (int i=0; i < 10; i++) {
+                                    eventChatExpandableAdapter.notifyDataSetChanged();
+                                   // elvEventChatList.setSelection(eventChats.size() + headers.size());
+                                    elvEventChatList.smoothScrollToPositionFromTop((eventChats.size() + headers.size()), 0, 100);
+                                    //try {
+                                          //  Thread.sleep(1000);
+                                        //} catch (Exception e) {
+
+                                        //}
+                                    //}
+                                    //elvEventChatList.setSelectedGroup(headers.size() - 1);
+                                    //elvEventChatList.setSelectedChild(headers.size() - 1, eventChatMapList.get(headers.get(headers.size() - 1)).size() - 1, false);
+                                    //elvEventChatList.set( eventChatMapList.get(headers.get(headers.size() - 1)).size() - 1);
+
+
+                                }
+                            }, 100);
                         }
-                    });
+                    }, 1000);
+
                 } else {
+                    System.out.println("Stepxx_4 ");
                     llSenderPicture.setVisibility(View.GONE);
                     rlIncludeChat.setVisibility(View.GONE);
                     rlChatBubble.setVisibility(View.GONE);
@@ -1787,7 +1864,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     .setCancelable(false)
                     .setPositiveButton("Ok", null).show();
         }
-
+            isPushRequest = false;
     }
 
     public void scrollFeatureOn() {
