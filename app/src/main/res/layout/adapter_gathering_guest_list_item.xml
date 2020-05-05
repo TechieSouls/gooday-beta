@@ -10,7 +10,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp">
+        android:layout_marginRight="15dp"
+        android:background="@color/white">
 
 
         <com.cenesbeta.util.RoundedImageView
@@ -32,22 +33,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:text="Mandeep"
-                android:textSize="18sp"
                 android:textColor="@color/black"
+                android:textSize="18dp"
                 android:textStyle="normal"
+                android:fontFamily="@font/avenir_light"
+
                 />
+
             <TextView
                 android:id="@+id/tv_phonebook_name"
                 android:layout_width="match_parent"
                 android:layout_height="21dp"
                 android:text=""
+                android:fontFamily="@font/avenir_light"
                 />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.5dip"
+                android:layout_height="0.05dp"
                 android:layout_marginTop="10dp"
-                android:background="#CCC"/>
+                android:background="@drawable/xml_greywhite_gradient_border_bottom"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
