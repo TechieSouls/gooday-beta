@@ -17,6 +17,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ import com.cenesbeta.AsyncTasks.MeTimeAsyncTask;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
+import com.cenesbeta.adapter.ImageAdapter;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.MeTime;
 import com.cenesbeta.bo.MeTimeItem;
@@ -84,13 +86,12 @@ public class MeTimeCardFragment extends CenesFragment {
     private Button sunday, monday, tuesday, wednesday, thursday, friday, saturday;
     private Button saveMeTime, deleteMeTime;
     private TextView startTimeText, endTimeText, tvTakePhoto, tvUploadPhoto, tvPhotoCancel;
-    private LinearLayout metimeStartTime, metimeEndTime;
+    private LinearLayout metimeStartTime, metimeEndTime, llSliderDots;
     private EditText etMetimeTitle;
     private RelativeLayout rlUploadMetimeImg, swipeCard, rlPhotoActionSheet;
     private ImageView rivMeTimeImg;
     private View fragmentView;
     View viewOpaque;
-
     private MeTime metime;
     private CenesApplication cenesApplication;
     private InternetManager internetManager;
@@ -105,6 +106,10 @@ public class MeTimeCardFragment extends CenesFragment {
     private Uri cameraFileUri;
     private File file;
     private String isTakeOrUpload = "take_picture";
+
+    ViewPager vpImagePager;
+    ImageView[] dots;
+
 
     private static final int CAMERA_PERMISSION_CODE = 1001, UPLOAD_PERMISSION_CODE = 1002;
     private static final int OPEN_CAMERA_REQUEST_CODE = 1003, OPEN_GALLERY_REQUEST_CODE = 1004;
@@ -152,6 +157,32 @@ public class MeTimeCardFragment extends CenesFragment {
         tvTakePhoto = (TextView) view.findViewById(R.id.tv_take_photo);
         tvUploadPhoto = (TextView) view.findViewById(R.id.tv_choose_library);
         tvPhotoCancel = (TextView) view.findViewById(R.id.tv_photo_cancel);
+
+        llSliderDots = (LinearLayout) view.findViewById(R.id.ll_slider_dots);
+        vpImagePager = (ViewPager) view.findViewById(R.id.vp_image_pager);
+
+       /* ImageAdapter adapterView = new ImageAdapter(this, post.getPostImages());
+        vpImagePager.setAdapter(adapterView); */
+
+        dots = new ImageView[2];
+
+        //code for slider
+
+        for(int i = 0; i < 2; i++){
+
+            dots[i] = new ImageView(getContext());
+            dots[i].setImageDrawable(ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.xml_circle_tranparent_white));
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+            params.setMargins(8, 0, 8, 0);
+
+            llSliderDots.addView(dots[i], params);
+        }
+
+        dots[1].setImageDrawable(ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.xml_circle_white));
+
+        //code for slider
 
 
         slideToTop(swipeCard);
