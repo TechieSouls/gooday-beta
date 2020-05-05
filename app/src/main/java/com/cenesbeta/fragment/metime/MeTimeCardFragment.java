@@ -38,6 +38,7 @@ import com.cenesbeta.AsyncTasks.MeTimeAsyncTask;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
+//import com.cenesbeta.adapter.ImageAdapter;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.MeTime;
 import com.cenesbeta.bo.MeTimeItem;
