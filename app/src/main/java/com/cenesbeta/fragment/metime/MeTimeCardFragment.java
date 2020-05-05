@@ -38,7 +38,6 @@ import com.cenesbeta.AsyncTasks.MeTimeAsyncTask;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.adapter.ImageAdapter;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.MeTime;
 import com.cenesbeta.bo.MeTimeItem;
@@ -158,8 +157,8 @@ public class MeTimeCardFragment extends CenesFragment {
         tvUploadPhoto = (TextView) view.findViewById(R.id.tv_choose_library);
         tvPhotoCancel = (TextView) view.findViewById(R.id.tv_photo_cancel);
 
-        llSliderDots = (LinearLayout) view.findViewById(R.id.ll_slider_dots);
-        vpImagePager = (ViewPager) view.findViewById(R.id.vp_image_pager);
+        //llSliderDots = (LinearLayout) view.findViewById(R.id.ll_slider_dots);
+        //vpImagePager = (ViewPager) view.findViewById(R.id.vp_image_pager);
 
        /* ImageAdapter adapterView = new ImageAdapter(this, post.getPostImages());
         vpImagePager.setAdapter(adapterView); */
