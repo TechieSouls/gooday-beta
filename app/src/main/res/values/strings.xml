@@ -101,6 +101,7 @@ time for everyone to meet.\n\n\nNo more back and forth messaging.\nNo more time 
     <string name="alarm">Alarm</string>
 
     <string name="metimeDesc">Set aside time to yourself\n(others won\'t see this)</string>
+    <string name="metimeFriends">Select friends who see you\'re available at this time, others don\'t.</string>
     <string name="time_match_info_text"><font color="#FFFFFFFF">Toggle Time Match to discover the best time and day for all</font> <font color="#FFAA4E">Cenes users</font></string>
 
     <string-array name="gender">

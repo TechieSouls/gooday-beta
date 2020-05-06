@@ -1262,17 +1262,17 @@ public class GatheringPreviewFragment extends CenesFragment {
             eventChat.setCreatedAt(new Date().getTime());
             eventChats.add(eventChat);
 
-            String key = CenesUtils.MMM_dd_cmYYYY.format(eventChat.getCreatedAt());
+            String key = CenesUtils.EEEMMMMdd.format(eventChat.getCreatedAt());
 
             Calendar previousDateCal = Calendar.getInstance();
             previousDateCal.add(Calendar.DAY_OF_MONTH, -1);
 
             if (key != null) {
-                if (key.equals(CenesUtils.MMM_dd_cmYYYY.format(new Date()))) {
+                if (key.equals(CenesUtils.EEEMMMMdd.format(new Date()))) {
 
                     key = "Today ";
 
-                } else if (key.equals(CenesUtils.MMM_dd_cmYYYY.format(previousDateCal.getTime()))) {
+                } else if (key.equals(CenesUtils.EEEMMMMdd.format(previousDateCal.getTime()))) {
 
                     key = "Yesterday ";
                 }
@@ -1701,17 +1701,17 @@ public class GatheringPreviewFragment extends CenesFragment {
                         for(EventChat  eventChat : eventChats) {
                           //  System.out.println(eventChat.getChat());
                            // System.out.println(eventChat.getCreatedAt());
-                            String key = CenesUtils.MMM_dd_cmYYYY.format(eventChat.getCreatedAt());
+                            String key = CenesUtils.EEEMMMMdd.format(eventChat.getCreatedAt());
 
                             Calendar previousDateCal = Calendar.getInstance();
                             previousDateCal.add(Calendar.DAY_OF_MONTH, -1);
 
                             if (key != null) {
-                                if (key.equals(CenesUtils.MMM_dd_cmYYYY.format(new Date()))) {
+                                if (key.equals(CenesUtils.EEEMMMMdd.format(new Date()))) {
 
                                     key = "Today ";
 
-                                } else if (key.equals(CenesUtils.MMM_dd_cmYYYY.format(previousDateCal.getTime()))) {
+                                } else if (key.equals(CenesUtils.EEEMMMMdd.format(previousDateCal.getTime()))) {
 
                                     key = "Yesterday ";
                                 }

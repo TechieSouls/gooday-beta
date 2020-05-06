@@ -39,6 +39,7 @@ import com.cenesbeta.bo.CalenadarSyncToken;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.impl.CalendarSyncTokenManagerImpl;
+import com.cenesbeta.database.impl.CenesUserManagerImpl;
 import com.cenesbeta.database.impl.UserManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.dto.AsyncTaskDto;
@@ -94,6 +95,7 @@ public class ProfileFragmentV2  extends CenesFragment {
     private String isTakeOrUpload = "take_picture";
     private ProfileListItemAdapter profileListItemAdapter;
     private CalendarSyncTokenManagerImpl calendarSyncTokenManagerImpl;
+    private CenesUserManagerImpl cenesUserManager;
 
 
     @Nullable
@@ -150,6 +152,7 @@ public class ProfileFragmentV2  extends CenesFragment {
         callMixPanel();
         new ProfileAsyncTask(getCenesActivity().getCenesApplication(), (CenesBaseActivity)getActivity());
         calendarSyncTokenManagerImpl = new CalendarSyncTokenManagerImpl(((CenesBaseActivity)getActivity()).getCenesApplication());
+        cenesUserManager = new CenesUserManagerImpl(((CenesBaseActivity)getActivity()).getCenesApplication());
         loadAttenedHostedCounts();
         loadUserSyncTokens();
         Glide.with(getContext())
@@ -525,6 +528,7 @@ public class ProfileFragmentV2  extends CenesFragment {
                             String profilePic = response.getString("data");
                             loggedInUser.setPicture(profilePic);
                             userManager.updateProfilePic(loggedInUser);
+                            cenesUserManager.updateCenesUser(loggedInUser);
 
                             //Reload Home Screen
                             if (getActivity() != null) {

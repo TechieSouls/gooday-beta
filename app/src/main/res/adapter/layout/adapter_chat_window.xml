@@ -18,18 +18,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_marginLeft="9dp"
-            android:text="Hey, How are you"
+            android:layout_marginLeft="10dp"
+            android:paddingLeft="5dp"
+            android:text="I am working at that hour, possible to start at 8pm? I wanna come so badly!"
             android:textColor="@color/black"
             android:textSize="14dp"
-            android:layout_marginRight="35dp"
-            android:fontFamily="@font/avenir_medium"
+            android:layout_marginRight="30dp"
             android:background="@color/transparent"></TextView>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="19dp"
             android:layout_marginRight="24dp"
             android:layout_gravity="right"
+            android:layout_marginBottom="2dp"
             >
             <TextView
                 android:id="@+id/chat_created_time"
@@ -65,13 +66,12 @@
             android:layout_height="wrap_content"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:text="Hey, How are you"
+            android:text="I am working at that hour, possible to start at 8pm? I wanna come so badly!"
             android:textSize="14dp"
             android:layout_marginLeft="40dp"
             android:textColor="@color/black"
             android:background="@color/transparent"
-            android:fontFamily="@font/avenir_medium"
-            android:paddingRight="60dp"
+            android:paddingRight="20dp"
             />
 
         <TextView
