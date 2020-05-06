@@ -216,22 +216,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:gravity="center">
+                    android:gravity="left"
+                    android:weightSum="2">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="START"
                         android:textSize="24dp"
                         android:textColor="@color/white"
-                        android:layout_margin="5dp"/>
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:gravity="center"/>
 
 
                     <TextView
                         android:id="@+id/startTimeText"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:text="00:00"
+                        android:gravity="left"
+                        android:paddingLeft="10dp"
                         android:textSize="24dp"
                         android:textColor="@color/white"
                         android:layout_margin="5dp"/>
@@ -255,15 +261,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:gravity="center">
+                    android:weightSum="2"
+                    android:gravity="left">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="END"
                         android:textSize="24dp"
                         android:textColor="@color/white"
-                        android:layout_margin="5dp"/>
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:layout_weight="1"/>
 
 
                     <TextView
@@ -272,8 +281,11 @@
                         android:layout_height="wrap_content"
                         android:text="00:00"
                         android:textSize="24dp"
+                        android:gravity="left"
+                        android:paddingLeft="10dp"
                         android:textColor="@color/white"
-                        android:layout_margin="5dp"/>
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"/>
 
                 </LinearLayout>
 
@@ -284,7 +296,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/metime_end_time"
-                android:background="@color/black">
+                android:background="@color/transparent">
+
+               <!-- <include layout="@layout/layout_me_time_include" /> -->
+
                 <android.support.v4.view.ViewPager
                     android:id="@+id/vp_image_pager"
                     android:layout_width="match_parent"
@@ -297,7 +312,8 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical|center_horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:background="@color/black"
                 android:layout_marginTop="7dp"/>
 
             <RelativeLayout

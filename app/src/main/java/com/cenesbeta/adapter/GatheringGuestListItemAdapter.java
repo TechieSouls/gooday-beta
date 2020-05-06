@@ -106,17 +106,17 @@ public class GatheringGuestListItemAdapter extends BaseAdapter {
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(R.drawable.profile_pic_no_image);
         requestOptions.circleCrop();
-        if (!CenesUtils.isEmpty(eventMember.getPicture())) {
-
-            profilePic = eventMember.getPicture();
-            Glide.with(gatheringGuestListFragment.getContext()).load(eventMember.getPicture()).apply(requestOptions).into(viewHolder.ivProfilePic);
-
-        } else if (eventMember.getUser() != null && !CenesUtils.isEmpty(eventMember.getUser().getPicture())) {
+        if (eventMember.getUser() != null && !CenesUtils.isEmpty(eventMember.getUser().getPicture())) {
 
             profilePic = eventMember.getUser().getPicture();
             Glide.with(gatheringGuestListFragment.getContext()).load(eventMember.getUser().getPicture()).apply(requestOptions).into(viewHolder.ivProfilePic);
 
-        } else {
+        } else if (!CenesUtils.isEmpty(eventMember.getPicture())) {
+
+            profilePic = eventMember.getPicture();
+            Glide.with(gatheringGuestListFragment.getContext()).load(eventMember.getPicture()).apply(requestOptions).into(viewHolder.ivProfilePic);
+
+        }  else {
 
             viewHolder.ivProfilePic.setImageDrawable(gatheringGuestListFragment.getResources().getDrawable(R.drawable.profile_pic_no_image));
         }

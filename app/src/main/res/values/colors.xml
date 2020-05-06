@@ -29,6 +29,7 @@
     <color name="outlook_blue">#0072c6</color>
     <color name="google_plus_red">#d34836</color>
     <color name="apple_gray">#999999</color>
+    <color name="gradient_grey">#FFD8D8D8</color>
     <color name="login_blue">#3E5997</color>
     <color name="new_theme_grey_color">#03FFFFFF</color>
     <color name="font_grey_color">#FF9B9B9B</color>

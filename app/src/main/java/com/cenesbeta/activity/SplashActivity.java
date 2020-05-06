@@ -40,6 +40,7 @@ public class SplashActivity extends CenesActivity{
     SplashManager splashManager;
     ImageView splashImageView;
     String imageURL = "";
+    int duration = 0;
 
     ProgressDialog progressDialog = null;
     @Override
@@ -59,6 +60,10 @@ public class SplashActivity extends CenesActivity{
 
         if(localSplash != null) {
             Glide.with(getApplicationContext()).load(localSplash.getSplashImage()).into(splashImageView);
+            splashImageView.setVisibility(View.VISIBLE);
+            duration = 3000;
+        } else {
+            duration = 5000;
         }
 
         new Handler().postDelayed(new Runnable() {
@@ -108,7 +113,7 @@ public class SplashActivity extends CenesActivity{
                                         finish();
                                     }
                                 }
-                            }, 0);
+                            }, duration);
 
                         } catch (Exception e) {
                             e.printStackTrace();
