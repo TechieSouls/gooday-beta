@@ -138,8 +138,9 @@ public class WelcomeActivity extends AppCompatActivity {
             dotsLayout.addView(dots[i]);
         }
 
-        if (dots.length > 0)
+        if (dots.length > 0) {
             dots[currentPage].setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
+        }
     }
 
     private int getItem(int i) {

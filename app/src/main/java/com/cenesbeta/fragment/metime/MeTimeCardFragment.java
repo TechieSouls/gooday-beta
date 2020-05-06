@@ -38,7 +38,8 @@ import com.cenesbeta.AsyncTasks.MeTimeAsyncTask;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
-//import com.cenesbeta.adapter.ImageAdapter;
+//import com.cenesbeta.adapter.MeTimePagerAdapter;
+import com.cenesbeta.adapter.MeTimePagerAdapter;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.MeTime;
 import com.cenesbeta.bo.MeTimeItem;
@@ -83,31 +84,31 @@ public class MeTimeCardFragment extends CenesFragment {
     public final static String TAG = "MeTimeCardFragment";
     private final static int TIME_PICKER_INTERVAL = 5;
 
-    private Button sunday, monday, tuesday, wednesday, thursday, friday, saturday;
+    public Button sunday, monday, tuesday, wednesday, thursday, friday, saturday;
     private Button saveMeTime, deleteMeTime;
-    private TextView startTimeText, endTimeText, tvTakePhoto, tvUploadPhoto, tvPhotoCancel;
-    private LinearLayout metimeStartTime, metimeEndTime, llSliderDots;
+    public TextView startTimeText, endTimeText;
+    public LinearLayout metimeStartTime, metimeEndTime, llSliderDots;
+    private TextView tvTakePhoto, tvUploadPhoto, tvPhotoCancel;
     private EditText etMetimeTitle;
     private RelativeLayout rlUploadMetimeImg, swipeCard, rlPhotoActionSheet;
     private ImageView rivMeTimeImg;
     private View fragmentView;
     View viewOpaque;
-    private MeTime metime;
+    public MeTime metime;
     private CenesApplication cenesApplication;
     private InternetManager internetManager;
 
-    private MeTimeService meTimeService;
+    public MeTimeService meTimeService;
     private MeTimeAsyncTask meTimeAsyncTask;
-    private Long startTimeMillis;
-    private Long endTimeMillis;
+    public Long startTimeMillis, endTimeMillis;
     private File metimePhotoFile;
-    JSONObject selectedDaysHolder;
+    public JSONObject selectedDaysHolder;
 
     private Uri cameraFileUri;
     private File file;
     private String isTakeOrUpload = "take_picture";
 
-    ViewPager vpImagePager;
+    ViewPager vpMetimePager;
     ImageView[] dots;
 
 
@@ -136,21 +137,6 @@ public class MeTimeCardFragment extends CenesFragment {
         etMetimeTitle = (EditText) view.findViewById(R.id.et_metime_title);
         viewOpaque = view.findViewById(R.id.view_opaque);
 
-        sunday = (Button) view.findViewById(R.id.metime_sun_text);
-        monday = (Button) view.findViewById(R.id.metime_mon_text);
-        tuesday = (Button) view.findViewById(R.id.metime_tue_text);
-        wednesday = (Button) view.findViewById(R.id.metime_wed_text);
-        thursday = (Button) view.findViewById(R.id.metime_thu_text);
-        friday = (Button) view.findViewById(R.id.metime_fri_text);
-        saturday = (Button) view.findViewById(R.id.metime_sat_text);
-
-
-        metimeStartTime = (LinearLayout) view.findViewById(R.id.metime_start_time);
-        metimeEndTime = (LinearLayout) view.findViewById(R.id.metime_end_time);
-
-        startTimeText = (TextView) view.findViewById(R.id.startTimeText);
-        endTimeText = (TextView) view.findViewById(R.id.endTimeText);
-
         saveMeTime = (Button) view.findViewById(R.id.btn_save_metime);
         deleteMeTime = (Button) view.findViewById(R.id.btn_delete_meTime);
 
@@ -158,46 +144,14 @@ public class MeTimeCardFragment extends CenesFragment {
         tvUploadPhoto = (TextView) view.findViewById(R.id.tv_choose_library);
         tvPhotoCancel = (TextView) view.findViewById(R.id.tv_photo_cancel);
 
-        //llSliderDots = (LinearLayout) view.findViewById(R.id.ll_slider_dots);
-        //vpImagePager = (ViewPager) view.findViewById(R.id.vp_image_pager);
-
-       /* ImageAdapter adapterView = new ImageAdapter(this, post.getPostImages());
-        vpImagePager.setAdapter(adapterView); */
-
-        dots = new ImageView[2];
+        llSliderDots = (LinearLayout) view.findViewById(R.id.ll_slider_dots);
+        vpMetimePager = (ViewPager) view.findViewById(R.id.vp_metime_pager);
 
         //code for slider
-
-        for(int i = 0; i < 2; i++){
-
-            dots[i] = new ImageView(getContext());
-            dots[i].setImageDrawable(ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.xml_circle_tranparent_white));
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-            params.setMargins(8, 0, 8, 0);
-
-            llSliderDots.addView(dots[i], params);
-        }
-
-        dots[1].setImageDrawable(ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.xml_circle_white));
-
-        //code for slider
-
-
         slideToTop(swipeCard);
 
-        sunday.setOnClickListener(onClickListener);
-        monday.setOnClickListener(onClickListener);
-        tuesday.setOnClickListener(onClickListener);
-        wednesday.setOnClickListener(onClickListener);
-        thursday.setOnClickListener(onClickListener);
-        friday.setOnClickListener(onClickListener);
-        saturday.setOnClickListener(onClickListener);
         saveMeTime.setOnClickListener(onClickListener);
         deleteMeTime.setOnClickListener(onClickListener);
-        metimeStartTime.setOnClickListener(onClickListener);
-        metimeEndTime.setOnClickListener(onClickListener);
         rlUploadMetimeImg.setOnClickListener(onClickListener);
         viewOpaque.setOnClickListener(onClickListener);
         tvTakePhoto.setOnClickListener(onClickListener);
@@ -213,11 +167,6 @@ public class MeTimeCardFragment extends CenesFragment {
         selectedDaysHolder = new JSONObject();
         metimePhotoFile = null;
 
-        startTimeText.setText("00:00");
-        startTimeMillis = null;
-
-        endTimeText.setText("00:00");
-        endTimeMillis = null;
 
         Bundle meTimeFragmentBundle = getArguments();
         //If user clicked on metime card saved
@@ -238,56 +187,62 @@ public class MeTimeCardFragment extends CenesFragment {
                 System.out.println(metime.getTitle());
                 etMetimeTitle.setText(metime.getTitle());
 
-                if (metime.getStartTime() != null && metime.getStartTime() != 0) {
 
-                    startTimeText.setText(CenesUtils.hmm_aa.format(new Date(metime.getStartTime())).toUpperCase());
-                    endTimeText.setText(CenesUtils.hmm_aa.format(new Date(metime.getEndTime())).toUpperCase());
-
-
-                    for(MeTimeItem meTimeItem: metime.getItems()) {
-
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTimeInMillis(meTimeItem.getDayOfWeekTimestamp());
-                        //daysInStrList[j] = cal.get(Calendar.DAY_OF_WEEK);//recJson.getInt("dayOfWeek");
-                        selectedDaysHolder.put(meTimeService.IndexDayMap().get(cal.get(Calendar.DAY_OF_WEEK)), true);
-                    }
-
-                    Iterator<String> daysItr = selectedDaysHolder.keys();
-                    while (daysItr.hasNext()) {
-                        String day = daysItr.next();
-                        if ("Sunday".equals(day)) {
-                            sunday.setBackground(getResources().getDrawable(R.drawable.round_button_red));
-                            sunday.setTextColor(getResources().getColor(R.color.white));
-                        } else if ("Monday".equals(day)) {
-                            monday.setBackground(getResources().getDrawable(R.drawable.round_button_red));
-                            monday.setTextColor(getResources().getColor(R.color.white));
-                        } else if ("Tuesday".equals(day)) {
-                            tuesday.setBackground(getResources().getDrawable(R.drawable.round_button_red));
-                            tuesday.setTextColor(getResources().getColor(R.color.white));
-                        } else if ("Wednesday".equals(day)) {
-                            wednesday.setBackground(getResources().getDrawable(R.drawable.round_button_red));
-                            wednesday.setTextColor(getResources().getColor(R.color.white));
-                        } else if ("Thursday".equals(day)) {
-                            thursday.setBackground(getResources().getDrawable(R.drawable.round_button_red));
-                            thursday.setTextColor(getResources().getColor(R.color.white));
-                        } else if ("Friday".equals(day)) {
-                            friday.setBackground(getResources().getDrawable(R.drawable.round_button_red));
-                            friday.setTextColor(getResources().getColor(R.color.white));
-                        } else if ("Saturday".equals(day)) {
-                            saturday.setBackground(getResources().getDrawable(R.drawable.round_button_red));
-                            saturday.setTextColor(getResources().getColor(R.color.white));
-                        }
-                    }
-                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+
+        MeTimePagerAdapter adapterView = new MeTimePagerAdapter(this);
+        vpMetimePager.setAdapter(adapterView);
+        vpMetimePager.addOnPageChangeListener(viewPagerPageChangeListener);
+        dots = new ImageView[2];
+        //code for slider
+        for(int i = 0; i < 2; i++){
+
+            dots[i] = new ImageView(getContext());
+            dots[i].setImageDrawable(ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.xml_circle_tranparent_white));
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(CenesUtils.dpToPx(16), CenesUtils.dpToPx(16));
+            params.setMargins(CenesUtils.dpToPx(9)*(i), 0, 0, 0);
+            dots[i].setLayoutParams(params);
+            llSliderDots.addView(dots[i]);
+        }
+
+        dots[0].setImageDrawable(ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.xml_circle_white));
+
         return view;
     }
 
-    View.OnClickListener onClickListener = new View.OnClickListener() {
+    //  viewpager change listener
+    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
 
+        @Override
+        public void onPageSelected(int position) {
+            // changing the next button text 'NEXT' / 'GOT IT'
+            llSliderDots.removeAllViews();
+            for(int i = 0; i < 2; i++){
+                dots[i] = new ImageView(getContext());
+                dots[i].setImageDrawable(ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.xml_circle_tranparent_white));
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(CenesUtils.dpToPx(16), CenesUtils.dpToPx(16));
+                params.setMargins(CenesUtils.dpToPx(9)*(i), 0, 0, 0);
+                dots[i].setLayoutParams(params);
+                llSliderDots.addView(dots[i]);
+            }
+            dots[position].setImageDrawable(ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.xml_circle_white));
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+
+        }
+    };
+
+    public View.OnClickListener onClickListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
@@ -474,6 +429,7 @@ public class MeTimeCardFragment extends CenesFragment {
                             Calendar mcurrentTime = Calendar.getInstance();
                             mcurrentTime.set(Calendar.HOUR_OF_DAY, selectedHour);
                             mcurrentTime.set(Calendar.MINUTE, selectedMinute);
+                            mcurrentTime.set(Calendar.MILLISECOND, 0);
 
                             System.out.println("HOur"+mcurrentTime.get(Calendar.HOUR)+"  -- "+selectedHour);
 
@@ -499,11 +455,28 @@ public class MeTimeCardFragment extends CenesFragment {
                             }
                             startTimeText.setText( selectedHourTemp+ ":" + singleDigitMinuteZero + selectedMinute+ampm);
                             metime.setStartTime(mcurrentTime.getTimeInMillis());
+
+                            if (metime.getEndTime() == null) {
+
+                                Calendar endTimeCalendar = Calendar.getInstance();
+                                endTimeCalendar.setTimeInMillis(mcurrentTime.getTimeInMillis());
+                                endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
+                                metime.setEndTime(endTimeCalendar.getTimeInMillis());
+
+                                String ampmEndTime = "AM";
+                                if (endTimeCalendar.get(Calendar.HOUR_OF_DAY) >= 12) {
+                                    ampmEndTime = "PM";
+                                }
+                                String singleDigitMinuteZeroEndTime = "";
+                                if (endTimeCalendar.get(Calendar.MINUTE) < 10) {
+                                    singleDigitMinuteZeroEndTime = "0";
+                                }
+                                endTimeText.setText( endTimeCalendar.get(Calendar.HOUR)+ ":" + singleDigitMinuteZeroEndTime + endTimeCalendar.get(Calendar.MINUTE)+ampmEndTime);
+                            }
                         }
                     };
 
                     TimePickerDialog startTimeDateTimePicker = new TimePickerDialog(getCenesActivity(), startTimePickerListener, mcurrentTimeForStartTimeHour, mcurrentTimeForStartTimeMinute, false);
-
                     startTimeDateTimePicker.setTitle("Select Time");
                     startTimeDateTimePicker.show();
 
@@ -747,9 +720,9 @@ public class MeTimeCardFragment extends CenesFragment {
                             rotatedBitmap = imageBitmap;
                     }
 
-                    rivMeTimeImg.getLayoutParams().height = CenesUtils.dpToPx(90);
-                    rivMeTimeImg.getLayoutParams().width = CenesUtils.dpToPx(90);
-
+                    rivMeTimeImg.getLayoutParams().height = CenesUtils.dpToPx(91);
+                    rivMeTimeImg.getLayoutParams().width = CenesUtils.dpToPx(91);
+                    rivMeTimeImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     persistImage(rotatedBitmap, filePath.substring(filePath.lastIndexOf("/"), filePath.length()));
 
                     final Bitmap bitImage = imageBitmap;

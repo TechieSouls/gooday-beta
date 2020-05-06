@@ -9,5 +9,9 @@
         android:fontStyle="normal"
         android:font="@font/avenir_medium"
         />
+    <font
+        android:fontStyle="normal"
+        android:font="@font/avenir_book"
+        />
 
 </font-family>
