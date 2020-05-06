@@ -15,6 +15,8 @@ public class MeTime {
 
     @SerializedName("recurringPatterns")
     List<MeTimeItem> items;
+
+    @SerializedName("createdById")
     private Long userId;
     String timezone;
     private String photo;
@@ -22,6 +24,7 @@ public class MeTime {
     private Long startTime;
     private Long endTime;
     private String days;
+    private List<RecurringEventMember> recurringEventMembers;
 
     public Long getRecurringEventId() {
         return recurringEventId;
@@ -101,6 +104,14 @@ public class MeTime {
 
     public void setPhotoToUpload(String photoToUpload) {
         this.photoToUpload = photoToUpload;
+    }
+
+    public List<RecurringEventMember> getRecurringEventMembers() {
+        return recurringEventMembers;
+    }
+
+    public void setRecurringEventMembers(List<RecurringEventMember> recurringEventMembers) {
+        this.recurringEventMembers = recurringEventMembers;
     }
 
     @Override

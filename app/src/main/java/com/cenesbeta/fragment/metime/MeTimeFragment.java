@@ -16,9 +16,12 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.AsyncTasks.MeTimeAsyncTask;
+import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
+import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
+import com.cenesbeta.api.MeTimeAPI;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.MeTime;
 import com.cenesbeta.bo.MeTimeItem;
@@ -27,6 +30,7 @@ import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.impl.MeTimeManagerImpl;
 import com.cenesbeta.database.impl.MeTimePatternManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
+import com.cenesbeta.dto.AsyncTaskDto;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.NavigationFragment;
 import com.cenesbeta.fragment.NotificationFragment;
@@ -173,6 +177,50 @@ public class MeTimeFragment extends CenesFragment {
 
         if (internetManager.isInternetConnection(getCenesActivity())) {
 
+
+            AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+            asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+            asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ MeTimeAPI.get_metimeData);
+            asyncTaskDto.setQueryStr("createdById="+loggedInUser.getUserId());
+            new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+
+                    try {
+                        if (getActivity() == null) {
+                            return;
+                        }
+
+                        if (response.getBoolean("success")) {
+                            meTimeCategoryHeaders = new ArrayList<>();
+                            meTimeDataCategoryMap = new HashMap<>();
+                            daysSelectionMap = new HashMap<>();
+                            llMetimeTilesContainer.removeAllViews();
+                            JSONArray meTimeData = response.getJSONArray("data");
+
+                            if (meTimeData != null && meTimeData.length() > 0) {
+
+                                //To Run Code of block in background
+                                AsyncTask.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        meTimeManagerImpl.deleteAllMeTimeRecurringEvents();
+                                    }
+                                });
+
+                                Type listType = new TypeToken<List<MeTime>>() {}.getType();
+                                meTimes = new Gson().fromJson(response.getJSONArray("data").toString(), listType);
+                                processMeTimeList(meTimes, true);
+
+
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).execute(asyncTaskDto);
+
             new MeTimeAsyncTask.GetMeTimeDataTask(new MeTimeAsyncTask.GetMeTimeDataTask.AsyncResponse() {
                 @Override
                 public void processFinish(JSONObject response) {
@@ -247,22 +295,10 @@ public class MeTimeFragment extends CenesFragment {
                 }
                 System.out.println("Days in Str Arra : "+mapKey);
 
-                /*boolean allDaysMeTime = false;
-                if (allDaysMeTime) {
-                    daysStr = "MON-FRI";
-                    metime.setDays(daysStr);
-                } else {
-                    for(int j=0; j < daysInStrList.length; j++) {
-                        //JSONObject recJson = recurringPatterns.getJSONObject(j);
-                        daysStr += meTimeService.IndexDayMap().get(daysInStrList[j]).substring(0,3).toUpperCase() +",";
-                    }
-                    metime.setDays(daysStr.substring(0, daysStr.length() - 1));
-                }*/
                 if (daysStrMap.containsKey(mapKey)) {
                     metime.setDays(daysStrMap.get(mapKey));
                 } else {
                     for(int j=0; j < daysInStrList.length; j++) {
-                        //JSONObject recJson = recurringPatterns.getJSONObject(j);
                         daysStr += meTimeService.IndexDayMap().get(daysInStrList[j]).substring(0,3).toUpperCase() +",";
                     }
                     metime.setDays(daysStr.substring(0, daysStr.length() - 1));

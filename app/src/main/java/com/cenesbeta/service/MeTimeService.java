@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -12,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.bo.MeTime;
+import com.cenesbeta.bo.RecurringEventMember;
 import com.cenesbeta.util.CenesConstants;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
@@ -258,8 +262,64 @@ public class MeTimeService {
             metimeDays.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             detailsLayout.addView(metimeDays);
         }
-        metimeTile.addView(detailsLayout);
 
+        if (meTime.getRecurringEventMembers() != null && meTime.getRecurringEventMembers().size() > 0) {
+
+            LinearLayout.LayoutParams metimeMembersLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, CenesUtils.dpToPx(30));
+            metimeMembersLayoutParams.setMargins(0,CenesUtils.dpToPx(10), 0, 0);
+            LinearLayout metimeMembersLayout = new LinearLayout(activity);
+            metimeMembersLayout.setOrientation(LinearLayout.HORIZONTAL);
+            metimeMembersLayout.setLayoutParams(metimeMembersLayoutParams);
+
+            int index = 0;
+            boolean areMembersMoreThanThree = false;
+            for (RecurringEventMember recurringEventMember: meTime.getRecurringEventMembers()) {
+
+                if (meTime.getRecurringEventMembers().size() > 3 && index == 3) {
+                    areMembersMoreThanThree = true;
+                    break;
+                }
+                LinearLayout.LayoutParams memberImageParams = new LinearLayout.LayoutParams(CenesUtils.dpToPx(30), CenesUtils.dpToPx(30));
+                memberImageParams.setMargins((index == 0 ? 0 : 1)*CenesUtils.dpToPx(10), 0, 0, 0);
+                RoundedImageView memberImage = new RoundedImageView(activity);
+                memberImage.setLayoutParams(memberImageParams);
+                if (recurringEventMember.getUser() != null && recurringEventMember.getUser().getPicture() != null) {
+
+                    RequestOptions requestOptions = new RequestOptions();
+                    requestOptions.placeholder(R.drawable.profile_pic_no_image);
+                    requestOptions.centerCrop();
+                    Glide.with(activity).load(recurringEventMember.getUser().getPicture()).apply(requestOptions).into(memberImage);
+                } else {
+                    memberImage.setImageResource(R.drawable.profile_pic_no_image);
+                }
+                metimeMembersLayout.addView(memberImage);
+                index ++;
+            }
+
+            if (areMembersMoreThanThree) {
+
+                LinearLayout.LayoutParams memberImageParams = new LinearLayout.LayoutParams(CenesUtils.dpToPx(30), CenesUtils.dpToPx(30));
+                memberImageParams.setMargins(CenesUtils.dpToPx(10), 0, 0, 0);
+                RelativeLayout countLayout = new RelativeLayout(activity);
+                countLayout.setLayoutParams(memberImageParams);
+                countLayout.setBackground(activity.getResources().getDrawable(R.drawable.xml_gradient_orange));
+
+                RelativeLayout.LayoutParams countTextViewParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                countTextViewParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+                TextView countTextView = new TextView(activity);
+                countTextView.setText("+"+(meTime.getRecurringEventMembers().size()-3));
+                countTextView.setLayoutParams(countTextViewParams);
+                countTextView.setTextColor(activity.getResources().getColor(R.color.white));
+                countTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                countLayout.addView(countTextView);
+
+                metimeMembersLayout.addView(countLayout);
+
+            }
+            detailsLayout.addView(metimeMembersLayout);
+        }
+
+        metimeTile.addView(detailsLayout);
 
         return metimeTile;
     }
