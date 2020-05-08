@@ -180,7 +180,7 @@ public class MeTimeFragment extends CenesFragment {
 
             AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
             asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
-            asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ MeTimeAPI.get_metimeData);
+            asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ MeTimeAPI.get_metimeDataV2);
             asyncTaskDto.setQueryStr("createdById="+loggedInUser.getUserId());
             new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
                 @Override
@@ -221,7 +221,7 @@ public class MeTimeFragment extends CenesFragment {
                 }
             }).execute(asyncTaskDto);
 
-            new MeTimeAsyncTask.GetMeTimeDataTask(new MeTimeAsyncTask.GetMeTimeDataTask.AsyncResponse() {
+            /*new MeTimeAsyncTask.GetMeTimeDataTask(new MeTimeAsyncTask.GetMeTimeDataTask.AsyncResponse() {
                 @Override
                 public void processFinish(JSONObject response) {
                     try {
@@ -258,7 +258,7 @@ public class MeTimeFragment extends CenesFragment {
                         e.printStackTrace();
                     }
                 }
-            }).execute();
+            }).execute();*/
         }
 
     }
@@ -275,6 +275,7 @@ public class MeTimeFragment extends CenesFragment {
         daysStrMap.put("17", "WEEKEND");
 
         for (final MeTime metime: meTimes) {
+            System.out.println(metime.toString());
             if (metime.getItems().size() > 0) {
                 String daysStr = "";
 

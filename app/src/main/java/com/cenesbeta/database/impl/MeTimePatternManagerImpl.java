@@ -24,10 +24,10 @@ public class MeTimePatternManagerImpl {
         public MeTimePatternManagerImpl(CenesApplication cenesApplication){
                 this.cenesApplication = cenesApplication;
                 cenesDatabase = new CenesDatabase(cenesApplication);
-                this.db = cenesDatabase.getReadableDatabase();
         }
 
         public void addMeTimePattern(MeTimeItem meTimeItem){
+            this.db = cenesDatabase.getReadableDatabase();
 
                 String dayOfWeek = "";
                 if (!CenesUtils.isEmpty(meTimeItem.getDay_Of_week())) {
@@ -38,10 +38,12 @@ public class MeTimePatternManagerImpl {
 
                 System.out.println(insertQuery);
                 db.execSQL(insertQuery);
+            this.db.close();
 
         }
 
         public List<MeTimeItem> fetchMeTimePatternByRecurringEventId(Long recurringEventId) {
+                this.db = cenesDatabase.getReadableDatabase();
 
                 List<MeTimeItem> metimeRecurringPatterns = new ArrayList<>();
 
@@ -55,16 +57,26 @@ public class MeTimePatternManagerImpl {
                         meTimeItem.setDayOfWeekTimestamp(cursor.getLong(cursor.getColumnIndex("day_of_week_timestamp")));
                         metimeRecurringPatterns.add(meTimeItem);
                 }
+
+                this.db.close();
                 return metimeRecurringPatterns;
         }
 
         public void deleteMeTimeRecurringPatternsByRecurringEventId(Long recurringEventId) {
-                String deleteQuery = "delete from metime_recurring_patterns where recurring_event_id = "+recurringEventId+" ";
+            this.db = cenesDatabase.getReadableDatabase();
+
+            String deleteQuery = "delete from metime_recurring_patterns where recurring_event_id = "+recurringEventId+" ";
                 db.execSQL(deleteQuery);
+            this.db.close();
+
         }
 
         public void deleteMeTimeRecurringPatterns() {
-                String deleteQuery = "delete from metime_recurring_patterns";
+            this.db = cenesDatabase.getReadableDatabase();
+
+            String deleteQuery = "delete from metime_recurring_patterns";
                 db.execSQL(deleteQuery);
+            this.db.close();
+
         }
 }

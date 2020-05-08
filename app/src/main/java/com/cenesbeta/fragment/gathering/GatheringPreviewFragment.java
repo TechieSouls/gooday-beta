@@ -293,7 +293,11 @@ public class GatheringPreviewFragment extends CenesFragment {
                 }
             }
 
-            getChatThread();
+            if (event.getEventId() != null && event.getDescription() != null) {
+                getChatThread();
+            } else {
+                isChatLoaded = true;
+            }
             populateInvitationCard(event);
         }
         ivProfilePicView.setOnClickListener(new View.OnClickListener() {
@@ -1690,9 +1694,11 @@ public class GatheringPreviewFragment extends CenesFragment {
                         eventChats.add(eventChatEvent); */
                         List<EventChat> eventChatsTmp = gson.fromJson(response.getJSONArray("data").toString(), listType);
                         for(EventChat  eventChat : eventChatsTmp) {
-                            if(eventChat.getChatType().equals("Description")) {
+                            if(!eventChat.getChat().contains("(Edited)") && eventChat.getChatType().equals("Description")) {
                                 if(!eventChat.getChat().equals(event.getDescription())) {
-                                    eventChat.setChat(event.getDescription());
+                                    eventChat.setChat(event.getDescription()+" (Edited)");
+                                } else if("Yes".equals(eventChat.getChatEdited())) {
+                                    eventChat.setChat(event.getDescription()+" (Edited)");
                                 }
                             }
                             eventChats.add(eventChat);
@@ -1760,7 +1766,7 @@ public class GatheringPreviewFragment extends CenesFragment {
        // tinderCardView.setOnTouchListener(null);
         if (!CenesUtils.isEmpty(event.getDescription())) {
 
-            if ((event.getExpired() != null && event.getExpired() == true) || event.getEndTime() < new Date().getTime() ||  event.getEventMembers().size() == 1 ) {
+            if (event.getEventId() == null || (event.getExpired() != null && event.getExpired() == true) || event.getEndTime() < new Date().getTime() ||  event.getEventMembers().size() == 1 ) {
 
 
                 if (rvEventDescriptionDialog.getVisibility() == View.GONE) {

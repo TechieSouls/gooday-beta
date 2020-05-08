@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -140,6 +142,40 @@ public class MeTimePagerAdapter extends PagerAdapter {
 
         } else {
             view = inflater.inflate(R.layout.layout_metime_friends, container, false);
+
+            meTimeCardFragment.llFriendsCollectionView = view.findViewById(R.id.ll_friends_collection_view);
+            meTimeCardFragment.ivAddMoreFriendsBtn = view.findViewById(R.id.iv_add_more_friends_btn);
+            meTimeCardFragment.rvFriendsCollection = view.findViewById(R.id.rv_friends_collection);
+            meTimeCardFragment.rlProfilePicPlaceholderView = view.findViewById(R.id.rl_profile_pic_placeholder_view);
+
+            meTimeCardFragment.ivAddMoreFriendsBtn.setOnClickListener(meTimeCardFragment.onClickListener);
+            meTimeCardFragment.rlProfilePicPlaceholderView.setOnClickListener(meTimeCardFragment.onClickListener);
+
+            if (meTimeCardFragment.metime.getRecurringEventMembers() != null && meTimeCardFragment.metime.getRecurringEventMembers().size() > 0) {
+
+                meTimeCardFragment.llFriendsCollectionView.setVisibility(View.VISIBLE);
+                meTimeCardFragment.rlProfilePicPlaceholderView.setVisibility(View.GONE);
+
+                meTimeCardFragment.getActivity().runOnUiThread(new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                        if (meTimeCardFragment.meTimeCollectionViewRecyclerAdapter == null) {
+                            meTimeCardFragment.meTimeCollectionViewRecyclerAdapter = new MeTimeCollectionViewRecyclerAdapter(meTimeCardFragment, meTimeCardFragment.metime.getRecurringEventMembers());
+                        }
+                        meTimeCardFragment.meTimeCollectionViewRecyclerAdapter.notifyDataSetChanged();
+                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(meTimeCardFragment.getContext(), LinearLayoutManager.HORIZONTAL, false);
+                        meTimeCardFragment.rvFriendsCollection.setLayoutManager(mLayoutManager);
+                        meTimeCardFragment.rvFriendsCollection.setAdapter(meTimeCardFragment.meTimeCollectionViewRecyclerAdapter);
+                        meTimeCardFragment.rvFriendsCollection.invalidate();
+                    }
+                }));
+
+            } else {
+                meTimeCardFragment.llFriendsCollectionView.setVisibility(View.GONE);
+                meTimeCardFragment.rlProfilePicPlaceholderView.setVisibility(View.VISIBLE);
+            }
         }
         try {
 
@@ -148,7 +184,6 @@ public class MeTimePagerAdapter extends PagerAdapter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return view;
     }
 
@@ -166,10 +201,4 @@ public class MeTimePagerAdapter extends PagerAdapter {
         return null;
     }
 
-}
-
-class MeTimeDaysViewHolder {
-
-    private Button sunday, monday, tuesday, wednesday, thursday, friday, saturday;
-    private TextView startTimeText, endTimeText;
 }

@@ -1,5 +1,9 @@
 package com.cenesbeta.adapter;
 
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -140,14 +144,11 @@ public class EventChatExpandableAdapter extends BaseExpandableListAdapter {
             holder.rlChatFromProfileContainer.setVisibility(View.GONE);
 
             holder.chatMessageFrom.setText(eventChat.getChat());
-            String editedText = "";
-            System.out.println("Edited : "+eventChat.getChatEdited());
-            if(eventChat.getChatEdited().equals("Yes")) {
-                editedText = "(Edited) ";
-            } else {
-                System.out.println("Edited NO");
-            }
-            holder.chatSentTimeFrom.setText(editedText + CenesUtils.hhmmaa.format(new Date(eventChat.getCreatedAt()))  );
+            String textToHighlight = "\\(Edited\\)";
+            String replacedWith = "<font color= '#9B9B9B'>" + textToHighlight + "</font>";
+            holder.chatMessageFrom.setText(Html.fromHtml(eventChat.getChat().replaceAll(textToHighlight, replacedWith)));
+
+            holder.chatSentTimeFrom.setText(CenesUtils.hhmmaa.format(new Date(eventChat.getCreatedAt()))  );
             System.out.println("Chat Status ::: " +eventChat.getChatStatus());
             if(eventChat.getChatStatus().equals("Read")) {
 
@@ -167,14 +168,16 @@ public class EventChatExpandableAdapter extends BaseExpandableListAdapter {
             holder.chatFromPic.setVisibility(View.VISIBLE);
             holder.rlChatFromProfileContainer.setVisibility(View.VISIBLE);
 
-            holder.chatMessageTo.setText(eventChat.getChat());
-            String editedText = "";
+            String textToHighlight = "\\(Edited\\)";
+            String replacedWith = "<font color= '#9B9B9B'>" + textToHighlight + "</font>";
+            holder.chatMessageTo.setText(Html.fromHtml(eventChat.getChat().replaceAll(textToHighlight, replacedWith)));
+            /*String editedText = "";
             if(eventChat.getChatEdited().equals("Yes")) {
                 editedText = "(Edited) ";
             } else {
                 System.out.println("Edited NO");
-            }
-            holder.chatSentTimeSender.setText(editedText + CenesUtils.hhmmaa.format(new Date(eventChat.getCreatedAt())) );
+            }*/
+            holder.chatSentTimeSender.setText(CenesUtils.hhmmaa.format(new Date(eventChat.getCreatedAt())) );
             RequestOptions requestOptions = new RequestOptions();
             requestOptions.placeholder(R.drawable.profile_pic_no_image);
             requestOptions.circleCrop();
@@ -206,6 +209,22 @@ public class EventChatExpandableAdapter extends BaseExpandableListAdapter {
 
     class EventHeaderViewHolder {
         TextView header;
+    }
+
+    public void setHighLightedText(TextView tv, String textToHighlight) {
+        String tvt = tv.getText().toString();
+        int ofe = tvt.indexOf(textToHighlight, 0);
+        Spannable wordToSpan = new SpannableString(tv.getText());
+        for (int ofs = 0; ofs < tvt.length() && ofe != -1; ofs = ofe + 1) {
+            ofe = tvt.indexOf(textToHighlight, ofs);
+            if (ofe == -1)
+                break;
+            else {
+                // set color here
+                wordToSpan.setSpan(new ForegroundColorSpan(0xFF3B4C8B), ofe, ofe + textToHighlight.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                tv.setText(wordToSpan, TextView.BufferType.SPANNABLE);
+            }
+        }
     }
 
 }

@@ -117,14 +117,17 @@ public class MeTime {
     @Override
     public String toString() {
         return "MeTime{" +
-                "title='" + title + '\'' +
+                "recurringEventId=" + recurringEventId +
+                ", title='" + title + '\'' +
                 ", items=" + items +
-                ", userId='" + userId + '\'' +
+                ", userId=" + userId +
                 ", timezone='" + timezone + '\'' +
                 ", photo='" + photo + '\'' +
+                ", photoToUpload='" + photoToUpload + '\'' +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", days='" + days + '\'' +
+                ", recurringEventMembers=" + recurringEventMembers +
                 '}';
     }
 }

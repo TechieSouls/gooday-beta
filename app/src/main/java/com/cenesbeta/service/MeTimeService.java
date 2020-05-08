@@ -182,13 +182,17 @@ public class MeTimeService {
 
         //MeTimeImage
         if (meTime.getPhoto() != null && meTime.getPhoto().length() > 0) {
-            RoundedImageView meTimeImage = new RoundedImageView(activity);
-            LinearLayout.LayoutParams imageViewParams = new LinearLayout.LayoutParams(CenesUtils.dpToPx(50), CenesUtils.dpToPx(50));
-            imageViewParams.gravity = Gravity.CENTER;
-            imageViewParams.setMargins(CenesUtils.dpToPx(20),0,0,0);
-            meTimeImage.setLayoutParams(imageViewParams);
-            Glide.with(activity).load(CenesConstants.imageDomain+meTime.getPhoto()).apply(RequestOptions.placeholderOf(R.drawable.metime_default)).into(meTimeImage);
-            metimeTile.addView(meTimeImage);
+            try {
+                RoundedImageView meTimeImage = new RoundedImageView(activity);
+                LinearLayout.LayoutParams imageViewParams = new LinearLayout.LayoutParams(CenesUtils.dpToPx(50), CenesUtils.dpToPx(50));
+                imageViewParams.gravity = Gravity.CENTER;
+                imageViewParams.setMargins(CenesUtils.dpToPx(20),0,0,0);
+                meTimeImage.setLayoutParams(imageViewParams);
+                Glide.with(activity).load(CenesConstants.imageDomain+meTime.getPhoto()).apply(RequestOptions.placeholderOf(R.drawable.metime_default)).into(meTimeImage);
+                metimeTile.addView(meTimeImage);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         } else {
 
             String imageName = "";
@@ -283,14 +287,20 @@ public class MeTimeService {
                 memberImageParams.setMargins((index == 0 ? 0 : 1)*CenesUtils.dpToPx(10), 0, 0, 0);
                 RoundedImageView memberImage = new RoundedImageView(activity);
                 memberImage.setLayoutParams(memberImageParams);
-                if (recurringEventMember.getUser() != null && recurringEventMember.getUser().getPicture() != null) {
+                System.out.println("Recurring Event Member : "+recurringEventMember.getUser().toString());
 
+                if (recurringEventMember.getUser() != null && recurringEventMember.getUser().getPicture() != null && recurringEventMember.getUser().getPicture().length() > 0) {
+
+                    System.out.println("Profile Pic Url "+recurringEventMember.getUser().getPicture());
                     RequestOptions requestOptions = new RequestOptions();
                     requestOptions.placeholder(R.drawable.profile_pic_no_image);
                     requestOptions.centerCrop();
                     Glide.with(activity).load(recurringEventMember.getUser().getPicture()).apply(requestOptions).into(memberImage);
+
                 } else {
+
                     memberImage.setImageResource(R.drawable.profile_pic_no_image);
+
                 }
                 metimeMembersLayout.addView(memberImage);
                 index ++;

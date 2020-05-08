@@ -18,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
 //import com.cenesbeta.adapter.MeTimePagerAdapter;
+import com.cenesbeta.adapter.MeTimeCollectionViewRecyclerAdapter;
 import com.cenesbeta.adapter.MeTimePagerAdapter;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.MeTime;
@@ -87,7 +89,10 @@ public class MeTimeCardFragment extends CenesFragment {
     public Button sunday, monday, tuesday, wednesday, thursday, friday, saturday;
     private Button saveMeTime, deleteMeTime;
     public TextView startTimeText, endTimeText;
-    public LinearLayout metimeStartTime, metimeEndTime, llSliderDots;
+    public LinearLayout metimeStartTime, metimeEndTime, llSliderDots, llFriendsCollectionView;
+    public ImageView ivAddMoreFriendsBtn;
+    public RecyclerView rvFriendsCollection;
+    public RelativeLayout rlProfilePicPlaceholderView;
     private TextView tvTakePhoto, tvUploadPhoto, tvPhotoCancel;
     private EditText etMetimeTitle;
     private RelativeLayout rlUploadMetimeImg, swipeCard, rlPhotoActionSheet;
@@ -107,7 +112,7 @@ public class MeTimeCardFragment extends CenesFragment {
     private Uri cameraFileUri;
     private File file;
     private String isTakeOrUpload = "take_picture";
-
+    public MeTimeCollectionViewRecyclerAdapter meTimeCollectionViewRecyclerAdapter;
     ViewPager vpMetimePager;
     ImageView[] dots;
 
@@ -208,7 +213,7 @@ public class MeTimeCardFragment extends CenesFragment {
             llSliderDots.addView(dots[i]);
         }
 
-        dots[0].setImageDrawable(ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.xml_circle_white));
+        dots[1].setImageDrawable(ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.xml_circle_white));
 
         return view;
     }
@@ -615,10 +620,18 @@ public class MeTimeCardFragment extends CenesFragment {
                     ((CenesBaseActivity)getActivity()).onBackPressed();
                     break;
 
+                case R.id.rl_profile_pic_placeholder_view:
+
+                    //Open Friend List Screen
+
+                    break;
+
+                case R.id.ll_friends_collection_view:
+                    //Open Friend List Screen
+                    break;
             }
         }
     };
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

@@ -6,7 +6,7 @@ public class RecurringEventMember {
     private Integer recurringEventId;
     private Integer userId;
     private UserContact userContact;
-    private  User user;
+    private User user;
 
     public Integer getRecurringEventMemberId() {
         return recurringEventMemberId;
@@ -46,5 +46,16 @@ public class RecurringEventMember {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "RecurringEventMember{" +
+                "recurringEventMemberId=" + recurringEventMemberId +
+                ", recurringEventId=" + recurringEventId +
+                ", userId=" + userId +
+                ", userContact=" + userContact +
+                ", user=" + user +
+                '}';
     }
 }

@@ -11,11 +11,12 @@ import com.cenesbeta.util.CenesUtils;
 
 public class UserContactManagerImpl {
 
+    public static String TableName = "user_contacts";
     CenesApplication cenesApplication;
     CenesDatabase cenesDatabase;
     SQLiteDatabase db;
 
-    public static String createUserContactTableQuery = "CREATE TABLE user_contacts (user_contact_id INTEGER, " +
+    public static String createUserContactTableQuery = "CREATE TABLE "+TableName+" (user_contact_id INTEGER, " +
             "name TEXT, " +
             "user_id INTEGER, " +
             "friend_id INTEGER, " +
@@ -68,6 +69,34 @@ public class UserContactManagerImpl {
         try {
             this.db = cenesDatabase.getReadableDatabase();
             String query = "select * from user_contacts where user_contact_id = "+userContactId;
+            Cursor cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+
+                userContact = new UserContact();
+                userContact.setUserContactId(cursor.getInt(cursor.getColumnIndex("user_contact_id")));
+                userContact.setFriendId(cursor.getInt(cursor.getColumnIndex("friend_id")));
+                userContact.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
+                userContact.setName(cursor.getString(cursor.getColumnIndex("name")));
+                userContact.setPhone(cursor.getString(cursor.getColumnIndex("phone")));
+                userContact.setCenesMember(cursor.getString(cursor.getColumnIndex("cenes_member")));
+
+            }
+            cursor.close();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+        return userContact;
+    }
+
+    public UserContact fetchUserContactByUserId(Integer useriId) {
+        UserContact userContact = null;
+        try {
+            this.db = cenesDatabase.getReadableDatabase();
+            String query = "select * from user_contacts where user_id = "+useriId;
             Cursor cursor = db.rawQuery(query, null);
 
             if (cursor.moveToFirst()) {
