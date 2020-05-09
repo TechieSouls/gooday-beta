@@ -23,7 +23,7 @@ public class RecurringEventMemberImpl {
     private UserContactManagerImpl userContactManagerImpl;
 
 
-    public static String createUserContactTableQuery = "CREATE TABLE "+TableName+" (recurring_event_member_id INTEGER, " +
+    public static String createRecurringEventMemberTableQuery = "CREATE TABLE "+TableName+" (recurring_event_member_id INTEGER, " +
             "recurring_event_id TEXT, " +
             "user_id INTEGER)";
 
@@ -79,9 +79,6 @@ public class RecurringEventMemberImpl {
                 recurringEventMemberList.add(recurringEventMember);
             }
             cursor.close();
-            db.close();
-
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

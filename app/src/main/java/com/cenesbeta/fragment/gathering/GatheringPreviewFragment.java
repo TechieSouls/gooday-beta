@@ -308,69 +308,78 @@ public class GatheringPreviewFragment extends CenesFragment {
             }
         });
 
-        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-
-                if ( getActivity() != null) {
-                    Fragment visibleFragment = (((CenesBaseActivity) getActivity()).getVisibleFragment());
-                    if (visibleFragment instanceof GatheringPreviewFragment) {
-                        int heightDiff = fragmentView.getRootView().getHeight() - fragmentView.getHeight();
-                        // IF height diff is more then 150, consider keyboard as visible.
-                        System.out.println("Ha ha ha ha hi Maaaa : "+heightDiff);
-
-                        // TODO Auto-generated method stub
-                        Rect r = new Rect();
-                        fragmentView.getWindowVisibleDisplayFrame(r);
-
-                        int screenHeight = fragmentView.getRootView().getHeight();
-                        int heightDifference = screenHeight - (r.bottom - r.top);
-                        Log.d("Keyboard Size", "Size: " + heightDifference);
-                        Log.d("Keyboard Size in dp",  CenesUtils.pxToDp(heightDifference)+"");
-
-
-                        if (heightDifference >= 150) {
-                            rlEnterChat.setVisibility(View.VISIBLE);
-                            rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 60));
-                            //got focus
-                            //RelativeLayout.LayoutParams newPara = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PrecastrUtils.convertDpToPx(getContext(),350));
-                            //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
-                            //relativeParams.;  // left, top, right, bottom
-                            //rlBottomText.setLayoutParams(relativeParams);
-                            //relativeParams.height = CenesUtils.convertDpToPx(getContext(), 350);
-                            // svCard.setScrollingEnabled(true);
-                            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)elvEventChatList.getLayoutParams();
-                            params.setMargins(0, 0, 0, CenesUtils.dpToPx(50));
-                            //elvEventChatList.setLayoutParams(params);
-
-
-                        } else {
-                            //lost focus
-                            //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
-                            //relativeParams.height = PrecastrUtils.convertDpToPx(getContext(), 160);
-                            rlEnterChat.setVisibility(View.GONE);
-                            rlChatBubble.setVisibility(View.VISIBLE);
-                            llSenderPicture.setVisibility(View.VISIBLE);
-                            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)elvEventChatList.getLayoutParams();
-                            params.setMargins(0, 0, 0, CenesUtils.dpToPx(chatListViewMarginBottom));
-                            //elvEventChatList.setLayoutParams(params);
-
-                            try {
-                                hideKeyboard();
-                            } catch (Exception e) {
-
-                            }
-
-                            //  svCard.setScrollingEnabled(false);
-                        }
-                    }
-                }
-
-            }
-        });
+        view.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
 
         return view;
     }
+
+    ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+
+            if ( getActivity() != null) {
+                Fragment visibleFragment = (((CenesBaseActivity) getActivity()).getVisibleFragment());
+                if (visibleFragment instanceof GatheringPreviewFragment) {
+                    int heightDiff = fragmentView.getRootView().getHeight() - fragmentView.getHeight();
+                    // IF height diff is more then 150, consider keyboard as visible.
+                    System.out.println("Ha ha ha ha hi Maaaa : "+heightDiff);
+
+                    // TODO Auto-generated method stub
+                    Rect r = new Rect();
+                    fragmentView.getWindowVisibleDisplayFrame(r);
+
+                    int screenHeight = fragmentView.getRootView().getHeight();
+                    int heightDifference = screenHeight - (r.bottom - r.top);
+                    Log.d("Keyboard Size", "Size: " + heightDifference);
+                    Log.d("Keyboard Size in dp",  CenesUtils.pxToDp(heightDifference)+"");
+
+
+                    if (heightDifference >= 150) {
+
+
+                        Log.d("ShowKeyboard", "Going to show keyboard");
+                        Log.d("Screen Height ", ""+getActivity().getWindowManager().getDefaultDisplay().getHeight());
+                        Log.d("rlEnterChat Y", ""+(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 60)));
+
+                        rlEnterChat.setVisibility(View.VISIBLE);
+                        rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 60));
+                        enterChatTv.requestFocus();
+                        //got focus
+                        //RelativeLayout.LayoutParams newPara = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PrecastrUtils.convertDpToPx(getContext(),350));
+                        //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
+                        //relativeParams.;  // left, top, right, bottom
+                        //rlBottomText.setLayoutParams(relativeParams);
+                        //relativeParams.height = CenesUtils.convertDpToPx(getContext(), 350);
+                        // svCard.setScrollingEnabled(true);
+                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)elvEventChatList.getLayoutParams();
+                        params.setMargins(0, 0, 0, CenesUtils.dpToPx(50));
+                        //elvEventChatList.setLayoutParams(params);
+
+
+                    } else {
+                        //lost focus
+                        //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
+                        //relativeParams.height = PrecastrUtils.convertDpToPx(getContext(), 160);
+                        rlEnterChat.setVisibility(View.GONE);
+                        rlChatBubble.setVisibility(View.VISIBLE);
+                        llSenderPicture.setVisibility(View.VISIBLE);
+                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)elvEventChatList.getLayoutParams();
+                        params.setMargins(0, 0, 0, CenesUtils.dpToPx(chatListViewMarginBottom));
+                        //elvEventChatList.setLayoutParams(params);
+
+                        try {
+                            hideKeyboard();
+                        } catch (Exception e) {
+
+                        }
+
+                        //  svCard.setScrollingEnabled(false);
+                    }
+                }
+            }
+
+        }
+    };
 
     //This is the handler that will manager to process the broadcast intent
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -539,13 +548,21 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                 case R.id.iv_edit_reject_icon:
 
-                    event.setEditMode(true);
-                    CreateGatheringFragment createGatheringFragment = new CreateGatheringFragment();
-                    createGatheringFragment.event = event;
-                    ((CenesBaseActivity)getActivity()).replaceFragment(createGatheringFragment, null);
+                    try {
+                        event.setEditMode(true);
+                        fragmentView.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+                        CreateGatheringFragment createGatheringFragment = new CreateGatheringFragment();
+                        createGatheringFragment.event = event;
+                        ((CenesBaseActivity)getActivity()).replaceFragment(createGatheringFragment, null);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                     break;
 
                 case R.id.iv_card_swipe_arrow:
+
+                    fragmentView.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
 
                     if ((GatheringPreviewFragment.this).event.getScheduleAs() != null && (GatheringPreviewFragment.this).event.getScheduleAs().equals("Notification")) {
 

@@ -3,6 +3,7 @@ package com.cenesbeta.adapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,12 +29,12 @@ import java.util.Date;
 public class GatheringInvitationCardAdapter extends BaseAdapter {
 
 
-    private GatheringPreviewFragment gatheringPreviewFragment;
+    private Fragment gatheringPreviewFragment;
     private LayoutInflater inflter;
     private Event event;
     private EventMember eventOwner;
 
-    public GatheringInvitationCardAdapter(GatheringPreviewFragment gatheringPreviewFragment, Event event) {
+    public GatheringInvitationCardAdapter(Fragment gatheringPreviewFragment, Event event) {
 
         this.eventOwner = null;
         this.event = event;
@@ -87,7 +88,7 @@ public class GatheringInvitationCardAdapter extends BaseAdapter {
         }
 
 
-        if (event != null) {
+        if (event.getEventId() != null) {
 
             holder.tvEventTitle.setText(event.getTitle());
 

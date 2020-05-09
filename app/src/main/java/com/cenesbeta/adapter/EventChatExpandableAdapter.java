@@ -3,6 +3,7 @@ package com.cenesbeta.adapter;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannedString;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -124,7 +125,7 @@ public class EventChatExpandableAdapter extends BaseExpandableListAdapter {
             holder.chatMessageTo = (TextView) convertView.findViewById(R.id.chat_msg_to);
             holder.chatMessageFrom = (TextView) convertView.findViewById(R.id.chat_msg_from);
             holder.chatFromPic = (RoundedImageView) convertView.findViewById(R.id.chat_from_picture);
-            holder.rlToChat = (RelativeLayout) convertView.findViewById(R.id.rl_to_chat);
+            holder.rlToChat = (LinearLayout) convertView.findViewById(R.id.rl_to_chat);
             holder.llFromChat = (LinearLayout) convertView.findViewById(R.id.ll_from_chat);
             holder.rlChatFromProfileContainer = (RelativeLayout) convertView.findViewById(R.id.rl_chat_from_profile_container);
             convertView.setTag(R.layout.adapter_chat_window,holder);
@@ -171,12 +172,8 @@ public class EventChatExpandableAdapter extends BaseExpandableListAdapter {
             String textToHighlight = "\\(Edited\\)";
             String replacedWith = "<font color= '#9B9B9B'>" + textToHighlight + "</font>";
             holder.chatMessageTo.setText(Html.fromHtml(eventChat.getChat().replaceAll(textToHighlight, replacedWith)));
-            /*String editedText = "";
-            if(eventChat.getChatEdited().equals("Yes")) {
-                editedText = "(Edited) ";
-            } else {
-                System.out.println("Edited NO");
-            }*/
+
+
             holder.chatSentTimeSender.setText(CenesUtils.hhmmaa.format(new Date(eventChat.getCreatedAt())) );
             RequestOptions requestOptions = new RequestOptions();
             requestOptions.placeholder(R.drawable.profile_pic_no_image);
@@ -203,28 +200,17 @@ public class EventChatExpandableAdapter extends BaseExpandableListAdapter {
         private TextView chatSentTimeFrom, chatSentTimeSender, chatMessageTo,chatMessageFrom;
         private ImageView chatReadStatus;
         private RoundedImageView chatFromPic;
-        private RelativeLayout rlToChat, rlChatFromProfileContainer;
-        private LinearLayout llFromChat;
+        private RelativeLayout rlChatFromProfileContainer;
+        private LinearLayout llFromChat, rlToChat;
     }
 
     class EventHeaderViewHolder {
         TextView header;
     }
 
-    public void setHighLightedText(TextView tv, String textToHighlight) {
-        String tvt = tv.getText().toString();
-        int ofe = tvt.indexOf(textToHighlight, 0);
-        Spannable wordToSpan = new SpannableString(tv.getText());
-        for (int ofs = 0; ofs < tvt.length() && ofe != -1; ofs = ofe + 1) {
-            ofe = tvt.indexOf(textToHighlight, ofs);
-            if (ofe == -1)
-                break;
-            else {
-                // set color here
-                wordToSpan.setSpan(new ForegroundColorSpan(0xFF3B4C8B), ofe, ofe + textToHighlight.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                tv.setText(wordToSpan, TextView.BufferType.SPANNABLE);
-            }
-        }
+    public String convertToHtml(TextView textViewToHtml) {
+        SpannedString contentText = (SpannedString)textViewToHtml.getText();
+        String htmlEncodedString = Html.toHtml(contentText);
+        return htmlEncodedString;
     }
-
 }

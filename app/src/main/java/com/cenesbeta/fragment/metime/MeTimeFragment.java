@@ -276,7 +276,7 @@ public class MeTimeFragment extends CenesFragment {
 
         for (final MeTime metime: meTimes) {
             System.out.println(metime.toString());
-            if (metime.getItems().size() > 0) {
+            if (metime.getItems() != null && metime.getItems().size() > 0) {
                 String daysStr = "";
 
                 Integer daysInStrList[] = new Integer[metime.getItems().size()];

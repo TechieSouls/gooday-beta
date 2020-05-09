@@ -66,8 +66,10 @@ public class MeTimeManagerImpl {
             System.out.println(insertQuery);
             db.execSQL(insertQuery);
 
-            for (MeTimeItem meTimeItem: metime.getItems()) {
-                this.meTimePatternManagerImpl.addMeTimePattern(meTimeItem);
+            if (metime.getItems() != null) {
+                for (MeTimeItem meTimeItem: metime.getItems()) {
+                    this.meTimePatternManagerImpl.addMeTimePattern(meTimeItem);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
