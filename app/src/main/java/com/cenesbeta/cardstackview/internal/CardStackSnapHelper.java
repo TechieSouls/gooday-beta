@@ -1,15 +1,15 @@
 package com.cenesbeta.cardstackview.internal;
 
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.view.View;
+
+import com.cenesbeta.cardstackview.CardStackLayoutManager;
+import com.cenesbeta.cardstackview.Duration;
+import com.cenesbeta.cardstackview.SwipeAnimationSetting;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SnapHelper;
-
-import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
-import com.yuyakaido.android.cardstackview.Duration;
-import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 
 public class CardStackSnapHelper extends SnapHelper {
 

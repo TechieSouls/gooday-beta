@@ -3,11 +3,11 @@ package com.cenesbeta.cardstackview.internal;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
-import com.yuyakaido.android.cardstackview.Direction;
-import com.yuyakaido.android.cardstackview.RewindAnimationSetting;
-import com.yuyakaido.android.cardstackview.StackFrom;
-import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
-import com.yuyakaido.android.cardstackview.SwipeableMethod;
+import com.cenesbeta.cardstackview.Direction;
+import com.cenesbeta.cardstackview.RewindAnimationSetting;
+import com.cenesbeta.cardstackview.StackFrom;
+import com.cenesbeta.cardstackview.SwipeAnimationSetting;
+import com.cenesbeta.cardstackview.SwipeableMethod;
 
 import java.util.List;
 

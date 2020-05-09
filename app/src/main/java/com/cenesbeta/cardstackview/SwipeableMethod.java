@@ -1,4 +1,4 @@
-package com.yuyakaido.android.cardstackview;
+package com.cenesbeta.cardstackview;
 
 public enum SwipeableMethod {
     AutomaticAndManual,

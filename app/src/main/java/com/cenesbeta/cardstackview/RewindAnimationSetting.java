@@ -3,7 +3,7 @@ package com.cenesbeta.cardstackview;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 
-import com.yuyakaido.android.cardstackview.internal.AnimationSetting;
+import com.cenesbeta.cardstackview.internal.AnimationSetting;
 
 public class RewindAnimationSetting implements AnimationSetting {
 

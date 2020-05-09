@@ -2,7 +2,7 @@ package com.cenesbeta.cardstackview.internal;
 
 import android.view.animation.Interpolator;
 
-import com.yuyakaido.android.cardstackview.Direction;
+import com.cenesbeta.cardstackview.Direction;
 
 public interface AnimationSetting {
     Direction getDirection();

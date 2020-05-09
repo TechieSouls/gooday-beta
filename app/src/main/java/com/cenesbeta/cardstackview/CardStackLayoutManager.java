@@ -3,19 +3,20 @@ package com.cenesbeta.cardstackview;
 import android.content.Context;
 import android.graphics.PointF;
 import android.os.Handler;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 
+import com.cenesbeta.R;
+import com.cenesbeta.cardstackview.internal.CardStackSetting;
+import com.cenesbeta.cardstackview.internal.CardStackSmoothScroller;
+import com.cenesbeta.cardstackview.internal.CardStackState;
+import com.cenesbeta.cardstackview.internal.DisplayUtil;
+
 import androidx.annotation.FloatRange;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.yuyakaido.android.cardstackview.internal.CardStackSetting;
-import com.yuyakaido.android.cardstackview.internal.CardStackSmoothScroller;
-import com.yuyakaido.android.cardstackview.internal.CardStackState;
-import com.yuyakaido.android.cardstackview.internal.DisplayUtil;
 
 import java.util.List;
 
@@ -467,7 +468,7 @@ public class CardStackLayoutManager
     }
 
     private void updateOverlay(View view) {
-        View leftOverlay = view.findViewById(R.id.left_overlay);
+        /*View leftOverlay = view.findViewById(R.id.left_overlay);
         if (leftOverlay != null) {
             leftOverlay.setAlpha(0.0f);
         }
@@ -482,35 +483,35 @@ public class CardStackLayoutManager
         View bottomOverlay = view.findViewById(R.id.bottom_overlay);
         if (bottomOverlay != null) {
             bottomOverlay.setAlpha(0.0f);
-        }
+        }*/
         Direction direction = state.getDirection();
         float alpha = setting.overlayInterpolator.getInterpolation(state.getRatio());
         switch (direction) {
             case Left:
-                if (leftOverlay != null) {
+                /*if (leftOverlay != null) {
                     leftOverlay.setAlpha(alpha);
-                }
+                }*/
                 break;
             case Right:
-                if (rightOverlay != null) {
+                /*if (rightOverlay != null) {
                     rightOverlay.setAlpha(alpha);
-                }
+                }*/
                 break;
             case Top:
-                if (topOverlay != null) {
+                /*if (topOverlay != null) {
                     topOverlay.setAlpha(alpha);
-                }
+                }*/
                 break;
             case Bottom:
-                if (bottomOverlay != null) {
+                /*if (bottomOverlay != null) {
                     bottomOverlay.setAlpha(alpha);
-                }
+                }*/
                 break;
         }
     }
 
     private void resetOverlay(View view) {
-        View leftOverlay = view.findViewById(R.id.left_overlay);
+        /*View leftOverlay = view.findViewById(R.id.left_overlay);
         if (leftOverlay != null) {
             leftOverlay.setAlpha(0.0f);
         }
@@ -525,7 +526,7 @@ public class CardStackLayoutManager
         View bottomOverlay = view.findViewById(R.id.bottom_overlay);
         if (bottomOverlay != null) {
             bottomOverlay.setAlpha(0.0f);
-        }
+        }*/
     }
 
     private void smoothScrollToPosition(int position) {

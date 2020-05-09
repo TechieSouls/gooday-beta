@@ -1,14 +1,14 @@
 package com.cenesbeta.cardstackview;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
+import com.cenesbeta.cardstackview.internal.CardStackDataObserver;
+import com.cenesbeta.cardstackview.internal.CardStackSnapHelper;
 
-import com.yuyakaido.android.cardstackview.internal.CardStackDataObserver;
-import com.yuyakaido.android.cardstackview.internal.CardStackSnapHelper;
+import androidx.annotation.Nullable;
 
 public class CardStackView extends RecyclerView {
 
