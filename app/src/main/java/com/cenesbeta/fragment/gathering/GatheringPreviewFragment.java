@@ -309,7 +309,6 @@ public class GatheringPreviewFragment extends CenesFragment {
         });
 
         view.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
-
         return view;
     }
 

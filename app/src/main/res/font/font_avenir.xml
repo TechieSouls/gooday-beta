@@ -13,5 +13,10 @@
         android:fontStyle="normal"
         android:font="@font/avenir_book"
         />
+    <font
+        android:fontStyle="normal"
+        android:font="@font/avenir_heavy"
+        />
+
 
 </font-family>

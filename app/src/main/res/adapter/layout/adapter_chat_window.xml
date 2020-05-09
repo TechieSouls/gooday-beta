@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-
+    android:orientation="vertical">s
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -14,7 +12,6 @@
         android:layout_marginTop="8dp"
         android:layout_marginLeft="20dp"
         android:orientation="horizontal">
-
         <LinearLayout
             android:id="@+id/ll_from_chat"
             android:layout_width="0dp"
@@ -40,6 +37,7 @@
                     android:text="I am working at that hour, possible to start at 8pm? I wanna come so badly!"
                     android:textColor="@color/black"
                     android:textSize="14dp"
+                    android:fontFamily="@font/avenir_medium"
                     android:layout_marginRight="20dp"
                     android:background="@color/transparent"
                     android:layout_gravity="right|bottom"
@@ -120,6 +118,7 @@
                     android:textColor="@color/black"
                     android:background="@color/transparent"
                     android:layout_marginLeft="15dp"
+                    android:fontFamily="@font/avenir_medium"
                     />
 
                 <TextView
@@ -134,10 +133,7 @@
                     android:gravity="right"
                     ></TextView>
             </com.cenesbeta.service.ImFlexboxLayout>
-
         </LinearLayout>
-
-
     </LinearLayout>
     <RelativeLayout
         android:id="@+id/rl_chat_from_profile_container"
