@@ -28,7 +28,8 @@
                 android:text="Veterans Day Veterans Day Veterans Day Veterans Day"
                 android:textColor="@color/cenes_pink"
                 android:textSize="14dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/avenir_heavy"/>
         </LinearLayout>
 
         <RelativeLayout
@@ -101,7 +102,8 @@
                         android:text="Seahawks at Rams"
                         android:textColor="@color/black"
                         android:textSize="16dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:fontFamily="@font/avenir_heavy"/>
 
                     <LinearLayout
                         android:id="@+id/ll_event_location_section"
@@ -124,7 +126,8 @@
                             android:lines="1"
                             android:text="Seahawks at Rams"
                             android:textColor="@color/cenes_light_gray"
-                            android:textSize="14dp" />
+                            android:textSize="14dp"
+                            android:fontFamily="@font/avenir_book"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -151,7 +154,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:text="23:25PM"
-                    android:textColor="@color/cenes_light_gray"/>
+                    android:textColor="@color/cenes_light_gray"
+                    android:fontFamily="@font/avenir_book"/>
             </RelativeLayout>
         </com.daimajia.swipe.SwipeLayout>
 
@@ -203,7 +207,8 @@
                         android:lines="1"
                         android:text="Seahawks at Rams"
                         android:textColor="#FF9B9B9B"
-                        android:textSize="16dp" />
+                        android:textSize="16dp"
+                        android:fontFamily="@font/avenir_heavy"/>
 
                     <com.cenesbeta.util.CenesTextView
                         android:id="@+id/tv_tp_source"
@@ -214,7 +219,8 @@
                         android:text="Outlook"
                         android:textColor="@color/cenes_light_gray"
                         android:textSize="14dp"
-                        android:textStyle="italic" />
+                        android:textStyle="italic"
+                        android:fontFamily="@font/avenir_book"/>
 
                 </LinearLayout>
 
@@ -244,7 +250,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:text="22:25PM"
-                    android:textColor="@color/cenes_light_gray" />
+                    android:textColor="@color/cenes_light_gray"
+                    android:fontFamily="@font/avenir_book"/>
             </RelativeLayout>
 
         </com.daimajia.swipe.SwipeLayout>

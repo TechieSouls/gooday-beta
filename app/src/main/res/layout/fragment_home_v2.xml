@@ -32,7 +32,7 @@
                     android:textSize="16dp"
                     android:textColor="@color/black"
                     android:background="@drawable/xml_border_bottom_black"
-                    />
+                    android:fontFamily="@font/avenir_book"/>
                    <View
                        android:layout_width="20dp"
                        android:layout_height="match_parent"
@@ -43,7 +43,8 @@
                     android:layout_height="wrap_content"
                     android:text="Invitation"
                     android:textSize="16dp"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/avenir_book"/>
             </LinearLayout>
 
             <ImageView
@@ -93,6 +94,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/black"
                     android:gravity="center_vertical"
+                    android:fontFamily="@font/avenir_black"
                     />
                 <ImageView
                     android:id="@+id/iv_cal_date_bar_arrow"

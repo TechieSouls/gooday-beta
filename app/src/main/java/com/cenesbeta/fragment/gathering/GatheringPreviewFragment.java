@@ -316,7 +316,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     Fragment visibleFragment = (((CenesBaseActivity) getActivity()).getVisibleFragment());
                     if (visibleFragment instanceof GatheringPreviewFragment) {
                         int heightDiff = fragmentView.getRootView().getHeight() - fragmentView.getHeight();
-                        // IF height diff is more then 150, consider keyboard as visible.
+                        // IF height diff is more than 150, consider keyboard as visible.
                         System.out.println("Ha ha ha ha hi Maaaa : "+heightDiff);
 
                         // TODO Auto-generated method stub
@@ -329,8 +329,9 @@ public class GatheringPreviewFragment extends CenesFragment {
                         Log.d("Keyboard Size in dp",  CenesUtils.pxToDp(heightDifference)+"");
 
 
-                        if (heightDifference >= 150) {
+                        if (heightDifference >= 149) {
                             rlEnterChat.setVisibility(View.VISIBLE);
+                            System.out.println("getHeight() :  "+getActivity().getWindowManager().getDefaultDisplay().getHeight());
                             rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 60));
                             //got focus
                             //RelativeLayout.LayoutParams newPara = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PrecastrUtils.convertDpToPx(getContext(),350));

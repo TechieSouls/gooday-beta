@@ -14,5 +14,6 @@
         android:text="Today"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:fontFamily="@font/avenir_heavy"
         android:layout_marginTop="10dp"/>
 </RelativeLayout>

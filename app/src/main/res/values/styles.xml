@@ -3,6 +3,10 @@
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:buttonStyle">@style/MyButtonStyle</item>
+
+        <item name="android:fontFamily">@font/avenir_book</item>
+        <item name="fontFamily">@font/avenir_book</item> <!-- target android sdk versions < 26 and > 14 if theme other than AppCompat -->
+
     </style>
 
     <style name="MyButtonStyle" parent="@style/Widget.AppCompat.Button.Borderless">

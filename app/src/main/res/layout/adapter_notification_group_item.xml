@@ -38,6 +38,7 @@
                     android:layout_gravity="center_vertical"
                     android:textSize="14sp"
                     android:textStyle="normal"
+                    android:fontFamily="@font/avenir_medium"
                     android:padding="1dp"/>
                 <TextView
                     android:id="@+id/notification_title"
@@ -47,7 +48,8 @@
                     android:text="(event)"
                     android:layout_gravity="left"
                     android:textSize="14sp"
-                    android:textStyle="normal">
+                    android:textStyle="normal"
+                    android:fontFamily="@font/avenir_medium">
                 </TextView>
             </LinearLayout>
 
@@ -81,7 +83,8 @@
                     android:text="Just Now"
                     android:textSize="12sp"
                     android:textColor="@color/cenes_grey"
-                    android:gravity="center_horizontal"/>
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/avenir_medium"/>
 
                 <TextView
                     android:id="@+id/notification_readstatus"
