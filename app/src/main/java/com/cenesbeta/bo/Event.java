@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Event {
 
-    public enum EventDisplayScreen {HOME, ACCEPTED, PENDING, DECLINED};
+    public enum EventDisplayScreen {PAST, HOME, ACCEPTED, PENDING, DECLINED};
 
     private Long eventId;
     private String logo;

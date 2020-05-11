@@ -27,6 +27,7 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -140,6 +141,9 @@ public class GatheringPreviewFragment extends CenesFragment {
     private boolean isChatLoaded = false;
     private boolean isDescriptionButtonOn = false;
     private int chatListViewMarginBottom = 20;
+    private float ROTATION_DEGREES = 15f;
+    private int mActivePointerId;
+    private int parentWidth;
 
 
     @Nullable
@@ -308,6 +312,12 @@ public class GatheringPreviewFragment extends CenesFragment {
             }
         });
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        parentWidth = width;
         view.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
         return view;
     }
@@ -668,9 +678,11 @@ public class GatheringPreviewFragment extends CenesFragment {
             tinderCardView.setX(0);
             tinderCardView.setY(0);
 
-            switch (event.getAction()) {
+
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
 
                 case MotionEvent.ACTION_DOWN:
+
 
                     GatheringPreviewDto.userCanSwipe = true;
 
@@ -776,6 +788,8 @@ public class GatheringPreviewFragment extends CenesFragment {
                         svCard.scrollTo(0, 0);
                         resetCardPosition();
                     }
+
+                    v.performClick();
                     break;
 
 
@@ -791,6 +805,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                     newXcord = (int)(xCord - x);
                     System.out.println("enableLeftToRightSwipe && enableRightToLeftSwipe : "+enableLeftToRightSwipe+","+enableRightToLeftSwipe);
+
 
                     if (enableLeftToRightSwipe && enableRightToLeftSwipe) {
 
@@ -939,9 +954,12 @@ public class GatheringPreviewFragment extends CenesFragment {
 
     public void resetCardPosition() {
 
-        tinderCardView.setX(0);
-        tinderCardView.setY(0);
-        tinderCardView.setRotation(0);
+        tinderCardView.animate().setDuration(200)
+                .setInterpolator(new OvershootInterpolator(1.0f))
+                .x(0)
+                .y(0)
+                .rotation(0);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

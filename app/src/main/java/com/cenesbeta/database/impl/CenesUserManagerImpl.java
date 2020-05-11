@@ -34,62 +34,90 @@ public class CenesUserManagerImpl  {
         }
     }
     public void addUser(User user){
+        try {
+            User userExists = fetchCenesUserByUserId(user.getUserId());
+            if (userExists != null) {
 
-        User userExists = fetchCenesUserByUserId(user.getUserId());
-        if (userExists != null) {
+                user.setUserId(userExists.getUserId());
+                updateCenesUser(user);
 
-            user.setUserId(userExists.getUserId());
-            updateCenesUser(user);
+            } else {
+                if (!this.db.isOpen()) {
+                    this.db = cenesDatabase.getReadableDatabase();
+                }
+                if (CenesUtils.isEmpty(user.getPicture())) {
+                    user.setPicture("");
+                }
+                if (CenesUtils.isEmpty(user.getPhone())) {
+                    user.setPhone("");
+                }
 
-        } else {
-            this.db = cenesDatabase.getReadableDatabase();
-            if (CenesUtils.isEmpty(user.getPicture())) {
-                user.setPicture("");
+                String insertQuery = "insert into cenes_users values("+user.getUserId()+", '"+user.getName()+"', '"+user.getPicture()+"'," +
+                        " '"+user.getPhone()+"')";
+                db.execSQL(insertQuery);
             }
-            if (CenesUtils.isEmpty(user.getPhone())) {
-                user.setPhone("");
-            }
-
-            String insertQuery = "insert into cenes_users values("+user.getUserId()+", '"+user.getName()+"', '"+user.getPicture()+"'," +
-                    " '"+user.getPhone()+"')";
-            db.execSQL(insertQuery);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
             db.close();
         }
     }
 
     public User fetchCenesUserByUserId(Integer userId) {
-        this.db = cenesDatabase.getReadableDatabase();
+
         User user = null;
-        String query = "select * from cenes_users where user_id = "+userId;
-        Cursor cursor = db.rawQuery(query, null);
+        try {
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
+            String query = "select * from cenes_users where user_id = "+userId;
+            Cursor cursor = db.rawQuery(query, null);
 
-        if (cursor.moveToFirst()) {
-
-            user = new User();
-            user.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
-            user.setName(cursor.getString(cursor.getColumnIndex("name")));
-            user.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
-            user.setPhone(cursor.getString(cursor.getColumnIndex("phone")));
-
+            if (cursor.moveToFirst()) {
+                user = new User();
+                user.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
+                user.setName(cursor.getString(cursor.getColumnIndex("name")));
+                user.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
+                user.setPhone(cursor.getString(cursor.getColumnIndex("phone")));
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
         }
-        cursor.close();
-        db.close();
         return user;
     }
 
     public void updateCenesUser(User user) {
-        this.db = cenesDatabase.getReadableDatabase();
-        db.execSQL("update cenes_users set name = '"+user.getName()+"', " +
-                " picture = '"+user.getPicture()+"', phone = '"+user.getPhone()+"' where user_id = "+user.getUserId()+" ");
-        db.close();
+
+        try {
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
+            db.execSQL("update cenes_users set name = '"+user.getName()+"', " +
+                    " picture = '"+user.getPicture()+"', phone = '"+user.getPhone()+"' where user_id = "+user.getUserId()+" ");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+
     }
 
 
 
     public void deleteAllUsers() {
-        this.db = cenesDatabase.getReadableDatabase();
-        String deleteQuery = "delete from cenes_users";
-        db.execSQL(deleteQuery);
-        db.close();
+        try {
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
+            String deleteQuery = "delete from cenes_users";
+            db.execSQL(deleteQuery);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
     }
 }

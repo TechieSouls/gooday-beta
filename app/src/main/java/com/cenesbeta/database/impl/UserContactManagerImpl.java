@@ -39,7 +39,9 @@ public class UserContactManagerImpl {
 
             if (userContactDB == null) {
 
-                this.db = cenesDatabase.getReadableDatabase();
+                if (!this.db.isOpen()) {
+                    this.db = cenesDatabase.getReadableDatabase();
+                }
                 if (CenesUtils.isEmpty(userContact.getName())) {
                     userContact.setName("");
                 }
@@ -67,7 +69,9 @@ public class UserContactManagerImpl {
     public UserContact fetchUserContactByUserContactId(Integer userContactId) {
         UserContact userContact = null;
         try {
-            this.db = cenesDatabase.getReadableDatabase();
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
             String query = "select * from user_contacts where user_contact_id = "+userContactId;
             Cursor cursor = db.rawQuery(query, null);
 
@@ -83,7 +87,6 @@ public class UserContactManagerImpl {
 
             }
             cursor.close();
-            db.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -95,7 +98,9 @@ public class UserContactManagerImpl {
     public UserContact fetchUserContactByUserId(Integer useriId) {
         UserContact userContact = null;
         try {
-            this.db = cenesDatabase.getReadableDatabase();
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
             String query = "select * from user_contacts where user_id = "+useriId;
             Cursor cursor = db.rawQuery(query, null);
 
@@ -111,7 +116,6 @@ public class UserContactManagerImpl {
 
             }
             cursor.close();
-            db.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

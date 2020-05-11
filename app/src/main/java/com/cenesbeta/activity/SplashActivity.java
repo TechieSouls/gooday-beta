@@ -40,7 +40,7 @@ public class SplashActivity extends CenesActivity{
     SplashManager splashManager;
     ImageView splashImageView;
     String imageURL = "";
-    int duration = 0;
+    int duration = 3000;
 
     ProgressDialog progressDialog = null;
     @Override
@@ -61,9 +61,19 @@ public class SplashActivity extends CenesActivity{
         if(localSplash != null) {
             Glide.with(getApplicationContext()).load(localSplash.getSplashImage()).into(splashImageView);
             splashImageView.setVisibility(View.VISIBLE);
-            duration = 3000;
-        } else {
-            duration = 5000;
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(userManager.isUserExist()){
+                        startActivity(new Intent(SplashActivity.this,MainActivity.class));
+                        finish();
+                    } else{
+                        startActivity(new Intent(SplashActivity.this,WelcomeActivity.class));
+                        finish();
+                    }
+                }
+            }, duration);
         }
 
         new Handler().postDelayed(new Runnable() {
@@ -80,47 +90,52 @@ public class SplashActivity extends CenesActivity{
                             boolean success = response.getBoolean("success");
                             if (success == true) {
                                 JSONObject data = response.getJSONObject("data");
-                                boolean activeStatus = data.getBoolean("enabled");
-                                System.out.println("Splash_1");
-                                if(activeStatus == true) {
-                                    System.out.println("Splash_2");
+                                if (data.has("enabled")) {
+                                    boolean activeStatus = data.getBoolean("enabled");
+                                    System.out.println("Splash_1");
+                                    if(activeStatus == true) {
+                                        System.out.println("Splash_2");
 
-                                     imageURL = CenesConstants.imageDomain + "/" + data.getString("splashImage");
-                                    System.out.println(imageURL);
+                                        imageURL = CenesConstants.imageDomain + "/" + data.getString("splashImage");
+                                        System.out.println(imageURL);
 
-                                    if(localSplash == null) {
-                                        Glide.with(getApplicationContext()).load(imageURL).into(splashImageView);
+                                        if(localSplash == null) {
+                                            Glide.with(getApplicationContext()).load(imageURL).into(splashImageView);
+                                            splashImageView.setVisibility(View.VISIBLE);
+                                        }
+
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if(userManager.isUserExist()){
+                                                    startActivity(new Intent(SplashActivity.this,MainActivity.class));
+                                                    finish();
+                                                } else{
+                                                    startActivity(new Intent(SplashActivity.this,WelcomeActivity.class));
+                                                    finish();
+                                                }
+                                            }
+                                        }, duration);
+
+                                        splashManager.deleteSplash();
+                                        Splash serverSplash = new Splash();
+                                        serverSplash.setSplashImage(imageURL);
+                                        splashManager.addSplash(serverSplash);
                                     }
-
-                                    splashManager.deleteSplash();
-                                    Splash serverSplash = new Splash();
-                                    serverSplash.setSplashImage(imageURL);
-                                    splashManager.addSplash(serverSplash);
-                                    splashImageView.setVisibility(View.VISIBLE);
                                 }
-
-
                             }
-
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if(userManager.isUserExist()){
-                                        startActivity(new Intent(SplashActivity.this,MainActivity.class));
-                                        finish();
-                                    } else{
-                                        startActivity(new Intent(SplashActivity.this,WelcomeActivity.class));
-                                        finish();
-                                    }
-                                }
-                            }, duration);
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
 
+                        if(userManager.isUserExist()){
+                            startActivity(new Intent(SplashActivity.this,MainActivity.class));
+                            finish();
+                        } else{
+                            startActivity(new Intent(SplashActivity.this,WelcomeActivity.class));
+                            finish();
+                        }
                     }
-
                 }).execute(asyncTaskDto);
 
 

@@ -51,9 +51,12 @@ public class EventManagerImpl {
         }
     }
     public void addEvent(Event event){
-        this.db = cenesDatabase.getReadableDatabase();
 
         try {
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
+
             String description = "";
             if (!CenesUtils.isEmpty(event.getDescription())) {
                 description = event.getDescription().replaceAll("'","''");
@@ -73,7 +76,7 @@ public class EventManagerImpl {
 
             int isSynced = event.isSynced() ? 1 : 0;
 
-            String insertQuery = "insert into events values("+event.getEventId()+", '"+event.getTitle().replaceAll("'","''")+"', '"+description+"'," +
+            String insertQuery = "insert into events values ("+event.getEventId()+", '"+event.getTitle().replaceAll("'","''")+"', '"+description+"'," +
                     " "+event.getStartTime()+", "+event.getEndTime()+", '"+event.getEventPicture()+"', '"+event.getScheduleAs()+"', " +
                     ""+event.getCreatedById()+", '"+location+"', '"+event.getLatitude()+"', '"+event.getLongitude()+"', " +
                     "'"+event.getSource()+"', "+expired+", "+isSynced+",'"+recurringEventId+"', '"+event.getDisplayAtScreen()+"', '"+event.getKey()+"')";
@@ -90,11 +93,12 @@ public class EventManagerImpl {
     }
 
     public List<Event> fetchAllEventsByScreen(String displayAtScreen) {
-        this.db = cenesDatabase.getReadableDatabase();
-
         List<Event> events = new ArrayList<>();
 
         try {
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
             String query = "select * from events where display_at_screen = '"+displayAtScreen+"' ";
             Cursor cursor = db.rawQuery(query, null);
 
@@ -103,7 +107,6 @@ public class EventManagerImpl {
                 events.add(event);
             }
             cursor.close();
-            db.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -114,30 +117,33 @@ public class EventManagerImpl {
     }
 
     public Event findEventByEventId(Long eventId) {
-        this.db = cenesDatabase.getReadableDatabase();
         Event event = null;
 
         try {
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
             String query = "select * from events where event_id = "+eventId+"";
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
                 event = populateEventObject(cursor);
-
                 cursor.close();
-                db.close();
-                return event;
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            db.close();
         }
 
         return event;
     }
 
     public List<Event> findAllEventsByEventId(Long eventId) {
-        this.db = cenesDatabase.getReadableDatabase();
         List<Event> events = new ArrayList<>();
         try {
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
             String query = "select * from events where event_id = "+eventId+"";
             Cursor cursor = db.rawQuery(query, null);
 
@@ -146,7 +152,6 @@ public class EventManagerImpl {
                 events.add(event);
             }
             cursor.close();
-            db.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -156,10 +161,11 @@ public class EventManagerImpl {
     }
 
     public List<Event> findAllOfflineEvents() {
-        this.db = cenesDatabase.getReadableDatabase();
         List<Event> events = new ArrayList<>();
         try {
-
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
             String query = "select * from events where synced = 0";
             Cursor cursor = db.rawQuery(query, null);
 
@@ -168,7 +174,6 @@ public class EventManagerImpl {
                 events.add(event);
             }
             cursor.close();
-            db.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -177,9 +182,11 @@ public class EventManagerImpl {
         return events;
     }
     public List<Event> findAllEventsByRecurringEventId(String recurringEventId) {
-        this.db = cenesDatabase.getReadableDatabase();
         List<Event> events = new ArrayList<>();
         try {
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
             String query = "select * from events where recurring_event_id = '"+recurringEventId+"'";
             Cursor cursor = db.rawQuery(query, null);
 
@@ -188,7 +195,6 @@ public class EventManagerImpl {
                 events.add(event);
             }
             cursor.close();
-            db.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -198,9 +204,11 @@ public class EventManagerImpl {
     }
 
     public List<Event> findAllEventsByTitleAndSource(String title, String source) {
-        this.db = cenesDatabase.getReadableDatabase();
         List<Event> events = new ArrayList<>();
         try {
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
             String query = "select * from events where title like '"+title+"' and source = '"+source+"' ";
             Cursor cursor = db.rawQuery(query, null);
 
@@ -209,7 +217,6 @@ public class EventManagerImpl {
                 events.add(event);
             }
             cursor.close();
-            db.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -248,15 +255,18 @@ public class EventManagerImpl {
 
     public boolean isEventExist(Event event){
         try {
-            this.db = cenesDatabase.getReadableDatabase();
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
             Cursor cursor = db.rawQuery("select * from events where event_id = "+event.getEventId()+" ", null);
             if (cursor.moveToNext()) {
                 cursor.close();
-                db.close();
                 return true;
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            this.db.close();
         }
 
         return false;
@@ -265,8 +275,9 @@ public class EventManagerImpl {
     public void deleteAllEventsByDisplayAtScreen(String dispayAtScreen) {
 
         try {
-            this.db = cenesDatabase.getReadableDatabase();
-
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
             String eventIds = "";
             String query = "select * from events where display_at_screen = '"+dispayAtScreen+"' ";
             Cursor cursor = db.rawQuery(query, null);
@@ -286,56 +297,61 @@ public class EventManagerImpl {
             } else {
                 eventMemberManagerImpl.deleteFromEventMembersByEventIdsIn(eventIds.substring(0, eventIds.length() - 1));
             }
-            db.close();
         } catch (Exception e){
             e.printStackTrace();
+        } finally {
+            db.close();
         }
     }
 
     public void deleteEventByEventId(Long eventId) {
         try {
-            this.db = cenesDatabase.getReadableDatabase();
-
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
             String deleteQuery = "delete from events where event_id = "+eventId+"";
             db.execSQL(deleteQuery);
 
             EventMemberManagerImpl eventMemberManagerImpl = new EventMemberManagerImpl(cenesApplication);
             eventMemberManagerImpl.deleteFromEventMembersByEventId(eventId.intValue());
-            db.close();
         } catch (Exception e){
             e.printStackTrace();
+        } finally {
+            db.close();
         }
     }
 
     public void deleteAllEvents() {
-
         try {
-            this.db = cenesDatabase.getReadableDatabase();
-
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
             String deleteQuery = "delete from events";
             db.execSQL(deleteQuery);
 
             EventMemberManagerImpl eventMemberManagerImpl = new EventMemberManagerImpl(cenesApplication);
             eventMemberManagerImpl.deleteAllFromEventMembers();
-
-            db.close();
         } catch (Exception e){
             e.printStackTrace();
+        } finally {
+            db.close();
         }
     }
 
     public void updateByDisplayAtScreenByEventId(Long eventId, Integer userId, String displayAtScreen) {
         try {
-            this.db = cenesDatabase.getReadableDatabase();
-
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
             String updateQuery = "update events set display_at_screen = '"+Event.EventDisplayScreen.DECLINED.toString()+"' where event_id = "+eventId+"";
             db.execSQL(updateQuery);
 
             EventMemberManagerImpl eventMemberManagerImpl = new EventMemberManagerImpl(cenesApplication);
             eventMemberManagerImpl.updateEventMemberStatus(eventId.intValue(), userId, displayAtScreen);
-            db.close();
         } catch (Exception e){
             e.printStackTrace();
+        } finally {
+            db.close();
         }
     }
 }
