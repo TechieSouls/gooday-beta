@@ -46,7 +46,8 @@
                 android:text="January"
                 android:textColor="@color/black"
                 android:textSize="20dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/avenir_heavy"/>
         </RelativeLayout>
 
         <com.daimajia.swipe.SwipeLayout

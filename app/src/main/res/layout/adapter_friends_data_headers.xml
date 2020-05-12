@@ -14,6 +14,7 @@
         android:textColor="@color/black"
         android:text="A"
         android:textSize="16dp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:fontFamily="@font/avenir_medium"/>
 
 </LinearLayout>

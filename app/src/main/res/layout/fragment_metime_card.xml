@@ -74,6 +74,7 @@
                     android:singleLine="false"
                     android:imeOptions="actionDone"
                     android:scrollHorizontally="false"
+                    android:fontFamily="@font/avenir_medium"
                     />
             </LinearLayout>
 
@@ -138,7 +139,8 @@
                 android:layout_weight="1"
                 android:text="DELETE"
                 android:textColor="@color/white"
-                android:background="@color/cenes_light_blue"/>
+                android:background="@color/cenes_light_blue"
+                android:fontFamily="@font/avenir_heavy"/>
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
@@ -151,7 +153,8 @@
                 android:layout_weight="1"
                 android:text="SAVE"
                 android:textColor="@color/white"
-                android:background="@color/cenes_light_blue"/>
+                android:background="@color/cenes_light_blue"
+                android:fontFamily="@font/avenir_heavy"/>
 
 
         </LinearLayout>
@@ -188,7 +191,8 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/cenes_new_orange"
                     android:background="@drawable/xml_curved_corner_top_only"
-                    android:textSize="17sp"/>
+                    android:textSize="17dp"
+                    android:fontFamily="@font/avenir_medium"/>
                 <TextView
                     android:id="@+id/tv_take_photo"
                     android:layout_width="match_parent"
@@ -200,7 +204,8 @@
                     android:textColor="@color/link_color"
                     android:layout_marginTop="0.5dp"
                     android:layout_marginBottom="0.5dp"
-                    android:textSize="17sp"/>
+                    android:textSize="17dp"
+                    android:fontFamily="@font/avenir_medium"/>
 
 
 
@@ -217,8 +222,9 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
                 android:layout_marginTop="20dp"
-                android:textSize="17sp"
-                android:textStyle="bold"/>
+                android:textSize="17dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/avenir_medium"/>
         </LinearLayout>
     </RelativeLayout>
 

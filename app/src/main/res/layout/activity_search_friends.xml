@@ -19,7 +19,8 @@
             android:text="Cancel"
             android:background="@color/transparent"
             android:textColor="@color/cenes_light_blue"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentLeft="true"
+            android:fontFamily="@font/avenir_medium"/>
 
 
         <TextView
@@ -32,6 +33,7 @@
             android:textAlignment="center"
             android:gravity="center_vertical"
             android:textStyle="bold"
+            android:fontFamily="@font/avenir_heavy"
             android:textColor="#FF000000"/>
 
         <Button
@@ -41,7 +43,8 @@
             android:text="Done"
             android:background="@color/transparent"
             android:textColor="@color/cenes_light_blue"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:fontFamily="@font/avenir_medium"/>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/gath_search_friend_sub_header"
@@ -62,6 +65,7 @@
             android:singleLine="true"
             android:imeOptions="actionDone"
             android:hint="Search Contacts"
+            android:fontFamily="@font/avenir_medium"
             android:textSize="14dp"
             />
 
@@ -104,6 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="40dp"
+            android:fontFamily="@font/avenir_medium"
             android:textColor="@color/black"/>
 
         <ImageView

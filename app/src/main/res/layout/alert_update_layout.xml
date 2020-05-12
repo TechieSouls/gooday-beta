@@ -19,7 +19,8 @@
             android:textSize="20dp"
             android:textStyle="bold"
             android:textColor="#595757"
-            android:gravity="center"></TextView>
+            android:gravity="center"
+            android:fontFamily="@font/avenir_heavy"></TextView>
 
         <TextView
             android:id="@+id/alert_update_message"
@@ -31,6 +32,7 @@
             android:gravity="center_horizontal"
             android:layout_marginLeft="13dp"
             android:layout_marginRight="13dp"
+            android:fontFamily="@font/avenir_book"
             ></TextView>
 
         <Button
@@ -42,7 +44,8 @@
             android:layout_height="44dp"
             android:textAlignment="center"
             android:text="Visit Play Store"
-            android:layout_marginTop="25dp"></Button>
+            android:layout_marginTop="25dp"
+            android:fontFamily="@font/avenir_heavy"></Button>
 
     </LinearLayout>
 

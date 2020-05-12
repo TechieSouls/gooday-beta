@@ -27,7 +27,8 @@
             android:textColor="@color/black"
             android:textSize="@dimen/header_title_font"
             android:layout_marginLeft="@dimen/header_title_margin_left"
-            android:layout_marginRight="@dimen/header_title_margin_right"/>
+            android:layout_marginRight="@dimen/header_title_margin_right"
+            android:fontFamily="@font/avenir_heavy"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -72,7 +73,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="40dp"
                     android:text="Version Update"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/avenir_book"/>
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>

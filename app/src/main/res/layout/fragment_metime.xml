@@ -31,7 +31,8 @@
             android:textColor="@color/black"
             android:textSize="@dimen/header_title_font"
             android:layout_marginLeft="@dimen/header_title_margin_left"
-            android:layout_marginRight="@dimen/header_title_margin_right"/>
+            android:layout_marginRight="@dimen/header_title_margin_right"
+            android:fontFamily="@font/avenir_heavy"/>
         <ImageView
             android:id="@+id/iv_add_metime"
             android:layout_width="35dp"
@@ -60,7 +61,8 @@
             android:gravity="center"
             android:padding="5dp"
             android:textSize="16sp"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/avenir_book"/>
 
         <LinearLayout
             android:id="@+id/ll_metime_tiles_container"
@@ -109,11 +111,13 @@
                         android:layout_height="wrap_content"
                         android:text="Sleep Cycle"
                         android:textColor="#FF4A90E2"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp"
+                        android:fontFamily="@font/avenir_medium"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/avenir_book"
                         android:text="Not Scheduled"/>
                     <TextView
                         android:layout_width="match_parent"

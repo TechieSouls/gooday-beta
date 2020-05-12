@@ -18,6 +18,7 @@
             android:background="@color/transparent"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:fontFamily="@font/avenir_medium"
             />
 
         <Button
@@ -30,6 +31,7 @@
             android:background="@color/transparent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:fontFamily="@font/avenir_medium"
             />
 
     </RelativeLayout>
@@ -62,6 +64,7 @@
             android:layout_gravity="right"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
+            android:fontFamily="@font/avenir_book"
             />
     </LinearLayout>
     <RelativeLayout

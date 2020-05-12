@@ -124,7 +124,8 @@
                     android:gravity="center"
                     android:text="Accepted"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:fontFamily="@font/avenir_medium"/>
 
                 <TextView
                     android:id="@+id/tv_pending_btn"
@@ -134,7 +135,8 @@
                     android:gravity="center"
                     android:text="Pending"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:fontFamily="@font/avenir_medium"/>
 
                 <TextView
                     android:id="@+id/tv_declined_btn"
@@ -144,7 +146,8 @@
                     android:gravity="center"
                     android:text="Declined"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:fontFamily="@font/avenir_medium"/>
 
             </LinearLayout>
 

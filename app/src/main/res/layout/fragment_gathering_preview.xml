@@ -174,7 +174,8 @@
                                     android:layout_height="20dp"
                                     android:textColor="@color/white"
                                     android:text="Sat June 15, 2:30PM-6:00PM"
-                                    android:textSize="15sp"
+                                    android:textSize="15dp"
+                                    android:fontFamily="@font/avenir_black"
                                     />
                             </LinearLayout>
                         </LinearLayout>
@@ -341,7 +342,7 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="150dp"
+                            android:layout_height="155dp"
                             android:orientation="vertical"
                             android:layout_marginTop="20dp">
 
@@ -352,7 +353,8 @@
                                 android:text="WELCOME TO"
                                 android:textColor="@color/black"
                                 android:textSize="36dp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:fontFamily="@font/avenir_heavy"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -361,7 +363,8 @@
                                 android:text="CENES!"
                                 android:textColor="@color/black"
                                 android:textSize="36dp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:fontFamily="@font/avenir_heavy"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -369,7 +372,8 @@
                                 android:layout_gravity="center"
                                 android:text="Create &amp; preview your first invite."
                                 android:textColor="@color/black"
-                                android:textSize="12dp" />
+                                android:textSize="12dp"
+                                android:fontFamily="@font/avenir_medium"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -377,7 +381,8 @@
                                 android:layout_gravity="center"
                                 android:text="Refine or blast your invite with swipe gestures."
                                 android:textColor="@color/black"
-                                android:textSize="12dp" />
+                                android:textSize="12dp"
+                                android:fontFamily="@font/avenir_medium" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -394,7 +399,8 @@
                                 android:textStyle="bold"
                                 android:textColor="@color/black"
                                 android:textSize="12dp"
-                                android:layout_gravity="center"/>
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/avenir_black"/>
 
                             <ImageView
                                 android:layout_width="match_parent"
@@ -425,7 +431,8 @@
                                 android:layout_gravity="center"
                                 android:text="swipe up to close"
                                 android:textColor="@color/black"
-                                android:textSize="12dp" />
+                                android:textSize="12dp"
+                                android:fontFamily="@font/avenir_medium"/>
                         </LinearLayout>
 
 
