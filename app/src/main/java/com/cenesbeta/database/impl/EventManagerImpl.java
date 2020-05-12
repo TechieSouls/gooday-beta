@@ -6,12 +6,16 @@ import android.database.sqlite.SQLiteDatabase;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventMember;
-import com.cenesbeta.bo.Notification;
 import com.cenesbeta.database.CenesDatabase;
 import com.cenesbeta.util.CenesUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EventManagerImpl {
 
@@ -47,7 +51,11 @@ public class EventManagerImpl {
 
         for (Event event: events) {
             event.setDisplayAtScreen(displayAtScreen);
-            addEvent(event);
+
+            boolean dbEvent = isEventExist(event);
+            if (!dbEvent) {
+                addEvent(event);
+            }
         }
     }
     public void addEvent(Event event){
@@ -115,6 +123,124 @@ public class EventManagerImpl {
 
         return events;
     }
+
+    public List<Event> fetchHomeScreenFutureEvents(Integer goingMemberId) {
+
+        List<Event> events = new ArrayList<>();
+
+        try {
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
+            String query = "select * from events e JOIN event_members em on e.event_id = em.event_id where " +
+                    "e.start_time >= "+new Date().getTime()+" and em.user_id = "+goingMemberId+" and " +
+                    "em.status = '"+ EventMember.EventMemberAttendingStatus.Going.toString()+"' ";
+            System.out.println("Future Events Query : "+query);
+            Cursor cursor = db.rawQuery(query, null);
+
+            events = populateEventAndEventMembers(cursor);
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+
+        return events;
+    }
+
+    public List<Event> fetchHomeScreenPastEvents(Integer goingMemberId) {
+        List<Event> events = new ArrayList<>();
+        try {
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
+            String query = "select * from events e JOIN event_members em on e.event_id = em.event_id where " +
+                    "e.start_time < "+new Date().getTime()+" and em.user_id = "+goingMemberId+" and " +
+                    "em.status = '"+ EventMember.EventMemberAttendingStatus.Going.toString()+"' ";
+            System.out.println("Past Events Query : "+query);
+            Cursor cursor = db.rawQuery(query, null);
+
+            events = populateEventAndEventMembers(cursor);
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+
+        return events;
+    }
+
+    public List<Event> fetchAcceptedTabEvents(Integer goingMemberId) {
+        List<Event> events = new ArrayList<>();
+        try {
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
+            String query = "select * from events e JOIN event_members em on e.event_id = em.event_id where " +
+                    "e.start_time >= "+new Date().getTime()+" and e.schedule_as = '"+ Event.EventScheduleAs.Gathering.toString() +"' and " +
+                    "em.user_id = "+goingMemberId+" and " +
+                    "em.status = '"+ EventMember.EventMemberAttendingStatus.Going.toString()+"' ";
+            System.out.println("Accepted Events Query : "+query);
+            Cursor cursor = db.rawQuery(query, null);
+
+            events = populateEventAndEventMembers(cursor);
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+        return events;
+    }
+
+    public List<Event> fetchPendingTabEvents(Integer goingMemberId) {
+        List<Event> events = new ArrayList<>();
+        try {
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
+            String query = "select * from events e JOIN event_members em on e.event_id = em.event_id where " +
+                    "e.start_time >= "+new Date().getTime()+" and e.schedule_as = '"+ Event.EventScheduleAs.Gathering.toString() +"' and " +
+                    "em.user_id = "+goingMemberId+" and " +
+                    "em.status is null or e.status = '' ";
+            System.out.println("Pending Events Query : "+query);
+            Cursor cursor = db.rawQuery(query, null);
+
+            events = populateEventAndEventMembers(cursor);
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+        return events;
+    }
+
+    public List<Event> fetchDeclinedTabEvents(Integer goingMemberId) {
+        List<Event> events = new ArrayList<>();
+        try {
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
+            String query = "select * from events e JOIN event_members em on e.event_id = em.event_id where " +
+                    "e.start_time >= "+new Date().getTime()+" and e.schedule_as = '"+ Event.EventScheduleAs.Gathering.toString() +"' and " +
+                    "em.user_id = "+goingMemberId+" and " +
+                    "em.status = '"+EventMember.EventMemberAttendingStatus.NoGoing.toString()+"' ";
+            System.out.println("Declined Events Query : "+query);
+            Cursor cursor = db.rawQuery(query, null);
+
+            events = populateEventAndEventMembers(cursor);
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+        return events;
+    }
+
 
     public Event findEventByEventId(Long eventId) {
         Event event = null;
@@ -245,12 +371,80 @@ public class EventManagerImpl {
         event.setKey(cursor.getString(cursor.getColumnIndex("key")));
         event.setDisplayAtScreen(cursor.getString(cursor.getColumnIndex("display_at_screen")));
 
+
         EventMemberManagerImpl eventMemberManagerImpl = new EventMemberManagerImpl(cenesApplication);
         List<EventMember> eventMembers = eventMemberManagerImpl.fetchEventMembersByEventIdAndDisplayAtScreen(event.getEventId(), event.getDisplayAtScreen());
         //List<EventMember> eventMembers = eventMemberManagerImpl.fetchEventMembersByEventAtScreen(Event.EventDisplayScreen.HOME.toString());
 
         event.setEventMembers(eventMembers);
         return event;
+    }
+
+    public List<Event> populateEventAndEventMembers(Cursor cursor) {
+
+        Map<Integer, Event> eventIdMap = new HashMap<>();
+        while (cursor.moveToNext()) {
+
+            Integer eventId = cursor.getInt(cursor.getColumnIndex("event_id"));
+
+            Event event = null;
+            if (eventIdMap.containsKey(eventId)) {
+                event = eventIdMap.get(eventId);
+
+                List<EventMember> eventMembers = event.getEventMembers();
+                EventMember eventMember = new EventMember();
+                eventMember.setEventId(cursor.getLong(cursor.getColumnIndex("event_id")));
+                eventMember.setEventMemberId(cursor.getLong(cursor.getColumnIndex("event_member_id")));
+                eventMember.setName(cursor.getString(cursor.getColumnIndex("name")));
+                eventMember.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
+                eventMember.setUserContactId(cursor.getInt(cursor.getColumnIndex("user_contact_id")));
+                eventMember.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
+                eventMember.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+                eventMembers.add(eventMember);
+                event.setEventMembers(eventMembers);
+            } else {
+                event = new Event();
+                event.setEventId(cursor.getLong(cursor.getColumnIndex("event_id")));
+                event.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+                event.setDescription(cursor.getString(cursor.getColumnIndex("description")));
+                event.setStartTime(cursor.getLong(cursor.getColumnIndex("start_time")));
+                event.setEndTime(cursor.getLong(cursor.getColumnIndex("end_time")));
+                event.setEventPicture(cursor.getString(cursor.getColumnIndex("photo")));
+                event.setScheduleAs(cursor.getString(cursor.getColumnIndex("schedule_as")));
+                event.setCreatedById(cursor.getInt(cursor.getColumnIndex("created_by_id")));
+                event.setLocation(cursor.getString(cursor.getColumnIndex("location")));
+                event.setLatitude(cursor.getString(cursor.getColumnIndex("latitude")));
+                event.setLongitude(cursor.getString(cursor.getColumnIndex("longitude")));
+                event.setSource(cursor.getString(cursor.getColumnIndex("source")));
+                event.setExpired(cursor.getString(cursor.getColumnIndex("expired")).equals("1"));
+                event.setSynced(cursor.getString(cursor.getColumnIndex("synced")).equals("1"));
+                event.setRecurringEventId(cursor.getString(cursor.getColumnIndex("recurring_event_id")));
+                event.setKey(cursor.getString(cursor.getColumnIndex("key")));
+                event.setDisplayAtScreen(cursor.getString(cursor.getColumnIndex("display_at_screen")));
+
+                List<EventMember> eventMembers = new ArrayList<>();
+                EventMember eventMember = new EventMember();
+                eventMember.setEventId(cursor.getLong(cursor.getColumnIndex("event_id")));
+                eventMember.setEventMemberId(cursor.getLong(cursor.getColumnIndex("event_member_id")));
+                eventMember.setName(cursor.getString(cursor.getColumnIndex("name")));
+                eventMember.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
+                eventMember.setUserContactId(cursor.getInt(cursor.getColumnIndex("user_contact_id")));
+                eventMember.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
+                eventMember.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+                eventMembers.add(eventMember);
+                event.setEventMembers(eventMembers);
+            }
+
+        }
+
+        List<Event> eventsToReturn = new ArrayList<>(eventIdMap.values());
+        Collections.sort(eventsToReturn, new Comparator<Event>() {
+            @Override
+            public int compare(Event o1, Event o2) {
+                return o1.getStartTime() < o2.getStartTime() ? 1 : -1;
+            }
+        });
+        return eventsToReturn;
     }
 
     public boolean isEventExist(Event event){

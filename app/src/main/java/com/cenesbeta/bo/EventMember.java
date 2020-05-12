@@ -8,6 +8,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class EventMember {
 
+    public enum EventMemberAttendingStatus {Going, Pending, NoGoing};
+
     //@SerializedName("memberId")
     private Long eventMemberId;
     private String name;

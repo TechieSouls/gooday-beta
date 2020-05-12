@@ -11,6 +11,7 @@ import java.util.List;
 public class Event {
 
     public enum EventDisplayScreen {PAST, HOME, ACCEPTED, PENDING, DECLINED};
+    public enum EventScheduleAs {Gathering, Event, MonthSeparator};
 
     private Long eventId;
     private String logo;
@@ -47,6 +48,7 @@ public class Event {
     private String recurringEventId;
     private String fullDayStartTime;
     private String displayAtScreen;
+    private Long monthSeparatorTimestamp;
     private boolean isEditMode;
     private boolean isSynced = true;
 
@@ -363,6 +365,14 @@ public class Event {
 
     public void setCreatedAt(Long createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Long getMonthSeparatorTimestamp() {
+        return monthSeparatorTimestamp;
+    }
+
+    public void setMonthSeparatorTimestamp(Long monthSeparatorTimestamp) {
+        this.monthSeparatorTimestamp = monthSeparatorTimestamp;
     }
 
     @Override
