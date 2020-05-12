@@ -65,6 +65,7 @@
         android:background="#50FFFFFF"
         android:text="Get Started"
         android:visibility="visible"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:fontFamily="@font/avenir_next_bold"/>
 
 </RelativeLayout>

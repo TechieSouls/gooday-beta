@@ -18,5 +18,19 @@
         android:font="@font/avenir_heavy"
         />
 
+    <font
+        android:fontStyle="normal"
+        android:font="@font/avenir_next_demi_bold"
+        />
+
+    <font
+        android:fontStyle="normal"
+        android:font="@font/avenir_next_demi_bold_italic"
+        />
+
+    <font
+        android:fontStyle="normal"
+        android:font="@font/avenir_next_bold"
+        />
 
 </font-family>

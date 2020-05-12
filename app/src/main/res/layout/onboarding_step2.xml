@@ -21,7 +21,8 @@
             android:textSize="30dp"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:layout_marginLeft="30dp"/>
+            android:layout_marginLeft="30dp"
+            android:fontFamily="@font/avenir_heavy"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -33,6 +34,7 @@
             android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"
             android:textSize="18dp"
+            android:fontFamily="@font/avenir_next_demi_bold_italic"
             />
         <ImageView
             android:layout_width="300dp"

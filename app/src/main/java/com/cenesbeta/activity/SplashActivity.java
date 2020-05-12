@@ -102,39 +102,44 @@ public class SplashActivity extends CenesActivity{
                                         if(localSplash == null) {
                                             Glide.with(getApplicationContext()).load(imageURL).into(splashImageView);
                                             splashImageView.setVisibility(View.VISIBLE);
-                                        }
 
-                                        new Handler().postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                if(userManager.isUserExist()){
-                                                    startActivity(new Intent(SplashActivity.this,MainActivity.class));
-                                                    finish();
-                                                } else{
-                                                    startActivity(new Intent(SplashActivity.this,WelcomeActivity.class));
-                                                    finish();
+                                            new Handler().postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    if(userManager.isUserExist()){
+                                                        startActivity(new Intent(SplashActivity.this,MainActivity.class));
+                                                        finish();
+                                                    } else{
+                                                        startActivity(new Intent(SplashActivity.this,WelcomeActivity.class));
+                                                        finish();
+                                                    }
                                                 }
-                                            }
-                                        }, duration);
+                                            }, duration);
+                                        }
 
                                         splashManager.deleteSplash();
                                         Splash serverSplash = new Splash();
                                         serverSplash.setSplashImage(imageURL);
                                         splashManager.addSplash(serverSplash);
                                     }
+                                } else {
+
+                                    if (localSplash == null) {
+                                        if(userManager.isUserExist()){
+                                            startActivity(new Intent(SplashActivity.this,MainActivity.class));
+                                            finish();
+                                        } else{
+                                            startActivity(new Intent(SplashActivity.this,WelcomeActivity.class));
+                                            finish();
+                                        }
+                                    }
+
                                 }
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
 
-                        if(userManager.isUserExist()){
-                            startActivity(new Intent(SplashActivity.this,MainActivity.class));
-                            finish();
-                        } else{
-                            startActivity(new Intent(SplashActivity.this,WelcomeActivity.class));
-                            finish();
-                        }
                     }
                 }).execute(asyncTaskDto);
 

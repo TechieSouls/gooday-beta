@@ -53,7 +53,8 @@
                 android:textAlignment="center"
                 android:background="@color/transparent"
                 android:inputType="textEmailAddress"
-                android:textSize="16sp"/>
+                android:textSize="16dp"
+                android:fontFamily="@font/avenir_medium"/>
             <View
                 android:id="@+id/view_email_divider"
                 android:layout_width="match_parent"
@@ -69,7 +70,8 @@
                 android:background="@color/transparent"
                 android:inputType="textPassword"
                 android:textSize="16sp"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/avenir_medium"/>
             <View
                 android:id="@+id/view_password_divider"
                 android:layout_width="match_parent"
@@ -85,7 +87,8 @@
                 android:background="@color/transparent"
                 android:inputType="textPassword"
                 android:textSize="16sp"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/avenir_medium"/>
             <View
                 android:id="@+id/view_confirm_password_divider"
                 android:layout_width="match_parent"
@@ -109,7 +112,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Have an account? "/>
+                    android:text="Have an account? "
+                    android:fontFamily="@font/avenir_book"/>
 
                 <Button
                     android:id="@+id/btn_login"
@@ -119,6 +123,7 @@
                     android:background="@color/transparent"
                     android:padding="0dp"
                     android:textColor="#4A8FE3"
+                    android:fontFamily="@font/avenir_book"
                     />
             </LinearLayout>
         </RelativeLayout>
@@ -136,7 +141,8 @@
                 android:background="@color/transparent"
                 android:text="Sign Up"
                 android:textColor="@color/white"
-                android:textSize="18sp"/>
+                android:textSize="18dp"
+                android:fontFamily="@font/avenir_heavy"/>
 
         </RelativeLayout>
     </RelativeLayout>

@@ -38,8 +38,8 @@
                     android:layout_height="wrap_content"
                     android:textSize="25dp"
                     android:text="Phone Verification"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/avenir_black"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -60,7 +60,8 @@
                             android:text="Select Country"
                             android:textColor="@color/link_color"
                             android:textSize="15dp"
-                            android:layout_centerVertical="true"/>
+                            android:layout_centerVertical="true"
+                            android:fontFamily="@font/avenir_medium"/>
 
                         <ImageView
                             android:layout_width="14dp"
@@ -80,7 +81,8 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
                         android:text="+00"
-                        android:textSize="15dp"/>
+                        android:textSize="15dp"
+                        android:fontFamily="@font/avenir_medium"/>
                     <EditText
                         android:id="@+id/et_phone_number"
                         android:layout_width="match_parent"
@@ -92,6 +94,7 @@
                         android:background="@color/transparent"
                         android:textSize="15dp"
                         android:imeOptions="actionDone"
+                        android:fontFamily="@font/avenir_medium"
                         />
                 </LinearLayout>
             </LinearLayout>
@@ -116,6 +119,7 @@
             android:textAlignment="center"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
+            android:fontFamily="@font/avenir_book"
             />
         <RelativeLayout
             android:id="@+id/rl_phone_verification_step1_continue"
@@ -135,7 +139,8 @@
                 android:textColor="@color/white"
                 android:textSize="18dp"
                 android:background="@color/transparent"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/avenir_heavy"/>
 
         </RelativeLayout>
     </RelativeLayout>
