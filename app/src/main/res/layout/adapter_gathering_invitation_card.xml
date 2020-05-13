@@ -57,17 +57,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:text="Event title"
-                        android:textSize="18sp"
+                        android:textSize="18dp"
                         android:textColor="@color/white"
-                        android:textStyle="bold"
-                        />
+                        android:fontFamily="@font/avenir_heavy"                        />
                     <TextView
                         android:id="@+id/tv_event_date"
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
                         android:textColor="@color/white"
                         android:text="Sat June 15, 2:30PM-6:00PM"
-                        android:textSize="15sp"
+                        android:textSize="15dp"
+                        android:fontFamily="@font/avenir_black"
                         />
                 </LinearLayout>
             </LinearLayout>
@@ -100,8 +100,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="I rented out a private patio. Best to take an Uber."
-                        android:textSize="15sp"
-                        android:textColor="@color/black"/>
+                        android:textSize="15dp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/avenir_medium"/>
                 </RelativeLayout>
 
                 <RelativeLayout
