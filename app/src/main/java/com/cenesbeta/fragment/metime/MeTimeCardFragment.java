@@ -206,14 +206,14 @@ public class MeTimeCardFragment extends CenesFragment {
         for(int i = 0; i < 2; i++){
 
             dots[i] = new ImageView(getContext());
-            dots[i].setImageDrawable(ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.xml_circle_tranparent_white));
+            dots[i].setImageDrawable(ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.xml_circle_white));
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(CenesUtils.dpToPx(16), CenesUtils.dpToPx(16));
             params.setMargins(CenesUtils.dpToPx(9)*(i), 0, 0, 0);
             dots[i].setLayoutParams(params);
             llSliderDots.addView(dots[i]);
         }
 
-        dots[1].setImageDrawable(ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.xml_circle_white));
+        dots[1].setImageDrawable(ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.xml_circle_tranparent_white));
 
         return view;
     }

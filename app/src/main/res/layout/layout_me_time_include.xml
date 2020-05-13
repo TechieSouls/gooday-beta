@@ -13,7 +13,9 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/metimeFriends">
+        android:text="@string/metimeFriends"
+        android:textSize="16dp"
+        android:fontFamily="@font/avenir_book">
     </TextView>
 
         <RelativeLayout

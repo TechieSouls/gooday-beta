@@ -36,7 +36,8 @@
                     android:gravity="center"
                     android:text="Guest"
                     android:textColor="#898989"
-                    android:textSize="20dp" />
+                    android:textSize="25dp"
+                    android:fontFamily="@font/avenir_heavy"/>
             </LinearLayout>
 
             <ImageView
@@ -69,7 +70,8 @@
                     android:layout_centerInParent="true"
                     android:text="0"
                     android:textAlignment="center"
-                    android:textSize="25dp" />
+                    android:textSize="25dp"
+                    android:fontFamily="@font/avenir_heavy"/>
             </RelativeLayout>
 
             <TextView
@@ -78,7 +80,8 @@
                 android:text="Events Hosted"
                 android:textAlignment="center"
                 android:textColor="#898989"
-                android:textSize="13dp" />
+                android:textSize="13dp"
+                android:fontFamily="@font/avenir_heavy"/>
         </LinearLayout>
 
         <LinearLayout
@@ -102,7 +105,8 @@
                     android:layout_centerInParent="true"
                     android:text="0"
                     android:textAlignment="center"
-                    android:textSize="25dp" />
+                    android:textSize="25dp"
+                    android:fontFamily="@font/avenir_heavy"/>
             </RelativeLayout>
 
             <TextView
@@ -111,7 +115,8 @@
                 android:text="Events Attended"
                 android:textAlignment="center"
                 android:textColor="#898989"
-                android:textSize="13dp" />
+                android:textSize="13dp"
+                android:fontFamily="@font/avenir_heavy"/>
 
         </LinearLayout>
     </RelativeLayout>
@@ -151,7 +156,8 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/red"
                     android:layout_marginBottom="0.5dp"
-                    android:textSize="17sp"/>
+                    android:textSize="20dp"
+                    android:fontFamily="@font/avenir_medium"/>
                 <TextView
                     android:id="@+id/tv_take_photo"
                     android:layout_width="match_parent"
@@ -161,7 +167,9 @@
                     android:textAlignment="center"
                     android:gravity="center_vertical"
                     android:textColor="@color/light_blue"
-                    android:textSize="17sp"/>
+                    android:textSize="20dp"
+                    android:fontFamily="@font/avenir_medium"
+                    />
                 <TextView
                     android:id="@+id/tv_choose_library"
                     android:layout_width="match_parent"
@@ -173,7 +181,8 @@
                     android:textColor="@color/light_blue"
                     android:layout_marginTop="0.5dp"
                     android:layout_marginBottom="0.5dp"
-                    android:textSize="17sp"/>
+                    android:textSize="20dp"
+                    android:fontFamily="@font/avenir_medium"/>
 
 
 
@@ -189,8 +198,8 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/link_color"
                 android:layout_marginTop="20dp"
-                android:textSize="17sp"
-                android:textStyle="bold"/>
+                android:textSize="20dp"
+                android:fontFamily="@font/avenir_heavy"/>
         </LinearLayout>
     </RelativeLayout>
 
@@ -224,7 +233,8 @@
                     android:textAlignment="center"
                     android:gravity="center_vertical"
                     android:textColor="@color/link_color"
-                    android:textSize="17sp"/>
+                    android:textSize="20dp"
+                    android:fontFamily="@font/avenir_medium"/>
                 <TextView
                     android:id="@+id/tv_help_and_feedback"
                     android:layout_width="match_parent"
@@ -236,7 +246,8 @@
                     android:textColor="@color/link_color"
                     android:layout_marginTop="0.5dp"
                     android:layout_marginBottom="0.5dp"
-                    android:textSize="17sp"/>
+                    android:textSize="20dp"
+                    android:fontFamily="@font/avenir_medium"/>
 
 
 
@@ -252,8 +263,8 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/link_color"
                 android:layout_marginTop="20dp"
-                android:textSize="17sp"
-                android:textStyle="bold"/>
+                android:textSize="20dp"
+                android:fontFamily="@font/avenir_heavy"/>
         </LinearLayout>
     </RelativeLayout>
 

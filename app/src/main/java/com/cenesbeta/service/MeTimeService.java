@@ -3,6 +3,7 @@ package com.cenesbeta.service;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -173,8 +174,8 @@ public class MeTimeService {
 
     public LinearLayout createMetimeCards(CenesBaseActivity activity, MeTime meTime, Context context) {
 
-        Typeface avenir_medium_face = Typeface.createFromAsset(context.getAssets(),"font/avenir_medium.otf");
-        Typeface avenir_book_face = Typeface.createFromAsset(context.getAssets(),"font/avenir_book.otf");
+        Typeface avenir_medium_face = ResourcesCompat.getFont(context, R.font.avenir_medium);
+        Typeface avenir_book_face = ResourcesCompat.getFont(context, R.font.avenir_book);
 
         LinearLayout.LayoutParams metimeTileParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         metimeTileParams.setMargins(0, CenesUtils.dpToPx(30), 0, 0);

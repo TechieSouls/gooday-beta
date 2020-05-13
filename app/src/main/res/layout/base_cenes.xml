@@ -146,7 +146,8 @@
                 android:layout_marginLeft="25dp"
                 android:text="Added"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="18dp"
+                android:fontFamily="@font/avenir_book"/>
 
         </RelativeLayout>
 
