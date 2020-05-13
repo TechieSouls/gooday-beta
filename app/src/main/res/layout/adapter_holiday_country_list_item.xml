@@ -16,6 +16,7 @@
             android:text="Indian"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
+            android:fontFamily="@font/avenir_medium"
             />
     </RelativeLayout>
 </RelativeLayout>

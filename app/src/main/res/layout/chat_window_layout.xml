@@ -76,7 +76,7 @@
             android:layout_marginTop="50dp"
         android:orientation="horizontal"
         android:background="@color/white"
-            android:visibility="gone">
+            android:visibility="visible">
         <com.cenesbeta.util.CenesEditText
             android:id="@+id/enter_chat_tv"
             android:layout_width="match_parent"
@@ -89,7 +89,8 @@
             android:windowSoftInputMode="stateVisible"
             android:background="@color/transparent"
             android:textColorHint="@color/apple_gray"
-            android:layout_marginRight="40dp"/>
+            android:layout_marginRight="40dp"
+             />
         <ImageView
             android:id="@+id/enter_chat_button"
             android:layout_width="20dp"

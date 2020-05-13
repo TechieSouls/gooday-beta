@@ -351,6 +351,9 @@ public class GatheringPreviewFragment extends CenesFragment {
                         Log.d("rlEnterChat Y", ""+(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 60)));
 
                         rlEnterChat.setVisibility(View.VISIBLE);
+                        rlChatBubble.setVisibility(View.GONE);
+                        llSenderPicture.setVisibility(View.GONE);
+
                         rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 60));
                         enterChatTv.requestFocus();
                         //got focus
@@ -366,6 +369,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
 
                     } else {
+                        System.out.println("else condition chat visible ");
                         //lost focus
                         //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
                         //relativeParams.height = PrecastrUtils.convertDpToPx(getContext(), 160);
