@@ -32,7 +32,8 @@
                 android:text="Personal Details"
                 android:textColor="@color/black"
                 android:textSize="17dp"
-                android:textStyle="normal"/>
+                android:textStyle="normal"
+                android:fontFamily="@font/avenir_medium"/>
 
 
             <TextView
@@ -42,7 +43,8 @@
                 android:text="Username, Email, Password, Phone, DOB"
                 android:textColor="#B5B5B6"
                 android:textSize="13dp"
-                android:textStyle="normal" />
+                android:textStyle="normal"
+                android:fontFamily="@font/avenir_medium"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

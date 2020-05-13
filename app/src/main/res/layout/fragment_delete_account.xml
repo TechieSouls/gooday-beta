@@ -25,9 +25,10 @@
             android:gravity="center"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:textSize="@dimen/header_title_font"
+            android:textSize="17dp"
             android:layout_marginLeft="@dimen/header_title_margin_left"
-            android:layout_marginRight="@dimen/header_title_margin_right"/>
+            android:layout_marginRight="@dimen/header_title_margin_right"
+            android:fontFamily="@font/avenir_heavy"/>
 
     </RelativeLayout>
 
@@ -79,7 +80,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:textColor="#4990BF"
-                android:textSize="16dp"/>
+                android:textSize="16dp"
+                android:fontFamily="@font/avenir_medium"/>
 
 
             <ImageView
@@ -105,7 +107,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/black"
-                android:textSize="16dp"/>
+                android:textSize="16dp"
+                android:fontFamily="@font/avenir_medium"/>
 
 
             <EditText
@@ -119,7 +122,8 @@
                 android:hint="xxx xxx xxx"
                 android:background="@color/transparent"
                 android:inputType="phone"
-                android:textSize="16dp"/>
+                android:textSize="16dp"
+                android:fontFamily="@font/avenir_medium"/>
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/rl_enter_password_bar"
@@ -137,6 +141,7 @@
                 android:inputType="textPassword"
                 android:textSize="16dp"
                 android:layout_marginLeft="10dp"
+                android:fontFamily="@font/avenir_medium"
                 />
         </RelativeLayout>
 
@@ -152,7 +157,8 @@
             android:text="Delete Account"
             android:textColor="@color/white"
             android:textSize="16dp"
-            android:background="@color/hues_of_gray"/>
+            android:background="@color/hues_of_gray"
+            android:fontFamily="@font/avenir_heavy"/>
 
     </LinearLayout>
 </RelativeLayout>

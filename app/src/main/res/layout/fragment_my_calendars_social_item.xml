@@ -23,10 +23,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Google Calendar"
-            android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="17dp"
             android:layout_centerInParent="true"
+            android:fontFamily="@font/avenir_heavy"
             />
     </RelativeLayout>
     <LinearLayout
@@ -49,7 +49,8 @@
                 android:textSize="16dp"
                 android:textStyle="bold"
                 android:layout_marginLeft="15dp"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/avenir_medium"/>
 
         </RelativeLayout>
         <Button
@@ -60,7 +61,8 @@
             android:background="@color/light_link_color"
             android:textColor="@color/white"
             android:textSize="16dp"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:fontFamily="@font/avenir_heavy"/>
 
         <Button
             android:id="@+id/btn_calendar_action_sync"
@@ -69,7 +71,8 @@
             android:background="@color/light_link_color"
             android:text="Sync"
             android:textColor="@color/white"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:fontFamily="@font/avenir_heavy"/>
 
         <TextView
             android:id="@+id/tv_calendar_guideline"
@@ -81,6 +84,7 @@
             android:layout_marginTop="15dp"
             android:textColor="@color/black"
             android:text="Only one Google account can be synced at a time"
+            android:fontFamily="@font/avenir_medium"
             />
     </LinearLayout>
 </RelativeLayout>
