@@ -28,7 +28,6 @@
                 android:text="Veterans Day Veterans Day Veterans Day Veterans Day"
                 android:textColor="@color/cenes_pink"
                 android:textSize="14dp"
-                android:textStyle="bold"
                 android:fontFamily="@font/avenir_heavy"/>
         </LinearLayout>
 
@@ -46,7 +45,6 @@
                 android:text="January"
                 android:textColor="@color/black"
                 android:textSize="20dp"
-                android:textStyle="bold"
                 android:fontFamily="@font/avenir_heavy"/>
         </RelativeLayout>
 
@@ -72,7 +70,8 @@
                     android:clickable="true"
                     android:gravity="center"
                     android:text="Delete"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/avenir_medium"/>
 
 
             </LinearLayout>
@@ -103,7 +102,6 @@
                         android:text="Seahawks at Rams"
                         android:textColor="@color/black"
                         android:textSize="16dp"
-                        android:textStyle="bold"
                         android:fontFamily="@font/avenir_heavy"/>
 
                     <LinearLayout
@@ -180,7 +178,8 @@
                     android:gravity="center"
                     android:text="Hide"
                     android:clickable="true"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/avenir_medium"/>
             </LinearLayout>
 
             <RelativeLayout
@@ -240,7 +239,7 @@
                         android:text="O"
                         android:textColor="@color/white"
                         android:textSize="26dp"
-                        android:textStyle="bold" />
+                        android:fontFamily="@font/avenir_heavy"/>
                 </RelativeLayout>
 
                 <TextView

@@ -56,9 +56,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="AS"
-                android:textSize="16sp"
+                android:textSize="16dp"
                 android:textColor="@color/white"
                 android:layout_centerInParent="true"
+                android:fontFamily="@font/avenir_medium"
                 />
         </RelativeLayout>
 

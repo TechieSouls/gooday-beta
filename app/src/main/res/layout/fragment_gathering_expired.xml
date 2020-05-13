@@ -23,11 +23,11 @@
             android:layout_height="match_parent"
             android:text="Gathering"
             android:gravity="center"
-            android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="@dimen/header_title_font"
             android:layout_marginLeft="@dimen/header_title_margin_left"
-            android:layout_marginRight="@dimen/header_title_margin_right"/>
+            android:layout_marginRight="@dimen/header_title_margin_right"
+            android:fontFamily="@font/avenir_heavy"/>
         <ImageView
             android:id="@+id/home_icon"
             android:layout_width="50dp"
@@ -69,11 +69,10 @@
             android:layout_height="wrap_content"
             android:text="The event you're looking for has ended."
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:textAlignment="center"
-            android:textStyle="bold"
             android:layout_marginTop="60dp"
-            android:fontFamily="@font/avenir_black"
+            android:fontFamily="@font/avenir_heavy"
             />
 
 
@@ -88,7 +87,7 @@
         android:textAlignment="center"
         android:textColor="@color/cenes_light_blue"
         android:background="@drawable/xml_round_rect_whitebg"
-        android:textSize="18sp"
+        android:textSize="18dp"
         android:layout_centerInParent="true"
         android:layout_marginTop="60dp"
         android:layout_marginLeft="30dp"

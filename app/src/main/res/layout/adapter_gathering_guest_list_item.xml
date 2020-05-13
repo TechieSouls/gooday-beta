@@ -36,7 +36,7 @@
                 android:textColor="@color/black"
                 android:textSize="18dp"
                 android:textStyle="normal"
-                android:fontFamily="@font/avenir_light"
+                android:fontFamily="@font/avenir_medium"
 
                 />
 
@@ -45,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="21dp"
                 android:text=""
-                android:fontFamily="@font/avenir_light"
+                android:fontFamily="@font/avenir_medium"
                 />
 
             <View

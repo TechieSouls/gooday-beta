@@ -312,7 +312,7 @@ public class MeTimeFragment extends CenesFragment {
             }
 
             //MeTimeDetails
-            LinearLayout detailsLayout = meTimeService.createMetimeCards((CenesBaseActivity)getActivity(), metime);
+            LinearLayout detailsLayout = meTimeService.createMetimeCards((CenesBaseActivity)getActivity(), metime, getContext());
             detailsLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -342,7 +342,7 @@ public class MeTimeFragment extends CenesFragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            LinearLayout detailsLayout = meTimeService.createMetimeCards((CenesBaseActivity)getActivity(), meTime);
+            LinearLayout detailsLayout = meTimeService.createMetimeCards((CenesBaseActivity)getActivity(), meTime, getContext());
             detailsLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

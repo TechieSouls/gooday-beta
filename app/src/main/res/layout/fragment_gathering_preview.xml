@@ -164,9 +164,9 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="25dp"
                                     android:text="Event title"
-                                    android:textSize="18sp"
+                                    android:textSize="18dp"
                                     android:textColor="@color/white"
-                                    android:textStyle="bold"
+                                    android:fontFamily="@font/avenir_heavy"
                                     />
                                 <TextView
                                     android:id="@+id/tv_event_date"
@@ -207,7 +207,8 @@
                                     android:layout_height="wrap_content"
                                     android:text="I rented out a private patio. Best to take an Uber."
                                     android:textSize="15dp"
-                                    android:textColor="@color/black"/>
+                                    android:textColor="@color/black"
+                                    android:fontFamily="@font/avenir_medium"/>
                             </RelativeLayout>
 
                             <RelativeLayout

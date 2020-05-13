@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:text="Done"
-            android:textSize="17sp"
+            android:textSize="17dp"
             android:textColor="@color/cenes_light_blue"
             android:background="@color/transparent"
             android:layout_alignParentRight="true"
@@ -50,11 +50,12 @@
             android:layout_height="110dp"
             android:text=""
             android:textColor="@color/black"
-            android:textSize="15sp"
+            android:textSize="15dp"
             android:gravity="top"
             android:padding="5dp"
             android:background="@android:color/transparent"
             android:maxLength="150"
+            android:fontFamily="@font/avenir_medium"
             />
         <TextView
             android:id="@+id/tv_characters_count"

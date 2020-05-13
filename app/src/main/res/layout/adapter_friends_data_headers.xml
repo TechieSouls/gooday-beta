@@ -13,8 +13,7 @@
         android:paddingLeft="10dp"
         android:textColor="@color/black"
         android:text="A"
-        android:textSize="16dp"
-        android:textStyle="bold"
+        android:textSize="18dp"
         android:fontFamily="@font/avenir_medium"/>
 
 </LinearLayout>

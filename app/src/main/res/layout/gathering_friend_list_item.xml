@@ -76,6 +76,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/white"
                 android:layout_centerInParent="true"
+                android:fontFamily="@font/avenir_medium"
                 />
             <ImageView
                 android:id="@+id/ib_delete_nonmember"
@@ -94,7 +95,8 @@
             android:gravity="center_horizontal|top"
             android:lines="1"
             android:textColor="@color/black"
-            android:textSize="13dp" />
+            android:textSize="13dp"
+            android:fontFamily="@font/avenir_medium"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="20dp"

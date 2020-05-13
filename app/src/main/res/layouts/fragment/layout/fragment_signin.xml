@@ -60,8 +60,9 @@
             android:padding="10dp"
             android:inputType="textEmailAddress"
             android:textAlignment="center"
-            android:textSize="16sp"
-            android:background="@color/transparent"/>
+            android:textSize="16dp"
+            android:background="@color/transparent"
+            android:fontFamily="@font/avenir_medium"/>
 
         <View
             android:id="@+id/view_email_divider"
@@ -77,8 +78,9 @@
             android:padding="10dp"
             android:inputType="textPassword"
             android:textAlignment="center"
-            android:textSize="16sp"
-            android:background="@color/transparent"/>
+            android:textSize="16dp"
+            android:background="@color/transparent"
+            android:fontFamily="@font/avenir_medium"/>
 
         <View
             android:id="@+id/view_password_divider"
@@ -92,8 +94,9 @@
             android:text="Forgot Password?"
             android:layout_marginTop="10dp"
             android:padding="2dp"
-            android:textSize="14sp"
-            android:gravity="center"/>
+            android:textSize="14dp"
+            android:gravity="center"
+            android:fontFamily="@font/avenir_book" />
 
 
 
@@ -112,7 +115,8 @@
             android:background="@color/transparent"
             android:text="Login"
             android:textColor="@color/white"
-            android:textSize="18sp"/>
+            android:textSize="18dp"
+            android:fontFamily="@font/avenir_heavy"/>
 
     </RelativeLayout>
 </RelativeLayout>

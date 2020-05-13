@@ -2,6 +2,7 @@ package com.cenesbeta.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -170,7 +171,11 @@ public class MeTimeService {
         return defaultMetimeCards;
     }
 
-    public LinearLayout createMetimeCards(CenesBaseActivity activity, MeTime meTime) {
+    public LinearLayout createMetimeCards(CenesBaseActivity activity, MeTime meTime, Context context) {
+
+        Typeface avenir_medium_face = Typeface.createFromAsset(context.getAssets(),"font/avenir_medium.otf");
+        Typeface avenir_book_face = Typeface.createFromAsset(context.getAssets(),"font/avenir_book.otf");
+
         LinearLayout.LayoutParams metimeTileParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         metimeTileParams.setMargins(0, CenesUtils.dpToPx(30), 0, 0);
 
@@ -179,7 +184,6 @@ public class MeTimeService {
         metimeTile.setLayoutParams(metimeTileParams);
         metimeTile.setPadding(CenesUtils.dpToPx(10), CenesUtils.dpToPx(10), CenesUtils.dpToPx(10), CenesUtils.dpToPx(10));
         metimeTile.setBackgroundResource(R.drawable.xml_round_rect_whitebg);
-
         //MeTimeImage
         if (meTime.getPhoto() != null && meTime.getPhoto().length() > 0) {
             try {
@@ -214,6 +218,7 @@ public class MeTimeService {
             circleText.setTextColor(activity.getResources().getColor(R.color.cenes_light_blue));
             circleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
             circleText.setBackground(activity.getResources().getDrawable(R.drawable.xml_circle_trans_blue_border));
+            circleText.setTypeface(avenir_book_face); // setting avenir book font
             metimeTile.addView(circleText);
         }
 
@@ -231,6 +236,7 @@ public class MeTimeService {
             metimeTitle.setText(meTime.getTitle());
             metimeTitle.setTextColor(activity.getResources().getColor(R.color.cenes_light_blue));
             metimeTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            metimeTitle.setTypeface(avenir_medium_face); // setting avenir medium font
             detailsLayout.addView(metimeTitle);
         } catch (Exception e) {
             e.printStackTrace();
@@ -245,6 +251,7 @@ public class MeTimeService {
             }
             metimeDays.setTextColor(activity.getResources().getColor(R.color.cenes_new_orange));
             metimeDays.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+            metimeDays.setTypeface(avenir_book_face); // setting avenir book font
             detailsLayout.addView(metimeDays);
 
             Calendar startCal = Calendar.getInstance();
@@ -257,6 +264,7 @@ public class MeTimeService {
             metimeHours.setText(CenesUtils.hmmaa.format(startCal.getTime()).toUpperCase() +" - "+CenesUtils.hmmaa.format(endCal.getTime()).toUpperCase());
             metimeHours.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             metimeHours.setTextColor(activity.getResources().getColor(R.color.cenes_new_orange));
+            metimeHours.setTypeface(avenir_book_face); // setting avenir book font
             detailsLayout.addView(metimeHours);
 
         } else {
@@ -264,6 +272,7 @@ public class MeTimeService {
             metimeDays.setText("Not Scheduled");
             metimeDays.setTextColor(activity.getResources().getColor(R.color.cenes_new_orange));
             metimeDays.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+            metimeDays.setTypeface(avenir_book_face); // setting avenir book font
             detailsLayout.addView(metimeDays);
         }
 
@@ -321,6 +330,7 @@ public class MeTimeService {
                 countTextView.setLayoutParams(countTextViewParams);
                 countTextView.setTextColor(activity.getResources().getColor(R.color.white));
                 countTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                countTextView.setTypeface(avenir_book_face); // setting avenir book font
                 countLayout.addView(countTextView);
 
                 metimeMembersLayout.addView(countLayout);

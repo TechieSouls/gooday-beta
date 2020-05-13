@@ -32,8 +32,8 @@
                     android:layout_height="wrap_content"
                     android:textSize="16dp"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:text="Party Time"/>
+                    android:text="Party Time"
+                    android:fontFamily="@font/avenir_heavy"/>
 
                 <LinearLayout
                     android:id="@+id/ll_event_location_section"
@@ -55,7 +55,8 @@
                         android:textColor="@color/cenes_light_gray"
                         android:textStyle="normal"
                         android:layout_marginLeft="5dp"
-                        android:text="Chandigarh"/>
+                        android:text="Chandigarh"
+                        android:fontFamily="@font/avenir_book"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -67,7 +68,8 @@
                 android:layout_marginRight="2dp"
                 android:text="10:00AM-11:00AM"
                 android:textColor="@color/cenes_light_gray"
-                android:textSize="14dp" />
+                android:textSize="14dp"
+                android:fontFamily="@font/avenir_book"/>
         </RelativeLayout>
 
 
@@ -96,6 +98,7 @@
                         android:textColor="@color/black"
                         android:layout_gravity="center"
                         android:textSize="13dp"
+                        android:fontFamily="@font/avenir_medium"
                         />
 
                     <RelativeLayout
@@ -123,7 +126,8 @@
                         android:text="Mandeep"
                         android:layout_gravity="center_horizontal"
                         android:maxLines="1" android:gravity="center_horizontal"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/avenir_medium"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -159,7 +163,8 @@
                             android:textColor="@color/white"
                             android:textSize="16dp"
                             android:layout_centerInParent="true"
-                            android:textAlignment="center"/>
+                            android:textAlignment="center"
+                            android:fontFamily="@font/avenir_medium"/>
                     </RelativeLayout>
                 </LinearLayout>
 

@@ -32,7 +32,6 @@
             android:text="Invite Guests"
             android:textAlignment="center"
             android:gravity="center_vertical"
-            android:textStyle="bold"
             android:fontFamily="@font/avenir_heavy"
             android:textColor="#FF000000"/>
 
@@ -66,7 +65,7 @@
             android:imeOptions="actionDone"
             android:hint="Search Contacts"
             android:fontFamily="@font/avenir_medium"
-            android:textSize="14dp"
+            android:textSize="17dp"
             />
 
     </RelativeLayout>
@@ -109,7 +108,9 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="40dp"
             android:fontFamily="@font/avenir_medium"
-            android:textColor="@color/black"/>
+            android:textSize="15dp"
+            android:textColor="@color/black"
+            android:text="All Contacts"/>
 
         <ImageView
             android:layout_width="14dp"
