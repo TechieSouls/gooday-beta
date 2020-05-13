@@ -69,6 +69,7 @@ public class EventMemberManagerImpl  {
             String insertQuery = "insert into event_members values("+eventMember.getEventMemberId()+", "+eventMember.getEventId()+", '"+eventMember.getName()+"'," +
                     " '"+eventMember.getPicture()+"', '"+eventMember.getStatus()+"', "+eventMember.getUserId()+", '"+eventMember.getPhone()+"', " +
                     "'"+eventMember.getCenesMember()+"', '"+eventMember.getDisplayScreenAt()+"', "+eventMember.getUserContactId()+")";
+            //System.out.println("Add Member Query : "+insertQuery);
             db.execSQL(insertQuery);
             if (eventMember.getUser() != null) {
                 cenesUserManagerImpl.addUser(eventMember.getUser());

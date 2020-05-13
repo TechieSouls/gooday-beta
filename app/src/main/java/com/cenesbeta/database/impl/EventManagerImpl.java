@@ -204,7 +204,7 @@ public class EventManagerImpl {
             String query = "select * from events e JOIN event_members em on e.event_id = em.event_id where " +
                     "e.start_time >= "+new Date().getTime()+" and e.schedule_as = '"+ Event.EventScheduleAs.Gathering.toString() +"' and " +
                     "em.user_id = "+goingMemberId+" and " +
-                    "em.status is null or e.status = '' ";
+                    "em.status is null or em.status = '' ";
             System.out.println("Pending Events Query : "+query);
             Cursor cursor = db.rawQuery(query, null);
 
@@ -227,7 +227,7 @@ public class EventManagerImpl {
             String query = "select * from events e JOIN event_members em on e.event_id = em.event_id where " +
                     "e.start_time >= "+new Date().getTime()+" and e.schedule_as = '"+ Event.EventScheduleAs.Gathering.toString() +"' and " +
                     "em.user_id = "+goingMemberId+" and " +
-                    "em.status = '"+EventMember.EventMemberAttendingStatus.NoGoing.toString()+"' ";
+                    "em.status = '"+EventMember.EventMemberAttendingStatus.NotGoing.toString()+"' ";
             System.out.println("Declined Events Query : "+query);
             Cursor cursor = db.rawQuery(query, null);
 
@@ -402,6 +402,7 @@ public class EventManagerImpl {
                 eventMember.setStatus(cursor.getString(cursor.getColumnIndex("status")));
                 eventMembers.add(eventMember);
                 event.setEventMembers(eventMembers);
+                eventIdMap.put(eventId, event);
             } else {
                 event = new Event();
                 event.setEventId(cursor.getLong(cursor.getColumnIndex("event_id")));
@@ -433,8 +434,8 @@ public class EventManagerImpl {
                 eventMember.setStatus(cursor.getString(cursor.getColumnIndex("status")));
                 eventMembers.add(eventMember);
                 event.setEventMembers(eventMembers);
+                eventIdMap.put(eventId, event);
             }
-
         }
 
         List<Event> eventsToReturn = new ArrayList<>(eventIdMap.values());
