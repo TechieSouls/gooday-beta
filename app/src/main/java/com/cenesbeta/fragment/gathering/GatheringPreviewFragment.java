@@ -1189,7 +1189,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     @Override
                     public void run() {
                         if (getActivity() != null){
-                            ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
+                            //((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
                         }
                     }
                 }, 500);
@@ -1210,7 +1210,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                             ((CenesBaseActivity) getActivity()).homeFragmentV2.addOrRejectEvent(event, "NotGoing");
                             //((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
-                            ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
+                            //((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
                         }
                     }, 500);
 
@@ -1234,7 +1234,9 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                         public void onClick(DialogInterface dialog, int whichButton) {
 
+                            rejectGathering();
                             rejectGatheringSendMessageAlert();
+
                         }})
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
@@ -1280,6 +1282,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                     resetCardPosition();
+                    ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
                 }
             });
 

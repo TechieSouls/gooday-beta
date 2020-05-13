@@ -18,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,16 +44,21 @@ import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.adapter.MeTimeCollectionViewRecyclerAdapter;
 import com.cenesbeta.adapter.MeTimePagerAdapter;
 import com.cenesbeta.application.CenesApplication;
+import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.bo.MeTime;
 import com.cenesbeta.bo.MeTimeItem;
+import com.cenesbeta.bo.RecurringEventMember;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.fragment.CenesFragment;
+import com.cenesbeta.fragment.friend.FriendListFragment;
 import com.cenesbeta.service.MeTimeService;
 import com.cenesbeta.util.CenesConstants;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.ImageUtils;
 import com.cenesbeta.util.RoundedDrawable;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.soundcloud.android.crop.Crop;
 import com.yalantis.ucrop.UCrop;
@@ -64,6 +70,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -84,7 +91,7 @@ public class MeTimeCardFragment extends CenesFragment {
     * */
 
     public final static String TAG = "MeTimeCardFragment";
-    private final static int TIME_PICKER_INTERVAL = 5;
+    private final static int TIME_PICKER_INTERVAL = 5, SEARCH_FRIEND_RESULT_CODE = 1001;
 
     public Button sunday, monday, tuesday, wednesday, thursday, friday, saturday;
     private Button saveMeTime, deleteMeTime;
@@ -216,6 +223,12 @@ public class MeTimeCardFragment extends CenesFragment {
         dots[1].setImageDrawable(ContextCompat.getDrawable(getContext().getApplicationContext(), R.drawable.xml_circle_tranparent_white));
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((CenesBaseActivity)getActivity()).hideFooter();
     }
 
     //  viewpager change listener
@@ -623,11 +636,31 @@ public class MeTimeCardFragment extends CenesFragment {
                 case R.id.rl_profile_pic_placeholder_view:
 
                     //Open Friend List Screen
+                    FriendListFragment friendListFragment = new FriendListFragment();
+                    friendListFragment.setTargetFragment(MeTimeCardFragment.this, SEARCH_FRIEND_RESULT_CODE);
+                    friendListFragment.isEditMode = true;
+                    ((CenesBaseActivity) getActivity()).replaceFragment(friendListFragment, MeTimeCardFragment.TAG);
 
                     break;
 
-                case R.id.ll_friends_collection_view:
+                case R.id.iv_add_more_friends_btn:
                     //Open Friend List Screen
+                    //Open Friend List Screen
+                    friendListFragment = new FriendListFragment();
+                    friendListFragment.setTargetFragment(MeTimeCardFragment.this, SEARCH_FRIEND_RESULT_CODE);
+                    friendListFragment.isEditMode = true;
+
+                    List<EventMember> selectedEventMembers = new ArrayList<>();
+                    for (RecurringEventMember recurringEventMember: metime.getRecurringEventMembers()) {
+                        EventMember  eventMember = new EventMember();
+                        eventMember.setUser(recurringEventMember.getUser());
+                        eventMember.setUserId(recurringEventMember.getUserId());
+                        eventMember.setFriendId(recurringEventMember.getUserId());
+                        eventMember.setUserContact(recurringEventMember.getUserContact());
+                        selectedEventMembers.add(eventMember);
+                    }
+                    friendListFragment.selectedEventMembers = selectedEventMembers;
+                    ((CenesBaseActivity) getActivity()).replaceFragment(friendListFragment, MeTimeCardFragment.TAG);
                     break;
             }
         }
@@ -751,13 +784,48 @@ public class MeTimeCardFragment extends CenesFragment {
                         }
                     }, 500);
                     rivMeTimeImg.requestLayout();
-
                     //rivMeTimeImg.setImageURI(getImageUri(getContext().getApplicationContext(), rotatedBitmap));
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            } else if (requestCode == SEARCH_FRIEND_RESULT_CODE) {
+
+                String selectedFriendsJsonArrayStr = data.getExtras().getString("selectedFriendJsonArray");
+                try {
+                    System.out.println(selectedFriendsJsonArrayStr);
+                    Gson gson = new GsonBuilder().create();
+                    Type listType = new TypeToken<List<EventMember>>(){}.getType();
+                    List<EventMember> membersSelected = gson.fromJson( selectedFriendsJsonArrayStr, listType);
+                    if (membersSelected != null && membersSelected.size() > 0) {
+
+                        List<RecurringEventMember> recurringEventMembers =  new ArrayList<>();
+                        for (EventMember eventMember: membersSelected) {
+                            RecurringEventMember recurringEventMember = new RecurringEventMember();
+                            recurringEventMember.setRecurringEventId(Integer.parseInt(metime.getRecurringEventId().toString()));
+                            recurringEventMember.setUserId(eventMember.getUserId());
+                            recurringEventMember.setUser(eventMember.getUser());
+                            recurringEventMember.setUserContact(eventMember.getUserContact());
+                            recurringEventMembers.add(recurringEventMember);
+                        }
+                        metime.setRecurringEventMembers(recurringEventMembers);
+
+                        llFriendsCollectionView.setVisibility(View.VISIBLE);
+                        rlProfilePicPlaceholderView.setVisibility(View.GONE);
+
+                        //if (meTimeCollectionViewRecyclerAdapter == null) {
+                            meTimeCollectionViewRecyclerAdapter = new MeTimeCollectionViewRecyclerAdapter(this, metime.getRecurringEventMembers());
+                        //}
+                        meTimeCollectionViewRecyclerAdapter.notifyDataSetChanged();
+                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                        rvFriendsCollection.setLayoutManager(mLayoutManager);
+                        rvFriendsCollection.setAdapter(meTimeCollectionViewRecyclerAdapter);
+                        rvFriendsCollection.invalidate();
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         }
     }
