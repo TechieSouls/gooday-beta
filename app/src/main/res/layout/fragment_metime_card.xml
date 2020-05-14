@@ -70,11 +70,14 @@
                     android:textSize="30dp"
                     android:textColorHint="@color/white"
                     android:textColor="@color/white"
+                    android:textCursorDrawable="@color/cenes_dark_gray"
                     android:backgroundTint="@color/transparent"
                     android:singleLine="false"
                     android:imeOptions="actionDone"
                     android:scrollHorizontally="false"
                     android:fontFamily="@font/avenir_medium"
+                    android:focusable="true"
+                    android:cursorVisible="true"
                     />
             </LinearLayout>
 

@@ -170,6 +170,7 @@ public class MeTimeCardFragment extends CenesFragment {
         tvUploadPhoto.setOnClickListener(onClickListener);
         tvPhotoCancel.setOnClickListener(onClickListener);
         swipeCard.setOnClickListener(onClickListener);
+        etMetimeTitle.setOnClickListener(onClickListener);
 
         cenesApplication = getCenesActivity().getCenesApplication();
         meTimeService = new MeTimeService();
@@ -662,6 +663,14 @@ public class MeTimeCardFragment extends CenesFragment {
                     friendListFragment.selectedEventMembers = selectedEventMembers;
                     ((CenesBaseActivity) getActivity()).replaceFragment(friendListFragment, MeTimeCardFragment.TAG);
                     break;
+
+                case R.id.et_metime_title :
+                    System.out.println("EventTitleClicked");
+                    etMetimeTitle.requestFocus();
+                    etMetimeTitle.setCursorVisible(true);
+                   // etMetimeTitle.setHint("");
+                    break;
+
             }
         }
     };
