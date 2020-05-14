@@ -101,6 +101,7 @@ public class MeTimePatternManagerImpl {
                     this.db = cenesDatabase.getReadableDatabase();
                 }
                 String deleteQuery = "delete from metime_recurring_patterns";
+                System.out.println(deleteQuery);
                 db.execSQL(deleteQuery);
             } catch (Exception e) {
                 e.printStackTrace();

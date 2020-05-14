@@ -120,6 +120,7 @@ public class RecurringEventMemberImpl {
                 this.db = cenesDatabase.getReadableDatabase();
             }
             String deleteQuery = "delete from "+TableName+" ";
+            System.out.println(deleteQuery);
             this.db.execSQL(deleteQuery);
 
         } catch (Exception e) {

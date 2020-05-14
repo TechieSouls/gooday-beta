@@ -201,18 +201,19 @@ public class MeTimeFragment extends CenesFragment {
                             if (meTimeData != null && meTimeData.length() > 0) {
 
                                 //To Run Code of block in background
-                                AsyncTask.execute(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        meTimeManagerImpl.deleteAllMeTimeRecurringEvents();
-                                    }
-                                });
+                                //AsyncTask.execute(new Runnable() {
+                                    //@Override
+                                    //public void run() {
+                                meTimeManagerImpl.deleteAllMeTimeRecurringEvents();
+                                  //  }
+                                //});
+                                System.out.println("Metime recurring event list : "+meTimeManagerImpl.fetchAllMeTimeRecurringEvents().size());
 
                                 Type listType = new TypeToken<List<MeTime>>() {}.getType();
                                 meTimes = new Gson().fromJson(response.getJSONArray("data").toString(), listType);
                                 processMeTimeList(meTimes, true);
 
-
+                                System.out.println("Metime recurring event list : "+meTimeManagerImpl.fetchAllMeTimeRecurringEvents().size());
                             }
                         }
                     } catch (Exception e) {
@@ -321,6 +322,7 @@ public class MeTimeFragment extends CenesFragment {
                     Bundle bundle = new Bundle();
                     bundle.putString("meTimeCard", jsonStr);
                     MeTimeCardFragment ll = new MeTimeCardFragment();
+                    ll.meTimeFragment = MeTimeFragment.this;
                     ll.setArguments(bundle);
                     ((CenesBaseActivity)getActivity()).getSupportFragmentManager().beginTransaction()
                             .add(R.id.fragment_container, ll)

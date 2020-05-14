@@ -74,6 +74,7 @@
             android:layout_height="46dp"
         android:orientation="horizontal"
         android:background="@color/white"
+        android:layout_alignParentBottom="true"
             android:visibility="visible">
         <com.cenesbeta.util.CenesEditText
             android:id="@+id/enter_chat_tv"

@@ -19,7 +19,8 @@ public class MeTimeManagerImpl {
     CenesDatabase cenesDatabase;
     SQLiteDatabase db;
 
-    public static String CreateTableQuery = "CREATE TABLE metime_recurring_events (recurring_event_id LONG, " +
+    public static String TableName = "metime_recurring_events";
+    public static String CreateTableQuery = "CREATE TABLE "+TableName+" (recurring_event_id LONG, " +
             "title TEXT, " +
             "user_id LONG, " +
             "start_time LONG, " +
@@ -59,7 +60,7 @@ public class MeTimeManagerImpl {
             if (!CenesUtils.isEmpty(metime.getDays())) {
                 days = metime.getDays().replaceAll("'","''");
             }
-            String insertQuery = "insert into metime_recurring_events values("+metime.getRecurringEventId()+", '"+title+"', "+metime.getUserId()+"," +
+            String insertQuery = "insert into "+TableName+" values("+metime.getRecurringEventId()+", '"+title+"', "+metime.getUserId()+"," +
                     " "+metime.getStartTime()+", "+metime.getEndTime()+", '"+metime.getTimezone()+"', '"+photo+"',  '"+days+"')";
 
             System.out.println(insertQuery);
@@ -94,7 +95,7 @@ public class MeTimeManagerImpl {
             if (!this.db.isOpen()) {
                 this.db = cenesDatabase.getReadableDatabase();
             }
-            String query = "select * from metime_recurring_events";
+            String query = "select * from "+TableName+"";
             Cursor cursor = db.rawQuery(query, null);
 
             while (cursor.moveToNext()) {
@@ -132,7 +133,7 @@ public class MeTimeManagerImpl {
         if (!this.db.isOpen()) {
             this.db = cenesDatabase.getReadableDatabase();
         }
-        String query = "select * from metime_recurring_events where recurring_event_id = "+recurringEventId+"";
+        String query = "select * from "+TableName+" where recurring_event_id = "+recurringEventId+"";
         Cursor cursor = db.rawQuery(query, null);
         MeTime meTime = null;
         if (cursor.moveToFirst()) {
@@ -165,7 +166,7 @@ public class MeTimeManagerImpl {
             if (!this.db.isOpen()) {
                 this.db = cenesDatabase.getReadableDatabase();
             }
-            String deleteQuery = "delete from metime_recurring_events where recurring_event_id = "+recurringEventId+" ";
+            String deleteQuery = "delete from "+TableName+" where recurring_event_id = "+recurringEventId+" ";
             db.execSQL(deleteQuery);
 
             MeTimePatternManagerImpl meTimePatternManagerImpl = new MeTimePatternManagerImpl(cenesApplication);
@@ -188,7 +189,8 @@ public class MeTimeManagerImpl {
             if (!this.db.isOpen()) {
                 this.db = cenesDatabase.getReadableDatabase();
             }
-            String deleteQuery = "delete from metime_recurring_events";
+            String deleteQuery = "delete from "+TableName+"";
+            System.out.println(deleteQuery);
             db.execSQL(deleteQuery);
 
             MeTimePatternManagerImpl meTimePatternManagerImpl = new MeTimePatternManagerImpl(cenesApplication);
@@ -211,7 +213,7 @@ public class MeTimeManagerImpl {
             if (!this.db.isOpen()) {
                 this.db = cenesDatabase.getReadableDatabase();
             }
-            db.execSQL("update metime_recurring_events set photo = '"+photoUrl+"' where recurring_event_id = "+recurringEventId+" ");
+            db.execSQL("update "+TableName+" set photo = '"+photoUrl+"' where recurring_event_id = "+recurringEventId+" ");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

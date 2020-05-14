@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -372,9 +370,9 @@ public class GatheringPreviewFragment extends CenesFragment {
                         rlChatBubble.setVisibility(View.GONE);
                         llSenderPicture.setVisibility(View.GONE);
 
-                        rlEnterChat.setBottom(heightDifference + CenesUtils.dpToPx(10));
+                        //rlEnterChat.setBottom(heightDifference + CenesUtils.dpToPx(10));
 
-                        //rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference + CenesUtils.dpToPx(10)));
+                        rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 5));
                         rlEnterChat.setVisibility(View.VISIBLE);
                         enterChatTv.requestFocus();
                         //got focus

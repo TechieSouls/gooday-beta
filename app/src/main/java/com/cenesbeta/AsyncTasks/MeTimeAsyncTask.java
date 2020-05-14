@@ -79,6 +79,7 @@ public class MeTimeAsyncTask {
             JSONObject meTimeData = lists[0];
 
             try {
+                Log.d("MeTimeRequest", meTimeData.toString());
                 User user = userManager.getUser();
                 meTimeData.put("userId", user.getUserId());
                 meTimeData.put("timezone", mcurrentTime.getTimeZone().getID());

@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -48,8 +49,10 @@ import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.bo.MeTime;
 import com.cenesbeta.bo.MeTimeItem;
 import com.cenesbeta.bo.RecurringEventMember;
+import com.cenesbeta.bo.User;
 import com.cenesbeta.bo.UserContact;
 import com.cenesbeta.coremanager.CoreManager;
+import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.friend.FriendListFragment;
 import com.cenesbeta.service.MeTimeService;
@@ -64,6 +67,7 @@ import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.soundcloud.android.crop.Crop;
 import com.yalantis.ucrop.UCrop;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -76,8 +80,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mandeep on 8/1/19.
@@ -98,7 +104,7 @@ public class MeTimeCardFragment extends CenesFragment {
     private Button saveMeTime, deleteMeTime;
     public TextView startTimeText, endTimeText;
     public LinearLayout metimeStartTime, metimeEndTime, llSliderDots, llFriendsCollectionView;
-    public ImageView ivAddMoreFriendsBtn;
+    public ImageView ivAddMoreFriendsBtn, ivMetimeSaveSpinner;
     public RecyclerView rvFriendsCollection;
     public RelativeLayout rlProfilePicPlaceholderView;
     private TextView tvTakePhoto, tvUploadPhoto, tvPhotoCancel;
@@ -106,6 +112,7 @@ public class MeTimeCardFragment extends CenesFragment {
     private RelativeLayout rlUploadMetimeImg, swipeCard, rlPhotoActionSheet;
     private ImageView rivMeTimeImg;
     private View fragmentView;
+    public MeTimeFragment meTimeFragment;
     View viewOpaque;
     public MeTime metime;
     private CenesApplication cenesApplication;
@@ -123,7 +130,7 @@ public class MeTimeCardFragment extends CenesFragment {
     public MeTimeCollectionViewRecyclerAdapter meTimeCollectionViewRecyclerAdapter;
     ViewPager vpMetimePager;
     ImageView[] dots;
-
+    private User loggedInUser;
 
     private static final int CAMERA_PERMISSION_CODE = 1001, UPLOAD_PERMISSION_CODE = 1002;
     private static final int OPEN_CAMERA_REQUEST_CODE = 1003, OPEN_GALLERY_REQUEST_CODE = 1004;
@@ -142,6 +149,9 @@ public class MeTimeCardFragment extends CenesFragment {
         cenesApplication = ((CenesBaseActivity)getActivity()).getCenesApplication();
         CoreManager coreManager = cenesApplication.getCoreManager();
         internetManager = coreManager.getInternetManager();
+        UserManager userManager = coreManager.getUserManager();
+        loggedInUser = userManager.getUser();
+
 
         rlUploadMetimeImg = (RelativeLayout) view.findViewById(R.id.rl_upload_metime_img);
         rlPhotoActionSheet = (RelativeLayout) view.findViewById(R.id.rl_photo_action_sheet);
@@ -589,19 +599,135 @@ public class MeTimeCardFragment extends CenesFragment {
                          }
                      }
                     metime.setItems(meTimeItemList);
-                    Intent intent = new Intent();
+                    /*Intent intent = new Intent();
                     try {
                         intent.putExtra(MeTimeFragment.SAVE_METIME_REQUEST_STRING, new Gson().toJson(metime));
                     } catch (Exception e) {
                         e.printStackTrace();
+                    }*/
+                    try {
+
+                        JSONObject meTimeJSONObj = new JSONObject();
+                        JSONArray meTimeEvents  = new JSONArray();
+                        for(MeTimeItem meTimeItem:  metime.getItems()) {
+                            JSONObject meTimeEvent = new JSONObject();
+                            try {
+
+                                meTimeEvent.put("title", metime.getTitle());
+                                meTimeEvent.put("dayOfWeek", meTimeItem.getDay_Of_week());
+
+                                Calendar startCal = Calendar.getInstance();
+                                startCal.setTimeInMillis(metime.getStartTime());
+                                startCal.set(Calendar.DAY_OF_WEEK, new MeTimeService().dayIndexMap().get(meTimeItem.getDay_Of_week()));
+
+                                meTimeEvent.put("startTime", startCal.getTimeInMillis());
+
+                                Calendar endCal = Calendar.getInstance();
+                                endCal.setTimeInMillis(metime.getEndTime());
+                                endCal.set(Calendar.DAY_OF_WEEK, new MeTimeService().dayIndexMap().get(meTimeItem.getDay_Of_week()));
+                                meTimeEvent.put("endTime", endCal.getTimeInMillis());
+                                meTimeEvents.put(meTimeEvent);
+                            } catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                        meTimeJSONObj.put("events", meTimeEvents);
+                        if (metime.getPhotoToUpload() != null) {
+                            meTimeJSONObj.put("metimePhotoFilePath", metime.getPhotoToUpload());
+                        }
+                        if (metime.getRecurringEventId() != null) {
+                            meTimeJSONObj.put("recurringEventId", metime.getRecurringEventId());
+                        }
+
+                        File metimePhotoFileTemp = null;
+                        if (meTimeJSONObj.has("metimePhotoFilePath")) {
+                            metimePhotoFileTemp = new File(meTimeJSONObj.getString("metimePhotoFilePath"));
+                        }
+
+                        if (metime.getRecurringEventMembers() != null && metime.getRecurringEventMembers().size() > 0) {
+                            String meTimeRecurringEventMemStr = new Gson().toJson(metime.getRecurringEventMembers());
+                            JSONArray array = new JSONArray(meTimeRecurringEventMemStr);
+                            meTimeJSONObj.put("recurringEventMembers", array);
+                        }
+                        ivMetimeSaveSpinner.setVisibility(View.VISIBLE);
+                        Glide.with(getContext()).asGif().load(R.drawable.ios_spinner).into(ivMetimeSaveSpinner);
+                        final File metimePhotoFile = metimePhotoFileTemp;
+                        new MeTimeAsyncTask.MeTimePosting(new MeTimeAsyncTask.MeTimePosting.AsyncResponse() {
+                            @Override
+                            public void processFinish(JSONObject response) {
+                                try {
+                                    if(response != null) {
+                                        MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                                        try {
+                                            JSONObject props = new JSONObject();
+                                            props.put("Action","MeTime Create Success");
+                                            props.put("Title",metime.getTitle());
+                                            props.put("UserEmail",loggedInUser.getEmail());
+                                            props.put("UserName",loggedInUser.getName());
+                                            mixpanel.track("MeTime", props);
+
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        if (metimePhotoFile != null) {
+                                            final JSONObject recurringEventJson = response.getJSONObject("recurringEvent");
+                                            Map<String, Object> photoPostData = new HashMap<>();
+                                            photoPostData.put("file",metimePhotoFile);
+                                            photoPostData.put("recurringEventId", recurringEventJson.getLong("recurringEventId"));
+
+                                            try {
+                                                JSONObject props = new JSONObject();
+                                                props.put("Action","MeTime Image Befor Upload");
+                                                props.put("Logs","PostData File : "+metimePhotoFile.getAbsolutePath());
+                                                props.put("UserEmail",loggedInUser.getEmail());
+                                                props.put("UserName",loggedInUser.getName());
+                                                mixpanel.track("MeTime", props);
+
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+
+                                            new MeTimeAsyncTask.UploadPhotoTask(new MeTimeAsyncTask.UploadPhotoTask.AsyncResponse() {
+                                                @Override
+                                                public void processFinish(final JSONObject response) {
+                                                    //System.out.println(response.toString());
+                                                    MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
+                                                    try {
+                                                        JSONObject props = new JSONObject();
+                                                        props.put("Action","MeTime Image Upload");
+                                                        props.put("Logs",response != null ? response : "Response is empty");
+                                                        props.put("UserEmail",loggedInUser.getEmail());
+                                                        props.put("UserName",loggedInUser.getName());
+                                                        mixpanel.track("MeTime", props);
+
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+
+
+                                                    meTimeFragment.loadMeTimes();
+                                                    hideLoadingBlock();
+                                                }
+                                            }).execute(photoPostData);
+                                        } else {
+
+                                            meTimeFragment.loadMeTimes();
+                                            hideLoadingBlock();
+                                        }
+                                    } else {
+                                        ((CenesBaseActivity) getActivity()).showRequestTimeoutDialog();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).execute(meTimeJSONObj);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
-                    ((CenesBaseActivity)getActivity()).fragmentManager.getFragments();
-                    for (Fragment fragment : ((CenesBaseActivity)getActivity()).fragmentManager.getFragments()) {
-                        if (fragment instanceof MeTimeFragment) {
-                            fragment.onActivityResult(MeTimeFragment.SAVE_METIME_REQUEST_CODE, Activity.RESULT_OK, intent);
-                        }
-                    }
                     getFragmentManager().popBackStack();
                     break;
 
@@ -827,7 +953,7 @@ public class MeTimeCardFragment extends CenesFragment {
                         rlProfilePicPlaceholderView.setVisibility(View.GONE);
 
                         //if (meTimeCollectionViewRecyclerAdapter == null) {
-                            meTimeCollectionViewRecyclerAdapter = new MeTimeCollectionViewRecyclerAdapter(this, metime.getRecurringEventMembers());
+                        meTimeCollectionViewRecyclerAdapter = new MeTimeCollectionViewRecyclerAdapter(this, metime.getRecurringEventMembers());
                         //}
                         meTimeCollectionViewRecyclerAdapter.notifyDataSetChanged();
                         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -953,4 +1079,7 @@ public class MeTimeCardFragment extends CenesFragment {
         }
     }
 
+    public void hideLoadingBlock() {
+        ivMetimeSaveSpinner.setVisibility(View.GONE);
+    }
 }
