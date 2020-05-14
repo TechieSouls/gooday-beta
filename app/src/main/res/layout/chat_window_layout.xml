@@ -70,17 +70,15 @@
 
     <RelativeLayout
         android:id="@+id/rl_enter_chat"
-        android:layout_below="@+id/rl_chat"
             android:layout_width="match_parent"
             android:layout_height="46dp"
-            android:layout_marginTop="50dp"
         android:orientation="horizontal"
         android:background="@color/white"
             android:visibility="visible">
         <com.cenesbeta.util.CenesEditText
             android:id="@+id/enter_chat_tv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="46dp"
             android:hint="Type a message"
             android:paddingLeft="20dp"
             android:textSize="14dp"

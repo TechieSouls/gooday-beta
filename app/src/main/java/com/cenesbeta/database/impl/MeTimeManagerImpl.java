@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.MeTime;
 import com.cenesbeta.bo.MeTimeItem;
+import com.cenesbeta.bo.RecurringEventMember;
 import com.cenesbeta.database.CenesDatabase;
 import com.cenesbeta.util.CenesUtils;
 
@@ -17,7 +18,6 @@ public class MeTimeManagerImpl {
     CenesApplication cenesApplication;
     CenesDatabase cenesDatabase;
     SQLiteDatabase db;
-    MeTimePatternManagerImpl meTimePatternManagerImpl;
 
     public static String CreateTableQuery = "CREATE TABLE metime_recurring_events (recurring_event_id LONG, " +
             "title TEXT, " +
@@ -32,7 +32,6 @@ public class MeTimeManagerImpl {
         this.cenesApplication = cenesApplication;
         cenesDatabase = new CenesDatabase(cenesApplication);
         this.db = cenesDatabase.getReadableDatabase();
-        this.meTimePatternManagerImpl = new MeTimePatternManagerImpl(this.cenesApplication);
     }
 
     public void addMeTime(MeTime metime){
@@ -68,13 +67,22 @@ public class MeTimeManagerImpl {
 
             if (metime.getItems() != null) {
                 for (MeTimeItem meTimeItem: metime.getItems()) {
-                    this.meTimePatternManagerImpl.addMeTimePattern(meTimeItem);
+                    MeTimePatternManagerImpl meTimePatternManagerImpl = new MeTimePatternManagerImpl(cenesApplication);
+                    meTimePatternManagerImpl.addMeTimePattern(meTimeItem);
+                }
+            }
+            if (metime.getRecurringEventMembers() != null && metime.getRecurringEventMembers().size() > 0) {
+                RecurringEventMemberImpl recurringEventMemberImpl = new RecurringEventMemberImpl(cenesApplication);
+                for (RecurringEventMember recurringEventMember: metime.getRecurringEventMembers()) {
+                    recurringEventMemberImpl.addRecurringEventMember(recurringEventMember);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            db.close();
+            if (this.db.isOpen()) {
+                this.db.close();
+            }
         }
 
     }
@@ -99,8 +107,13 @@ public class MeTimeManagerImpl {
                 meTime.setTimezone(cursor.getString(cursor.getColumnIndex("timezone")));
                 meTime.setPhoto(cursor.getString(cursor.getColumnIndex("photo")));
 
-                List<MeTimeItem> items = this.meTimePatternManagerImpl.fetchMeTimePatternByRecurringEventId(meTime.getRecurringEventId());
+                MeTimePatternManagerImpl meTimePatternManagerImpl = new MeTimePatternManagerImpl(cenesApplication);
+                List<MeTimeItem> items = meTimePatternManagerImpl.fetchMeTimePatternByRecurringEventId(meTime.getRecurringEventId());
                 meTime.setItems(items);
+
+                RecurringEventMemberImpl recurringEventMemberImpl = new RecurringEventMemberImpl(cenesApplication);
+                List<RecurringEventMember> recurringEventMembers = recurringEventMemberImpl.findByRecurringEventId(Integer.parseInt(meTime.getRecurringEventId().toString()));
+                meTime.setRecurringEventMembers(recurringEventMembers);
 
                 metimeRecurringEvents.add(meTime);
             }
@@ -108,7 +121,9 @@ public class MeTimeManagerImpl {
         }catch (Exception e) {
             e.printStackTrace();
         } finally {
-            db.close();
+            if (this.db.isOpen()) {
+                this.db.close();
+            }
         }
         return metimeRecurringEvents;
     }
@@ -130,13 +145,18 @@ public class MeTimeManagerImpl {
             meTime.setTimezone(cursor.getString(cursor.getColumnIndex("timezone")));
             meTime.setPhoto(cursor.getString(cursor.getColumnIndex("photo")));
 
-            List<MeTimeItem> items = this.meTimePatternManagerImpl.fetchMeTimePatternByRecurringEventId(meTime.getRecurringEventId());
+            MeTimePatternManagerImpl meTimePatternManagerImpl = new MeTimePatternManagerImpl(cenesApplication);
+            List<MeTimeItem> items = meTimePatternManagerImpl.fetchMeTimePatternByRecurringEventId(meTime.getRecurringEventId());
             meTime.setItems(items);
 
-            db.close();
+            if (this.db.isOpen()) {
+                this.db.close();
+            }
             return meTime;
         }
-        db.close();
+        if (this.db.isOpen()) {
+            this.db.close();
+        }
         return meTime;
     }
 
@@ -148,12 +168,17 @@ public class MeTimeManagerImpl {
             String deleteQuery = "delete from metime_recurring_events where recurring_event_id = "+recurringEventId+" ";
             db.execSQL(deleteQuery);
 
-            this.meTimePatternManagerImpl.deleteMeTimeRecurringPatternsByRecurringEventId(recurringEventId);
+            MeTimePatternManagerImpl meTimePatternManagerImpl = new MeTimePatternManagerImpl(cenesApplication);
+            meTimePatternManagerImpl.deleteMeTimeRecurringPatternsByRecurringEventId(recurringEventId);
 
+            RecurringEventMemberImpl recurringEventMemberImpl = new RecurringEventMemberImpl(cenesApplication);
+            recurringEventMemberImpl.deleteByRecurringEventId(Integer.valueOf(recurringEventId.toString()));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            db.close();
+            if (this.db.isOpen()) {
+                this.db.close();
+            }
         }
     }
 
@@ -166,11 +191,17 @@ public class MeTimeManagerImpl {
             String deleteQuery = "delete from metime_recurring_events";
             db.execSQL(deleteQuery);
 
-            this.meTimePatternManagerImpl.deleteMeTimeRecurringPatterns();
+            MeTimePatternManagerImpl meTimePatternManagerImpl = new MeTimePatternManagerImpl(cenesApplication);
+            meTimePatternManagerImpl.deleteMeTimeRecurringPatterns();
+
+            RecurringEventMemberImpl recurringEventMemberImpl = new RecurringEventMemberImpl(cenesApplication);
+            recurringEventMemberImpl.deleteAllRecurringEventMembers();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            db.close();
+            if (this.db.isOpen()) {
+                this.db.close();
+            }
         }
     }
 
@@ -184,7 +215,9 @@ public class MeTimeManagerImpl {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            db.close();
+            if (this.db.isOpen()) {
+                this.db.close();
+            }
         }
     }
 

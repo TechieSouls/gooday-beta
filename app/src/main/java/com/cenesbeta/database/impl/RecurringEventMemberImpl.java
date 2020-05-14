@@ -23,7 +23,7 @@ public class RecurringEventMemberImpl {
     private UserContactManagerImpl userContactManagerImpl;
 
 
-    public static String createRecurringEventMemberTableQuery = "CREATE TABLE "+TableName+" (recurring_event_member_id INTEGER, " +
+    public static String CreateTableQuery = "CREATE TABLE "+TableName+" (recurring_event_member_id INTEGER, " +
             "recurring_event_id TEXT, " +
             "user_id INTEGER)";
 
@@ -42,7 +42,16 @@ public class RecurringEventMemberImpl {
             }
             String insertQuery = "insert into recurring_event_members values("+recurringEventMember.getRecurringEventMemberId()+", " +
                     ""+recurringEventMember.getRecurringEventId()+", "+recurringEventMember.getUserId()+" )";
+
+            System.out.println(insertQuery);
             db.execSQL(insertQuery);
+
+            if (recurringEventMember.getUser() != null) {
+                userManagerImpl.addUser(recurringEventMember.getUser());
+            }
+            if (recurringEventMember.getUserContact() != null) {
+                userContactManagerImpl.addUserContact(recurringEventMember.getUserContact());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -50,7 +59,7 @@ public class RecurringEventMemberImpl {
         }
     }
 
-    public void findByRecurringEventId(Integer recurringEventId) {
+    public List<RecurringEventMember> findByRecurringEventId(Integer recurringEventId) {
 
         List<RecurringEventMember> recurringEventMemberList = new ArrayList<>();
         try {
@@ -58,14 +67,15 @@ public class RecurringEventMemberImpl {
                 this.db = cenesDatabase.getReadableDatabase();
             }
             String searchQuery = "select * from "+TableName+" where recurring_event_id = "+recurringEventId+" ";
+            System.out.println(searchQuery);
             Cursor cursor = db.rawQuery(searchQuery, null);
 
             while (cursor.moveToNext()) {
 
                 RecurringEventMember recurringEventMember = new RecurringEventMember();
-                recurringEventMember.setRecurringEventMemberId(cursor.getColumnIndex("recurring_event_member_id"));
-                recurringEventMember.setRecurringEventId(cursor.getColumnIndex("recurring_event_id"));
-                recurringEventMember.setUserId(cursor.getColumnIndex("user_id"));
+                recurringEventMember.setRecurringEventMemberId(cursor.getInt(cursor.getColumnIndex("recurring_event_member_id")));
+                recurringEventMember.setRecurringEventId(cursor.getInt(cursor.getColumnIndex("recurring_event_id")));
+                recurringEventMember.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
 
                 User cenesUser = userManagerImpl.fetchCenesUserByUserId(recurringEventMember.getUserId());
                 if (cenesUser != null) {
@@ -84,6 +94,7 @@ public class RecurringEventMemberImpl {
         } finally {
             db.close();
         }
+        return recurringEventMemberList;
     }
 
     public void deleteByRecurringEventId(Integer recurringEventId) {
@@ -101,4 +112,21 @@ public class RecurringEventMemberImpl {
             db.close();
         }
     }
+
+    public void deleteAllRecurringEventMembers() {
+
+        try {
+            if (!this.db.isOpen()) {
+                this.db = cenesDatabase.getReadableDatabase();
+            }
+            String deleteQuery = "delete from "+TableName+" ";
+            this.db.execSQL(deleteQuery);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+    }
+
 }

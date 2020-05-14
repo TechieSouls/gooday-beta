@@ -18,6 +18,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.telephony.TelephonyManager;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -342,19 +343,39 @@ public class GatheringPreviewFragment extends CenesFragment {
                     Log.d("Keyboard Size", "Size: " + heightDifference);
                     Log.d("Keyboard Size in dp",  CenesUtils.pxToDp(heightDifference)+"");
 
+                    boolean showKeyboard = false;
+                    DisplayMetrics metrics = new DisplayMetrics();
+                    getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                    int width = metrics.widthPixels;
+                    int height = metrics.heightPixels;
 
-                    if (heightDifference >= 150) {
+                    if (width > 1023 || height > 1023){
+                        //code for big screen (like tablet)
+                        if (heightDifference >= 930) {
+                            showKeyboard = true;
+                        }
+                        Log.d("Tablet", "Going to show keyboard");
+                    }else{
+                        //code for small screen (like smartphone)
+                        Log.d("Mobile", "Going to show keyboard");
+                        if (heightDifference >= 150) {
+                            showKeyboard = true;
+                        }
+                    }
 
 
+                    if (showKeyboard) {
                         Log.d("ShowKeyboard", "Going to show keyboard");
                         Log.d("Screen Height ", ""+getActivity().getWindowManager().getDefaultDisplay().getHeight());
-                        Log.d("rlEnterChat Y", ""+(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 60)));
+                        Log.d("rlEnterChat Y", ""+(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 20)));
 
-                        rlEnterChat.setVisibility(View.VISIBLE);
                         rlChatBubble.setVisibility(View.GONE);
                         llSenderPicture.setVisibility(View.GONE);
 
-                        rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 60));
+                        rlEnterChat.setBottom(heightDifference + CenesUtils.dpToPx(10));
+
+                        //rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference + CenesUtils.dpToPx(10)));
+                        rlEnterChat.setVisibility(View.VISIBLE);
                         enterChatTv.requestFocus();
                         //got focus
                         //RelativeLayout.LayoutParams newPara = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PrecastrUtils.convertDpToPx(getContext(),350));
@@ -364,7 +385,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                         //relativeParams.height = CenesUtils.convertDpToPx(getContext(), 350);
                         // svCard.setScrollingEnabled(true);
                         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)elvEventChatList.getLayoutParams();
-                        params.setMargins(0, 0, 0, CenesUtils.dpToPx(50));
+                        //params.setMargins(0, 0, 0, CenesUtils.dpToPx(50));
                         //elvEventChatList.setLayoutParams(params);
 
 
@@ -1836,12 +1857,14 @@ public class GatheringPreviewFragment extends CenesFragment {
                     System.out.println("Stepxx_3 ");
                     postReadChatStatus();
 
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            rlIncludeChat.setVisibility(View.VISIBLE);
-                            rlChatBubble.setVisibility(View.VISIBLE);
-                            llSenderPicture.setVisibility(View.VISIBLE);
+                    rlEnterChat.setVisibility(View.GONE);
+                    rlIncludeChat.setVisibility(View.VISIBLE);
+                    rlChatBubble.setVisibility(View.VISIBLE);
+                    llSenderPicture.setVisibility(View.VISIBLE);
+
+                    //new Handler().postDelayed(new Runnable() {
+                        //@Override
+                        //public void run() {
 
                             if (event.getCreatedById().equals(loggedInUser.getUserId())) {
                                 llSenderPicture.setBackground(getResources().getDrawable(R.drawable.host_gradient_circle));
@@ -1892,8 +1915,10 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                                 }
                             }, 100);
-                        }
-                    }, 1000);
+
+                            //fragmentView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
+                        //}
+                    //}, 1000);
 
                 } else {
                     System.out.println("Stepxx_4 ");

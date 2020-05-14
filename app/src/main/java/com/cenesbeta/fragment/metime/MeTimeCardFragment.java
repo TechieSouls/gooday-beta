@@ -48,6 +48,7 @@ import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.bo.MeTime;
 import com.cenesbeta.bo.MeTimeItem;
 import com.cenesbeta.bo.RecurringEventMember;
+import com.cenesbeta.bo.UserContact;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.friend.FriendListFragment;
@@ -656,7 +657,7 @@ public class MeTimeCardFragment extends CenesFragment {
                         eventMember.setUser(recurringEventMember.getUser());
                         eventMember.setUserId(recurringEventMember.getUserId());
                         eventMember.setFriendId(recurringEventMember.getUserId());
-                        eventMember.setUserContact(recurringEventMember.getUserContact());
+                        eventMember.setUserContactId(recurringEventMember.getUserContact().getUserContactId());
                         selectedEventMembers.add(eventMember);
                     }
                     friendListFragment.selectedEventMembers = selectedEventMembers;
@@ -804,7 +805,11 @@ public class MeTimeCardFragment extends CenesFragment {
                             recurringEventMember.setRecurringEventId(Integer.parseInt(metime.getRecurringEventId().toString()));
                             recurringEventMember.setUserId(eventMember.getUserId());
                             recurringEventMember.setUser(eventMember.getUser());
-                            recurringEventMember.setUserContact(eventMember.getUserContact());
+
+                            UserContact userContact = new UserContact();
+                            userContact.setUserContactId(eventMember.getUserContactId());
+                            recurringEventMember.setUserContact(userContact);
+
                             recurringEventMembers.add(recurringEventMember);
                         }
                         metime.setRecurringEventMembers(recurringEventMembers);

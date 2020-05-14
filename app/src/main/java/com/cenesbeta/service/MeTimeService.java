@@ -297,9 +297,9 @@ public class MeTimeService {
                 memberImageParams.setMargins((index == 0 ? 0 : 1)*CenesUtils.dpToPx(10), 0, 0, 0);
                 RoundedImageView memberImage = new RoundedImageView(activity);
                 memberImage.setLayoutParams(memberImageParams);
-                System.out.println("Recurring Event Member : "+recurringEventMember.getUser().toString());
 
                 if (recurringEventMember.getUser() != null && recurringEventMember.getUser().getPicture() != null && recurringEventMember.getUser().getPicture().length() > 0) {
+                    System.out.println("Recurring Event Member : "+recurringEventMember.getUser().toString());
 
                     System.out.println("Profile Pic Url "+recurringEventMember.getUser().getPicture());
                     RequestOptions requestOptions = new RequestOptions();
