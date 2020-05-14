@@ -171,7 +171,7 @@
                                 <TextView
                                     android:id="@+id/tv_event_date"
                                     android:layout_width="match_parent"
-                                    android:layout_height="20dp"
+                                    android:layout_height="25dp"
                                     android:textColor="@color/white"
                                     android:text="Sat June 15, 2:30PM-6:00PM"
                                     android:textSize="15dp"

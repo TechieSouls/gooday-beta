@@ -22,7 +22,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="+1-684"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:fontFamily="@font/avenir_medium"/>
 
 
             <TextView
@@ -33,7 +34,9 @@
                 android:layout_marginLeft="10dp"
                 android:text="India"
                 android:textColor="@color/black"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:fontFamily="@font/avenir_medium"
+                />
         </LinearLayout>
 
         <View
