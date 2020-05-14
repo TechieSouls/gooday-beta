@@ -1331,6 +1331,19 @@ public class GatheringPreviewFragment extends CenesFragment {
             Calendar previousDateCal = Calendar.getInstance();
             previousDateCal.add(Calendar.DAY_OF_MONTH, -1);
 
+            Calendar currentYear = Calendar.getInstance();
+            Calendar chatCalendar = Calendar.getInstance();
+            chatCalendar.setTimeInMillis(eventChat.getCreatedAt());
+
+            String yearAppend = "";
+
+            if(currentYear.get(Calendar.YEAR) != chatCalendar.get(Calendar.YEAR)) {
+                yearAppend = ", "+chatCalendar.get(Calendar.YEAR);
+
+            }else {
+                yearAppend = "";
+            }
+
             if (key != null) {
                 if (key.equals(CenesUtils.EEEMMMMdd.format(new Date()))) {
 
@@ -1344,7 +1357,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
             if(!headers.contains(key)) {
                 //System.out.println("Header key  : "+ key);
-                headers.add(key);
+                headers.add(key + yearAppend);
             }
 
             List<EventChat> eventChatTemp = null;
@@ -1771,6 +1784,19 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                             Calendar previousDateCal = Calendar.getInstance();
                             previousDateCal.add(Calendar.DAY_OF_MONTH, -1);
+                            Calendar currentYear = Calendar.getInstance();
+                            Calendar chatCalendar = Calendar.getInstance();
+                            chatCalendar.setTimeInMillis(eventChat.getCreatedAt());
+
+
+                            String yearAppend = "";
+
+                            if(currentYear.get(Calendar.YEAR) != chatCalendar.get(Calendar.YEAR)) {
+                                yearAppend = ", "+chatCalendar.get(Calendar.YEAR);
+
+                            }else {
+                                yearAppend = "";
+                            }
 
                             if (key != null) {
                                 if (key.equals(CenesUtils.EEEMMMMdd.format(new Date()))) {
@@ -1784,7 +1810,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                             }
                             if(!headers.contains(key)) {
                               //  System.out.println("header key : +" + key);
-                                headers.add(key);
+                                headers.add(key + yearAppend);
                             }
 
                             List<EventChat> eventChatTemp = null;
