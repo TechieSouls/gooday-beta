@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.bumptech.glide.Glide;
 import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
 import com.cenesbeta.Manager.Impl.UrlManagerImpl;
+import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.api.CenesCommonAPI;
 import com.cenesbeta.application.CenesApplication;
@@ -41,6 +42,7 @@ public class SplashActivity extends CenesActivity{
     ImageView splashImageView;
     String imageURL = "";
     int duration = 3000;
+    private InternetManager internetManager;
 
     ProgressDialog progressDialog = null;
     @Override
@@ -58,30 +60,31 @@ public class SplashActivity extends CenesActivity{
 
         final Splash localSplash = splashManager.getSplash();
 
-        if(localSplash != null) {
+        if (localSplash != null) {
             Glide.with(getApplicationContext()).load(localSplash.getSplashImage()).into(splashImageView);
             splashImageView.setVisibility(View.VISIBLE);
 
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if(userManager.isUserExist()){
-                        startActivity(new Intent(SplashActivity.this,MainActivity.class));
+                    if (userManager.isUserExist()) {
+                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
                         finish();
-                    } else{
-                        startActivity(new Intent(SplashActivity.this,WelcomeActivity.class));
+                    } else {
+                        startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
                         finish();
                     }
                 }
             }, duration);
         }
+        if (internetManager.isInternetConnection(this)) {
 
-        new Handler().postDelayed(new Runnable() {
+            new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
 
                 AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
-                asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ CenesCommonAPI.get_splash_screen_api);
+                asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl + CenesCommonAPI.get_splash_screen_api);
                 new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
                     @Override
                     public void processFinish(JSONObject response) {
@@ -93,24 +96,24 @@ public class SplashActivity extends CenesActivity{
                                 if (data.has("enabled")) {
                                     boolean activeStatus = data.getBoolean("enabled");
                                     System.out.println("Splash_1");
-                                    if(activeStatus == true) {
+                                    if (activeStatus == true) {
                                         System.out.println("Splash_2");
 
                                         imageURL = CenesConstants.imageDomain + "/" + data.getString("splashImage");
                                         System.out.println(imageURL);
 
-                                        if(localSplash == null) {
+                                        if (localSplash == null) {
                                             Glide.with(getApplicationContext()).load(imageURL).into(splashImageView);
                                             splashImageView.setVisibility(View.VISIBLE);
 
                                             new Handler().postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    if(userManager.isUserExist()){
-                                                        startActivity(new Intent(SplashActivity.this,MainActivity.class));
+                                                    if (userManager.isUserExist()) {
+                                                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
                                                         finish();
-                                                    } else{
-                                                        startActivity(new Intent(SplashActivity.this,WelcomeActivity.class));
+                                                    } else {
+                                                        startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
                                                         finish();
                                                     }
                                                 }
@@ -124,15 +127,16 @@ public class SplashActivity extends CenesActivity{
                                     }
                                 } else {
 
-                                    if (localSplash == null) {
-                                        if(userManager.isUserExist()){
-                                            startActivity(new Intent(SplashActivity.this,MainActivity.class));
+                                    //if (localSplash == null) {
+                                    splashManager.deleteSplash();
+                                        if (userManager.isUserExist()) {
+                                            startActivity(new Intent(SplashActivity.this, MainActivity.class));
                                             finish();
-                                        } else{
-                                            startActivity(new Intent(SplashActivity.this,WelcomeActivity.class));
+                                        } else {
+                                            startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
                                             finish();
                                         }
-                                    }
+                                   // }
 
                                 }
                             }
@@ -147,6 +151,8 @@ public class SplashActivity extends CenesActivity{
             }
 
         }, 0);
+
+    }
 
     }
 }
