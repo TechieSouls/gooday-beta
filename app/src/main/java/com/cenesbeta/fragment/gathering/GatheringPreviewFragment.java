@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -347,13 +348,15 @@ public class GatheringPreviewFragment extends CenesFragment {
                     int width = metrics.widthPixels;
                     int height = metrics.heightPixels;
 
-                    if (width > 1023 || height > 1023){
+                    boolean isTablet = (getContext().getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+
+                    if (isTablet) {
                         //code for big screen (like tablet)
                         if (heightDifference >= 930) {
                             showKeyboard = true;
                         }
                         Log.d("Tablet", "Going to show keyboard");
-                    }else{
+                    } else {
                         //code for small screen (like smartphone)
                         Log.d("Mobile", "Going to show keyboard");
                         if (heightDifference >= 150) {
@@ -365,14 +368,14 @@ public class GatheringPreviewFragment extends CenesFragment {
                     if (showKeyboard) {
                         Log.d("ShowKeyboard", "Going to show keyboard");
                         Log.d("Screen Height ", ""+getActivity().getWindowManager().getDefaultDisplay().getHeight());
-                        Log.d("rlEnterChat Y", ""+(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 20)));
+                        Log.d("rlEnterChat Y", ""+(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference + 5)));
 
                         rlChatBubble.setVisibility(View.GONE);
                         llSenderPicture.setVisibility(View.GONE);
 
                         //rlEnterChat.setBottom(heightDifference + CenesUtils.dpToPx(10));
 
-                        rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 5));
+                        rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 60));
                         rlEnterChat.setVisibility(View.VISIBLE);
                         enterChatTv.requestFocus();
                         //got focus
@@ -463,7 +466,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         // Create a Uri from an intent string. Use the result to create an Intent.
-                                      //  Uri gmmIntentUri = Uri.parse("google.streetview:cbll="+event.getLatitude()+","+event.getLongitude()+"");
+                                        //  Uri gmmIntentUri = Uri.parse("google.streetview:cbll="+event.getLatitude()+","+event.getLongitude()+"");
                                         Uri gmmIntentUri = Uri.parse("geo:0,0?q="+event.getLatitude()+","+event.getLongitude()+"(label)");
                                         // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
                                         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
@@ -475,11 +478,11 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                                     }
                                 }).setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                        @Override
-                                        public void onCancel(DialogInterface dialog) {
-                                            dialog.dismiss();
-                                        }
-                                    }).show();
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                dialog.dismiss();
+                            }
+                        }).show();
                     } else  if (!CenesUtils.isEmpty(event.getLocation())) {
 
                         new AlertDialog.Builder(getActivity())
@@ -522,7 +525,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                         progressBar.setVisibility(View.VISIBLE);
                     } else {
 
-                       loadDescriptionData();
+                        loadDescriptionData();
 
                     }
 
@@ -647,17 +650,17 @@ public class GatheringPreviewFragment extends CenesFragment {
                     rlEnterChat.setVisibility(View.VISIBLE);
 
                     Handler handler = new Handler(); handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+                    @Override
+                    public void run() {
 
-                            enterChatTv.requestFocus();
-                            enterChatTv.setFocusableInTouchMode(true);
-                            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
-                            imm.showSoftInput(enterChatTv, InputMethodManager.SHOW_FORCED);
+                        enterChatTv.requestFocus();
+                        enterChatTv.setFocusableInTouchMode(true);
+                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(enterChatTv, InputMethodManager.SHOW_FORCED);
 
-                        }
+                    }
 
-                        }, 100);
+                }, 100);
 
 
                     break;
@@ -683,7 +686,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     break;
 
                 default:
-                        System.out.println("Heyyy you did it.");
+                    System.out.println("Heyyy you did it.");
             }
         }
     };
@@ -758,26 +761,26 @@ public class GatheringPreviewFragment extends CenesFragment {
                             System.out.println("[ACTION_UP] : Card was swiped to left");
 
 
-                                System.out.println("[ACTION_UP] : User Tap Finger of Card");
+                            System.out.println("[ACTION_UP] : User Tap Finger of Card");
                             System.out.println("[ACTION_UP] : Rotatoin : "+tinderCardView.getRotation());
 
-                                tinderCardView.setRotation(-20);
-                                tinderCardView.setX(-300);
+                            tinderCardView.setRotation(-20);
+                            tinderCardView.setX(-300);
 
-                                if (!isNewOrEditMode) {
-                                    if (pendingEvents != null && pendingEvents.size() > 0) {
-                                        new Handler().postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                resetCardPosition();
-                                                populateInvitationCard((GatheringPreviewFragment.this).event);
-                                            }
-                                        }, 500);
-                                    } else {
-                                        //rejectGathering();
-                                        rejectGatheringConfirmAlert();
-                                    }
+                            if (!isNewOrEditMode) {
+                                if (pendingEvents != null && pendingEvents.size() > 0) {
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            resetCardPosition();
+                                            populateInvitationCard((GatheringPreviewFragment.this).event);
+                                        }
+                                    }, 500);
+                                } else {
+                                    //rejectGathering();
+                                    rejectGatheringConfirmAlert();
                                 }
+                            }
 
 
                         } else if (GatheringPreviewDto.ifSwipedLeftToRight) {
@@ -945,7 +948,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         }
     };
 
-     View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
+    View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
 
@@ -1103,7 +1106,6 @@ public class GatheringPreviewFragment extends CenesFragment {
         new GatheringAsyncTask.DeleteGatheringTask(new GatheringAsyncTask.DeleteGatheringTask.AsyncResponse() {
             @Override
             public void processFinish(JSONObject response) {
-
             }
         }).execute(event.getEventId());*/
 
@@ -1395,7 +1397,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     try {
                         boolean success = response.getBoolean("success");
                         if (success == true) {
-                          //  elvEventChatList.setSelection(eventChats.size() + headers.size());
+                            //  elvEventChatList.setSelection(eventChats.size() + headers.size());
 
                             System.out.println("Message sent for chat ....");
                         }
@@ -1740,10 +1742,10 @@ public class GatheringPreviewFragment extends CenesFragment {
 
         System.out.println("getChatThread");
         try {
-        AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
-        asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ GatheringAPI.get_event_chat_api);
-        asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
-        asyncTaskDto.setQueryStr("eventId="+event.getEventId());
+            AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+            asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ GatheringAPI.get_event_chat_api);
+            asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+            asyncTaskDto.setQueryStr("eventId="+event.getEventId());
             new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
                 @Override
                 public void processFinish(JSONObject response) {
@@ -1778,8 +1780,8 @@ public class GatheringPreviewFragment extends CenesFragment {
                         }
 
                         for(EventChat  eventChat : eventChats) {
-                          //  System.out.println(eventChat.getChat());
-                           // System.out.println(eventChat.getCreatedAt());
+                            //  System.out.println(eventChat.getChat());
+                            // System.out.println(eventChat.getCreatedAt());
                             String key = CenesUtils.EEEMMMMdd.format(eventChat.getCreatedAt());
 
                             Calendar previousDateCal = Calendar.getInstance();
@@ -1809,7 +1811,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                                 }
                             }
                             if(!headers.contains(key)) {
-                              //  System.out.println("header key : +" + key);
+                                //  System.out.println("header key : +" + key);
                                 headers.add(key + yearAppend);
                             }
 
@@ -1829,12 +1831,12 @@ public class GatheringPreviewFragment extends CenesFragment {
                         }
 
                         if(isDescriptionButtonOn == true ) {
-                           // System.out.println("fgdfgdgdfgf");
+                            // System.out.println("fgdfgdgdfgf");
                             loadDescriptionData();
                         }
 
-                       // System.out.println(" headers : "+headers.size());
-                       // System.out.println(" eventChatMapList : "+eventChatMapList.size());
+                        // System.out.println(" headers : "+headers.size());
+                        // System.out.println(" eventChatMapList : "+eventChatMapList.size());
 
 
                     } catch (Exception e) {
@@ -1848,8 +1850,8 @@ public class GatheringPreviewFragment extends CenesFragment {
 
     }
     public void loadDescriptionData(){
-       // svCard.setOnTouchListener(null);
-       // tinderCardView.setOnTouchListener(null);
+        // svCard.setOnTouchListener(null);
+        // tinderCardView.setOnTouchListener(null);
         if (!CenesUtils.isEmpty(event.getDescription())) {
 
             if (event.getEventId() == null || (event.getExpired() != null && event.getExpired() == true) || event.getEndTime() < new Date().getTime() ||  event.getEventMembers().size() == 1 ) {
@@ -1887,61 +1889,61 @@ public class GatheringPreviewFragment extends CenesFragment {
                     llSenderPicture.setVisibility(View.VISIBLE);
 
                     //new Handler().postDelayed(new Runnable() {
-                        //@Override
-                        //public void run() {
+                    //@Override
+                    //public void run() {
 
-                            if (event.getCreatedById().equals(loggedInUser.getUserId())) {
-                                llSenderPicture.setBackground(getResources().getDrawable(R.drawable.host_gradient_circle));
-                            } else {
-                                llSenderPicture.setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
-                            }
+                    if (event.getCreatedById().equals(loggedInUser.getUserId())) {
+                        llSenderPicture.setBackground(getResources().getDrawable(R.drawable.host_gradient_circle));
+                    } else {
+                        llSenderPicture.setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
+                    }
 
-                            //elvEventChatList.invalidate();
-                            if (eventChatExpandableAdapter == null) {
-                                eventChatExpandableAdapter = new EventChatExpandableAdapter(GatheringPreviewFragment.this, headers, eventChatMapList);
-                                elvEventChatList.setAdapter(eventChatExpandableAdapter);
-                            } else {
-                                eventChatExpandableAdapter.notifyDataSetChanged();
-                            }
-                            //
+                    //elvEventChatList.invalidate();
+                    if (eventChatExpandableAdapter == null) {
+                        //eventChatExpandableAdapter = new EventChatExpandableAdapter(GatheringPreviewFragment.this, headers, eventChatMapList);
+                        elvEventChatList.setAdapter(eventChatExpandableAdapter);
+                    } else {
+                        eventChatExpandableAdapter.notifyDataSetChanged();
+                    }
+                    //
 
-                            RequestOptions options = new RequestOptions();
-                            options.placeholder(R.drawable.profile_pic_no_image);
-                            options.centerCrop();
-                            Glide.with(getContext()).load(loggedInUser.getPicture()).apply(options).into(enterMsgPicture);
+                    RequestOptions options = new RequestOptions();
+                    options.placeholder(R.drawable.profile_pic_no_image);
+                    options.centerCrop();
+                    Glide.with(getContext()).load(loggedInUser.getPicture()).apply(options).into(enterMsgPicture);
 
-                            elvEventChatList.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+                    elvEventChatList.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
                           /*  int scrollPosition = 0;
                             for (Map.Entry<String, List<EventChat>> entrySet : eventChatMapList.entrySet()) {
                                 scrollPosition = scrollPosition + 1 + entrySet.getValue().size();
                             } */
-                                    System.out.println("size event chat  list : : : " + eventChats.size() + headers.size());
-                                    // elvEventChatList.smoothScrollBy(eventChatExpandableAdapter.getGroupCount()-1,100);
-                                    //elvEventChatList.smoothScrollToPosition(rlChatBubble.getBottom());
-                                    //elvEventChatList.setSelection(scrollPosition);
-                                    //elvEventChatList.setSelection(eventChats.size() + headers.size());
-                                    //for (int i=0; i < 10; i++) {
-                                    eventChatExpandableAdapter.notifyDataSetChanged();
-                                   // elvEventChatList.setSelection(eventChats.size() + headers.size());
-                                    elvEventChatList.smoothScrollToPositionFromTop((eventChats.size() + headers.size()), 0, 100);
-                                    //try {
-                                          //  Thread.sleep(1000);
-                                        //} catch (Exception e) {
+                            System.out.println("size event chat  list : : : " + eventChats.size() + headers.size());
+                            // elvEventChatList.smoothScrollBy(eventChatExpandableAdapter.getGroupCount()-1,100);
+                            //elvEventChatList.smoothScrollToPosition(rlChatBubble.getBottom());
+                            //elvEventChatList.setSelection(scrollPosition);
+                            //elvEventChatList.setSelection(eventChats.size() + headers.size());
+                            //for (int i=0; i < 10; i++) {
+                            eventChatExpandableAdapter.notifyDataSetChanged();
+                            // elvEventChatList.setSelection(eventChats.size() + headers.size());
+                            elvEventChatList.smoothScrollToPositionFromTop((eventChats.size() + headers.size()), 0, 100);
+                            //try {
+                            //  Thread.sleep(1000);
+                            //} catch (Exception e) {
 
-                                        //}
-                                    //}
-                                    //elvEventChatList.setSelectedGroup(headers.size() - 1);
-                                    //elvEventChatList.setSelectedChild(headers.size() - 1, eventChatMapList.get(headers.get(headers.size() - 1)).size() - 1, false);
-                                    //elvEventChatList.set( eventChatMapList.get(headers.get(headers.size() - 1)).size() - 1);
+                            //}
+                            //}
+                            //elvEventChatList.setSelectedGroup(headers.size() - 1);
+                            //elvEventChatList.setSelectedChild(headers.size() - 1, eventChatMapList.get(headers.get(headers.size() - 1)).size() - 1, false);
+                            //elvEventChatList.set( eventChatMapList.get(headers.get(headers.size() - 1)).size() - 1);
 
 
-                                }
-                            }, 100);
+                        }
+                    }, 100);
 
-                            //fragmentView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
-                        //}
+                    //fragmentView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
+                    //}
                     //}, 1000);
 
                 } else {
@@ -1960,7 +1962,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     .setCancelable(false)
                     .setPositiveButton("Ok", null).show();
         }
-            isPushRequest = false;
+        isPushRequest = false;
     }
 
     public void scrollFeatureOn() {
