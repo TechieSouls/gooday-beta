@@ -57,6 +57,7 @@ public class SplashActivity extends CenesActivity{
         coreManager = cenesApplication.getCoreManager();
         userManager = coreManager.getUserManager();
         splashManager = new SplashManagerImpl(getCenesApplication());
+        internetManager = coreManager.getInternetManager();
 
         final Splash localSplash = splashManager.getSplash();
 

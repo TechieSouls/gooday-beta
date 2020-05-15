@@ -795,7 +795,9 @@ public class MeTimeCardFragment extends CenesFragment {
                     System.out.println("EventTitleClicked");
                     etMetimeTitle.requestFocus();
                     etMetimeTitle.setCursorVisible(true);
-                   // etMetimeTitle.setHint("");
+                    etMetimeTitle.requestFocusFromTouch();
+
+                    // etMetimeTitle.setHint("");
                     break;
 
             }
