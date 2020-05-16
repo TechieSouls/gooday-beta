@@ -39,10 +39,9 @@
     </RelativeLayout>
     <ScrollView
         android:id="@+id/sv_gathering_scrollview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@+id/rl_header"
-        android:fillViewport="true"
         android:scrollbars="vertical">
 
         <LinearLayout
