@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +45,7 @@ import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.dto.NotificationDto;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.gathering.CreateGatheringFragment;
+import com.cenesbeta.fragment.metime.MeTimeCardFragment;
 import com.cenesbeta.service.SearchFriendService;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.Gson;
@@ -70,7 +74,7 @@ public class FriendListFragment  extends CenesFragment {
     private ExpandableListView expandableFriendListView;
     private Button btnDoneInviteFriend;
     private RelativeLayout cenesNoncenesSelectBar, gathSearchFriendSubHeader, rlSelectedFriendsRecyclerView;
-    private TextView tvSelectBarTitle;
+    private TextView tvSelectBarTitle, tvShareToFriends;
     private SwipeRefreshLayout swiperefreshFriends;
 
     private CenesApplication cenesApplication;
@@ -88,6 +92,7 @@ public class FriendListFragment  extends CenesFragment {
     private List<EventMember> searchedFriends;
     public User loggedInUser;
     public Boolean cenesFriendsVisible = false;
+    public Fragment parentFragment;
 
     public List<EventMember> selectedEventMembers;
     public static Map<Integer, CheckBox> checkboxButtonHolder;
@@ -112,6 +117,7 @@ public class FriendListFragment  extends CenesFragment {
         gathSearchFriendSubHeader = (RelativeLayout) view.findViewById(R.id.gath_search_friend_sub_header);
         rlSelectedFriendsRecyclerView = (RelativeLayout) view.findViewById(R.id.rl_selected_friends_recycler_view);
         tvSelectBarTitle = (TextView) view.findViewById(R.id.tv_select_bar_title);
+        tvShareToFriends = (TextView) view.findViewById(R.id.tv_share_to_friends);
         expandableFriendListView = (ExpandableListView) view.findViewById(R.id.elv_friend_list);
         swiperefreshFriends = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_friends);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
@@ -149,6 +155,10 @@ public class FriendListFragment  extends CenesFragment {
                 return true;
             }
         });
+        if (parentFragment != null && parentFragment instanceof MeTimeCardFragment) {
+            cenesNoncenesSelectBar.setVisibility(View.GONE);
+            btnDoneInviteFriend.setVisibility(View.GONE);
+        }
         addLoggedInUserAsMember(view);
         loadFriends();
         return view;
@@ -411,6 +421,8 @@ public class FriendListFragment  extends CenesFragment {
 
                         List<String> filteredErrors = prepareListHeadersOnScreenLoad();
                         if (cenesFriends.size() > 0) {
+                            btnDoneInviteFriend.setVisibility(View.VISIBLE);
+
                             cenesFriendsVisible = true;
                             //gathSearchFriendListView.setVisibility(View.VISIBLE);
                             //expandableFriendListView.setVisibility(View.VISIBLE);
@@ -421,6 +433,13 @@ public class FriendListFragment  extends CenesFragment {
                             allContactsExpandableAdapter = new AllContactsExpandableAdapter(FriendListFragment.this, filteredErrors, headerFriendsMap, true);
                             expandableFriendListView.setAdapter(allContactsExpandableAdapter);
                         } else {
+
+                            if (parentFragment != null && parentFragment instanceof MeTimeCardFragment) {
+                                expandableFriendListView.setVisibility(View.GONE);
+                                tvShareToFriends.setVisibility(View.VISIBLE);
+                                tvShareToFriends.setMovementMethod(LinkMovementMethod.getInstance());
+
+                            }
                             cenesNoncenesSelectBar.setVisibility(View.GONE);
                             cenesFriendsVisible = false;
 

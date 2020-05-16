@@ -173,4 +173,14 @@
             android:groupIndicator="@android:color/transparent"></ExpandableListView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <TextView
+        android:id="@+id/tv_share_to_friends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_cenes_contacts_list"
+        android:textColor="@color/black"
+        android:layout_centerInParent="true"
+        android:textSize="16dp"
+        android:fontFamily="@font/avenir_medium"
+        android:visibility="gone"/>
 </RelativeLayout>

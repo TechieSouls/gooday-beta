@@ -27,6 +27,7 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -102,7 +103,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     private ImageView ivDescriptionBubbleIcon;
     private RoundedImageView ivDescProfilePic,enterMsgPicture;
     private CardView tinderCardView;
-    private RelativeLayout rlParentVew, rlSkipText, rlChatBubble, rlEnterChat;
+    private RelativeLayout rlParentVew, rlSkipText, rlChatBubble, rlEnterChat, rlChatlistAndBubble;
     private RelativeLayout rlInvitationView, rlWelcomeInvitation;
     private RoundedImageView ivProfilePicView;
     private ImageView invitationAcceptSpinner, invitationRejectSpinner, enterChatImageView;
@@ -175,6 +176,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         llSenderPicture = (LinearLayout) view.findViewById(R.id.ll_sender_picture);
         rlEnterChat = (RelativeLayout) view.findViewById(R.id.rl_enter_chat);
         rlChatt = (RelativeLayout) view.findViewById(R.id.rl_chat);
+        rlChatlistAndBubble = (RelativeLayout) view.findViewById(R.id.rl_chatlist_and_bubble);
 
         rlSkipText = (RelativeLayout) view.findViewById(R.id.rl_skip_text);
         rvEventDescriptionDialog = (RelativeLayout) view.findViewById(R.id.rv_event_description_dialog);
@@ -316,11 +318,15 @@ public class GatheringPreviewFragment extends CenesFragment {
         int width = displayMetrics.widthPixels;
 
         parentWidth = width;
-        view.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)rlChatlistAndBubble.getLayoutParams();
+        layoutParams.setMargins(0, 0, 0, getActivity().getWindowManager().getDefaultDisplay().getHeight() - (CenesUtils.dpToPx(450) + CenesUtils.dpToPx(110)));
+
+        //view.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
         return view;
     }
 
-    ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+    /*ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {
 
@@ -357,7 +363,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     } else {
                         //code for small screen (like smartphone)
                         Log.d("Mobile", "Going to show keyboard");
-                        if (heightDifference >= 150) {
+                        if (heightDifference >= 144) {
                             showKeyboard = true;
                         }
                     }
@@ -416,7 +422,7 @@ public class GatheringPreviewFragment extends CenesFragment {
             }
 
         }
-    };
+    };*/
 
     //This is the handler that will manager to process the broadcast intent
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -587,7 +593,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                     try {
                         event.setEditMode(true);
-                        fragmentView.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+                        //fragmentView.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
                         CreateGatheringFragment createGatheringFragment = new CreateGatheringFragment();
                         createGatheringFragment.event = event;
                         ((CenesBaseActivity)getActivity()).replaceFragment(createGatheringFragment, null);
@@ -599,7 +605,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                 case R.id.iv_card_swipe_arrow:
 
-                    fragmentView.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+                    //fragmentView.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
 
                     if ((GatheringPreviewFragment.this).event.getScheduleAs() != null && (GatheringPreviewFragment.this).event.getScheduleAs().equals("Notification")) {
 
@@ -657,8 +663,8 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                         enterChatTv.requestFocus();
                         enterChatTv.setFocusableInTouchMode(true);
-                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(enterChatTv, InputMethodManager.SHOW_FORCED);
+                        //InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
+                        //imm.showSoftInput(enterChatTv, InputMethodManager.SHOW_FORCED);
 
                     }
 
@@ -948,6 +954,31 @@ public class GatheringPreviewFragment extends CenesFragment {
             System.out.println("On Back Button Pressed : ");
             if (hasFocus) {
                 rlEnterChat.setVisibility(View.VISIBLE);
+
+                int heightDiff = fragmentView.getRootView().getHeight() - fragmentView.getHeight();
+                // IF height diff is more then 150, consider keyboard as visible.
+                System.out.println("Ha ha ha ha hi Maaaa : "+heightDiff);
+
+                // TODO Auto-generated method stub
+                Rect r = new Rect();
+                fragmentView.getWindowVisibleDisplayFrame(r);
+
+                int screenHeight = fragmentView.getRootView().getHeight();
+                int heightDifference = screenHeight - (r.bottom - r.top);
+
+                RelativeLayout.LayoutParams rlEnterChatLayoutParams = (RelativeLayout.LayoutParams)rlEnterChat.getLayoutParams();
+                rlEnterChatLayoutParams.setMargins(0, 0, 0, getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference));
+                rlEnterChat.setLayoutParams(rlEnterChatLayoutParams);
+
+                //rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 3));
+                rlEnterChat.setVisibility(View.VISIBLE);
+                enterChatTv.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
+                imm.showSoftInput(enterChatTv, WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)rlChatlistAndBubble.getLayoutParams();
+                layoutParams.setMargins(0, 0, 0, getActivity().getWindowManager().getDefaultDisplay().getHeight() - (CenesUtils.dpToPx(450) + CenesUtils.dpToPx(50) + heightDifference));
+
                 //rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - 500);
                 //got focus
                 //RelativeLayout.LayoutParams newPara = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PrecastrUtils.convertDpToPx(getContext(),350));
@@ -960,6 +991,8 @@ public class GatheringPreviewFragment extends CenesFragment {
                 //lost focus
                 //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
                 //relativeParams.height = PrecastrUtils.convertDpToPx(getContext(), 160);
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)rlChatlistAndBubble.getLayoutParams();
+                layoutParams.setMargins(0, 0, 0, getActivity().getWindowManager().getDefaultDisplay().getHeight() - (CenesUtils.dpToPx(450) + CenesUtils.dpToPx(110)));
                 rlEnterChat.setVisibility(View.GONE);
                 rlChatBubble.setVisibility(View.VISIBLE);
                 llSenderPicture.setVisibility(View.VISIBLE);
@@ -1064,8 +1097,9 @@ public class GatheringPreviewFragment extends CenesFragment {
                                 }
                             }
 
+                            ((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
+
                             if (nonCenesMember.size() > 0) {
-                                ((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
                                 sendSmsToNonCenesMembers(nonCenesMember, eve);
                                 ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
                             }

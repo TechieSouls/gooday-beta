@@ -765,6 +765,7 @@ public class MeTimeCardFragment extends CenesFragment {
 
                     //Open Friend List Screen
                     FriendListFragment friendListFragment = new FriendListFragment();
+                    friendListFragment.parentFragment = MeTimeCardFragment.this;
                     friendListFragment.setTargetFragment(MeTimeCardFragment.this, SEARCH_FRIEND_RESULT_CODE);
                     friendListFragment.isEditMode = true;
                     ((CenesBaseActivity) getActivity()).replaceFragment(friendListFragment, MeTimeCardFragment.TAG);
@@ -775,6 +776,7 @@ public class MeTimeCardFragment extends CenesFragment {
                     //Open Friend List Screen
                     //Open Friend List Screen
                     friendListFragment = new FriendListFragment();
+                    friendListFragment.parentFragment = MeTimeCardFragment.this;
                     friendListFragment.setTargetFragment(MeTimeCardFragment.this, SEARCH_FRIEND_RESULT_CODE);
                     friendListFragment.isEditMode = true;
 

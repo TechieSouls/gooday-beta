@@ -618,7 +618,7 @@ public class HomeFragmentV2 extends CenesFragment {
             }
         }, 700);
 
-        System.out.println("currentDateGroupPosition : "+lvHomeListView.getItemAtPosition(HomeScreenDto.currentDateGroupPosition));
+        // System.out.println("currentDateGroupPosition : "+lvHomeListView.getItemAtPosition(HomeScreenDto.currentDateGroupPosition));
         lvHomeListView.setSelection(HomeScreenDto.currentDateGroupPosition);
         //lvHomeListView.smoothScrollToPositionFromTop(HomeScreenDto.currentDateGroupPosition, 0, 50);
         mcvHomeCalendar.setCurrentDate(calendar.getTime());

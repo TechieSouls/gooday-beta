@@ -81,55 +81,55 @@ public class SplashActivity extends CenesActivity{
         if (internetManager.isInternetConnection(this)) {
 
             new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+                @Override
+                public void run() {
 
-                AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
-                asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl + CenesCommonAPI.get_splash_screen_api);
-                new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
-                    @Override
-                    public void processFinish(JSONObject response) {
+                    AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+                    asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl + CenesCommonAPI.get_splash_screen_api);
+                    new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
+                        @Override
+                        public void processFinish(JSONObject response) {
 
-                        try {
-                            boolean success = response.getBoolean("success");
-                            if (success == true) {
-                                JSONObject data = response.getJSONObject("data");
-                                if (data.has("enabled")) {
-                                    boolean activeStatus = data.getBoolean("enabled");
-                                    System.out.println("Splash_1");
-                                    if (activeStatus == true) {
-                                        System.out.println("Splash_2");
+                            try {
+                                boolean success = response.getBoolean("success");
+                                if (success == true) {
+                                    JSONObject data = response.getJSONObject("data");
+                                    if (data.has("enabled")) {
+                                        boolean activeStatus = data.getBoolean("enabled");
+                                        System.out.println("Splash_1");
+                                        if (activeStatus == true) {
+                                            System.out.println("Splash_2");
 
-                                        imageURL = CenesConstants.imageDomain + "/" + data.getString("splashImage");
-                                        System.out.println(imageURL);
+                                            imageURL = CenesConstants.imageDomain + "/" + data.getString("splashImage");
+                                            System.out.println(imageURL);
 
-                                        if (localSplash == null) {
-                                            Glide.with(getApplicationContext()).load(imageURL).into(splashImageView);
-                                            splashImageView.setVisibility(View.VISIBLE);
+                                            if (localSplash == null) {
+                                                Glide.with(getApplicationContext()).load(imageURL).into(splashImageView);
+                                                splashImageView.setVisibility(View.VISIBLE);
 
-                                            new Handler().postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    if (userManager.isUserExist()) {
-                                                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                                                        finish();
-                                                    } else {
-                                                        startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
-                                                        finish();
+                                                new Handler().postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        if (userManager.isUserExist()) {
+                                                            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                                                            finish();
+                                                        } else {
+                                                            startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
+                                                            finish();
+                                                        }
                                                     }
-                                                }
-                                            }, duration);
+                                                }, duration);
+                                            }
+
+                                            splashManager.deleteSplash();
+                                            Splash serverSplash = new Splash();
+                                            serverSplash.setSplashImage(imageURL);
+                                            splashManager.addSplash(serverSplash);
                                         }
+                                    } else {
 
+                                        //if (localSplash == null) {
                                         splashManager.deleteSplash();
-                                        Splash serverSplash = new Splash();
-                                        serverSplash.setSplashImage(imageURL);
-                                        splashManager.addSplash(serverSplash);
-                                    }
-                                } else {
-
-                                    //if (localSplash == null) {
-                                    splashManager.deleteSplash();
                                         if (userManager.isUserExist()) {
                                             startActivity(new Intent(SplashActivity.this, MainActivity.class));
                                             finish();
@@ -137,23 +137,39 @@ public class SplashActivity extends CenesActivity{
                                             startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
                                             finish();
                                         }
-                                   // }
+                                        // }
 
+                                    }
+                                } else {
+                                    splashManager.deleteSplash();
+                                    if (userManager.isUserExist()) {
+                                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                                        finish();
+                                    } else {
+                                        startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
+                                        finish();
+                                    }
                                 }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+
                         }
-
-                    }
-                }).execute(asyncTaskDto);
+                    }).execute(asyncTaskDto);
 
 
+                }
+
+            }, 0);
+
+        } else if (localSplash == null) {
+            if (userManager.isUserExist()) {
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                finish();
+            } else {
+                startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
+                finish();
             }
-
-        }, 0);
-
-    }
-
+        }
     }
 }
