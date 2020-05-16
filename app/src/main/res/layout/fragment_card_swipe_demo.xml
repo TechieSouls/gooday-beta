@@ -1,6 +1,468 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    >
+        <com.cenesbeta.extension.InvitationScrollView
+            android:id="@+id/sv_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="false"
+            android:background="@color/light_blue">
 
-</LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <android.support.v7.widget.CardView
+                    android:id="@+id/tinderCardView"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    card_view:cardElevation="10dp"
+                    android:background="@color/red">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <RelativeLayout
+                            android:id="@+id/rl_invitation_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="gone">
+
+
+                            <ImageView
+                                android:id="@+id/iv_event_picture"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/invitation_default"
+                                android:scaleType="centerCrop"/>
+
+                            <RelativeLayout
+                                android:id="@+id/iv_event_picture_overlay"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/xml_gradient_topbottom_blackwhite"/>
+
+                            <LinearLayout
+                                android:id="@+id/ll_event_details"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginTop="50dp">
+
+                                <RelativeLayout
+                                    android:layout_width="53dp"
+                                    android:layout_height="53dp">
+
+                                    <ImageView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:src="@drawable/host_gradient_circle_small"/>
+                                    <com.cenesbeta.util.RoundedImageView
+                                        android:id="@+id/iv_profile_pic"
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        android:layout_centerInParent="true"
+                                        android:src="@drawable/profile_pic_no_image"/>
+
+                                </RelativeLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="10dp"
+                                    >
+                                    <TextView
+                                        android:id="@+id/tv_event_title"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="25dp"
+                                        android:text="Event title"
+                                        android:textSize="18dp"
+                                        android:textColor="@color/white"
+                                        android:fontFamily="@font/avenir_heavy"
+                                        />
+                                    <TextView
+                                        android:id="@+id/tv_event_date"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="25dp"
+                                        android:textColor="@color/white"
+                                        android:text="Sat June 15, 2:30PM-6:00PM"
+                                        android:textSize="15dp"
+                                        android:fontFamily="@font/avenir_black"
+                                        />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/rv_event_description_dialog"
+                                android:layout_width="match_parent"
+                                android:layout_height="400dp"
+                                android:layout_marginLeft="30dp"
+                                android:layout_marginRight="30dp"
+                                android:visibility="gone">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/xml_curved_corner_white"
+                                    android:paddingLeft="20dp"
+                                    android:paddingRight="20dp"
+                                    android:paddingTop="15dp"
+                                    android:paddingBottom="15dp"
+                                    android:layout_marginLeft="20dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginBottom="30dp"
+                                    >
+
+                                    <TextView
+                                        android:id="@+id/tv_event_description_dialog_text"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="I rented out a private patio. Best to take an Uber."
+                                        android:textSize="15dp"
+                                        android:textColor="@color/black"
+                                        android:fontFamily="@font/avenir_medium"/>
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:layout_width="52dp"
+                                    android:layout_height="52dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:background="@drawable/xml_circle_trans_white_border">
+
+                                    <com.cenesbeta.util.RoundedImageView
+                                        android:id="@+id/iv_desc_profile_pic"
+                                        android:layout_width="50dp"
+                                        android:layout_height="50dp"
+                                        android:layout_centerInParent="true"
+                                        android:src="@drawable/profile_pic_no_image"
+                                        />
+
+                                </RelativeLayout>
+                            </RelativeLayout>
+
+
+                            <LinearLayout
+                                android:id="@+id/ll_bottom_buttons"
+                                android:layout_width="290dp"
+                                android:layout_height="50dp"
+                                android:layout_alignParentBottom="true"
+                                android:weightSum="4"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="60dp"
+                                android:layout_centerHorizontal="true"
+                                >
+
+                                <RelativeLayout
+                                    android:id="@+id/rl_guest_list_bubble"
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="50dp">
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@drawable/xml_circle_black_faded"
+                                        android:alpha="0.3"></RelativeLayout>
+                                    <ImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/guest_list_icon"
+                                        android:layout_centerInParent="true"/>
+                                </RelativeLayout>
+                                <View
+                                    android:layout_width="30dp"
+                                    android:layout_height="50dp"/>
+                                <RelativeLayout
+                                    android:id="@+id/rl_location_bubble"
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="50dp">
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@drawable/xml_circle_black_faded"
+                                        android:alpha="0.3"></RelativeLayout>
+
+
+                                    <ImageView
+                                        android:layout_width="18dp"
+                                        android:layout_height="20dp"
+                                        android:src="@drawable/location_off_icon"
+                                        android:layout_centerInParent="true"/>
+                                </RelativeLayout>
+                                <View
+                                    android:layout_width="30dp"
+                                    android:layout_height="50dp"/>
+
+                                <RelativeLayout
+                                    android:id="@+id/rl_description_bubble"
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="50dp">
+                                    <RelativeLayout
+                                        android:id="@+id/rl_description_bubble_background"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@drawable/xml_circle_black_faded"
+                                        android:alpha="0.3"></RelativeLayout>
+
+                                    <ImageView
+                                        android:id="@+id/iv_description_bubble_icon"
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/message_off_icon"
+                                        android:layout_centerInParent="true"/>
+
+                                    <ProgressBar
+                                        android:id="@+id/progressBar"
+                                        style="?android:attr/progressBarStyleLarge"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:progressDrawable="@drawable/xml_circular_loading"
+                                        android:layout_centerInParent="true"
+                                        android:visibility="gone"/>
+                                </RelativeLayout>
+                                <View
+                                    android:layout_width="30dp"
+                                    android:layout_height="50dp"/>
+
+                                <RelativeLayout
+                                    android:id="@+id/rl_share_bubble"
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="50dp">
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@drawable/xml_circle_black_faded"
+                                        android:alpha="0.3"></RelativeLayout>
+
+                                    <ImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/share_icon"
+                                        android:layout_centerInParent="true"/>
+                                </RelativeLayout>
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/rl_welcome_invitation"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="visible">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="155dp"
+                                android:orientation="vertical"
+                                android:layout_marginTop="20dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="WELCOME TO"
+                                    android:textColor="@color/black"
+                                    android:textSize="36dp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="@font/avenir_heavy"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="CENES!"
+                                    android:textColor="@color/black"
+                                    android:textSize="36dp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="@font/avenir_heavy"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="Create &amp; preview your first invite."
+                                    android:textColor="@color/black"
+                                    android:textSize="12dp"
+                                    android:fontFamily="@font/avenir_medium"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="Refine or blast your invite with swipe gestures."
+                                    android:textColor="@color/black"
+                                    android:textSize="12dp"
+                                    android:fontFamily="@font/avenir_medium" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ll_invitation_image_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:layout_marginTop="170dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Swipe letf or right to interact"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/black"
+                                    android:textSize="12dp"
+                                    android:layout_gravity="center"
+                                    android:fontFamily="@font/avenir_black"/>
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/welcome_swipe_images"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_marginBottom="20dp"
+                                    />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/ll_invitation_footer"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_alignParentBottom="true"
+                                android:layout_marginBottom="15dp"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="25dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="5dp"
+                                    android:src="@drawable/welcome_swipe_up_arrow" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="swipe up to close"
+                                    android:textColor="@color/black"
+                                    android:textSize="12dp"
+                                    android:fontFamily="@font/avenir_medium"/>
+                            </LinearLayout>
+
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/rl_skip_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:padding="10dp"
+                            android:background="@color/light_tint_gray"
+                            >
+
+                            <ImageView
+                                android:id="@+id/iv_card_swipe_arrow"
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:src="@drawable/card_up_arrow"
+                                android:layout_centerInParent="true"
+                                />
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+                <RelativeLayout
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_alignParentLeft="true">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/iv_accept_icon"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_centerInParent="true"/>
+
+                        <ImageView
+                            android:id="@+id/iv_invitation_accept_spinner"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:src="@drawable/invitation_loader_spinner"
+                            android:layout_centerInParent="true"
+
+                            />
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="150dp"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_alignParentRight="true"
+                    android:clickable="true"
+                    >
+
+                    <RelativeLayout
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="20dp">
+
+                        <ImageView
+                            android:id="@+id/iv_edit_reject_icon"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:src="@drawable/invitation_edit_button"
+                            android:layout_centerInParent="true"/>
+                        <ImageView
+                            android:id="@+id/iv_invitation_decline_spinner"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:src="@drawable/invitation_loader_spinner"
+                            android:layout_centerInParent="true"
+                            />
+
+
+                    </RelativeLayout>
+
+
+                    <ImageView
+                        android:id="@+id/iv_delete_icon"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:src="@drawable/invitation_delete_button"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"/>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+        </com.cenesbeta.extension.InvitationScrollView>
+
+    <RelativeLayout
+        android:id="@+id/rl_include_chat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <include layout="@layout/chat_window_layout"></include>
+    </RelativeLayout>
+
+</RelativeLayout>

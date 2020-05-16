@@ -16,6 +16,7 @@ import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.dto.HomeScreenDto;
+import com.cenesbeta.fragment.CardSwipeDemoFragment;
 import com.cenesbeta.fragment.ImageZoomerFragment;
 import com.cenesbeta.fragment.dashboard.HomeFragmentV2;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
@@ -230,6 +231,13 @@ public class CalendarTabListViewAdapter extends BaseAdapter {
             viewHolder.rlCenesEvents.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    /*CardSwipeDemoFragment gatheringPreviewFragment = new CardSwipeDemoFragment();
+                    gatheringPreviewFragment.event = event;
+                    gatheringPreviewFragment.sourceFragment = homeFragmentV2;
+                    ((CenesBaseActivity) homeFragmentV2.getActivity()).replaceFragment(gatheringPreviewFragment, HomeFragmentV2.TAG);*/
+
+
                     GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
                     gatheringPreviewFragment.event = event;
                     gatheringPreviewFragment.sourceFragment = homeFragmentV2;

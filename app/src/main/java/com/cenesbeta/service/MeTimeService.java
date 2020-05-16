@@ -250,7 +250,7 @@ public class MeTimeService {
             if (meTime.getDays() != null && meTime.getDays().length() > 0) {
                 metimeDays.setText(meTime.getDays().replaceAll("-", ""));
             }
-            metimeDays.setTextColor(activity.getResources().getColor(R.color.cenes_new_orange));
+            metimeDays.setTextColor(activity.getResources().getColor(R.color.metime_week_color));
             metimeDays.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             metimeDays.setTypeface(avenir_book_face); // setting avenir book font
             detailsLayout.addView(metimeDays);
@@ -264,14 +264,14 @@ public class MeTimeService {
             TextView metimeHours = new TextView(activity);
             metimeHours.setText(CenesUtils.hmmaa.format(startCal.getTime()).toUpperCase() +" - "+CenesUtils.hmmaa.format(endCal.getTime()).toUpperCase());
             metimeHours.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-            metimeHours.setTextColor(activity.getResources().getColor(R.color.cenes_new_orange));
+            metimeHours.setTextColor(activity.getResources().getColor(R.color.metime_week_color));
             metimeHours.setTypeface(avenir_book_face); // setting avenir book font
             detailsLayout.addView(metimeHours);
 
         } else {
             TextView metimeDays = new TextView(activity);
             metimeDays.setText("Not Scheduled");
-            metimeDays.setTextColor(activity.getResources().getColor(R.color.cenes_new_orange));
+            metimeDays.setTextColor(activity.getResources().getColor(R.color.cenes_grey));
             metimeDays.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             metimeDays.setTypeface(avenir_book_face); // setting avenir book font
             detailsLayout.addView(metimeDays);

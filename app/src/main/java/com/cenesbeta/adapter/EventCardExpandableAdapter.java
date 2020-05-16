@@ -22,6 +22,7 @@ import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventMember;
+import com.cenesbeta.fragment.CardSwipeDemoFragment;
 import com.cenesbeta.fragment.dashboard.HomeFragment;
 import com.cenesbeta.fragment.gathering.CreateGatheringFragment;
 import com.cenesbeta.fragment.gathering.GatheringExpiredFragment;
@@ -233,7 +234,8 @@ public class EventCardExpandableAdapter  extends BaseExpandableListAdapter {
                 fragmentManager = gatheringsFragment.getCenesActivity().getSupportFragmentManager();
 
                 System.out.println(child.toString());
-                GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
+                CardSwipeDemoFragment gatheringPreviewFragment = new CardSwipeDemoFragment();
+                //GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
                 if (isInvitation) {
                     List<Event> events = new ArrayList<>();
                     events.add(child);

@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.R;
 import com.cenesbeta.bo.EventChat;
+import com.cenesbeta.fragment.CardSwipeDemoFragment;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
@@ -34,7 +35,7 @@ public class EventChatExpandableAdapter extends BaseExpandableListAdapter {
     private List<String> headers;
     LayoutInflater inflter;
 
-    public EventChatExpandableAdapter(GatheringPreviewFragment gatheringPreviewFragment,List<String> headers, Map<String, List<EventChat>> eventChatsListMap){
+    public EventChatExpandableAdapter(GatheringPreviewFragment gatheringPreviewFragment, List<String> headers, Map<String, List<EventChat>> eventChatsListMap){
 
 
         this.gatheringPreviewFragment = gatheringPreviewFragment;

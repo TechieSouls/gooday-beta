@@ -19,6 +19,7 @@ import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.dto.HomeScreenDto;
+import com.cenesbeta.fragment.CardSwipeDemoFragment;
 import com.cenesbeta.fragment.dashboard.HomeFragmentV2;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
 import com.cenesbeta.util.CenesUtils;
@@ -174,7 +175,7 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
             } else {
                 eventViewHolder.rvHostImage.setImageResource(R.drawable.profile_pic_no_image);
             }
-            if (eventHost.getUser().getUserId().equals(homeFragmentV2.loggedInUser.getUserId())) {
+            if (eventHost.getUser().getUserId() != null && eventHost.getUser().getUserId().equals(homeFragmentV2.loggedInUser.getUserId())) {
                 eventViewHolder.tvHostName.setText("Me");
             } else {
                 eventViewHolder.tvHostName.setText(eventHost.getUser().getName());
@@ -267,6 +268,7 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
         eventViewHolder.rlInvitationBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //CardSwipeDemoFragment gatheringPreviewFragment = new CardSwipeDemoFragment();
                 GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
                 gatheringPreviewFragment.event = event;
                 gatheringPreviewFragment.sourceFragment = homeFragmentV2;

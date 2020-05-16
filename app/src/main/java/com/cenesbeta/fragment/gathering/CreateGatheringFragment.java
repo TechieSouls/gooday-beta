@@ -56,6 +56,7 @@ import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.dto.CreateGatheringDto;
 import com.cenesbeta.dto.PredictiveData;
+import com.cenesbeta.fragment.CardSwipeDemoFragment;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.friend.FriendListFragment;
 import com.cenesbeta.materialcalendarview.CalendarDay;
@@ -574,6 +575,7 @@ public class CreateGatheringFragment extends CenesFragment {
                             e.printStackTrace();
                         }
 
+                        //CardSwipeDemoFragment gatheringPreviewFragment = new CardSwipeDemoFragment();
                         GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
                         gatheringPreviewFragment.event = event;
                         ((CenesBaseActivity) getActivity()).replaceFragment( gatheringPreviewFragment, CreateGatheringFragment.TAG);
