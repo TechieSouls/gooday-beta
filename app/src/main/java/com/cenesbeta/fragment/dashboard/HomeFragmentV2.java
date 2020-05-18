@@ -179,11 +179,7 @@ public class HomeFragmentV2 extends CenesFragment {
         mcvHomeCalendar.setCurrentDate(new Date());
         //When internet connection is off/first time loading...
         //eventManagerImpl.deleteAllEvents();
-        firstTimeLoadData();
-        if (internetManager.isInternetConnection((CenesBaseActivity)getActivity())) {
-            System.out.println("Inside On create View");
-            loadHomeScreenData();
-        }
+        reloadHomeData();
 
         makeMixPanelCall();
         ((CenesBaseActivity) getActivity()).showFooter();
@@ -209,11 +205,23 @@ public class HomeFragmentV2 extends CenesFragment {
     public void onPause() {
         super.onPause();
         System.out.println("On Pause Called");
-        getActivity().unregisterReceiver(mMessageReceiver);
+        try {
+            getActivity().unregisterReceiver(mMessageReceiver);
+        } catch (Exception e){
+
+        }
     }
 
+
+    public void reloadHomeData() {
+        firstTimeLoadData();
+        if (internetManager.isInternetConnection((CenesBaseActivity)getActivity())) {
+            System.out.println("Inside On create View");
+            loadHomeScreenData();
+        }
+    }
     //This is the handler that will manager to process the broadcast intent
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 

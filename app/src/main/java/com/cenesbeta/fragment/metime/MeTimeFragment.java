@@ -143,8 +143,11 @@ public class MeTimeFragment extends CenesFragment {
             switch (v.getId()) {
 
                 case R.id.iv_add_metime:
+
+                    MeTimeCardFragment meTimeCardFragment = new MeTimeCardFragment();
+                    meTimeCardFragment.meTimeFragment = MeTimeFragment.this;
                     ((CenesBaseActivity)getActivity()).getSupportFragmentManager().beginTransaction()
-                            .add(R.id.fragment_container, new MeTimeCardFragment())
+                            .add(R.id.fragment_container, meTimeCardFragment)
                             .addToBackStack(MeTimeCardFragment.TAG)
                             .commit();
 

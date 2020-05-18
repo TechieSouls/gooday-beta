@@ -170,6 +170,7 @@ public class MeTimeCardFragment extends CenesFragment {
         llSliderDots = (LinearLayout) view.findViewById(R.id.ll_slider_dots);
         vpMetimePager = (ViewPager) view.findViewById(R.id.vp_metime_pager);
 
+        ivMetimeSaveSpinner = (ImageView) view.findViewById(R.id.iv_metime_save_spinner);
         //code for slider
         slideToTop(swipeCard);
 
@@ -709,12 +710,14 @@ public class MeTimeCardFragment extends CenesFragment {
 
                                                     meTimeFragment.loadMeTimes();
                                                     hideLoadingBlock();
+                                                    ((CenesBaseActivity)getActivity()).onBackPressed();
                                                 }
                                             }).execute(photoPostData);
                                         } else {
 
                                             meTimeFragment.loadMeTimes();
                                             hideLoadingBlock();
+                                            ((CenesBaseActivity)getActivity()).onBackPressed();
                                         }
                                     } else {
                                         ((CenesBaseActivity) getActivity()).showRequestTimeoutDialog();
@@ -727,8 +730,6 @@ public class MeTimeCardFragment extends CenesFragment {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-                    getFragmentManager().popBackStack();
                     break;
 
                 case R.id.btn_delete_meTime:

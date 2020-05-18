@@ -425,7 +425,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     };*/
 
     //This is the handler that will manager to process the broadcast intent
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mChatMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
@@ -440,14 +440,18 @@ public class GatheringPreviewFragment extends CenesFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().registerReceiver(mMessageReceiver, new IntentFilter("eventchatrefresh"));
+        getActivity().registerReceiver(mChatMessageReceiver, new IntentFilter("eventchatrefresh"));
 
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getActivity().unregisterReceiver(mMessageReceiver);
+        try {
+            getActivity().unregisterReceiver(mChatMessageReceiver);
+        } catch (Exception e){
+
+        }
 
     }
 
@@ -1077,7 +1081,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                 public void processFinish(JSONObject response) {
 
                     try {
-                        ((CenesBaseActivity) getActivity()).homeScreenReloadBroadcaster();
+                        //((CenesBaseActivity) getActivity()).homeScreenReloadBroadcaster();
 
                         if (response.getBoolean("success") == true) {
                             JSONObject data = response.getJSONObject("data");
@@ -1097,9 +1101,9 @@ public class GatheringPreviewFragment extends CenesFragment {
                                 }
                             }
 
-                            ((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
 
                             if (nonCenesMember.size() > 0) {
+                                ((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
                                 sendSmsToNonCenesMembers(nonCenesMember, eve);
                                 ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
                             }
@@ -1157,7 +1161,13 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                             System.out.println("Firing Broadcaster");
                             //((CenesBaseActivity) getActivity()).clearAllFragmentsInBackstack();
-                            //((CenesBaseActivity) getActivity()).homeFragmentV2.loadHomeScreenData();
+
+                            try {
+                                getActivity().unregisterReceiver(((CenesBaseActivity) getActivity()).homeFragmentV2.mMessageReceiver);
+                            } catch (Exception e) {
+
+                            }
+                            ((CenesBaseActivity) getActivity()).homeFragmentV2.reloadHomeData();
                             ((CenesBaseActivity) getActivity()).replaceFragment(((CenesBaseActivity) getActivity()).homeFragmentV2, null);
                         }
                     }, 2000);
