@@ -32,6 +32,7 @@ import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -1322,9 +1323,15 @@ public class GatheringPreviewFragment extends CenesFragment {
             // Set up the input
             final EditText input = new EditText(getContext());
             input.setHint(" Write a message");
+            FrameLayout container = new FrameLayout(getActivity());
+            FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(CenesUtils.dpToPx(20), 0, CenesUtils.dpToPx(20), 0);
+            input.setLayoutParams(params);
             // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            builder.setView(input);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            container.addView(input);
+
+            builder.setView(container);
 
             // Set up the buttons
             builder.setPositiveButton("Send", new DialogInterface.OnClickListener() {
