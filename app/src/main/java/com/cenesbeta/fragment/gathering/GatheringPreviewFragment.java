@@ -144,7 +144,9 @@ public class GatheringPreviewFragment extends CenesFragment {
     private int mActivePointerId;
     private int parentWidth;
     private float ROTATION_DEGREES = 20f;
-    private float MAX_CARD_EXTENT = 150f;
+    private float MAX_CARD_EXTENT = 200f;
+    private float CARD_SWIPE_DELAY = 20f;
+
     private float initialX, initialY;
     private boolean click = true;
     private float initialXPress;
@@ -232,6 +234,9 @@ public class GatheringPreviewFragment extends CenesFragment {
                     System.out.println("scrollX - scrollY , oldScrollX - oldScrollY, "+ scrollX+" - "+scrollY+", "+oldScrollX+" - "+oldScrollY);
                     if (scrollY == 0) {
                         svCard.setOnTouchListener(onTouchListener);
+                    } else {
+                        tinderCardView.setX(0);
+                        tinderCardView.setRotation(0);
                     }
 
                 }
@@ -767,30 +772,32 @@ public class GatheringPreviewFragment extends CenesFragment {
                     if (Math.abs(dx + dy) > 5) click = false;
                     Log.e("X Position : ",posX+" ---------- "+posY);
 
-                    if (posY < -50) {
+
+                    if (Math.abs(posX) < 10 && posY < -40) {
                         //tinderCardView.setY(posY);
                         svCard.setOnTouchListener(null);
                         break;
                     } else {
-                        tinderCardView.setY(0);
-                        svCard.setOnTouchListener(onTouchListener);
-                        //svCard.setScrollingEnabled(false);
+                        if (Math.abs(posX) > 30) {
+                            svCard.scrollTo(0, 0);
+                            svCard.setOnTouchListener(onTouchListener);
+                        }
                     }
 
                     if (enableLeftToRightSwipe && enableRightToLeftSwipe) {
                         System.out.println("[ACTION_MOVE] -- INSIDE BOTH WAY SWIPE");
 
-                        if (Math.abs(posX - 40) < MAX_CARD_EXTENT && !GatheringPreviewDto.cardSwipedToExtent) {
-                            if (posX + 40 < 0) {
-                                tinderCardView.setX(posX + 40);
+                        if (Math.abs(posX - CARD_SWIPE_DELAY) < MAX_CARD_EXTENT && !GatheringPreviewDto.cardSwipedToExtent) {
+                            if (posX + CARD_SWIPE_DELAY < 0) {
+                                tinderCardView.setX(posX + CARD_SWIPE_DELAY);
                             } else {
-                                tinderCardView.setX(posX - 40);
+                                tinderCardView.setX(posX - CARD_SWIPE_DELAY);
                             }
                             tinderCardView.setRotation(rotation);
                         } else {
 
                             GatheringPreviewDto.cardSwipedToExtent = true;
-                            if (posX + 40 < 0) {
+                            if (posX < 0) {
                                 tinderCardView.setX(-MAX_CARD_EXTENT);
                                 tinderCardView.setRotation(-ROTATION_DEGREES);
                             } else {
@@ -799,9 +806,9 @@ public class GatheringPreviewFragment extends CenesFragment {
                             }
                         }
 
-                        if (posX + 40 < 0) {
+                        if (posX + CARD_SWIPE_DELAY < 0) {
                             GatheringPreviewDto.ifSwipedRightToLeft = true;
-                        } else if (posX - 40 > 0) {
+                        } else if (posX - CARD_SWIPE_DELAY > 0) {
                             GatheringPreviewDto.ifSwipedLeftToRight = true;
                         }
                     } else  if (!enableLeftToRightSwipe && enableRightToLeftSwipe) {
@@ -810,13 +817,13 @@ public class GatheringPreviewFragment extends CenesFragment {
                         GatheringPreviewDto.ifSwipedRightToLeft = true;
 
                         if (GatheringPreviewDto.cardSwipedToExtent == false) {
-                            if (posX + 40 < 0) {
+                            if (posX + CARD_SWIPE_DELAY < 0) {
 
                                 Log.e("Alpha  ", posX+"+"+CenesUtils.dpToPx(20)+"="+(Math.abs(posX) - CenesUtils.dpToPx(20))+"/"+parentWidth);
                                 //ivEditRejectIcon.setAlpha((float) ((Math.abs(posX) + CenesUtils.dpToPx(20))/(parentWidth)));
-                                if (posX + 40 > -MAX_CARD_EXTENT) {
-                                    Log.d("Right To Left Sipe : ", (posX + 40) + "  :   " + (posY));
-                                    tinderCardView.setX(posX + 40);
+                                if (posX > -MAX_CARD_EXTENT) {
+                                    Log.d("Right To Left Sipe : ", (posX + CARD_SWIPE_DELAY) + "  :   " + (posY));
+                                    tinderCardView.setX(posX + CARD_SWIPE_DELAY);
                                     tinderCardView.setRotation(rotation);
                                     GatheringPreviewDto.ifSwipedRightToLeft = true;
 
@@ -834,11 +841,11 @@ public class GatheringPreviewFragment extends CenesFragment {
                         System.out.println("[ACTION_MOVE] -- INSIDE LEFT TO RIGHT SWIPE");
                         GatheringPreviewDto.ifSwipedLeftToRight = true;
                         if (GatheringPreviewDto.cardSwipedToExtent == false) {
-                            if (posX - 40 > 0) {
-                                if (posX - 40 < MAX_CARD_EXTENT ) {
+                            if (posX - CARD_SWIPE_DELAY > 0) {
+                                if (posX < MAX_CARD_EXTENT ) {
 
-                                    Log.d("Left To Right Swipe : ",(posX - 40)+"  :   "+(posY));
-                                    tinderCardView.setX(posX - 40);
+                                    Log.d("Left To Right Swipe : ",(posX - CARD_SWIPE_DELAY)+"  :   "+(posY));
+                                    tinderCardView.setX(posX - CARD_SWIPE_DELAY);
                                     tinderCardView.setRotation(rotation);
                                     GatheringPreviewDto.ifSwipedLeftToRight = true;
                                 } else {
@@ -872,6 +879,8 @@ public class GatheringPreviewFragment extends CenesFragment {
                     svCard.setOnClickListener(null);
                     if (GatheringPreviewDto.cardSwipedToExtent) {
 
+                        svCard.scrollTo(0, 0);
+                        svCard.setOnTouchListener(onTouchListener);
                         GatheringPreviewDto.cardSwipedToExtent = false;
                         if (GatheringPreviewDto.ifSwipedRightToLeft) {
                             GatheringPreviewDto.ifSwipedRightToLeft = false;
@@ -1333,8 +1342,15 @@ public class GatheringPreviewFragment extends CenesFragment {
                     System.out.println(input.getText().toString());
                     if (input.getText().toString() != "") {
                         postEventChat(input.getText().toString());
-                    }
-                    else{
+
+                        rotate(360, invitationRejectSpinner);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ((CenesBaseActivity) getActivity()).getSupportFragmentManager().popBackStack();
+                            }
+                        }, 1000);
+                    } else{
                         showAlert("error","Message cannot be empty");
                     }
                 }
@@ -1804,78 +1820,77 @@ public class GatheringPreviewFragment extends CenesFragment {
                         eventChatEvent.setSenderId(event.getCreatedById());
                         eventChatEvent.setUser(eventOwner.getUser());
                         eventChats.add(eventChatEvent); */
-                        List<EventChat> eventChatsTmp = gson.fromJson(response.getJSONArray("data").toString(), listType);
-                        for(EventChat  eventChat : eventChatsTmp) {
-                            if(!eventChat.getChat().contains("(Edited)") && eventChat.getChatType().equals("Description")) {
-                                if(!eventChat.getChat().equals(event.getDescription())) {
-                                    eventChat.setChat(event.getDescription()+" (Edited)");
-                                } else if("Yes".equals(eventChat.getChatEdited())) {
-                                    eventChat.setChat(event.getDescription()+" (Edited)");
+                        boolean success = response.getBoolean("success");
+                        if (success) {
+
+                            List<EventChat> eventChatsTmp = gson.fromJson(response.getJSONArray("data").toString(), listType);
+                            for(EventChat  eventChat : eventChatsTmp) {
+                                if(!eventChat.getChat().contains("(Edited)") && eventChat.getChatType().equals("Description")) {
+                                    if(!eventChat.getChat().equals(event.getDescription())) {
+                                        eventChat.setChat(event.getDescription()+" (Edited)");
+                                    } else if("Yes".equals(eventChat.getChatEdited())) {
+                                        eventChat.setChat(event.getDescription()+" (Edited)");
+                                    }
                                 }
+                                eventChats.add(eventChat);
                             }
-                            eventChats.add(eventChat);
-                        }
+                            for(EventChat  eventChat : eventChats) {
+                                //  System.out.println(eventChat.getChat());
+                                // System.out.println(eventChat.getCreatedAt());
+                                String key = CenesUtils.EEEMMMMdd.format(eventChat.getCreatedAt());
 
-                        for(EventChat  eventChat : eventChats) {
-                            //  System.out.println(eventChat.getChat());
-                            // System.out.println(eventChat.getCreatedAt());
-                            String key = CenesUtils.EEEMMMMdd.format(eventChat.getCreatedAt());
-
-                            Calendar previousDateCal = Calendar.getInstance();
-                            previousDateCal.add(Calendar.DAY_OF_MONTH, -1);
-                            Calendar currentYear = Calendar.getInstance();
-                            Calendar chatCalendar = Calendar.getInstance();
-                            chatCalendar.setTimeInMillis(eventChat.getCreatedAt());
+                                Calendar previousDateCal = Calendar.getInstance();
+                                previousDateCal.add(Calendar.DAY_OF_MONTH, -1);
+                                Calendar currentYear = Calendar.getInstance();
+                                Calendar chatCalendar = Calendar.getInstance();
+                                chatCalendar.setTimeInMillis(eventChat.getCreatedAt());
 
 
-                            String yearAppend = "";
+                                String yearAppend = "";
 
-                            if(currentYear.get(Calendar.YEAR) != chatCalendar.get(Calendar.YEAR)) {
-                                yearAppend = ", "+chatCalendar.get(Calendar.YEAR);
+                                if(currentYear.get(Calendar.YEAR) != chatCalendar.get(Calendar.YEAR)) {
+                                    yearAppend = ", "+chatCalendar.get(Calendar.YEAR);
 
-                            }else {
-                                yearAppend = "";
-                            }
-
-                            if (key != null) {
-                                if (key.equals(CenesUtils.EEEMMMMdd.format(new Date()))) {
-
-                                    key = "Today ";
-
-                                } else if (key.equals(CenesUtils.EEEMMMMdd.format(previousDateCal.getTime()))) {
-
-                                    key = "Yesterday ";
+                                }else {
+                                    yearAppend = "";
                                 }
+
+                                if (key != null) {
+                                    if (key.equals(CenesUtils.EEEMMMMdd.format(new Date()))) {
+
+                                        key = "Today ";
+
+                                    } else if (key.equals(CenesUtils.EEEMMMMdd.format(previousDateCal.getTime()))) {
+
+                                        key = "Yesterday ";
+                                    }
+                                }
+                                if(!headers.contains(key)) {
+                                    //  System.out.println("header key : +" + key);
+                                    headers.add(key + yearAppend);
+                                }
+
+                                List<EventChat> eventChatTemp = null;
+                                if (eventChatMapList.containsKey(key)) {
+
+                                    eventChatTemp = eventChatMapList.get(key);
+
+                                } else {
+
+                                    eventChatTemp = new ArrayList<>();
+
+                                }
+                                eventChatTemp.add(eventChat);
+                                eventChatMapList.put(key,eventChatTemp);
                             }
-                            if(!headers.contains(key)) {
-                                //  System.out.println("header key : +" + key);
-                                headers.add(key + yearAppend);
-                            }
-
-                            List<EventChat> eventChatTemp = null;
-                            if(eventChatMapList.containsKey(key)) {
-
-                                eventChatTemp = eventChatMapList.get(key);
-
-
-                            }else {
-
-                                eventChatTemp = new ArrayList<>();
-
-                            }
-                            eventChatTemp.add(eventChat);
-                            eventChatMapList.put(key,eventChatTemp);
                         }
 
                         if(isDescriptionButtonOn == true ) {
                             // System.out.println("fgdfgdgdfgf");
                             loadDescriptionData();
                         }
-
                         // System.out.println(" headers : "+headers.size());
                         // System.out.println(" eventChatMapList : "+eventChatMapList.size());
-
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1922,7 +1937,11 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                     rlEnterChat.setVisibility(View.GONE);
                     rlIncludeChat.setVisibility(View.VISIBLE);
-                    rlChatBubble.setVisibility(View.VISIBLE);
+                    if (event.isEditMode()) {
+                        rlChatBubble.setVisibility(View.GONE);
+                    } else {
+                        rlChatBubble.setVisibility(View.VISIBLE);
+                    }
                     llSenderPicture.setVisibility(View.VISIBLE);
 
                     //new Handler().postDelayed(new Runnable() {

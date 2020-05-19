@@ -907,16 +907,19 @@ public class MeTimeCardFragment extends CenesFragment {
                             rotatedBitmap = imageBitmap;
                     }
 
-                    rivMeTimeImg.getLayoutParams().height = CenesUtils.dpToPx(91);
-                    rivMeTimeImg.getLayoutParams().width = CenesUtils.dpToPx(91);
-                    rivMeTimeImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    RelativeLayout.LayoutParams rivLayoutParams = (RelativeLayout.LayoutParams)rivMeTimeImg.getLayoutParams();
+                    rivLayoutParams.height = CenesUtils.dpToPx(90);
+                    rivLayoutParams.width = CenesUtils.dpToPx(90);
+                    rivLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+                    rivMeTimeImg.setLayoutParams(rivLayoutParams);
+                    rlUploadMetimeImg.setBackground(null);
                     persistImage(rotatedBitmap, filePath.substring(filePath.lastIndexOf("/"), filePath.length()));
 
                     final Bitmap bitImage = imageBitmap;
                     final RoundedDrawable drawable = new RoundedDrawable(ImageUtils.getRotatedBitmap(bitImage, filePath));
 
                     //Do something after 100ms
-                    rivMeTimeImg.invalidate();
+                    //rivMeTimeImg.invalidate();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -924,7 +927,7 @@ public class MeTimeCardFragment extends CenesFragment {
                             rivMeTimeImg.setImageDrawable(drawable);
                         }
                     }, 500);
-                    rivMeTimeImg.requestLayout();
+                    //rivMeTimeImg.requestLayout();
                     //rivMeTimeImg.setImageURI(getImageUri(getContext().getApplicationContext(), rotatedBitmap));
                 } catch (Exception e) {
                     e.printStackTrace();
