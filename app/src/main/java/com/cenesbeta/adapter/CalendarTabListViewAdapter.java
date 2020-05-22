@@ -52,12 +52,12 @@ public class CalendarTabListViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return homeScreenDto.getHomelistViewWithHeaders().size();
+        return this.homeScreenDto.getHomelistViewWithHeaders().size();
     }
 
     @Override
     public Object getItem(int position) {
-        return homeScreenDto.getHomelistViewWithHeaders().get(position);
+        return this.homeScreenDto.getHomelistViewWithHeaders().get(position);
     }
 
     @Override
@@ -367,6 +367,10 @@ public class CalendarTabListViewAdapter extends BaseAdapter {
         return VIEW_TYPE_NONE;
     }
 
+    public void refreshItems(HomeScreenDto homeScreenDto) {
+        this.homeScreenDto = homeScreenDto;
+        notifyDataSetChanged();
+    }
     class HeaderViewHolder {
         private TextView tvHeader;
     }

@@ -26,6 +26,7 @@ public class HomeScreenDto {
     private List<Event> pastEvents = new ArrayList<>();
     private List<Object> homelistViewWithHeaders = new ArrayList<>();
     private List<Long> uniqueEventIdTracker = new ArrayList<>();
+    private boolean offlineDataExists = false;
 
     private List<String> invitaitonDataHeaders = new ArrayList<>();
     private Map<String, List<Event>> invitationDataListMap = new HashMap<>();
@@ -162,5 +163,13 @@ public class HomeScreenDto {
 
     public void setUniqueEventIdTracker(List<Long> uniqueEventIdTracker) {
         this.uniqueEventIdTracker = uniqueEventIdTracker;
+    }
+
+    public boolean isOfflineDataExists() {
+        return offlineDataExists;
+    }
+
+    public void setOfflineDataExists(boolean offlineDataExists) {
+        this.offlineDataExists = offlineDataExists;
     }
 }

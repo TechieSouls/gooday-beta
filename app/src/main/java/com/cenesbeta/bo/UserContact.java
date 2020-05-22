@@ -2,6 +2,7 @@ package com.cenesbeta.bo;
 
 public class UserContact {
 
+    public enum CenesMember {yes, no};
     private Integer userContactId;
 
     private Integer userId;

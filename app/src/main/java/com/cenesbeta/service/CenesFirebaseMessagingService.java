@@ -107,7 +107,7 @@ public class CenesFirebaseMessagingService extends FirebaseMessagingService {
             //Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
             System.out.println("Silent Push...");
-            Intent newintent = new Intent("eventchatrefresh");
+            Intent newintent = new Intent("homescreenrefresh");
             //send broadcast
             getApplicationContext().sendBroadcast(newintent);
 

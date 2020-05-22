@@ -63,6 +63,7 @@ import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.impl.EventManagerImpl;
+import com.cenesbeta.database.impl.EventMemberManagerImpl;
 import com.cenesbeta.database.impl.UserManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.dto.AsyncTaskDto;
@@ -284,6 +285,65 @@ public class GatheringPreviewFragment extends CenesFragment {
             pendingEventIndex++;
         }
 
+        populateInvitationCard(event);
+        if (event.getScheduleAs() != null && event.getScheduleAs().equals("Notification")) {
+
+            populateInvitationCard(event);
+
+        } else if (event != null && event.getEventId() != null && event.getEventId() != 0) {
+            rlInvitationView.setVisibility(View.VISIBLE);
+            rlWelcomeInvitation.setVisibility(View.GONE);
+
+            populateInvitationCard(event);
+            AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+            asyncTaskDto.setQueryStr("eventId="+event.getEventId()+"&userId="+loggedInUser.getUserId()+"");
+            asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+GatheringAPI.get_gathering_detail);
+            asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+
+            new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+
+                    try {
+                        boolean success = response.getBoolean("success");
+                        if (success) {
+
+                            updateEventFromServer(response);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).execute(asyncTaskDto);
+        } else if (event.getKey() != null) {
+            rlInvitationView.setVisibility(View.VISIBLE);
+            rlWelcomeInvitation.setVisibility(View.GONE);
+
+            populateInvitationCard(event);
+            AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+            asyncTaskDto.setQueryStr("key="+event.getKey()+"&userId="+loggedInUser.getUserId()+"");
+            asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+GatheringAPI.get_gathering_detail);
+            asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+
+            new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+
+                    try {
+                        boolean success = response.getBoolean("success");
+                        if (success) {
+
+                            updateEventFromServer(response);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).execute(asyncTaskDto);
+        }
+
         if (event != null) {
 
             if (event.getEventId() == null || event.getEventId().equals(0l)) {
@@ -302,13 +362,6 @@ public class GatheringPreviewFragment extends CenesFragment {
                     e.printStackTrace();
                 }
             }
-
-            if (event.getEventId() != null && event.getDescription() != null) {
-                getChatThread();
-            } else {
-                isChatLoaded = true;
-            }
-            populateInvitationCard(event);
         }
         ivProfilePicView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -327,108 +380,8 @@ public class GatheringPreviewFragment extends CenesFragment {
 
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)rlChatlistAndBubble.getLayoutParams();
         layoutParams.setMargins(0, 0, 0, getActivity().getWindowManager().getDefaultDisplay().getHeight() - (CenesUtils.dpToPx(450) + CenesUtils.dpToPx(110)));
-
-        //view.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
         return view;
     }
-
-    /*ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
-        @Override
-        public void onGlobalLayout() {
-
-            if ( getActivity() != null) {
-                Fragment visibleFragment = (((CenesBaseActivity) getActivity()).getVisibleFragment());
-                if (visibleFragment instanceof GatheringPreviewFragment) {
-                    int heightDiff = fragmentView.getRootView().getHeight() - fragmentView.getHeight();
-                    // IF height diff is more then 150, consider keyboard as visible.
-                    System.out.println("Ha ha ha ha hi Maaaa : "+heightDiff);
-
-                    // TODO Auto-generated method stub
-                    Rect r = new Rect();
-                    fragmentView.getWindowVisibleDisplayFrame(r);
-
-                    int screenHeight = fragmentView.getRootView().getHeight();
-                    int heightDifference = screenHeight - (r.bottom - r.top);
-                    Log.d("Keyboard Size", "Size: " + heightDifference);
-                    Log.d("Keyboard Size in dp",  CenesUtils.pxToDp(heightDifference)+"");
-
-                    boolean showKeyboard = false;
-                    DisplayMetrics metrics = new DisplayMetrics();
-                    getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                    int width = metrics.widthPixels;
-                    int height = metrics.heightPixels;
-
-                    boolean isTablet = (getContext().getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
-
-                    if (isTablet) {
-                        //code for big screen (like tablet)
-                        if (heightDifference >= 930) {
-                            showKeyboard = true;
-                        }
-                        Log.d("Tablet", "Going to show keyboard");
-                    } else {
-                        //code for small screen (like smartphone)
-                        Log.d("Mobile", "Going to show keyboard");
-                        if (heightDifference >= 144) {
-                            showKeyboard = true;
-                        }
-                    }
-
-
-                    if (showKeyboard) {
-                        Log.d("ShowKeyboard", "Going to show keyboard");
-                        Log.d("Screen Height ", ""+getActivity().getWindowManager().getDefaultDisplay().getHeight());
-                        Log.d("rlEnterChat Y", ""+(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference + 5)));
-
-                        rlChatBubble.setVisibility(View.GONE);
-                        llSenderPicture.setVisibility(View.GONE);
-
-                        int keyboardHeightPadding = 0;
-                        if (isTablet) {
-                            keyboardHeightPadding = 10;
-                        } else {
-                            keyboardHeightPadding = 60;
-                        }
-                        rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - keyboardHeightPadding));
-                        rlEnterChat.setVisibility(View.VISIBLE);
-                        enterChatTv.requestFocus();
-                        //got focus
-                        //RelativeLayout.LayoutParams newPara = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PrecastrUtils.convertDpToPx(getContext(),350));
-                        //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
-                        //relativeParams.;  // left, top, right, bottom
-                        //rlBottomText.setLayoutParams(relativeParams);
-                        //relativeParams.height = CenesUtils.convertDpToPx(getContext(), 350);
-                        // svCard.setScrollingEnabled(true);
-                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)elvEventChatList.getLayoutParams();
-                        //params.setMargins(0, 0, 0, CenesUtils.dpToPx(50));
-                        //elvEventChatList.setLayoutParams(params);
-
-
-                    } else {
-                        System.out.println("else condition chat visible ");
-                        //lost focus
-                        //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
-                        //relativeParams.height = PrecastrUtils.convertDpToPx(getContext(), 160);
-                        rlEnterChat.setVisibility(View.GONE);
-                        rlChatBubble.setVisibility(View.VISIBLE);
-                        llSenderPicture.setVisibility(View.VISIBLE);
-                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)elvEventChatList.getLayoutParams();
-                        params.setMargins(0, 0, 0, CenesUtils.dpToPx(chatListViewMarginBottom));
-                        //elvEventChatList.setLayoutParams(params);
-
-                        try {
-                            hideKeyboard();
-                        } catch (Exception e) {
-
-                        }
-
-                        //  svCard.setScrollingEnabled(false);
-                    }
-                }
-            }
-
-        }
-    };*/
 
     //This is the handler that will manager to process the broadcast intent
     private BroadcastReceiver mChatMessageReceiver = new BroadcastReceiver() {
@@ -539,7 +492,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                     }
 
-                    if (isChatLoaded == false) {
+                    if (isChatLoaded == false && event.getEventId() != null) {
                         progressBar.setVisibility(View.VISIBLE);
                     } else {
 
@@ -1049,6 +1002,76 @@ public class GatheringPreviewFragment extends CenesFragment {
                 GatheringPreviewDto.userCanSwipe = true;
             }
         }, 500);
+    }
+
+    public void updateEventFromServer(JSONObject response) {
+
+        try {
+            Event eventTemp = new Gson().fromJson(response.getString("data"), Event.class);
+            eventManagerImpl.updateEvent(eventTemp);
+
+            //Lets refresh the invitation tab and calendar tab here
+            //TODO
+
+            System.out.println("Yahi koi : "+eventTemp.getEventMembers().toString());
+
+            if (eventTemp.getCreatedAt() != null) {
+                event.setCreatedAt(eventTemp.getCreatedAt());
+            } else {
+                event.setCreatedAt(new Date().getTime());
+            }
+
+            if (!event.isEditMode()) {
+
+                event.setTitle(eventTemp.getTitle());
+                event.setStartTime(eventTemp.getStartTime());
+                event.setEndTime(eventTemp.getEndTime());
+                event.setLocation(eventTemp.getLocation());
+
+                event.setEventPicture(eventTemp.getEventPicture());
+                event.setDescription(eventTemp.getDescription());
+
+                System.out.println("Sever Event Member List : "+eventTemp.getEventMembers().size());
+
+                if (eventTemp.getEventMembers() != null && eventTemp.getEventMembers().size() > 0) {
+
+                    List<EventMember> eventMembersExistingInEvent  = event.getEventMembers();
+                    List<EventMember> eventMemberList = new ArrayList<>();
+
+                    for (EventMember eventMemFromServer: eventTemp.getEventMembers()) {
+
+                        for (EventMember eveMemFromEdit: eventMembersExistingInEvent) {
+                            if (eventMemFromServer.getUserId() != null && eventMemFromServer.getUserId() != 0 && eventMemFromServer.getUserId().equals(eveMemFromEdit.getUserId())) {
+                                EventMemberManagerImpl eventMemberManager = new EventMemberManagerImpl(cenesApplication);
+                                eventMemberManager.addEventMember(eventMemFromServer);
+                                eventMemberList.add(eventMemFromServer);
+                                break;
+                            }
+                        }
+                    }
+
+                    //Lets add newly added members
+                    for (EventMember oldEventMember: eventMembersExistingInEvent) {
+                        if (oldEventMember.getEventMemberId() == null) {
+                            eventMemberList.add(oldEventMember);
+                        }
+                    }
+
+                    System.out.println("New Event Member List : "+eventMemberList.size());
+                    event.setEventMembers(eventMemberList);
+                }
+            }
+            event.setThumbnail(eventTemp.getThumbnail());
+            populateInvitationCard(event);
+
+            if (event.getDescription() != null) {
+                getChatThread();
+            } else {
+                isChatLoaded = true;
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void hideDescriptionMessage() {
@@ -1911,8 +1934,10 @@ public class GatheringPreviewFragment extends CenesFragment {
     public void loadDescriptionData(){
         // svCard.setOnTouchListener(null);
         // tinderCardView.setOnTouchListener(null);
+        System.out.println("Description : "+event.getDescription());
         if (!CenesUtils.isEmpty(event.getDescription())) {
 
+            System.out.println("Description : event id : "+event.getEventId());
             if (event.getEventId() == null || (event.getExpired() != null && event.getExpired() == true) || event.getEndTime() < new Date().getTime() ||  event.getEventMembers().size() == 1 ) {
 
 

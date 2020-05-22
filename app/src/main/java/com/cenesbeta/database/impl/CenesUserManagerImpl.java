@@ -54,6 +54,7 @@ public class CenesUserManagerImpl  {
 
                 String insertQuery = "insert into cenes_users values("+user.getUserId()+", '"+user.getName()+"', '"+user.getPicture()+"'," +
                         " '"+user.getPhone()+"')";
+                System.out.println("Insert Query : "+insertQuery);
                 db.execSQL(insertQuery);
             }
         } catch (Exception e) {
@@ -71,6 +72,7 @@ public class CenesUserManagerImpl  {
                 this.db = cenesDatabase.getReadableDatabase();
             }
             String query = "select * from cenes_users where user_id = "+userId;
+            System.out.println("User Select Query : "+query);
             Cursor cursor = db.rawQuery(query, null);
 
             if (cursor.moveToFirst()) {
@@ -95,8 +97,11 @@ public class CenesUserManagerImpl  {
             if (!this.db.isOpen()) {
                 this.db = cenesDatabase.getReadableDatabase();
             }
-            db.execSQL("update cenes_users set name = '"+user.getName()+"', " +
-                    " picture = '"+user.getPicture()+"', phone = '"+user.getPhone()+"' where user_id = "+user.getUserId()+" ");
+
+            String updateQuery = "update cenes_users set name = '"+user.getName()+"', " +
+                    " picture = '"+user.getPicture()+"', phone = '"+user.getPhone()+"' where user_id = "+user.getUserId()+" ";
+            System.out.println("Update Query : "+updateQuery);
+            db.execSQL(updateQuery);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
