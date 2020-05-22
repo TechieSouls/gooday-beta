@@ -944,16 +944,22 @@ public class MeTimeCardFragment extends CenesFragment {
 
                         List<RecurringEventMember> recurringEventMembers =  new ArrayList<>();
                         for (EventMember eventMember: membersSelected) {
-                            RecurringEventMember recurringEventMember = new RecurringEventMember();
-                            recurringEventMember.setRecurringEventId(Integer.parseInt(metime.getRecurringEventId().toString()));
-                            recurringEventMember.setUserId(eventMember.getUserId());
-                            recurringEventMember.setUser(eventMember.getUser());
+                            System.out.println(eventMember.getUserId()+" : "+ loggedInUser.getUserId());
 
-                            UserContact userContact = new UserContact();
-                            userContact.setUserContactId(eventMember.getUserContactId());
-                            recurringEventMember.setUserContact(userContact);
+                            if (!eventMember.getUserId().equals(loggedInUser.getUserId())) {
+                                RecurringEventMember recurringEventMember = new RecurringEventMember();
+                                if(metime.getRecurringEventId() != null ) {
+                                    recurringEventMember.setRecurringEventId(Integer.parseInt(metime.getRecurringEventId().toString()));
+                                }
+                                recurringEventMember.setUserId(eventMember.getUserId());
+                                recurringEventMember.setUser(eventMember.getUser());
 
-                            recurringEventMembers.add(recurringEventMember);
+                                UserContact userContact = new UserContact();
+                                userContact.setUserContactId(eventMember.getUserContactId());
+                                recurringEventMember.setUserContact(userContact);
+
+                                recurringEventMembers.add(recurringEventMember);
+                            }
                         }
                         metime.setRecurringEventMembers(recurringEventMembers);
 
