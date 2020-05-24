@@ -1,5 +1,8 @@
 package com.cenesbeta.fragment.gathering;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,8 +22,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.telephony.TelephonyManager;
 import android.text.InputType;
+import android.transition.Slide;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -70,6 +75,7 @@ import com.cenesbeta.dto.AsyncTaskDto;
 import com.cenesbeta.dto.GatheringPreviewDto;
 import com.cenesbeta.extension.InvitationScrollView;
 import com.cenesbeta.fragment.CenesFragment;
+import com.cenesbeta.service.ResizeAnimation;
 import com.cenesbeta.util.CenesConstants;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
@@ -132,6 +138,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     private boolean isNewOrEditMode;
     private boolean isPushRequest = false;
     private int pendingEventIndex;
+    private boolean isKeyboardVisible = false;
     int windowWidth, windowHeight;
     int screenCenter;
     int xCord, yCord, newXcord, newYCord;
@@ -618,7 +625,28 @@ public class GatheringPreviewFragment extends CenesFragment {
                 case  R.id.send_chat_tv :
                     rlChatBubble.setVisibility(View.GONE);
                     llSenderPicture.setVisibility(View.GONE);
-                    rlEnterChat.setVisibility(View.VISIBLE);
+                    //rlEnterChat.setVisibility(View.VISIBLE);
+                    //RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
+                    //layoutParams.width = CenesUtils.dpToPx(60);
+                    //layoutParams.setMargins(windowWidth, 0, 0, 0);
+                    enterChatTv.requestFocus();
+                    enterChatTv.setFocusableInTouchMode(true);
+
+
+
+
+                    /*rlEnterChat.animate()
+                            .rotationX(10.0f)
+                           // .translationY(rlEnterChat.getHeight())
+                            .alpha(1f)
+                            .setDuration(3000)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    rlEnterChat.setVisibility(View.VISIBLE);
+                                }
+                            }); */
 
                     Handler handler = new Handler(); handler.postDelayed(new Runnable() {
                     @Override
@@ -918,33 +946,27 @@ public class GatheringPreviewFragment extends CenesFragment {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
 
-            System.out.println("On Back Button Pressed : ");
-            if (hasFocus) {
+            if (hasFocus && !isKeyboardVisible) {
+
+                isKeyboardVisible=true;
                 rlEnterChat.setVisibility(View.VISIBLE);
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)rlChatlistAndBubble.getLayoutParams();
 
                 int heightDiff = fragmentView.getRootView().getHeight() - fragmentView.getHeight();
                 // IF height diff is more then 150, consider keyboard as visible.
                 System.out.println("Ha ha ha ha hi Maaaa : "+heightDiff);
 
                 // TODO Auto-generated method stub
-                Rect r = new Rect();
+                final Rect r = new Rect();
                 fragmentView.getWindowVisibleDisplayFrame(r);
 
                 int screenHeight = fragmentView.getRootView().getHeight();
                 int heightDifference = screenHeight - (r.bottom - r.top);
 
-                RelativeLayout.LayoutParams rlEnterChatLayoutParams = (RelativeLayout.LayoutParams)rlEnterChat.getLayoutParams();
-                rlEnterChatLayoutParams.setMargins(0, 0, 0, getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference));
-                rlEnterChat.setLayoutParams(rlEnterChatLayoutParams);
-
                 //rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 3));
-                rlEnterChat.setVisibility(View.VISIBLE);
                 enterChatTv.requestFocus();
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
                 imm.showSoftInput(enterChatTv, WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
-                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)rlChatlistAndBubble.getLayoutParams();
-                layoutParams.setMargins(0, 0, 0, getActivity().getWindowManager().getDefaultDisplay().getHeight() - (CenesUtils.dpToPx(450) + CenesUtils.dpToPx(50) + heightDifference));
 
                 //rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - 500);
                 //got focus
@@ -953,13 +975,53 @@ public class GatheringPreviewFragment extends CenesFragment {
                 //relativeParams.;  // left, top, right, bottom
                 //rlBottomText.setLayoutParams(relativeParams);
                 //relativeParams.height = CenesUtils.convertDpToPx(getContext(), 350);
+                /* ObjectAnimator animation = ObjectAnimator.ofFloat(rlEnterChat, "translationY", 0f);
+                    animation.setDuration(3000);
+                    animation.start(); */
+                if (rlEnterChat.getLayoutParams().width != windowWidth) {
+                    final RelativeLayout.LayoutParams rlEnterChatLayoutParams = (RelativeLayout.LayoutParams)rlEnterChat.getLayoutParams();
+                    rlEnterChatLayoutParams.setMargins(windowWidth, 0, 0, getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference));
+                    rlEnterChatLayoutParams.width = 0;
+                    rlEnterChat.setLayoutParams(rlEnterChatLayoutParams);
+
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            rlEnterChat.setVisibility(View.VISIBLE);
+                            ResizeAnimation resizeAnimation = new ResizeAnimation(rlEnterChat, windowWidth);
+                            resizeAnimation.setDuration(1000);
+                            rlEnterChat.startAnimation(resizeAnimation);
+
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    enterChatTv.requestFocus();
+                                    enterChatTv.setFocusableInTouchMode(true);
+                                }
+
+                            },500);
+                            //enterChatTv.setPressed(true);
+                            //enterChatTv.setCursorVisible(true);
+
+                        }
+                    }, 100);
+                }
+
 
             } else {
+                    isKeyboardVisible = false;
+                System.out.println("On Back Button Pressed : ");
+
                 //lost focus
                 //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
                 //relativeParams.height = PrecastrUtils.convertDpToPx(getContext(), 160);
                 RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)rlChatlistAndBubble.getLayoutParams();
                 layoutParams.setMargins(0, 0, 0, getActivity().getWindowManager().getDefaultDisplay().getHeight() - (CenesUtils.dpToPx(450) + CenesUtils.dpToPx(110)));
+                RelativeLayout.LayoutParams rlEnterChatParams = (RelativeLayout.LayoutParams)rlEnterChat.getLayoutParams();
+                rlEnterChatParams.width = 0;
+                rlEnterChatParams.setMargins(windowWidth, 0, 0, 0);
+                rlEnterChat.setLayoutParams(rlEnterChatParams);
                 rlEnterChat.setVisibility(View.GONE);
                 rlChatBubble.setVisibility(View.VISIBLE);
                 llSenderPicture.setVisibility(View.VISIBLE);
