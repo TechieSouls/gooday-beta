@@ -175,7 +175,7 @@ public class InvitationListItemAdapter extends BaseExpandableListAdapter {
             } else {
                 eventViewHolder.rvHostImage.setImageResource(R.drawable.profile_pic_no_image);
             }
-            if (eventHost.getUser().getUserId() != null && eventHost.getUser().getUserId().equals(homeFragmentV2.loggedInUser.getUserId())) {
+            if (eventHost.getUser() != null && eventHost.getUser().getUserId() != null && eventHost.getUser().getUserId().equals(homeFragmentV2.loggedInUser.getUserId())) {
                 eventViewHolder.tvHostName.setText("Me");
             } else {
                 eventViewHolder.tvHostName.setText(eventHost.getUser().getName());

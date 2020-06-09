@@ -1,5 +1,14 @@
 package com.cenesbeta.service;
 
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+import com.cenesbeta.adapter.FriendHorizontalScrollAdapter;
+import com.cenesbeta.bo.Event;
+import com.cenesbeta.bo.EventMember;
+import com.cenesbeta.dto.PredictiveData;
+import com.cenesbeta.fragment.gathering.CreateGatheringFragment;
 import com.cenesbeta.materialcalendarview.CalendarDay;
 
 import org.json.JSONArray;
@@ -7,6 +16,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -55,12 +65,12 @@ public class GatheringService {
         return enabledDates;
     }
 
-    public static Map<String,Set<CalendarDay>> parsePredictiveData(JSONArray predictiveArray) {
+    public static Map<String,Set<CalendarDay>> parsePredictiveData(CreateGatheringFragment createGatheringFragment, List<PredictiveData> predictiveArray, Event event, Long originalStarTime, Long originalEndTime, Long predStartLong, Long predEndLong) {
+
         Map<String,Set<CalendarDay>> calMap  = new HashMap<>();
         JSONObject predictiveCalendarData = new JSONObject();
-        for (int i =0; i < predictiveArray.length(); i++) {
+        for (PredictiveData predictiveData: predictiveArray) {
             try {
-                JSONObject job = (JSONObject)predictiveArray.get(i);
 
                 Calendar todayCalendar = Calendar.getInstance();
                 todayCalendar.setTime(new Date());
@@ -68,17 +78,10 @@ public class GatheringService {
                 Calendar cal = Calendar.getInstance();
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                Date readableDate = sdf.parse(job.getString("readableDate"));
+                Date readableDate = sdf.parse(predictiveData.getReadableDate());
 
                 Calendar predictiveDateCal = Calendar.getInstance();
-                predictiveDateCal.setTimeInMillis(job.getLong("date"));
-
-                /*if (cal.get(Calendar.DAY_OF_MONTH) < todayCalendar.get(Calendar.DAY_OF_MONTH) && cal.getTimeInMillis() < todayCalendar.getTimeInMillis()) {
-                    continue;
-                }*/
-                //if (predictiveDateCal.get(Calendar.MONTH) < cal.get(Calendar.MONTH) || predictiveDateCal.get(Calendar.MONTH) > cal.get(Calendar.MONTH)) {
-                //    continue;
-                //}
+                predictiveDateCal.setTimeInMillis(predictiveData.getDate());
 
                 if (predictiveDateCal.get(Calendar.DAY_OF_MONTH) < todayCalendar.get(Calendar.DAY_OF_MONTH) &&
                         predictiveDateCal.get(Calendar.MONTH) <= todayCalendar.get(Calendar.MONTH) &&
@@ -93,10 +96,79 @@ public class GatheringService {
                 }
 
                 CalendarDay calDay = new CalendarDay(predictiveDateCal);
-                System.out.println("Day : "+calDay.getDay()+", Month : "+calDay.getMonth()+", Year : "+calDay.getYear()+", Percentage : "+job.getInt("predictivePercentage"));
+                System.out.println("Day : "+calDay.getDay()+", Month : "+calDay.getMonth()+", Year : "+calDay.getYear()+", Percentage : "+predictiveData.getPredictivePercentage());
 
                 //if (job.getInt("predictivePercentage") == 0 && job.getInt("predictivePercentage") <= 24) {
-                if (job.getInt("predictivePercentage") == 0) {
+                int predictivePercentage = predictiveData.getPredictivePercentage();
+
+                if (originalStarTime != null && originalEndTime != null) {
+
+                    Calendar origStartCal = Calendar.getInstance();
+                    origStartCal.setTimeInMillis(originalStarTime);
+
+                    Calendar origEndCal = Calendar.getInstance();
+                    origEndCal.setTimeInMillis(originalEndTime);
+
+
+                    Calendar predictiveSearchStartCal = Calendar.getInstance();
+                    predictiveSearchStartCal.setTimeInMillis(predStartLong);
+
+                    Calendar predictiveSearchEndCal = Calendar.getInstance();
+                    predictiveSearchEndCal.setTimeInMillis(predEndLong);
+
+                    System.out.println(predictiveDateCal.get(Calendar.DAY_OF_MONTH)+" == "+origStartCal.get(Calendar.DAY_OF_MONTH)+", "+predStartLong.equals(originalStarTime) +"&&"+ predEndLong.equals(originalEndTime));
+
+                    if (predictiveDateCal.get(Calendar.DAY_OF_MONTH) == origStartCal.get(Calendar.DAY_OF_MONTH) &&
+                            predictiveSearchStartCal.get(Calendar.HOUR_OF_DAY) == origStartCal.get(Calendar.HOUR_OF_DAY) &&
+                            predictiveSearchStartCal.get(Calendar.MINUTE) == origStartCal.get(Calendar.MINUTE) &&
+                            predictiveSearchEndCal.get(Calendar.HOUR_OF_DAY) == origEndCal.get(Calendar.HOUR_OF_DAY) &&
+                            predictiveSearchEndCal.get(Calendar.MINUTE) == origEndCal.get(Calendar.MINUTE)) {
+
+                        System.out.println("Inside DAY");
+                        List<EventMember> eventMembers = event.getEventMembers();
+                        int totatEventMembers = eventMembers.size();
+                        int eventMembersAttending = 0;
+                        for (EventMember eventMember: eventMembers) {
+                            if (eventMember.getEventMemberId() != null) {
+                                eventMembersAttending++;
+                            }
+                        }
+                        predictivePercentage = (eventMembersAttending/totatEventMembers)*100;
+                        System.out.println("predictivePercentage : "+predictivePercentage);
+
+                        String attendingFriends = "";
+                        if (predictiveData.getAttendingFriendsList() != null) {
+                            attendingFriends = predictiveData.getAttendingFriendsList();
+                        }
+                        List<String> attendingMembersLst = Arrays.asList(attendingFriends.split(","));
+                        System.out.println("attendingMembersArr : "+attendingMembersLst.size());
+                        for (EventMember eventMember: eventMembers) {
+                            if (eventMember.getUserId() != null) {
+                                if (!attendingMembersLst.contains(eventMember.getUserId())) {
+                                    if (attendingFriends.length() == 0) {
+                                        attendingFriends += eventMember.getUserId();
+                                    } else {
+                                        attendingFriends += ","+eventMember.getUserId();
+                                    }
+                                }
+                            }
+                        }
+                        predictiveData.setAttendingFriendsList(attendingFriends);
+                        createGatheringFragment.predictiveDataForDate = predictiveData;
+                        createGatheringFragment.populateFriendCollectionView();
+                    } else {
+
+                        Calendar eventCal = Calendar.getInstance();
+                        eventCal.setTimeInMillis(event.getStartTime());
+
+                        if (predictiveDateCal.get(Calendar.DAY_OF_MONTH) == eventCal.get(Calendar.DAY_OF_MONTH)) {
+                            createGatheringFragment.predictiveDataForDate = predictiveData;
+                            createGatheringFragment.populateFriendCollectionView();
+                        }
+                    }
+                }
+
+                if (predictivePercentage == 0) {
                     //RED
                     if (calMap.containsKey("WHITE")) {
 
@@ -133,7 +205,7 @@ public class GatheringService {
                         predictiveCalendarData.put("WHITE",redArray);
                             /*---------------------------*/
                     }
-                } else if (job.getInt("predictivePercentage") >= 1 && job.getInt("predictivePercentage") <= 33) {
+                } else if (predictivePercentage >= 1 && predictivePercentage <= 33) {
                     //ORANGE
                     if (calMap.containsKey("RED")) {
                         Set<CalendarDay> redSet = calMap.get("RED");
@@ -166,7 +238,7 @@ public class GatheringService {
 
                     }
 
-                } else if (job.getInt("predictivePercentage") >= 34 && job.getInt("predictivePercentage") <= 66) {
+                } else if (predictivePercentage >= 34 && predictivePercentage <= 66) {
                     //YELLOW
                     if (calMap.containsKey("PINK")) {
                         Set<CalendarDay> redSet = calMap.get("PINK");
@@ -197,7 +269,7 @@ public class GatheringService {
                         predictiveCalendarData.put("PINK",redArray);
 
                     }
-                } else if (job.getInt("predictivePercentage") >= 67 && job.getInt("predictivePercentage") <= 99) {
+                } else if (predictivePercentage >= 67 && predictivePercentage <= 99) {
                     //YELLOW
                     if (calMap.containsKey("YELLOW")) {
                         Set<CalendarDay> redSet = calMap.get("YELLOW");
@@ -229,7 +301,7 @@ public class GatheringService {
                         predictiveCalendarData.put("YELLOW",redArray);
                     }
 
-                } else if (job.getInt("predictivePercentage") == 100) {
+                } else if (predictivePercentage == 100) {
                     //GREEN
                     if (calMap.containsKey("GREEN")) {
                         Set<CalendarDay> redSet = calMap.get("GREEN");

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,7 +15,11 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.AsyncTasks.NotificationAsyncTask;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
+import com.cenesbeta.bo.Event;
+import com.cenesbeta.bo.EventChat;
 import com.cenesbeta.bo.Notification;
+import com.cenesbeta.dto.HomeScreenDto;
+import com.cenesbeta.dto.SelectedEventChatDto;
 import com.cenesbeta.fragment.NotificationFragment;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
 import com.cenesbeta.util.CenesUtils;
@@ -25,26 +30,32 @@ import org.json.JSONObject;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+
 public class NotificationAdapter extends BaseAdapter {
 
-    private List<Notification> notifications;
-    private NotificationFragment notificationFragment;
-    private LayoutInflater inflter;
+    private static final int VIEW_TYPE_NONE = 0;
+    private static final int VIEW_TYPE_SECTION = 1;
+    private static final int VIEW_TYPE_ITEM = 2;
 
-    public NotificationAdapter(NotificationFragment notificationFragment, List<Notification> notifications) {
+    private NotificationFragment notificationFragment;
+    private List<Object> notificationList;
+    private LayoutInflater layoutInflater;
+
+    public NotificationAdapter(NotificationFragment notificationFragment, List<Object> notificationList) {
         this.notificationFragment = notificationFragment;
-        this.notifications = notifications;
-        this.inflter = (LayoutInflater.from(notificationFragment.getActivity()));
+        this.notificationList = notificationList;
+        this.layoutInflater = LayoutInflater.from(notificationFragment.getContext());
     }
 
     @Override
     public int getCount() {
-        return notifications.size();
+        return notificationList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return notifications.get(position);
+        return notificationList.get(position);
     }
 
     @Override
@@ -54,9 +65,21 @@ public class NotificationAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+        if (getItemViewType(position) == VIEW_TYPE_SECTION) {
+            return getSectionView(position, convertView, parent);
+        } else if (getItemViewType(position) == VIEW_TYPE_ITEM) {
+            return getItemView(position, convertView, parent);
+        }
+        return convertView;
+    }
+
+    @NonNull
+    private View getItemView(int position, View convertView, ViewGroup parent) {
+
         final ViewHolder holder;
         if (convertView == null) {
-            convertView = inflter.inflate(R.layout.adapter_notification_group_item, null);
+            convertView = layoutInflater.inflate(R.layout.adapter_notification_group_item, parent, false);
             holder = new ViewHolder();
             holder.notificationMessage = (TextView) convertView.findViewById(R.id.notification_mesasge);
             holder.notificationTitle = (TextView) convertView.findViewById(R.id.notification_title);
@@ -64,32 +87,49 @@ public class NotificationAdapter extends BaseAdapter {
             holder.notifcationReadStatus = (TextView) convertView.findViewById(R.id.notification_readstatus);
             holder.senderPic = (RoundedImageView) convertView.findViewById(R.id.notification_sender_profile_pic);
             holder.notificationDay = (TextView) convertView.findViewById(R.id.notification_day);
-            holder.llContainer = (LinearLayout) convertView.findViewById(R.id.ll_container);
+            holder.rlContainer = (RelativeLayout) convertView.findViewById(R.id.rl_container);
             holder.rlUnreadDot = (RelativeLayout) convertView.findViewById(R.id.rl_unread_dot);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-        final Notification notification = (Notification) notifications.get(position);
+            holder.notificationActionIcon = (ImageView) convertView.findViewById(R.id.iv_notification_action_icon);
 
-        System.out.println(notification.toString());
+            convertView.setTag(R.layout.adapter_notification_group_item,holder);
+
+        } else if (convertView.getTag(R.layout.adapter_notification_group_item) == null) {
+            convertView = layoutInflater.inflate(R.layout.adapter_notification_group_item, parent, false);
+            holder = new ViewHolder();
+            holder.notificationMessage = (TextView) convertView.findViewById(R.id.notification_mesasge);
+            holder.notificationTitle = (TextView) convertView.findViewById(R.id.notification_title);
+            holder.notificationTime = (TextView) convertView.findViewById(R.id.notifcation_time);
+            holder.notifcationReadStatus = (TextView) convertView.findViewById(R.id.notification_readstatus);
+            holder.senderPic = (RoundedImageView) convertView.findViewById(R.id.notification_sender_profile_pic);
+            holder.notificationDay = (TextView) convertView.findViewById(R.id.notification_day);
+            holder.rlContainer = (RelativeLayout) convertView.findViewById(R.id.rl_container);
+            holder.rlUnreadDot = (RelativeLayout) convertView.findViewById(R.id.rl_unread_dot);
+            holder.notificationActionIcon = (ImageView) convertView.findViewById(R.id.iv_notification_action_icon);
+            convertView.setTag(R.layout.adapter_notification_group_item,holder);
+        } else {
+            holder =  (ViewHolder) convertView.getTag(R.layout.adapter_notification_group_item);
+        }
+
+        final Notification notification = (Notification) getItem(position);
+
+        //System.out.println(notification.toString());
         String notificationText = notification.getMessage();
         //if (!(notification.getType() != null && notification.getType().equals("Welcome"))) {
-        System.out.println("Event Title : "+notification.getTitle());
-            holder.notificationTitle.setText(Html.fromHtml("("+notification.getTitle()+")"));
+        //System.out.println("Event Title : "+notification.getTitle());
+        holder.notificationTitle.setText(Html.fromHtml("("+notification.getTitle()+")"));
         //}
 
-        notificationText = notificationText.replaceAll("accepted", "<font color='#FFAA4E'>accepted</font>");
-        notificationText = notificationText.replaceAll("declined", "<font color='#FFAA4E'>declined</font>");
-        notificationText = notificationText.replaceAll("deleted", "<font color='#FFAA4E'>deleted</font>");
-        System.out.println(notificationText);
+        notificationText = notificationText.replace("accepted", "<font color='#FFAA4E'>accepted</font>");
+        notificationText = notificationText.replace("declined", "<font color='#FFAA4E'>declined</font>");
+        notificationText = notificationText.replace("deleted", "<font color='#FFAA4E'>deleted</font>");
+        notificationText = notificationText.replace("changed", "<font color='#FFAA4E'>changed</font>");
+        notificationText = notificationText.replace("updated", "<font color='#FFAA4E'>updated</font>");
+        notificationText = notificationText.replace("modified", "<font color='#FFAA4E'>modified</font>");
+        notificationText = notificationText.replace("added", "<font color='#FFAA4E'>added</font>");
+        notificationText = notificationText.replace("Invitation", "<font color='#FFAA4E'>Invitation</font>");
+        //System.out.println(notificationText);
         holder.notificationMessage.setText(Html.fromHtml( notificationText));
 
-        //if (notification.getSenderImage() != null && notification.getSenderImage() != "" && notification.getSenderImage() != "null") {
-        //    Glide.with(activity).load(notification.getSenderImage()).apply(RequestOptions.placeholderOf(R.drawable.default_profile_icon)).into(holder.senderPic);
-        //} else {
-       //     holder.senderPic.setImageResource(R.drawable.default_profile_icon);
-        //}
 
         try {
 
@@ -110,14 +150,16 @@ public class NotificationAdapter extends BaseAdapter {
             e.printStackTrace();
         }
         long daysDiff  = (new Date().getTime() - notification.getNotificationTime())/(1000*3600*24);
-        System.out.println("Different in Days : "+daysDiff/(1000*3600*24)+"   -----   "+daysDiff);
+        //System.out.println("Different in Days : "+daysDiff/(1000*3600*24)+"   -----   "+daysDiff);
         if (daysDiff > 0) {
-            holder.notificationDay.setText(daysDiff +" Days Ago");
-            holder.notificationTime.setText(CenesUtils.ddMMM.format(notification.getNotificationTime()).toUpperCase());
-
+            if(daysDiff < 7) {
+                holder.notificationDay.setText(daysDiff + "d");
+            }else{
+                long weekDiff = (new Date().getTime() - notification.getNotificationTime())/(1000*3600*24)/7;
+                holder.notificationDay.setText(weekDiff + "w");
+            }
         } else {
 
-            //int hours = CenesUtils.differenceInHours(notification.getNotificationTime(), new Date().getTime());
             int hours = Math.round((new Date().getTime() - notification.getNotificationTime())/(1000*3600));
             System.out.println("Hours Diff : "+hours);
             if (hours == 0) {
@@ -132,103 +174,136 @@ public class NotificationAdapter extends BaseAdapter {
                     System.out.println("abc 3");
                     holder.notificationDay.setText(minutes+"m");
                 }
-            } else {/*if (hours == 1) {
-                holder.notificationDay.setText(hours+"h");
-            } else {*/
+            } else {
                 System.out.println("abc 4");
                 System.out.println("hours hours hours");
                 holder.notificationDay.setText(hours+"h");
             }
         }
+
+
         if (notification.getReadStatus().equals("Read")) {
-          //  holder.llContainer.setBackground(notificationFragment.getActivity().getResources().getDrawable(R.drawable.xml_curved_corner_markread_fill));
-         //   holder.notificationTime.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_markread_color));
-          //  holder.notificationDay.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_markread_color));
-         //   holder.notifcationReadStatus.setVisibility(View.VISIBLE);
-            holder.rlUnreadDot.setVisibility(View.GONE);
+            //holder.rlUnreadDot.setVisibility(View.GONE);
+            holder.notificationMessage.setTextColor(notificationFragment.getResources().getColor(R.color.notification_read_text));
+            holder.notificationTitle.setTextColor(notificationFragment.getResources().getColor(R.color.notification_read_text));
+            holder.rlContainer.setBackgroundColor(notificationFragment.getResources().getColor(R.color.white));
+
         } else {
-           // holder.llContainer.setBackground(notificationFragment.getActivity().getResources().getDrawable(R.drawable.xml_curved_corner_blue_fill));
-          //  holder.notificationTime.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_selectedText_color));
-          //  holder.notificationDay.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_selectedText_color));
-           // holder.notifcationReadStatus.setVisibility(View.GONE);
-            holder.rlUnreadDot.setVisibility(View.VISIBLE);
+            //holder.rlUnreadDot.setVisibility(View.VISIBLE);
+            holder.notificationTitle.setTextColor(notificationFragment.getResources().getColor(R.color.black));
+            holder.notificationMessage.setTextColor(notificationFragment.getResources().getColor(R.color.black));
+            holder.rlContainer.setBackgroundColor(notificationFragment.getResources().getColor(R.color.notification_read_bg));
+
         }
 
-        holder.llContainer.setOnClickListener(new View.OnClickListener() {
+        holder.notificationActionIcon.setVisibility(View.GONE);
+        if (notification.getType().equals("Gathering")) {
+            if (notification.getAction().equals("Chat")) {
+                holder.notificationActionIcon.setVisibility(View.VISIBLE);
+                holder.notificationActionIcon.setImageResource(R.drawable.notificaiton_chat_icon);
+            } else if (notification.getAction().equals("Create")) {
+                holder.notificationActionIcon.setVisibility(View.VISIBLE);
+                holder.notificationActionIcon.setImageResource(R.drawable.mdi_party_popper);
+            }
+        }
+
+
+        holder.rlContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notification.setReadStatus("Read");
-                if (notification.getReadStatus().equals("Read")) {
-                   // holder.llContainer.setBackground(notificationFragment.getActivity().getResources().getDrawable(R.drawable.xml_curved_corner_markread_fill));
-                    holder.notificationTime.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_markread_color));
-                    holder.notificationDay.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_markread_color));
-                   // holder.notifcationReadStatus.setVisibility(View.VISIBLE);
-                } else {
-                  //  holder.llContainer.setBackground(notificationFragment.getActivity().getResources().getDrawable(R.drawable.xml_curved_corner_blue_fill));
-                    holder.notificationTime.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_selectedText_color));
-                    holder.notificationDay.setTextColor(notificationFragment.getActivity().getResources().getColor(R.color.cenes_selectedText_color));
-                   // holder.notifcationReadStatus.setVisibility(View.GONE);
+
+                if (notification.getReadStatus().equals("UnRead")) {
+
+                    notification.setReadStatus("Read");
+                    notificationFragment.notificationManagerImpl.updateNotificationReadStatus(notification);
+                    List<Notification> notifications = notificationFragment.notificationManagerImpl.fetchAllNotifications();
+
+                    notificationFragment.markNotificationAsReadInMap(notification);
+
+                    if (notificationFragment.internetManager.isInternetConnection(notificationFragment.getCenesActivity())) {
+
+                        new NotificationAsyncTask(((CenesBaseActivity)notificationFragment.getActivity()).getCenesApplication(), notificationFragment.getActivity());
+                        new NotificationAsyncTask.MarkNotificationReadTask(new NotificationAsyncTask.MarkNotificationReadTask.AsyncResponse() {
+                            @Override
+                            public void processFinish(JSONObject response) {
+                                System.out.println(response);
+                            }
+                        }).execute(notification.getNotificationTypeId());
+
+                    }
+                    holder.rlContainer.setBackgroundColor(notificationFragment.getResources().getColor(R.color.white));
+                    holder.notificationMessage.setTextColor(notificationFragment.getResources().getColor(R.color.notification_read_text));
+                    holder.notificationTitle.setTextColor(notificationFragment.getResources().getColor(R.color.notification_read_text));
+                    //notifyDataSetChanged();
                 }
 
-                notificationFragment.notificationManagerImpl.updateNotificationReadStatus(notification);
-                if (notificationFragment.internetManager.isInternetConnection(notificationFragment.getCenesActivity())) {
-
-                    new NotificationAsyncTask(((CenesBaseActivity)notificationFragment.getActivity()).getCenesApplication(), notificationFragment.getActivity());
-                    new NotificationAsyncTask.MarkNotificationReadTask(new NotificationAsyncTask.MarkNotificationReadTask.AsyncResponse() {
-                        @Override
-                        public void processFinish(JSONObject response) {
-                            System.out.println(response);
-                        }
-                    }).execute(notification.getNotificationTypeId());
-
+                if(notification.getEvent() != null) {
+                    GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
+                    gatheringPreviewFragment.event = notification.getEvent();
+                    if (notification.getAction().equals("Chat")) {
+                        SelectedEventChatDto selectedEventChatDto = new SelectedEventChatDto();
+                        selectedEventChatDto.setShowChatWindow(true);
+                        selectedEventChatDto.setMessage(notification.getMessage());
+                        gatheringPreviewFragment.selectedEventChatDto = selectedEventChatDto;
+                    }
+                    ((CenesBaseActivity) notificationFragment.getActivity()).replaceFragment(gatheringPreviewFragment, NotificationFragment.TAG);
                 }
 
-                GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
-                gatheringPreviewFragment.event = notification.getEvent();
-                ((CenesBaseActivity)notificationFragment.getActivity()).replaceFragment(gatheringPreviewFragment, NotificationFragment.TAG);
-
-               /* if (notification.getType().equals("Gathering")) {
-
-                    Bundle bundle = new Bundle();
-                    bundle.putString("dataFrom", "notification");
-                    bundle.putLong("eventId",notification.getNotificationTypeId());
-                    bundle.putString("message", "Your have been invited to...");
-                    bundle.putString("title", notification.getTitle());
-
-
-                    new NotificationAsyncTask(((CenesBaseActivity)activity).getCenesApplication(), activity);
-                    new NotificationAsyncTask.MarkNotificationReadTask(new NotificationAsyncTask.MarkNotificationReadTask.AsyncResponse() {
-                        @Override
-                        public void processFinish(JSONObject response) {
-                            System.out.println(response.toString());
-                        }
-                    }).execute(notification.getNotificationTypeId());
-
-                    GatheringPreviewFragmentBkup gatheringPreviewFragmentBkup = new GatheringPreviewFragmentBkup();
-                    gatheringPreviewFragmentBkup.setArguments(bundle);
-
-                    ((CenesBaseActivity)activity).replaceFragment(gatheringPreviewFragmentBkup, GatheringPreviewFragmentBkup.TAG);
-                }*/ /*else if (notification.getType().equals("Gathering") && notification.getNotificationTypeStatus().equalsIgnoreCase("old")) {
-
-                    Bundle bundle = new Bundle();
-                    bundle.putString("dataFrom", "list");
-                    bundle.putLong("eventId",notification.getNotificationTypeId());
-
-
-                    GatheringPreviewFragmentBkup gatheringPreviewFragment = new GatheringPreviewFragmentBkup();
-                    gatheringPreviewFragment.setArguments(bundle);
-
-
-                    ((CenesBaseActivity)activity).replaceFragment(gatheringPreviewFragment, GatheringPreviewFragmentBkup.TAG);
-
-                }*/ /*else if (child.getType().equals("Reminder")) {
-                    startActivity(new Intent(getActivity(), ReminderActivity.class));
-                    getActivity().finish();
-                }*/
             }
         });
-
         return convertView;
+    }
+
+    @NonNull
+    private View getSectionView(int position, View convertView, ViewGroup parent) {
+        NotificationHeaderViewHolder notificationHeaderViewHolder;
+        if (convertView == null) {
+            convertView = layoutInflater.inflate(R.layout.adapter_notification_group_header, null);
+            notificationHeaderViewHolder = new NotificationHeaderViewHolder();
+            notificationHeaderViewHolder.header = (TextView) convertView.findViewById(R.id.tv_list_title);
+            notificationHeaderViewHolder.header_separator = (View) convertView.findViewById(R.id.view_header_separator);
+            convertView.setTag(R.layout.adapter_notification_group_header, notificationHeaderViewHolder);
+
+        } else if (convertView.getTag(R.layout.adapter_event_chats_group_header) == null) {
+
+            convertView = layoutInflater.inflate(R.layout.adapter_notification_group_header, null);
+            notificationHeaderViewHolder = new NotificationHeaderViewHolder();
+            notificationHeaderViewHolder.header = (TextView) convertView.findViewById(R.id.tv_list_title);
+            notificationHeaderViewHolder.header_separator = (View) convertView.findViewById(R.id.view_header_separator);
+            convertView.setTag(R.layout.adapter_notification_group_header, notificationHeaderViewHolder);
+
+        } else {
+            notificationHeaderViewHolder = (NotificationHeaderViewHolder) convertView.getTag();
+        }
+
+        String headerTitle = (String) getItem(position);
+        if(position == 0){
+            notificationHeaderViewHolder.header_separator.setVisibility(View.GONE);
+        }else{
+            notificationHeaderViewHolder.header_separator.setVisibility(View.VISIBLE);
+        }
+
+        System.out.println("Header of table : "+headerTitle);
+        notificationHeaderViewHolder.header.setText(headerTitle);
+        return convertView;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        super.getItemViewType(position);
+
+        Object listItem = getItem(position);
+        if (listItem instanceof Notification) {
+            return VIEW_TYPE_ITEM;
+        } else if (listItem instanceof String) {
+            return VIEW_TYPE_SECTION;
+        }
+        return VIEW_TYPE_NONE;
+    }
+
+    public void refreshItems(List<Object> notificationList) {
+        this.notificationList = notificationList;
+        notifyDataSetChanged();
     }
 
     class ViewHolder {
@@ -236,8 +311,14 @@ public class NotificationAdapter extends BaseAdapter {
         private TextView notificationTime;
         private TextView notifcationReadStatus;
         private RoundedImageView senderPic;
-        private LinearLayout llContainer;
-        private RelativeLayout rlUnreadDot;
+        private RelativeLayout rlUnreadDot, rlContainer;
         private TextView notificationDay;
+        private ImageView notificationActionIcon;
     }
+
+    class NotificationHeaderViewHolder {
+        TextView header;
+        View header_separator;
+    }
+
 }

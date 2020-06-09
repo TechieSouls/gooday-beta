@@ -48,6 +48,7 @@ import com.cenesbeta.api.CenesCommonAPI;
 import com.cenesbeta.api.NotificationAPI;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
+import com.cenesbeta.bo.Gathering;
 import com.cenesbeta.bo.Notification;
 import com.cenesbeta.bo.NotificationCountData;
 import com.cenesbeta.bo.User;
@@ -350,6 +351,8 @@ public class CenesBaseActivity extends CenesActivity {
                 startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(startMain);
 
+            } else if (fragment instanceof GatheringPreviewFragment) {
+                ((GatheringPreviewFragment)fragment).hideChatBoxKeyboard();
             }
         }
 

@@ -4,128 +4,140 @@
     android:layout_height="match_parent"
     android:background="@color/transparent">
 
+
     <RelativeLayout
-        android:id="@+id/rl_header"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="match_parent">
 
         <RelativeLayout
+            android:id="@+id/rl_header"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            >
+            android:layout_height="50dp">
 
-            <ImageView
-                android:id="@+id/iv_bug_report"
-                android:layout_width="25dp"
-                android:layout_height="30dp"
-                android:src="@drawable/instabug_report"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="25dp"
-                android:visibility="gone"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                >
+
+                <ImageView
+                    android:id="@+id/iv_bug_report"
+                    android:layout_width="25dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/instabug_report"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="25dp"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_back_button"
+            android:layout_width="20dp"
+            android:layout_height="28dp"
+            android:padding="5dp"
+            android:src="@drawable/abondan_event_icon"
+            android:layout_marginTop="60dp"
+            android:layout_marginLeft="20dp"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/iv_back_button"
+            android:layout_above="@+id/rl_login_btn">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:layout_marginTop="70dp"
+                    android:id="@+id/ll_login_form">
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="90dp"
+                        android:src="@drawable/about_us_logo"
+                        android:layout_gravity="center"/>
+
+                    <EditText
+                        android:id="@+id/et_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="50dp"
+                        android:hint="Email"
+                        android:padding="10dp"
+                        android:inputType="textEmailAddress"
+                        android:textAlignment="center"
+                        android:textSize="16dp"
+                        android:background="@color/transparent"
+                        android:fontFamily="@font/avenir_medium"/>
+
+                    <View
+                        android:id="@+id/view_email_divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@drawable/xml_gradient_multicolors"/>
+                    <EditText
+                        android:id="@+id/et_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="20dp"
+                        android:hint="Password"
+                        android:padding="10dp"
+                        android:inputType="textPassword"
+                        android:textAlignment="center"
+                        android:textSize="16dp"
+                        android:background="@color/transparent"
+                        android:fontFamily="@font/avenir_medium"/>
+
+                    <View
+                        android:id="@+id/view_password_divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@drawable/xml_gradient_multicolors"/>
+                    <TextView
+                        android:id="@+id/tv_forget_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Forgot Password?"
+                        android:layout_marginTop="10dp"
+                        android:padding="2dp"
+                        android:textSize="14dp"
+                        android:gravity="center"
+                        android:fontFamily="@font/avenir_book" />
+
+
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/rl_login_btn"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/light_link_color">
+
+            <Button
+                android:id="@+id/bt_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:text="Login"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                android:fontFamily="@font/avenir_heavy"/>
+
         </RelativeLayout>
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/iv_back_button"
-        android:layout_width="20dp"
-        android:layout_height="28dp"
-        android:padding="5dp"
-        android:src="@drawable/abondan_event_icon"
-        android:layout_marginTop="60dp"
-        android:layout_marginLeft="20dp"/>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/iv_back_button"
-        android:layout_above="@+id/rl_login_btn">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rl_header"
-            android:orientation="vertical"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:layout_marginTop="70dp"
-            android:id="@+id/ll_login_form">
-
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="90dp"
-                android:src="@drawable/about_us_logo"
-                android:layout_gravity="center"/>
-
-            <EditText
-                android:id="@+id/et_email"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="50dp"
-                android:hint="Email"
-                android:padding="10dp"
-                android:inputType="textEmailAddress"
-                android:textAlignment="center"
-                android:textSize="16dp"
-                android:background="@color/transparent"
-                android:fontFamily="@font/avenir_medium"/>
-
-            <View
-                android:id="@+id/view_email_divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@drawable/xml_gradient_multicolors"/>
-            <EditText
-                android:id="@+id/et_password"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:hint="Password"
-                android:padding="10dp"
-                android:inputType="textPassword"
-                android:textAlignment="center"
-                android:textSize="16dp"
-                android:background="@color/transparent"
-                android:fontFamily="@font/avenir_medium"/>
-
-            <View
-                android:id="@+id/view_password_divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@drawable/xml_gradient_multicolors"/>
-            <TextView
-                android:id="@+id/tv_forget_password"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Forgot Password?"
-                android:layout_marginTop="10dp"
-                android:padding="2dp"
-                android:textSize="14dp"
-                android:gravity="center"
-                android:fontFamily="@font/avenir_book" />
-
-
-
-        </LinearLayout>
-
-    </ScrollView>
-
-    <RelativeLayout
-        android:id="@+id/rl_login_btn"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/light_link_color">
-
-        <Button
-            android:id="@+id/bt_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            android:text="Login"
-            android:textColor="@color/white"
-            android:textSize="18dp"
-            android:fontFamily="@font/avenir_heavy"/>
-
-    </RelativeLayout>
 </RelativeLayout>

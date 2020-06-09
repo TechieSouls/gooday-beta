@@ -1,14 +1,10 @@
 package com.cenesbeta.fragment.gathering;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -20,30 +16,26 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
-import android.telephony.TelephonyManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
-import android.transition.Slide;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -54,25 +46,24 @@ import com.cenesbeta.AsyncTasks.GatheringAsyncTask;
 import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
 import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.InternetManager;
-import com.cenesbeta.Manager.UrlManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.adapter.EventChatExpandableAdapter;
+import com.cenesbeta.adapter.EventChatBaseAdapter;
+import com.cenesbeta.adapter.LocationPhotoRecyclerViewAdapter;
 import com.cenesbeta.api.GatheringAPI;
-import com.cenesbeta.api.UserAPI;
 import com.cenesbeta.application.CenesApplication;
-import com.cenesbeta.backendManager.UserApiManager;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventChat;
 import com.cenesbeta.bo.EventMember;
+import com.cenesbeta.bo.LocationPhoto;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.impl.EventManagerImpl;
 import com.cenesbeta.database.impl.EventMemberManagerImpl;
-import com.cenesbeta.database.impl.UserManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.dto.AsyncTaskDto;
 import com.cenesbeta.dto.GatheringPreviewDto;
+import com.cenesbeta.dto.SelectedEventChatDto;
 import com.cenesbeta.extension.InvitationScrollView;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.service.ResizeAnimation;
@@ -84,12 +75,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -119,6 +109,12 @@ public class GatheringPreviewFragment extends CenesFragment {
     private InvitationScrollView svCard;
     private ProgressBar progressBar;
 
+    //Layout ChatView Components
+    private RelativeLayout rlLocationAlertBackdrop, rlIncludeLocationAlertView;
+    private TextView tvLocation;
+    private Button btnGetDirections;
+    private RecyclerView rvLocationPlaces;
+
     public Fragment sourceFragment;
     private CenesApplication cenesApplication;
     private InternetManager internetManager;
@@ -127,10 +123,11 @@ public class GatheringPreviewFragment extends CenesFragment {
     public Event event;
     public List<Event> pendingEvents;
     public List<EventChat> eventChats;
-    private EventChatExpandableAdapter eventChatExpandableAdapter;
-    private ExpandableListView elvEventChatList;
+    private EventChatBaseAdapter eventChatBaseAdapter;
+    private ListView lvChatListView;
     private List<String> headers;
     private Map<String, List<EventChat>> eventChatMapList;
+    private List<Object> eventChatList;
 
 
     private EventMember eventOwner, loggedInUserAsEventMember;
@@ -141,26 +138,23 @@ public class GatheringPreviewFragment extends CenesFragment {
     private boolean isKeyboardVisible = false;
     int windowWidth, windowHeight;
     int screenCenter;
-    int xCord, yCord, newXcord, newYCord;
-    private int yPositionOfCard = 0;
-    boolean leftPartClicked, bottomBarClicked;
     boolean isLoggedInUserExistsInMemberList = false;
     private List<EventMember> nonCenesMember;
     private boolean isNewEvent = false;
     private boolean isChatLoaded = false;
     private boolean isDescriptionButtonOn = false;
-    private int chatListViewMarginBottom = 20;
     private int mActivePointerId;
-    private int parentWidth;
+    private int parentWidth, initialX;
     private float ROTATION_DEGREES = 20f;
     private float MAX_CARD_EXTENT = 200f;
     private float CARD_SWIPE_DELAY = 20f;
 
-    private float initialX, initialY;
     private boolean click = true;
     private float initialXPress;
     private float initialYPress;
-
+    public SelectedEventChatDto selectedEventChatDto;
+    public List<LocationPhoto> locationPhotos;
+    private LocationPhotoRecyclerViewAdapter locationPhotoRecyclerViewAdapter;
 
     @Nullable
     @Override
@@ -193,7 +187,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         rvEventDescriptionDialog = (RelativeLayout) view.findViewById(R.id.rv_event_description_dialog);
         rlDescriptionBubbleBackground = (RelativeLayout) view.findViewById(R.id.rl_description_bubble_background);
         rlIncludeChat = (RelativeLayout) view.findViewById(R.id.rl_include_chat);
-        elvEventChatList = (ExpandableListView) view.findViewById(R.id.elv_chat_listView);
+        lvChatListView = (ListView) view.findViewById(R.id.lv_chat_listView);
         ivDescriptionBubbleIcon = (ImageView) view.findViewById(R.id.iv_description_bubble_icon);
         ivDescProfilePic = (RoundedImageView) view.findViewById(R.id.iv_desc_profile_pic);
 
@@ -210,6 +204,13 @@ public class GatheringPreviewFragment extends CenesFragment {
         rlWelcomeInvitation = (RelativeLayout) view.findViewById(R.id.rl_welcome_invitation);
         rlInvitationView = (RelativeLayout) view.findViewById(R.id.rl_invitation_view);
         ivEventPictureOverlay = (RelativeLayout) view.findViewById(R.id.iv_event_picture_overlay);
+
+        //Location Alert View Components
+        rlIncludeLocationAlertView = (RelativeLayout) view.findViewById(R.id.rl_include_location_alert_view);
+        rlLocationAlertBackdrop = (RelativeLayout) view.findViewById(R.id.rl_location_alert_backdrop);
+        tvLocation = (TextView) view.findViewById(R.id.tv_location);
+        btnGetDirections = (Button) view.findViewById(R.id.btn_get_directions);
+        rvLocationPlaces = (RecyclerView) view.findViewById(R.id.rv_location_photos);
 
         llBottomButtons = (LinearLayout) view.findViewById(R.id.ll_bottom_buttons);
         llEventDetails = (LinearLayout) view.findViewById(R.id.ll_event_details);
@@ -234,6 +235,8 @@ public class GatheringPreviewFragment extends CenesFragment {
         svCard.setOnTouchListener(onTouchListener);
         enterChatTv.setOnFocusChangeListener(onFocusChangeListener);
         enterChatImageView.setOnClickListener(onClickListener);
+        rlLocationAlertBackdrop.setOnClickListener(onClickListener);
+        btnGetDirections.setOnClickListener(onClickListener);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             svCard.setOnScrollChangeListener(new View.OnScrollChangeListener() {
@@ -262,6 +265,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         eventManagerImpl = new EventManagerImpl(cenesApplication);
 
         new GatheringPreviewDto();
+        locationPhotos = new ArrayList<>();
 
         windowWidth = getActivity().getWindowManager().getDefaultDisplay().getWidth();
         windowHeight = getActivity().getWindowManager().getDefaultDisplay().getHeight();
@@ -407,7 +411,6 @@ public class GatheringPreviewFragment extends CenesFragment {
     public void onResume() {
         super.onResume();
         getActivity().registerReceiver(mChatMessageReceiver, new IntentFilter("eventchatrefresh"));
-
     }
 
     @Override
@@ -418,7 +421,6 @@ public class GatheringPreviewFragment extends CenesFragment {
         } catch (Exception e){
 
         }
-
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -437,30 +439,47 @@ public class GatheringPreviewFragment extends CenesFragment {
                     hideDescriptionMessage();
 
                     if (!CenesUtils.isEmpty(event.getLatitude())) {
-                        new AlertDialog.Builder(getActivity())
-                                .setTitle("")
-                                .setMessage(event.getLocation())
-                                .setPositiveButton("Get Directions", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // Create a Uri from an intent string. Use the result to create an Intent.
-                                        //  Uri gmmIntentUri = Uri.parse("google.streetview:cbll="+event.getLatitude()+","+event.getLongitude()+"");
-                                        Uri gmmIntentUri = Uri.parse("geo:0,0?q="+event.getLatitude()+","+event.getLongitude()+"(label)");
-                                        // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-                                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                                        // Make the Intent explicit by setting the Google Maps package
-                                        mapIntent.setPackage("com.google.android.apps.maps");
 
-                                        // Attempt to start an activity that can handle the Intent
-                                        startActivity(mapIntent);
+                        if (locationPhotos.size() > 0) {
 
-                                    }
-                                }).setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialog) {
-                                dialog.dismiss();
-                            }
-                        }).show();
+                            rlIncludeLocationAlertView.setVisibility(View.VISIBLE);
+
+                            tvLocation.setText(event.getLocation());
+
+                            locationPhotoRecyclerViewAdapter = new LocationPhotoRecyclerViewAdapter(GatheringPreviewFragment.this, locationPhotos);
+                            locationPhotoRecyclerViewAdapter.notifyDataSetChanged();
+                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                            rvLocationPlaces.setLayoutManager(mLayoutManager);
+                            rvLocationPlaces.setAdapter(locationPhotoRecyclerViewAdapter);
+                            rvLocationPlaces.invalidate();
+
+                        } else {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle("")
+                                    .setMessage(event.getLocation())
+                                    .setPositiveButton("Get Directions", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // Create a Uri from an intent string. Use the result to create an Intent.
+                                            //  Uri gmmIntentUri = Uri.parse("google.streetview:cbll="+event.getLatitude()+","+event.getLongitude()+"");
+                                            Uri gmmIntentUri = Uri.parse("geo:0,0?q="+event.getLatitude()+","+event.getLongitude()+"(label)");
+                                            // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+                                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                                            // Make the Intent explicit by setting the Google Maps package
+                                            mapIntent.setPackage("com.google.android.apps.maps");
+
+                                            // Attempt to start an activity that can handle the Intent
+                                            startActivity(mapIntent);
+
+                                        }
+                                    }).setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                        }
+
                     } else  if (!CenesUtils.isEmpty(event.getLocation())) {
 
                         new AlertDialog.Builder(getActivity())
@@ -625,13 +644,13 @@ public class GatheringPreviewFragment extends CenesFragment {
                 case  R.id.send_chat_tv :
                     rlChatBubble.setVisibility(View.GONE);
                     llSenderPicture.setVisibility(View.GONE);
-                    //rlEnterChat.setVisibility(View.VISIBLE);
-                    //RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
-                    //layoutParams.width = CenesUtils.dpToPx(60);
-                    //layoutParams.setMargins(windowWidth, 0, 0, 0);
-                    enterChatTv.requestFocus();
-                    enterChatTv.setFocusableInTouchMode(true);
+                    rlEnterChat.setVisibility(View.VISIBLE);
 
+                    System.out.println("rl enter chat width : "+rlEnterChat.getLayoutParams().width);
+                    ResizeAnimation resizeAnimation = new ResizeAnimation(rlEnterChat, windowWidth);
+                    resizeAnimation.setDuration(500);
+                    rlEnterChat.startAnimation(resizeAnimation);
+                    enterChatTv.setHint("Type a message");
 
 
 
@@ -653,13 +672,13 @@ public class GatheringPreviewFragment extends CenesFragment {
                     public void run() {
 
                         enterChatTv.requestFocus();
-                        enterChatTv.setFocusableInTouchMode(true);
+                        //enterChatTv.setFocusableInTouchMode(true);
                         //InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
                         //imm.showSoftInput(enterChatTv, InputMethodManager.SHOW_FORCED);
 
                     }
 
-                }, 100);
+                }, 1500);
 
 
                     break;
@@ -670,20 +689,33 @@ public class GatheringPreviewFragment extends CenesFragment {
                         return;
                     }
                     System.out.println("typing message...");
-                    int scrollPosition = 0;
-                    for (Map.Entry<String, List<EventChat>> entrySet: eventChatMapList.entrySet()) {
-                        scrollPosition = scrollPosition + 1 + entrySet.getValue().size();
-                    }
                     String chatMessage = enterChatTv.getText().toString();
                     enterChatTv.setText("");
                     if (chatMessage != null && chatMessage.length() > 0) {
-                        System.out.println(eventChats.size() +" gggggg enter "+ headers.size());
-                        elvEventChatList.setSelection(eventChats.size() + headers.size());
                         postEventChat(chatMessage);
 
                     }
                     break;
 
+                case R.id.btn_get_directions:
+                    rlIncludeLocationAlertView.setVisibility(View.GONE);
+
+                    //  Uri gmmIntentUri = Uri.parse("google.streetview:cbll="+event.getLatitude()+","+event.getLongitude()+"");
+                    Uri gmmIntentUri = Uri.parse("geo:0,0?q="+event.getLatitude()+","+event.getLongitude()+"(label)");
+                    // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    // Make the Intent explicit by setting the Google Maps package
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    // Attempt to start an activity that can handle the Intent
+                    startActivity(mapIntent);
+
+                    break;
+
+                case R.id.rl_location_alert_backdrop:
+
+                    rlIncludeLocationAlertView.setVisibility(View.GONE);
+
+                    break;
                 default:
                     System.out.println("Heyyy you did it.");
             }
@@ -946,10 +978,11 @@ public class GatheringPreviewFragment extends CenesFragment {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
 
-            if (hasFocus && !isKeyboardVisible) {
+            System.out.println("Has Focus : "+hasFocus);
 
+            if (hasFocus) {
                 isKeyboardVisible=true;
-                rlEnterChat.setVisibility(View.VISIBLE);
+
                 RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)rlChatlistAndBubble.getLayoutParams();
 
                 int heightDiff = fragmentView.getRootView().getHeight() - fragmentView.getHeight();
@@ -963,65 +996,21 @@ public class GatheringPreviewFragment extends CenesFragment {
                 int screenHeight = fragmentView.getRootView().getHeight();
                 int heightDifference = screenHeight - (r.bottom - r.top);
 
-                //rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference - 3));
-                enterChatTv.requestFocus();
+                //rlEnterChat.setVisibility(View.VISIBLE);
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
                 imm.showSoftInput(enterChatTv, WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-                //rlEnterChat.setY(getActivity().getWindowManager().getDefaultDisplay().getHeight() - 500);
-                //got focus
-                //RelativeLayout.LayoutParams newPara = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PrecastrUtils.convertDpToPx(getContext(),350));
-                //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
-                //relativeParams.;  // left, top, right, bottom
-                //rlBottomText.setLayoutParams(relativeParams);
-                //relativeParams.height = CenesUtils.convertDpToPx(getContext(), 350);
-                /* ObjectAnimator animation = ObjectAnimator.ofFloat(rlEnterChat, "translationY", 0f);
-                    animation.setDuration(3000);
-                    animation.start(); */
-                if (rlEnterChat.getLayoutParams().width != windowWidth) {
-                    final RelativeLayout.LayoutParams rlEnterChatLayoutParams = (RelativeLayout.LayoutParams)rlEnterChat.getLayoutParams();
-                    rlEnterChatLayoutParams.setMargins(windowWidth, 0, 0, getActivity().getWindowManager().getDefaultDisplay().getHeight() - (heightDifference));
-                    rlEnterChatLayoutParams.width = 0;
-                    rlEnterChat.setLayoutParams(rlEnterChatLayoutParams);
-
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            rlEnterChat.setVisibility(View.VISIBLE);
-                            ResizeAnimation resizeAnimation = new ResizeAnimation(rlEnterChat, windowWidth);
-                            resizeAnimation.setDuration(1000);
-                            rlEnterChat.startAnimation(resizeAnimation);
-
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    enterChatTv.requestFocus();
-                                    enterChatTv.setFocusableInTouchMode(true);
-                                }
-
-                            },500);
-                            //enterChatTv.setPressed(true);
-                            //enterChatTv.setCursorVisible(true);
-
-                        }
-                    }, 100);
-                }
-
-
             } else {
-                    isKeyboardVisible = false;
+
                 System.out.println("On Back Button Pressed : ");
 
                 //lost focus
                 //RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
                 //relativeParams.height = PrecastrUtils.convertDpToPx(getContext(), 160);
-                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)rlChatlistAndBubble.getLayoutParams();
-                layoutParams.setMargins(0, 0, 0, getActivity().getWindowManager().getDefaultDisplay().getHeight() - (CenesUtils.dpToPx(450) + CenesUtils.dpToPx(110)));
-                RelativeLayout.LayoutParams rlEnterChatParams = (RelativeLayout.LayoutParams)rlEnterChat.getLayoutParams();
-                rlEnterChatParams.width = 0;
-                rlEnterChatParams.setMargins(windowWidth, 0, 0, 0);
-                rlEnterChat.setLayoutParams(rlEnterChatParams);
+                RelativeLayout.LayoutParams relativeParams = (RelativeLayout.LayoutParams) rlEnterChat.getLayoutParams();
+                relativeParams.width = 0;
+                relativeParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                rlEnterChat.setLayoutParams(relativeParams);
                 rlEnterChat.setVisibility(View.GONE);
                 rlChatBubble.setVisibility(View.VISIBLE);
                 llSenderPicture.setVisibility(View.VISIBLE);
@@ -1033,6 +1022,12 @@ public class GatheringPreviewFragment extends CenesFragment {
     };
 
 
+    public void hideChatBoxKeyboard() {
+        rlEnterChat.setVisibility(View.GONE);
+        rlChatBubble.setVisibility(View.VISIBLE);
+        llSenderPicture.setVisibility(View.VISIBLE);
+        hideKeyboard();
+    }
     public void resetCardPosition() {
 
         tinderCardView.animate().setDuration(200)
@@ -1127,9 +1122,17 @@ public class GatheringPreviewFragment extends CenesFragment {
             populateInvitationCard(event);
 
             if (event.getDescription() != null) {
+                if (selectedEventChatDto != null && selectedEventChatDto.isShowChatWindow()) {
+                    selectedEventChatDto.setShowChatWindow(false);
+                    rlDescriptionBubble.performClick();
+                }
                 getChatThread();
             } else {
                 isChatLoaded = true;
+            }
+
+            if (eventTemp.getPlaceId() != null) {
+                fetchLocationPhotos(eventTemp.getPlaceId());
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -1509,14 +1512,9 @@ public class GatheringPreviewFragment extends CenesFragment {
 
             List<EventChat> eventChatTemp = null;
             if(eventChatMapList.containsKey(key)) {
-
                 eventChatTemp = eventChatMapList.get(key);
-
-
-            }else {
-
+            } else {
                 eventChatTemp = new ArrayList<>();
-
             }
 
             if (!internetManager.isInternetConnection((CenesBaseActivity)getActivity())) {
@@ -1525,7 +1523,19 @@ public class GatheringPreviewFragment extends CenesFragment {
             }
             eventChatTemp.add(eventChat);
             eventChatMapList.put(key,eventChatTemp);
-            eventChatExpandableAdapter.notifyDataSetChanged();
+
+            eventChatList = new ArrayList<>();
+            for (String header: headers) {
+                eventChatList.add(header);
+                List<EventChat> eventChats = eventChatMapList.get(header);
+                for (EventChat eventChatTmp: eventChats) {
+                    eventChatList.add(eventChatTmp);
+                }
+            }
+
+            if (eventChatBaseAdapter != null) {
+                eventChatBaseAdapter.refreshItems(eventChatList);
+            }
 
 
             AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
@@ -1533,7 +1543,7 @@ public class GatheringPreviewFragment extends CenesFragment {
             asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
             asyncTaskDto.setPostData(new JSONObject(new Gson().toJson(eventChat)));
             System.out.println("gggggggtttttt "+ eventChats.size() +" : "+ headers.size());
-            elvEventChatList.setSelection(eventChats.size() + headers.size());
+            lvChatListView.setSelection(eventChatList.size() -1);
 
             new ProfileAsyncTask.CommonPostRequestTask(new ProfileAsyncTask.CommonPostRequestTask.AsyncResponse() {
                 @Override
@@ -1927,7 +1937,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                                 eventChats.add(eventChat);
                             }
                             for(EventChat  eventChat : eventChats) {
-                                //  System.out.println(eventChat.getChat());
+                                 // System.out.println(eventChat.getChat());
                                 // System.out.println(eventChat.getCreatedAt());
                                 String key = CenesUtils.EEEMMMMdd.format(eventChat.getCreatedAt());
 
@@ -1974,6 +1984,15 @@ public class GatheringPreviewFragment extends CenesFragment {
                                 }
                                 eventChatTemp.add(eventChat);
                                 eventChatMapList.put(key,eventChatTemp);
+                            }
+
+                            eventChatList = new ArrayList<>();
+                            for (String header: headers) {
+                                eventChatList.add(header);
+                                List<EventChat> eventChats = eventChatMapList.get(header);
+                                for (EventChat eventChatTmp: eventChats) {
+                                    eventChatList.add(eventChatTmp);
+                                }
                             }
                         }
 
@@ -2049,11 +2068,12 @@ public class GatheringPreviewFragment extends CenesFragment {
                     }
 
                     //elvEventChatList.invalidate();
-                    if (eventChatExpandableAdapter == null) {
-                        eventChatExpandableAdapter = new EventChatExpandableAdapter(GatheringPreviewFragment.this, headers, eventChatMapList);
-                        elvEventChatList.setAdapter(eventChatExpandableAdapter);
+                    if (eventChatBaseAdapter == null) {
+                        eventChatBaseAdapter = new EventChatBaseAdapter(GatheringPreviewFragment.this, eventChatList);
+                        lvChatListView.setAdapter(eventChatBaseAdapter);
                     } else {
-                        eventChatExpandableAdapter.notifyDataSetChanged();
+                        eventChatBaseAdapter.refreshItems(eventChatList);
+                        //eventChatExpandableAdapter.notifyDataSetChanged();
                     }
                     //
 
@@ -2062,7 +2082,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                     options.centerCrop();
                     Glide.with(getContext()).load(loggedInUser.getPicture()).apply(options).into(enterMsgPicture);
 
-                    elvEventChatList.postDelayed(new Runnable() {
+                    lvChatListView.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                           /*  int scrollPosition = 0;
@@ -2075,9 +2095,26 @@ public class GatheringPreviewFragment extends CenesFragment {
                             //elvEventChatList.setSelection(scrollPosition);
                             //elvEventChatList.setSelection(eventChats.size() + headers.size());
                             //for (int i=0; i < 10; i++) {
-                            eventChatExpandableAdapter.notifyDataSetChanged();
                             // elvEventChatList.setSelection(eventChats.size() + headers.size());
-                            elvEventChatList.smoothScrollToPositionFromTop((eventChats.size() + headers.size()), 0, 100);
+
+                            int selectionIndex = eventChatList.size() - 1;
+                            if (selectedEventChatDto != null && selectedEventChatDto.getMessage() != null) {
+                                selectionIndex = 0;
+                                for (Object chatObj: eventChatList) {
+                                    if (chatObj instanceof  EventChat) {
+                                        System.out.println("Checking if chat equals");
+                                        if (((EventChat)chatObj).getChat().equals(selectedEventChatDto.getMessage())) {
+                                            System.out.println("Chat Equals");
+                                            break;
+                                        }
+
+                                    }
+                                    selectionIndex++;
+                                }
+                                selectedEventChatDto = null;
+                            }
+                            System.out.println("Selection Index : "+selectionIndex);
+                            lvChatListView.setSelection(selectionIndex);
                             //try {
                             //  Thread.sleep(1000);
                             //} catch (Exception e) {
@@ -2121,12 +2158,35 @@ public class GatheringPreviewFragment extends CenesFragment {
         svCard.setOnTouchListener(onTouchListener);
         svCard.setScrollingEnabled(true);
 
-
     }
     public void scrollFeatureOff() {
 
         tinderCardView.setOnTouchListener(null);
         svCard.setOnTouchListener(null);
         svCard.setScrollingEnabled(false);
+    }
+
+    public void fetchLocationPhotos(String placeId) {
+
+        AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+        asyncTaskDto.setApiUrl(GatheringAPI.get_place_details_api);
+        asyncTaskDto.setQueryStr("place_id="+placeId+"&fields=photos&key="+CenesConstants.GOOGLE_MAP_API_KEY);
+        new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
+            @Override
+            public void processFinish(JSONObject response) {
+
+                try {
+                    JSONObject result = response.getJSONObject("result");
+                    JSONArray photosArray = result.getJSONArray("photos");
+
+                    Gson gson = new GsonBuilder().create();
+                    Type listType = new TypeToken<List<LocationPhoto>>() {}.getType();
+                    locationPhotos = gson.fromJson(photosArray.toString(), listType);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).execute(asyncTaskDto);
     }
 }

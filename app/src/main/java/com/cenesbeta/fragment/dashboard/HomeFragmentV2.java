@@ -1720,7 +1720,7 @@ public class HomeFragmentV2 extends CenesFragment {
 
     public void findListViewScrollPosition() {
 
-        if (internetManager.isInternetConnection((CenesBaseActivity)getActivity())) {
+        //if (internetManager.isInternetConnection((CenesBaseActivity)getActivity())) {
             List<Event> events = homeScreenDto.getPastEvents();
             if (events == null || events.size() == 0) {
                 return;
@@ -1822,7 +1822,7 @@ public class HomeFragmentV2 extends CenesFragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        //}
     }
     public void addMonthSeparatorToList() {
 

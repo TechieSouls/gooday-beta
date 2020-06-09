@@ -12,7 +12,11 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.widget.ImageView;
 
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.cenesbeta.fragment.CenesFragment;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
@@ -21,6 +25,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by mandeep on 9/9/17.
@@ -281,5 +287,17 @@ public class ImageUtils {
         }
     }
 
+    public static BitmapImageViewTarget getRoundedImageTarget(@NonNull final Context context, @NonNull final ImageView imageView,
+                                                              final float radius) {
+        return new BitmapImageViewTarget(imageView) {
+            @Override
+            protected void setResource(final Bitmap resource) {
+                RoundedBitmapDrawable circularBitmapDrawable =
+                        RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                circularBitmapDrawable.setCornerRadius(radius);
+                imageView.setImageDrawable(circularBitmapDrawable);
+            }
+        };
 
+    }
 }

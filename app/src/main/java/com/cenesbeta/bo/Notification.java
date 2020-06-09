@@ -25,6 +25,7 @@ public class Notification {
     private String notificationTypeStatus;
     private Long notificationTypeId;
     private String readStatus;
+    private String action;
     private Event event;
     private User user;
 
@@ -130,6 +131,14 @@ public class Notification {
 
     public void setEvent(Event event) {
         this.event = event;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
     }
 
     @Override

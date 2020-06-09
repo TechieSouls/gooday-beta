@@ -51,7 +51,9 @@ public class MeTimeCollectionViewRecyclerAdapter extends RecyclerView.Adapter<Me
             myViewHolder.rvProfileImage.setImageResource(R.drawable.profile_pic_no_image);
 
         }
-        myViewHolder.tvProfileName.setText(recurringEventMember.getUser().getName());
+        if (recurringEventMember.getUser() != null) {
+            myViewHolder.tvProfileName.setText(recurringEventMember.getUser().getName());
+        }
     }
 
     @Override

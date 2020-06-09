@@ -148,7 +148,8 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
                                                             JSONObject geomateryLocation = geomatery.getJSONObject("location");
 
                                                             float kms = getKmFromLatLong(Float.valueOf(currentLocation.getLatitude()), Float.valueOf(currentLocation.getLongitude()), Float.valueOf(geomateryLocation.getString("lat")), Float.valueOf(geomateryLocation.getString("lng")));
-                                                            location.setKilometers(String.valueOf((kms)) + "Km");
+                                                            location.setKilometersInDouble(kms);
+                                                            location.setKilometers(String.valueOf((kms)));
                                                             locations.add(location);
                                                         }
 
@@ -313,14 +314,14 @@ public class SearchLocationActivity extends CenesActivity implements LocationLis
                     if (currentLocation != null && currentLocation.getLatitude() != null && currentLocation.getLongitude() != null) {
                         for (com.cenesbeta.bo.Location loc : recentLocations) {
                             float kms = getKmFromLatLong(Float.valueOf(currentLocation.getLatitude()), Float.valueOf(currentLocation.getLongitude()), Float.valueOf(loc.getLatitude()), Float.valueOf(loc.getLongitude()));
-                            loc.setKilometers(String.valueOf((kms)) + "Km");
+                            loc.setKilometers(String.valueOf((kms)));
                             loc.setKilometersInDouble(kms);
                         }
 
                         Collections.sort(recentLocations, new Comparator<com.cenesbeta.bo.Location>() {
                             @Override
                             public int compare(com.cenesbeta.bo.Location o1, com.cenesbeta.bo.Location o2) {
-                                return o1.getKilometersInDouble() < o2.getKilometersInDouble() ? 1 : -1;
+                                return o1.getKilometersInDouble() > o2.getKilometersInDouble() ? 1 : -1;
                             }
                         });
                     }

@@ -45,7 +45,7 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
     private static Integer COUNTRY_LIST_REQUEST_CODE = 1001;
 
     private View fragmentView;
-    private RelativeLayout rlPhoneVerificationStep1Continue, rlChooseCountryList;
+    private RelativeLayout rlPhoneVerificationStep1Continue, rlChooseCountryList, rlTemrsAndConds;
     private Button btSignupStep1Continue;
     private EditText etPhoneNumber;
     private TextView tvTermsAndConds, tvPhoneCountryCode, tvCountryName;
@@ -78,6 +78,7 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
         tvPhoneCountryCode = (TextView) v.findViewById(R.id.tv_phone_country_code);
         tvCountryName = (TextView) v.findViewById(R.id.tv_country_name);
         tvTermsAndConds = (TextView) v.findViewById(R.id.tv_temrs_and_conds);
+        rlTemrsAndConds = (RelativeLayout) v.findViewById(R.id.rl_temrs_and_conds);
 
         ivBugReport = (ImageView) v.findViewById(R.id.iv_bug_report);
 
@@ -85,7 +86,7 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
         btSignupStep1Continue.setOnClickListener(onClickListener);
         etPhoneNumber.addTextChangedListener(phoneNumberWatcher);
         ivBugReport.setOnClickListener(onClickListener);
-
+        //etPhoneNumber.setOnFocusChangeListener(onFocusChangeListener);
 
         etPhoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
@@ -163,6 +164,11 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
         tvPhoneCountryCode.setText(countryCode);
         String countryName = authenticateService.getCountryNameFromCountryCode(countryCodeStr.toUpperCase());
         tvCountryName.setText(countryName);
+
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) rlTemrsAndConds.getLayoutParams();
+        layoutParams.setMargins(0, getCenesActivity().getWindowManager().getDefaultDisplay().getHeight() - CenesUtils.dpToPx(140), 0, 0);
+        rlTemrsAndConds.setLayoutParams(layoutParams);
 
         return v;
     }
@@ -290,6 +296,18 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
                     break;
                 case R.id.iv_bug_report:
                     break;
+            }
+        }
+    };
+
+    View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus) {
+
+                //rlTemrsAndConds.setVisibility(View.GONE);
+            } else {
+                //rlTemrsAndConds.setVisibility(View.VISIBLE);
             }
         }
     };

@@ -428,10 +428,10 @@ public class GatheringPreviewFragmentBkup extends CenesFragment {
 
                     Bundle membersBundle = new Bundle();
                     membersBundle.putString("members", membersStr);
-                    InviteesFragment inviteesFragment = new InviteesFragment();
-                    inviteesFragment.setArguments(membersBundle);
+                    //InviteesFragment inviteesFragment = new InviteesFragment();
+                    //inviteesFragment.setArguments(membersBundle);
 
-                    ((CenesBaseActivity)getActivity()).replaceFragment(inviteesFragment, InviteesFragment.TAG);
+                   // ((CenesBaseActivity)getActivity()).replaceFragment(inviteesFragment, InviteesFragment.TAG);
                     break;
 
                 case R.id.btn_edit_gath_stylesheet_cancel:

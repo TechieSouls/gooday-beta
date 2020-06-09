@@ -2,6 +2,7 @@ package com.cenesbeta.fragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,20 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.cenesbeta.AsyncTasks.NotificationAsyncTask;
 import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
 import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.adapter.NotificationExpandableAdapter;
+import com.cenesbeta.adapter.NotificationAdapter;
 import com.cenesbeta.api.NotificationAPI;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Notification;
@@ -40,11 +39,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,8 +57,8 @@ public class NotificationFragment extends CenesFragment {
     public final static String TAG = "NotificationFragment";
     public enum NotificationApiCall {Counts, List};
 
-    private ExpandableListView elvNotificationList;
-
+   //public ExpandableListView elvNotificationList;
+    private ListView notificationListview;
     private RoundedImageView homeProfilePic;
     private ImageView homeIcon, ivListLoader;
     private SwipeRefreshLayout swipeRefreshNotifications;
@@ -75,12 +74,15 @@ public class NotificationFragment extends CenesFragment {
     public NotificationManagerImpl notificationManagerImpl;
     private ShimmerFrameLayout shimmerFrameLayout;
 
-    private NotificationExpandableAdapter notificationExpandableAdapter;
+    //private NotificationExpandableAdapter notificationExpandableAdapter;
+    private NotificationAdapter notificationAdapter;
     private List<String> headers;
     private Map<String, List<Notification>> notificationMapList;
     private static String NEW_NOTIFICATION = "New";
-    private static String SEEN_NOTIFICATION = "Seen";
+    private static String SEEN_NOTIFICATION = "Earlier";
     private NotificationDto notificationDto;
+    public static Parcelable state;
+
 
     @Nullable
     @Override
@@ -89,6 +91,7 @@ public class NotificationFragment extends CenesFragment {
         if (fragmentView != null) {
 
             return fragmentView;
+
         }
 
         View v = inflater.inflate(R.layout.activity_notifications, container, false);
@@ -119,9 +122,15 @@ public class NotificationFragment extends CenesFragment {
            System.out.println("Notification On Resume Called");
            ((CenesBaseActivity) getActivity()).showFooter();
            ((CenesBaseActivity)  getActivity()).activateFooterIcon(NotificationFragment.TAG);
-        } catch (Exception e) {
+
+       } catch (Exception e) {
 
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     public void init(View view) {
@@ -141,7 +150,8 @@ public class NotificationFragment extends CenesFragment {
         notificationDto.setNewNotifications(new ArrayList<Notification>());
         notificationDto.setSeenNotifications(new ArrayList<Notification>());
 
-        elvNotificationList = (ExpandableListView) view.findViewById(R.id.notification_expandable_lv);
+        //elvNotificationList = (ExpandableListView) view.findViewById(R.id.notification_expandable_lv);
+        notificationListview = (ListView) view.findViewById(R.id.notification_listview);
         homeProfilePic = (RoundedImageView) view.findViewById(R.id.home_profile_pic);
         homeIcon = (ImageView) view.findViewById(R.id.home_icon);
         noNotificationsText = (TextView) view.findViewById(R.id.no_notifications_text);
@@ -151,7 +161,7 @@ public class NotificationFragment extends CenesFragment {
 
         homeIcon.setOnClickListener(onClickListener);
         homeProfilePic.setOnClickListener(onClickListener);
-        elvNotificationList.setOnScrollListener(notificationListListener);
+        notificationListview.setOnScrollListener(notificationListListener);
         swipeRefreshNotifications.setOnRefreshListener(swipeDownListener);
     }
 
@@ -186,13 +196,14 @@ public class NotificationFragment extends CenesFragment {
             //Algorithm to check if the last item is visible or not
             final int lastItem = firstVisibleItem + visibleItemCount;
 
-            //System.out.println("firstVisibleItem , visibleItemCount, totalItemCount : "+firstVisibleItem+" -- "+visibleItemCount+" -- "+totalItemCount);
+            System.out.println(lastItem+" : firstVisibleItem , visibleItemCount, totalItemCount : "+firstVisibleItem+" -- "+visibleItemCount+" -- "+totalItemCount);
             if(lastItem == totalItemCount && totalItemCount != 0) {
                 // you have reached end of list, load more data
+                System.out.println("All Notification Size : "+notificationDto.getAllNotifications().size()+", Total : "+notificationDto.getTotalNotificationCounts());
                 if (notificationDto.getAllNotifications().size() < notificationDto.getTotalNotificationCounts()) {
                     if (notificationDto.isMadeApiCall()) {
-                        prepareNotificationListCall();
                         notificationDto.setMadeApiCall(false);
+                        prepareNotificationListCall();
                     }
                 }
 
@@ -269,7 +280,7 @@ public class NotificationFragment extends CenesFragment {
                 headers.add(SEEN_NOTIFICATION);
             }
         }
-        notificationExpandableAdapter.notifyDataSetChanged();
+        //notificationAdapter.refreshItems(headers, notificationMapList);
     }
 
     public void filterNotification(List<Notification> notifications) {
@@ -283,9 +294,14 @@ public class NotificationFragment extends CenesFragment {
             seenNotifications = notificationMapList.get(SEEN_NOTIFICATION);
         }
 
+        long currentMilliSeconds = new Date().getTime();
+
         for (Notification notification: notifications) {
             //Seen notification
-            if (notification.getReadStatus().equals("Read")) {
+
+            long getDaysFromCurrentDate = (currentMilliSeconds - notification.getNotificationTime())/(1000*3600*24);
+            System.out.println("Number Of Days : "+getDaysFromCurrentDate+", Now Date : "+currentMilliSeconds+", Notification Time : "+notification.getNotificationTime());
+            if (getDaysFromCurrentDate > 6) {
                 seenNotifications.add(notification);
             } else {
                 newNotifications.add(notification);
@@ -308,19 +324,27 @@ public class NotificationFragment extends CenesFragment {
                 headers.add(SEEN_NOTIFICATION);
             }
         }
-
         shimmerFrameLayout.hideShimmer();
         shimmerFrameLayout.setVisibility(View.GONE);
+
+        List<Object> notificationList = new ArrayList<>();
+        for (String header: headers) {
+            notificationList.add(header);
+            List<Notification> notifs = notificationMapList.get(header);
+            for (Notification noti: notifs) {
+                notificationList.add(noti);
+            }
+        }
         if (notificationDto.getPageNumber() == 0) {
 
-            if (notificationExpandableAdapter != null) {
-                notificationExpandableAdapter.notifyDataSetChanged();
+            if (notificationAdapter != null) {
+                notificationAdapter.refreshItems(notificationList);
             } else {
-                notificationExpandableAdapter = new NotificationExpandableAdapter(NotificationFragment.this, headers, notificationMapList);
-                elvNotificationList.setAdapter(notificationExpandableAdapter);
+                notificationAdapter = new NotificationAdapter(NotificationFragment.this, notificationList);
+                notificationListview.setAdapter(notificationAdapter);
             }
         } else {
-            notificationExpandableAdapter.notifyDataSetChanged();
+            notificationAdapter.refreshItems(notificationList);
         }
     }
 
@@ -380,6 +404,7 @@ public class NotificationFragment extends CenesFragment {
                     }
 
                     if (notificationApiCall.equals(NotificationApiCall.Counts)) {
+                        System.out.println("Count Response : "+response);
                         System.out.println("A1");
                         if (success) {
                             System.out.println("A1 1");
@@ -422,10 +447,10 @@ public class NotificationFragment extends CenesFragment {
                         }
                         if (notificationsTemp.size() > 0) {
                             System.out.println("A5");
-                            notificationDto.setMadeApiCall(true);
                             filterNotification(notificationsTemp);
                             int pageNumber = notificationDto.getPageNumber() + 20;
                             notificationDto.setPageNumber(pageNumber);
+                            notificationDto.setMadeApiCall(true);
                         }
                     }
 
@@ -437,7 +462,7 @@ public class NotificationFragment extends CenesFragment {
     }
 
     public void scrollToTop() {
-        elvNotificationList.smoothScrollToPositionFromTop(0, 0, 5);
+        notificationListview.smoothScrollToPositionFromTop(0, 0, 0);
     }
 
 }

@@ -474,4 +474,12 @@
     <include layout="@layout/chat_window_layout"></include>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_include_location_alert_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <include layout="@layout/layout_location_alert_view"></include>
+    </RelativeLayout>
 </RelativeLayout>

@@ -52,6 +52,7 @@ import com.cenesbeta.bo.RecurringEventMember;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.bo.UserContact;
 import com.cenesbeta.coremanager.CoreManager;
+import com.cenesbeta.database.impl.MeTimeManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.friend.FriendListFragment;
@@ -131,6 +132,7 @@ public class MeTimeCardFragment extends CenesFragment {
     ViewPager vpMetimePager;
     ImageView[] dots;
     private User loggedInUser;
+    private MeTimeManagerImpl meTimeManager;
 
     private static final int CAMERA_PERMISSION_CODE = 1001, UPLOAD_PERMISSION_CODE = 1002;
     private static final int OPEN_CAMERA_REQUEST_CODE = 1003, OPEN_GALLERY_REQUEST_CODE = 1004;
@@ -187,7 +189,7 @@ public class MeTimeCardFragment extends CenesFragment {
         cenesApplication = getCenesActivity().getCenesApplication();
         meTimeService = new MeTimeService();
         meTimeAsyncTask = new MeTimeAsyncTask(cenesApplication, (CenesBaseActivity)getActivity());
-
+        meTimeManager = new MeTimeManagerImpl(cenesApplication);
         metime = new MeTime();
         selectedDaysHolder = new JSONObject();
         metimePhotoFile = null;
@@ -734,8 +736,43 @@ public class MeTimeCardFragment extends CenesFragment {
 
                 case R.id.btn_delete_meTime:
 
+                    if (metime.getRecurringEventId() != null) {
 
-                    Intent deleteIntent = new Intent();
+                        ivMetimeSaveSpinner.setVisibility(View.VISIBLE);
+                        Glide.with(getContext()).asGif().load(R.drawable.ios_spinner).into(ivMetimeSaveSpinner);
+
+                        new MeTimeAsyncTask.DeleteMeTimeDataTask(new MeTimeAsyncTask.DeleteMeTimeDataTask.AsyncResponse() {
+                            @Override
+                            public void processFinish(JSONObject response) {
+
+                                if (getActivity() != null){
+                                    ((CenesBaseActivity) getActivity()).runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            ivMetimeSaveSpinner.setVisibility(View.GONE);
+
+                                        }
+                                    });
+                                }
+                                //To Run Code of block in background
+                                AsyncTask.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            meTimeManager.deleteAllMeTimeRecurringEventsByRecurringEventId(metime.getRecurringEventId());
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                });
+                                meTimeFragment.loadMeTimes();
+                                getFragmentManager().popBackStack();
+                            }
+                        }).execute(metime.getRecurringEventId());
+                    }
+
+                    /*Intent deleteIntent = new Intent();
                     if (metime.getRecurringEventId() != null) {
                         try {
                             JSONObject responseJSON = new JSONObject();
@@ -754,9 +791,8 @@ public class MeTimeCardFragment extends CenesFragment {
                                 fragment.onActivityResult(MeTimeFragment.CANCEL_METIME_REQUEST_CODE, Activity.RESULT_OK, deleteIntent);
                             }
                         }
-                    }
+                    }*/
 
-                    getFragmentManager().popBackStack();
                     break;
                 case R.id.view_opaque:
                     ((CenesBaseActivity)getActivity()).onBackPressed();

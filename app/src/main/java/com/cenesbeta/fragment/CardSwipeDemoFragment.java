@@ -37,7 +37,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -49,8 +48,6 @@ import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.adapter.CardSwipeDemoRecyclerAdapter;
-import com.cenesbeta.adapter.EventChatExpandableAdapter;
 import com.cenesbeta.api.GatheringAPI;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
@@ -65,8 +62,6 @@ import com.cenesbeta.dto.GatheringPreviewDto;
 import com.cenesbeta.extension.InvitationScrollView;
 import com.cenesbeta.fragment.gathering.CreateGatheringFragment;
 import com.cenesbeta.fragment.gathering.GatheringGuestListFragment;
-import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
-import com.cenesbeta.service.OnCardSwipeGestureListener;
 import com.cenesbeta.util.CenesConstants;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
@@ -117,7 +112,6 @@ public class CardSwipeDemoFragment extends CenesFragment {
     public Event event;
     public List<Event> pendingEvents;
     public List<EventChat> eventChats;
-    private EventChatExpandableAdapter eventChatExpandableAdapter;
     private ExpandableListView elvEventChatList;
     private List<String> headers;
     private Map<String, List<EventChat>> eventChatMapList;
@@ -172,7 +166,7 @@ public class CardSwipeDemoFragment extends CenesFragment {
         rvEventDescriptionDialog = (RelativeLayout) view.findViewById(R.id.rv_event_description_dialog);
         rlDescriptionBubbleBackground = (RelativeLayout) view.findViewById(R.id.rl_description_bubble_background);
         rlIncludeChat = (RelativeLayout) view.findViewById(R.id.rl_include_chat);
-        elvEventChatList = (ExpandableListView) view.findViewById(R.id.elv_chat_listView);
+        //elvEventChatList = (ExpandableListView) view.findViewById(R.id.elv_chat_listView);
         ivDescriptionBubbleIcon = (ImageView) view.findViewById(R.id.iv_description_bubble_icon);
         ivDescProfilePic = (RoundedImageView) view.findViewById(R.id.iv_desc_profile_pic);
 
@@ -1417,7 +1411,6 @@ public class CardSwipeDemoFragment extends CenesFragment {
             }
             eventChatTemp.add(eventChat);
             eventChatMapList.put(key,eventChatTemp);
-            eventChatExpandableAdapter.notifyDataSetChanged();
 
 
             AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
@@ -1935,15 +1928,6 @@ public class CardSwipeDemoFragment extends CenesFragment {
                         llSenderPicture.setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
                     }
 
-                    //elvEventChatList.invalidate();
-                    if (eventChatExpandableAdapter == null) {
-                        //eventChatExpandableAdapter = new EventChatExpandableAdapter(CardSwipeDemoFragment.this, headers, eventChatMapList);
-                        elvEventChatList.setAdapter(eventChatExpandableAdapter);
-                    } else {
-                        eventChatExpandableAdapter.notifyDataSetChanged();
-                    }
-                    //
-
                     RequestOptions options = new RequestOptions();
                     options.placeholder(R.drawable.profile_pic_no_image);
                     options.centerCrop();
@@ -1962,7 +1946,6 @@ public class CardSwipeDemoFragment extends CenesFragment {
                             //elvEventChatList.setSelection(scrollPosition);
                             //elvEventChatList.setSelection(eventChats.size() + headers.size());
                             //for (int i=0; i < 10; i++) {
-                            eventChatExpandableAdapter.notifyDataSetChanged();
                             // elvEventChatList.setSelection(eventChats.size() + headers.size());
                             elvEventChatList.smoothScrollToPositionFromTop((eventChats.size() + headers.size()), 0, 100);
                             //try {

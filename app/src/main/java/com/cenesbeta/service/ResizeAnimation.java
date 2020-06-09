@@ -5,6 +5,8 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.RelativeLayout;
 
+import com.cenesbeta.util.CenesUtils;
+
 public class ResizeAnimation  extends Animation {
     final int startWidth;
     final int targetWidth;
@@ -18,10 +20,9 @@ public class ResizeAnimation  extends Animation {
 
     @Override
     protected void applyTransformation(float interpolatedTime, Transformation t) {
-        int newWidth = (int) (startWidth + (targetWidth - startWidth) * interpolatedTime);
+        int newWidth = (int) (0 + (targetWidth - 0) * interpolatedTime);
+        System.out.println("StartWidth : "+startWidth +"  -  "+ newWidth);
         view.getLayoutParams().width = newWidth;
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
-        layoutParams.setMargins((int) (targetWidth + (startWidth - targetWidth) * interpolatedTime), 0, 0, 0);
         view.requestLayout();
     }
 

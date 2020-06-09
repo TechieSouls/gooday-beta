@@ -7,17 +7,32 @@
             android:id="@+id/rl_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp">
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
 
-            <com.cenesbeta.util.RoundedImageView
-                android:id="@+id/notification_sender_profile_pic"
+            <RelativeLayout
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_marginLeft="12dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/profile_pic_no_image"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true">
+
+                <com.cenesbeta.util.RoundedImageView
+                    android:id="@+id/notification_sender_profile_pic"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/profile_pic_no_image"
+                    android:layout_centerVertical="true"/>
+
+                <ImageView
+                    android:id="@+id/iv_notification_action_icon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/mdi_party_popper"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
 
 
             <LinearLayout
@@ -25,21 +40,23 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginLeft="65dp"
-                android:layout_marginRight="60dp"
+                android:layout_marginRight="50dp"
                 android:layout_centerVertical="true"
 
                 >
+
                 <TextView
                     android:id="@+id/notification_mesasge"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="ouhdliqjhdwoqhdjiqoh shdjk ahsdjk hsdjkl ahsd"
                     android:layout_gravity="center_vertical"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
                     android:fontFamily="@font/avenir_medium"
-                    android:padding="1dp"/>
+                    android:padding="1dp"
+                    android:text="ouhdliqjhdwoqhdjiqoh shdjk ahsdjk hsdjkl ahsd"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:textStyle="normal" />
+
                 <TextView
                     android:id="@+id/notification_title"
                     android:layout_width="match_parent"
@@ -47,24 +64,41 @@
                     android:textColor="@color/black"
                     android:text="(event)"
                     android:layout_gravity="left"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     android:textStyle="normal"
                     android:fontFamily="@font/avenir_medium">
                 </TextView>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/notification_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2s"
+                android:textSize="12dp"
+                android:textColor="@color/notification_read_text"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:fontFamily="@font/avenir_medium"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+
+                />
 
             <LinearLayout
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_centerVertical="true"
-                android:layout_alignParentRight="true">
+                android:layout_alignParentRight="true"
+                android:visibility="gone">
                 <RelativeLayout
                     android:id="@+id/rl_unread_dot"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:background="@drawable/xml_circle_facebook_blue"
-                    android:layout_gravity="center"></RelativeLayout>
+                    android:layout_gravity="center"
+                    android:visibility="invisible"></RelativeLayout>
                 <TextView
                     android:id="@+id/notifcation_time"
                     android:layout_width="match_parent"
@@ -76,16 +110,6 @@
                     android:gravity="center_horizontal"
                     android:visibility="gone"
                     />
-                <TextView
-                    android:id="@+id/notification_day"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Just Now"
-                    android:textSize="12sp"
-                    android:textColor="@color/cenes_grey"
-                    android:gravity="center_horizontal"
-                    android:fontFamily="@font/avenir_medium"/>
-
                 <TextView
                     android:id="@+id/notification_readstatus"
                     android:layout_width="match_parent"

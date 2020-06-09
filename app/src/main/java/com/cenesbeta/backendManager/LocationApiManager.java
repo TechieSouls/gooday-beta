@@ -35,7 +35,7 @@ public class LocationApiManager {
             System.out.println("Loaction API : "+url);
             JsonParsing jsonParsing = new JsonParsing();
             JSONArray locationArray = jsonParsing.httpGet(url, authToken);
-
+            System.out.println("Response : "+locationArray);
             Gson gson = new GsonBuilder().create();
             Type listType = new TypeToken<List<Location>>(){}.getType();
             return gson.fromJson( locationArray.toString(), listType);

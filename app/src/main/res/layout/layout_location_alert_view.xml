@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_location_alert_backdrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#70000000"
+        >
+
+        <LinearLayout
+            android:layout_width="317dp"
+            android:layout_height="255dp"
+            android:orientation="vertical"
+            android:background="@drawable/xml_curved_corner_white"
+            android:layout_centerInParent="true"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <TextView
+                    android:id="@+id/tv_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chandigarh"
+                    android:layout_centerInParent="true"
+                    android:textSize="14dp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/avenir_medium"
+                    />
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#979797"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="152dp">
+                
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_location_photos"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_centerInParent="true"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"/>
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#979797"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <Button
+                    android:id="@+id/btn_get_directions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Get Directions"
+                    android:layout_centerInParent="true"
+                    android:textSize="18dp"
+                    android:textColor="#007AFF"
+                    android:fontFamily="@font/avenir_medium"
+                    android:background="@color/transparent"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -190,8 +190,8 @@ public class MeTimeService {
             try {
                 RoundedImageView meTimeImage = new RoundedImageView(activity);
                 LinearLayout.LayoutParams imageViewParams = new LinearLayout.LayoutParams(CenesUtils.dpToPx(50), CenesUtils.dpToPx(50));
-                imageViewParams.gravity = Gravity.CENTER;
-                imageViewParams.setMargins(CenesUtils.dpToPx(20),0,0,0);
+                //imageViewParams.gravity = Gravity.CENTER;
+                imageViewParams.setMargins(CenesUtils.dpToPx(20),CenesUtils.dpToPx(10),0,0);
                 meTimeImage.setLayoutParams(imageViewParams);
                 Glide.with(activity).load(CenesConstants.imageDomain+meTime.getPhoto()).apply(RequestOptions.placeholderOf(R.drawable.metime_default)).into(meTimeImage);
                 metimeTile.addView(meTimeImage);

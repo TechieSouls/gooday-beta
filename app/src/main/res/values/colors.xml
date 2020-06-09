@@ -42,6 +42,9 @@
     <color name="cenes_selectedText_color">#FFF5A623</color>
     <color name="cenes_unselectedText_color">#FF9B9B9B</color>
     <color name="cenes_markread_color">#FF9B9B9B</color>
+    <color name="notification_read_text">#595757</color>
+    <color name="notification_read_bg">#2097C7FF</color>
+
 
     <!-- Material View Calendar Highlight Colors-->
     <color name="cenes_mcv_red">#FFED2838</color>

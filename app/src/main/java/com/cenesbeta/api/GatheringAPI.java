@@ -16,6 +16,9 @@ public class GatheringAPI {
     public static String get_predictive_calendar_api = "/api/predictive/calendar/v2";
     public static String get_gathering_by_key_api = "/api/event/invitation/";
 
+    public static String get_place_details_api = "https://maps.googleapis.com/maps/api/place/details/json"; //eventId
+
+
     //POST
     public static String post_create_gathering = "/api/event/create"; //Event Data
     public static String post_upload_image = "/api/event/upload"; //File

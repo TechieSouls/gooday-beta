@@ -19,15 +19,15 @@
             android:focusable="true"
             android:focusableInTouchMode="true">
 
-            <ExpandableListView
-                android:id="@+id/elv_chat_listView"
+            <ListView
+                android:id="@+id/lv_chat_listView"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginBottom="20dp"
                 android:groupIndicator="@null"
                 android:divider="@color/transparent"
-                android:layout_alignParentBottom="true">
-            </ExpandableListView>
+                android:layout_alignParentBottom="true"/>
+
 
         </RelativeLayout>
 
@@ -76,11 +76,12 @@
 
     <RelativeLayout
         android:id="@+id/rl_enter_chat"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="46dp"
         android:orientation="horizontal"
         android:background="@color/white"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:animateLayoutChanges="true"
             android:visibility="visible">
         <com.cenesbeta.util.CenesEditText
@@ -92,7 +93,6 @@
             android:textSize="14dp"
             android:imeOptions="actionDone"
             android:textColor="@color/black"
-            android:windowSoftInputMode="stateVisible"
             android:background="@color/transparent"
             android:textColorHint="@color/apple_gray"
             android:layout_marginRight="40dp"

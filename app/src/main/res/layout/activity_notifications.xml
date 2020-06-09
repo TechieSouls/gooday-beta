@@ -94,13 +94,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <ExpandableListView
-            android:id="@+id/notification_expandable_lv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:groupIndicator="@null"
-            ></ExpandableListView>
+            <ListView
+                android:id="@+id/notification_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:divider="@color/transparent"/>
         </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
     <ImageView

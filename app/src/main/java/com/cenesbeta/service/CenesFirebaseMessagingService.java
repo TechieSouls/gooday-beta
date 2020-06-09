@@ -75,7 +75,7 @@ public class CenesFirebaseMessagingService extends FirebaseMessagingService {
             if (notification.containsKey("payload")) {
                 Log.d(TAG, "Payload : " + notification.get("payload"));
                 JSONObject payloadObj = new JSONObject(notification.get("payload"));
-                if (payloadObj.getString("type").equals("Gathering")) {
+                if (payloadObj.getString("type").equals("Gathering") || payloadObj.getString("type").equals("Chat")) {
 
                     if (payloadObj.has("status") && payloadObj.getString("status").equals("AcceptAndDecline")) {
                         intent = new Intent(this, CenesBaseActivity.class);
@@ -106,10 +106,30 @@ public class CenesFirebaseMessagingService extends FirebaseMessagingService {
             }
             //Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-            System.out.println("Silent Push...");
-            Intent newintent = new Intent("homescreenrefresh");
-            //send broadcast
-            getApplicationContext().sendBroadcast(newintent);
+            if (notification.containsKey("payload")) {
+                try {
+                    JSONObject payloadObj = new JSONObject(notification.get("payload"));
+                    if (payloadObj.getString("type").equals("Chat")) {
+                        System.out.println("Silent Push 2...");
+                        Intent chatRefreshIntent = new Intent("eventchatrefresh");
+                        //send broadcast
+                        getApplicationContext().sendBroadcast(chatRefreshIntent);
+                    } else {
+                        System.out.println("Silent Push...");
+                        Intent newintent = new Intent("homescreenrefresh");
+                        //send broadcast
+                        getApplicationContext().sendBroadcast(newintent);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("Silent Push...");
+                Intent newintent = new Intent("homescreenrefresh");
+                //send broadcast
+                getApplicationContext().sendBroadcast(newintent);
+            }
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                     //.setLargeIcon(R.drawable.ic_ceneslogos_push)

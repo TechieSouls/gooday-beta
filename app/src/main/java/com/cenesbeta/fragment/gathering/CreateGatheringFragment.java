@@ -53,6 +53,7 @@ import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.bo.Location;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
+import com.cenesbeta.database.impl.EventManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.dto.CreateGatheringDto;
 import com.cenesbeta.dto.PredictiveData;
@@ -84,6 +85,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -140,6 +142,8 @@ public class CreateGatheringFragment extends CenesFragment {
     public PredictiveData predictiveDataForDate;
     private CreateGatheringDto createGatheringDto;
     private MaterialCalendarView materialCalendarView;
+    private Long originalStartTime, originalEndTime;
+    private EventManagerImpl eventManagerImpl;
 
     @Nullable
     @Override
@@ -157,7 +161,7 @@ public class CreateGatheringFragment extends CenesFragment {
 
         initializeComponents();
         addClickListnersToComponents();
-
+        eventManagerImpl = new EventManagerImpl(cenesApplication);
         ((CenesBaseActivity)getActivity()).hideFooter();
 
         //LocalBroadcastManager.getInstance(getContext()).registerReceiver(mMessageReceiver, new IntentFilter("month_changed_intent"));
@@ -216,6 +220,14 @@ public class CreateGatheringFragment extends CenesFragment {
             }
 
             populateFriendCollectionView();
+        }
+
+        if (event.getEventId() != null && event.getEventId() != 0) {
+            Event localEvent = eventManagerImpl.findEventByEventId(event.getEventId());
+            if (localEvent != null) {
+                originalStartTime = localEvent.getStartTime();
+                originalEndTime = localEvent.getEndTime();
+            }
         }
 
         materialCalendarView.sourceFragment = this;
@@ -294,7 +306,6 @@ public class CreateGatheringFragment extends CenesFragment {
         materialCalendarView = (MaterialCalendarView) fragmentView.findViewById(R.id.material_calendar_view);
         svGatheringScrollview = (ScrollView) fragmentView.findViewById(R.id.sv_gathering_scrollview);
         recyclerView = (RecyclerView) fragmentView.findViewById(R.id.recycler_view);
-
 
         createGatheringDto = new CreateGatheringDto();
         new GatheringAsyncTask(cenesApplication, (CenesBaseActivity) getActivity());
@@ -625,7 +636,7 @@ public class CreateGatheringFragment extends CenesFragment {
         }
     };
 
-            TimePickerDialog.OnTimeSetListener startTimePickerLisener = new TimePickerDialog.OnTimeSetListener() {
+    TimePickerDialog.OnTimeSetListener startTimePickerLisener = new TimePickerDialog.OnTimeSetListener() {
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
@@ -665,7 +676,14 @@ public class CreateGatheringFragment extends CenesFragment {
 
                 Calendar predictedDateEndCal = Calendar.getInstance();
                 predictedDateEndCal.setTimeInMillis(event.getEndTime());
-                predictedDateEndCal.add(Calendar.DAY_OF_MONTH, 1);
+
+                if (predictedDateStartCal.get(Calendar.HOUR_OF_DAY) < predictedDateEndCal.get(Calendar.HOUR_OF_DAY) ||
+                        predictedDateStartCal.get(Calendar.HOUR_OF_DAY) == predictedDateEndCal.get(Calendar.HOUR_OF_DAY) &&
+                                predictedDateStartCal.get(Calendar.MINUTE) <= predictedDateEndCal.get(Calendar.MINUTE)) {
+                    predictedDateEndCal.set(Calendar.DAY_OF_MONTH, predictedDateStartCal.get(Calendar.DAY_OF_MONTH));
+                } else {
+                    predictedDateEndCal.add(Calendar.DAY_OF_MONTH, 1);
+                }
                 endTimePickerLabel.setText(CenesUtils.hmmaa.format(predictedDateEndCal.getTime()).toUpperCase());
                 Log.e("End Date : ", predictedDateEndCal.getTime().toString());
                 event.setEndTime(predictedDateEndCal.getTimeInMillis());
@@ -745,6 +763,44 @@ public class CreateGatheringFragment extends CenesFragment {
 
 
                                 predictiveDataForDate = predictiveData;
+
+                                if (originalStartTime != null && originalEndTime != null) {
+
+                                    Calendar origStartCal = Calendar.getInstance();
+                                    origStartCal.setTimeInMillis(originalStartTime);
+
+                                    Calendar origEndCal = Calendar.getInstance();
+                                    origEndCal.setTimeInMillis(originalEndTime);
+
+                                    if (predictiveDateCal.get(Calendar.DAY_OF_MONTH) == origStartCal.get(Calendar.DAY_OF_MONTH) &&
+                                            event.getStartTime().equals(originalStartTime) && event.getEndTime().equals(originalEndTime)) {
+                                        List<EventMember> eventMembers = event.getEventMembers();
+
+                                        String attendingFriends = "";
+
+                                        if (predictiveDataForDate.getAttendingFriendsList() != null) {
+                                            attendingFriends = predictiveDataForDate.getAttendingFriendsList();
+                                        }
+                                        List<String> attendingMembersLst = Arrays.asList(attendingFriends.split(","));
+                                        System.out.println("attendingMembersArr : "+attendingMembersLst.size());
+                                        int totatEventMembers = eventMembers.size();
+                                        int eventMembersAttending = 0;
+                                        for (EventMember eventMember: eventMembers) {
+                                            if (eventMember.getUserId() != null) {
+                                                if (!attendingMembersLst.contains(eventMember.getUserId())) {
+                                                    if (attendingFriends.length() == 0) {
+                                                        attendingFriends += eventMember.getUserId();
+                                                    } else {
+                                                        attendingFriends += ","+eventMember.getUserId();
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        predictiveDataForDate.setAttendingFriendsList(attendingFriends);
+                                    }
+                                }
+
+
                                 break;
                             }
                         }
@@ -1104,7 +1160,8 @@ public class CreateGatheringFragment extends CenesFragment {
 
                         }
                         event.setLocation(title);
-
+                        event.setLatitude(null);
+                        event.setLongitude(null);
                     }
                 }
             }  else if (requestCode == SEARCH_FRIEND_RESULT_CODE) {
@@ -1444,7 +1501,7 @@ public class CreateGatheringFragment extends CenesFragment {
         }).execute(file);
     }
 
-    public void callPredictiveCalendarTask(Long startTime, Long endTime) {
+    public void callPredictiveCalendarTask(final Long startTime, final Long endTime) {
 
         String queryStr = "userId=" + loggedInUser.getUserId() + "&startTime=" + startTime + "&endTime=" + endTime + "";
         try {
@@ -1476,7 +1533,7 @@ public class CreateGatheringFragment extends CenesFragment {
                     Type listType = new TypeToken<List<PredictiveData>>(){}.getType();
                     predictiveDataList = gson.fromJson(preditiveArr.toString(), listType);
 
-                    Map<String, Set<CalendarDay>> calMap = GatheringService.parsePredictiveData(preditiveArr);
+                    Map<String, Set<CalendarDay>> calMap = GatheringService.parsePredictiveData(CreateGatheringFragment.this, predictiveDataList, event, originalStartTime, originalEndTime, startTime, endTime);
                     for (Map.Entry<String, Set<CalendarDay>> calEntrySet : calMap.entrySet()) {
 
                         if (getActivity() == null) {
