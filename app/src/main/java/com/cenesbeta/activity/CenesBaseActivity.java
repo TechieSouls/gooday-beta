@@ -426,6 +426,10 @@ public class CenesBaseActivity extends CenesActivity {
         }
     }
 
+    public void popBackStack() {
+        getSupportFragmentManager().popBackStack();
+    }
+
     public void clearFragmentsAndOpen(Fragment fragment) {
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         replaceFragment(fragment, null);

@@ -12,10 +12,13 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.cenesbeta.R;
+import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.bo.LocationPhoto;
+import com.cenesbeta.fragment.ImageViewSliderFragment;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
 import com.cenesbeta.util.CenesConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LocationPhotoRecyclerViewAdapter extends RecyclerView.Adapter<LocationPhotoRecyclerViewAdapter.LocationPhotoHolder> {
@@ -36,9 +39,9 @@ public class LocationPhotoRecyclerViewAdapter extends RecyclerView.Adapter<Locat
     }
 
     @Override
-    public void onBindViewHolder(@NonNull LocationPhotoHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull LocationPhotoHolder viewHolder, final int position) {
 
-        LocationPhoto locationPhoto = locationPhotos.get(i);
+        LocationPhoto locationPhoto = locationPhotos.get(position);
         try {
 
             RequestOptions requestOptions= new RequestOptions();
@@ -48,6 +51,21 @@ public class LocationPhotoRecyclerViewAdapter extends RecyclerView.Adapter<Locat
                     .load(CenesConstants.GOOGLE_PLACE_THUMBNAIL_PHOTOS_API+locationPhoto.getPhotoReferences())
                     .apply(requestOptions)
                     .into(viewHolder.ivLocationPhoto);
+
+            viewHolder.ivLocationPhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    List<String> locPhotos = new ArrayList<>();
+                    for (LocationPhoto locPhoto: locationPhotos) {
+                        locPhotos.add(CenesConstants.GOOGLE_PLACE_SLIDER_PHOTOS_API+locPhoto.getPhotoReferences());
+                    }
+                    ImageViewSliderFragment imageViewSliderFragment = new ImageViewSliderFragment();
+                    imageViewSliderFragment.images = locPhotos;
+                    imageViewSliderFragment.pageIndex = position;
+                    ((CenesBaseActivity)gatheringPreviewFragment.getActivity()).replaceFragment(imageViewSliderFragment, GatheringPreviewFragment.TAG);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -89,7 +89,7 @@ import java.util.Map;
 
 public class GatheringPreviewFragment extends CenesFragment {
 
-    private static String TAG = "GatheringPreviewFragment";
+    public static String TAG = "GatheringPreviewFragment";
     private int SMS_COMPOSE_RESULT_CODE = 1001;
 
     private View fragmentView;
@@ -297,6 +297,9 @@ public class GatheringPreviewFragment extends CenesFragment {
         }
 
         populateInvitationCard(event);
+        if (event.getPlaceId() != null) {
+            fetchLocationPhotos(event.getPlaceId());
+        }
         if (event.getScheduleAs() != null && event.getScheduleAs().equals("Notification")) {
 
             populateInvitationCard(event);
