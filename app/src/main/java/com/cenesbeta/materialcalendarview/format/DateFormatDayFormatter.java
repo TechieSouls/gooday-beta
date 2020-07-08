@@ -1,12 +1,12 @@
 package com.cenesbeta.materialcalendarview.format;
 
-import android.support.annotation.NonNull;
-
 import com.cenesbeta.materialcalendarview.CalendarDay;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
 
 /**
  * Format using a {@linkplain DateFormat} instance.

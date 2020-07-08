@@ -4,12 +4,13 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.text.style.ForegroundColorSpan;
 
 import com.cenesbeta.materialcalendarview.CalendarDay;
 import com.cenesbeta.materialcalendarview.DayViewDecorator;
 import com.cenesbeta.materialcalendarview.DayViewFacade;
+
+import androidx.core.content.ContextCompat;
 
 public class CurrentDateDecorator implements DayViewDecorator {
 

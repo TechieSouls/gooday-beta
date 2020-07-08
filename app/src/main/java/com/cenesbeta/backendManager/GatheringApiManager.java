@@ -1,6 +1,5 @@
 package com.cenesbeta.backendManager;
 
-import android.support.v7.app.AppCompatActivity;
 
 import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.JsonParsing;

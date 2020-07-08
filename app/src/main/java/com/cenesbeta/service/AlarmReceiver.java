@@ -9,9 +9,10 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 
 import com.cenesbeta.R;
+
+import androidx.core.app.NotificationCompat;
 
 /**
  * Created by rohan on 6/11/17.

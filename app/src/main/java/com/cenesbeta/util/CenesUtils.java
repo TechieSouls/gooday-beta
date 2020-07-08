@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
-import android.support.v4.os.ConfigurationCompat;
 import android.telephony.TelephonyManager;
 import android.util.TypedValue;
 
@@ -23,6 +22,8 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
+import androidx.core.os.ConfigurationCompat;
 
 /**
  * Created by mandeep on 9/9/17.

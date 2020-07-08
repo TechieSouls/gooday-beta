@@ -93,6 +93,11 @@ public class SearchLocationAdapter extends BaseAdapter {
             } else {
                 holder.tvDistance.setVisibility(View.VISIBLE);
                 holder.tvDistance.setText(location.getKilometers()+"Km");
+
+                if (Double.valueOf(location.getKilometers()) > 9000) {
+                    holder.tvDistance.setVisibility(View.GONE);
+                }
+
             }
 
             holder.rlLocationListItem.setOnTouchListener(mActivity.layoutTouchListener);

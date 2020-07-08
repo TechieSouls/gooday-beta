@@ -1,10 +1,9 @@
 package com.cenesbeta.fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +16,8 @@ import android.widget.TextView;
 
 import com.cenesbeta.activity.CenesActivity;
 import com.cenesbeta.activity.CenesBaseActivity;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * Created by rohan on 10/10/17.

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+                <!--  Title And Time Layout -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="17dp"
+                    android:layout_marginRight="17dp">
+                    <ImageView
+                        android:id="@+id/iv_back_button"
+                        android:layout_width="12dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/abondan_event_icon"
+                        android:layout_marginTop="15dp"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="20dp">
+
+                        <TextView
+                            android:id="@+id/tv_event_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Alpine Sunrise"
+                            android:fontFamily="@font/avenir_heavy"
+                            android:textColor="@color/black"
+                            android:textSize="18dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_event_dates"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Fri June 7, 7:00PM-9:30PM"
+                            android:textColor="@color/black"
+                            android:fontFamily="@font/avenir_black"
+                            android:textSize="15dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <!-- Image height will be 20% more than that of
+                    Screen width-->
+                <ImageView
+                    android:id="@+id/iv_event_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:src="@drawable/cenes_member"
+                    android:scaleType="centerCrop"
+                    android:layout_marginTop="20dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="17dp">
+
+                <!-- Here we are showing Owner Info -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="19dp">
+
+                    <com.cenesbeta.util.RoundedImageView
+                        android:id="@+id/riv_owner_image"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/profile_pic_no_image"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="80dp"
+                        android:layout_marginRight="95dp"
+                        android:layout_centerVertical="true">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Posted By"
+                            android:textColor="@color/black"
+                            android:fontFamily="@font/avenir_medium"
+                            android:textSize="14dp"/>
+                        <TextView
+                            android:id="@+id/tv_owner_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mandeep Singh"
+                            android:textColor="@color/black"
+                            android:fontFamily="@font/avenir_book"
+                            android:textSize="14dp"/>
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btn_view_event"
+                        android:layout_width="95dp"
+                        android:layout_height="wrap_content"
+                        android:text="View Event"
+                        android:textColor="@color/black"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:textSize="13dp"/>
+                </RelativeLayout>
+
+
+                <!-- Event Description -->
+                <TextView
+                    android:id="@+id/tv_event_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="This takes the description of Event"
+                    android:textSize="17dp"
+                    android:fontFamily="@font/avenir_medium"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="40dp"/>
+
+                <!-- Event Location -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp">
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/location_icon_with_shadow"/>
+
+                    <TextView
+                        android:id="@+id/tv_event_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="493 Jeramie Run"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/avenir_book"
+                        android:textSize="14dp"
+                        />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_location_photos"
+                    android:layout_width="match_parent"
+                    android:layout_height="106dp"
+                    android:layout_marginTop="19dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

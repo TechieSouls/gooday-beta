@@ -1,9 +1,6 @@
 package com.cenesbeta.fragment.gathering;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +19,10 @@ import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.HelpFeedbackFragment;
 import com.cenesbeta.fragment.dashboard.HomeFragment;
 import com.cenesbeta.util.RoundedImageView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.GravityCompat;
 
 public class GatheringExpiredFragment extends CenesFragment {
 
@@ -52,7 +53,7 @@ public class GatheringExpiredFragment extends CenesFragment {
         user = userManager.getUser();
 
         if (user != null && user.getPicture() != null && user.getPicture() != "null") {
-            Glide.with(this).load(user.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(homeProfilePic);
+            Glide.with(getCenesActivity()).load(user.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(homeProfilePic);
         }
 
         homeProfilePic.setOnClickListener(onClickListener);

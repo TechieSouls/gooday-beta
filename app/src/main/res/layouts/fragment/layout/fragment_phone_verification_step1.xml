@@ -65,7 +65,7 @@
                                 android:id="@+id/tv_country_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Select Country"
+                                android:text="Select Country/Region"
                                 android:textColor="@color/link_color"
                                 android:textSize="15dp"
                                 android:layout_centerVertical="true"

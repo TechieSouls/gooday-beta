@@ -18,14 +18,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -45,6 +37,7 @@ import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.api.CenesCommonAPI;
+import com.cenesbeta.api.GatheringAPI;
 import com.cenesbeta.api.NotificationAPI;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
@@ -77,6 +70,14 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class CenesBaseActivity extends CenesActivity {
 
@@ -256,6 +257,12 @@ public class CenesBaseActivity extends CenesActivity {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("Cenes Base Activity OnResume Called : ");
+        checkForGoogleUpdates();
+    }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -523,6 +530,30 @@ public class CenesBaseActivity extends CenesActivity {
                     try {
                         if (response != null && response.getBoolean("success") == true) {
                             rlBadgeCountDot.setVisibility(View.GONE);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).execute(asyncTaskDto);
+        }
+    }
+
+    public void checkForGoogleUpdates() {
+        if (internetManager.isInternetConnection(CenesBaseActivity.this)) {
+
+            AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+            asyncTaskDto.setQueryStr("userId="+loggedInUser.getUserId());
+            asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ GatheringAPI.get_google_updates);
+            asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+            new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+                    try {
+                        if (response != null && response.getBoolean("success") == true) {
+                            if (response.getBoolean("data") == true && homeFragmentV2 != null) {
+                                homeFragmentV2.loadHomeScreenData();
+                            }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

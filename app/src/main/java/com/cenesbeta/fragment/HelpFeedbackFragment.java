@@ -3,9 +3,6 @@ package com.cenesbeta.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +23,10 @@ import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
 
 import java.util.List;
+
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 /**
  * Created by mandeep on 27/7/18.
@@ -108,7 +109,7 @@ public class HelpFeedbackFragment  extends CenesFragment {
 
         if (loggedInUser != null && loggedInUser.getPicture() != null && loggedInUser.getPicture() != "null") {
             // DownloadImageTask(homePageProfilePic).execute(user.getPicture());
-            Glide.with(HelpFeedbackFragment.this).load(loggedInUser.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(homeProfilePic);
+            Glide.with(getCenesActivity()).load(loggedInUser.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(homeProfilePic);
         }
 
 

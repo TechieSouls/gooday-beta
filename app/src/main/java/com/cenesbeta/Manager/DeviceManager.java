@@ -1,10 +1,11 @@
 package com.cenesbeta.Manager;
 
-import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 /**
- * Created by puneet on 11/8/17.
+ * Created by Mandeep on 11/8/17.
  */
 
 public interface DeviceManager {

@@ -3,7 +3,6 @@ package com.cenesbeta.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDelegate;
 
 import com.cenesbeta.R;
 import com.cenesbeta.application.CenesApplication;
@@ -14,6 +13,8 @@ import com.cenesbeta.util.CenesUtils;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONObject;
+
+import androidx.appcompat.app.AppCompatDelegate;
 
 
 public class MainActivity extends CenesActivity {

@@ -3,7 +3,6 @@ package com.cenesbeta.fragment.guest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +26,8 @@ import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.fragment.CenesFragment;
 
 import org.json.JSONObject;
+
+import androidx.appcompat.app.AlertDialog;
 
 /**
  * Created by mandeep on 7/10/18.

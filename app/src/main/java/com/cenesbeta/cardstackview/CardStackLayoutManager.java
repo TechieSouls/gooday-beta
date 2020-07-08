@@ -3,7 +3,6 @@ package com.cenesbeta.cardstackview;
 import android.content.Context;
 import android.graphics.PointF;
 import android.os.Handler;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
@@ -17,6 +16,7 @@ import com.cenesbeta.cardstackview.internal.DisplayUtil;
 import androidx.annotation.FloatRange;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 

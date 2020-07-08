@@ -1,9 +1,6 @@
 package com.cenesbeta.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +14,10 @@ import com.cenesbeta.adapter.ImageViewPagerAdapter;
 import com.cenesbeta.util.CenesUtils;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
 
 public class ImageViewSliderFragment extends CenesFragment {
 

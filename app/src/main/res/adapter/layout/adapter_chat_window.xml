@@ -101,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|bottom"
                 android:gravity="left|center_vertical"
-                android:padding="9dp"
+                android:padding="8dp"
                 app:viewPartMain="@+id/chat_msg_to"
                 app:viewPartSlave="@+id/chat_created_time_sender"
                 android:layout_marginLeft="20dp">
@@ -110,21 +110,20 @@
                     android:id="@+id/chat_msg_to"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hey There how are you"
+                    android:text="No Yet but i will be soon in May"
                     android:textSize="14dp"
                     android:layout_gravity="right|bottom"
                     android:focusableInTouchMode="false"
                     android:gravity="left|top"
                     android:textColor="@color/black"
                     android:background="@color/transparent"
-                    android:layout_marginLeft="15dp"
                     android:fontFamily="@font/avenir_medium"
                     />
 
                 <TextView
                     android:id="@+id/chat_created_time_sender"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="13dp"
                     android:layout_marginRight="5dp"
                     android:background="@color/transparent"
                     android:text="12:45 PM"

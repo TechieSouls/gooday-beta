@@ -15,14 +15,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -68,6 +60,13 @@ import com.cenesbeta.service.GatheringService;
 import com.cenesbeta.util.CenesEditText;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.ImageUtils;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -78,6 +77,7 @@ import com.yalantis.ucrop.view.CropImageView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -92,6 +92,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by mandeep on 2/11/17.
@@ -119,12 +128,14 @@ public class CreateGatheringFragment extends CenesFragment {
     public ImageView ivAbandonEvent;
     private ImageView ivPredictiveInfo, gathInviteFrndsBtn, ivDateBarArrow;
     private TextView tvLocationLabel, tvGatheringMessage, tvCoverImageStatus, tvEventDate, tvChooseLibrary, tvTakePhoto, tvPhotoCancel;
+    private TextView tvBusinessStatus, tvBusinessPhone;
     private RelativeLayout rlStartBar, rlEndBar, rlDateBar;
     private RelativeLayout rlHeader, gathSearchLocationButton, rlGatheringMessageBar, rlCoverImageBar, rlSelectedFriendsRecyclerView;
     private RelativeLayout rlPreviewInvitationButton, rlPhotoActionSheet;
     private ScrollView svGatheringScrollview;
     private LinearLayout llGatheringDateBars, llGatheringInfoBars;
     private LinearLayout llPredictiveCalCell, llPredictiveCalInfo;
+    private SupportMapFragment supportMapFragment;
     public static RecyclerView recyclerView;
     private FriendHorizontalScrollAdapter friendHorizontalScrollAdapter;
     private Uri cameraFileUri;
@@ -144,6 +155,7 @@ public class CreateGatheringFragment extends CenesFragment {
     private MaterialCalendarView materialCalendarView;
     private Long originalStartTime, originalEndTime;
     private EventManagerImpl eventManagerImpl;
+    private GoogleMap locationMap;
 
     @Nullable
     @Override
@@ -282,6 +294,8 @@ public class CreateGatheringFragment extends CenesFragment {
         tvChooseLibrary = (TextView) fragmentView.findViewById(R.id.tv_choose_library);
         tvTakePhoto = (TextView) fragmentView.findViewById(R.id.tv_take_photo);
         tvPhotoCancel = (TextView) fragmentView.findViewById(R.id.tv_photo_cancel);
+        tvBusinessStatus = (TextView) fragmentView.findViewById(R.id.tv_business_status);
+        tvBusinessPhone = (TextView) fragmentView.findViewById(R.id.tv_business_phone);
 
         gathSearchLocationButton = (RelativeLayout) fragmentView.findViewById(R.id.gath_search_location_button);
         rlCoverImageBar = (RelativeLayout) fragmentView.findViewById(R.id.rl_cover_image_bar);
@@ -306,6 +320,11 @@ public class CreateGatheringFragment extends CenesFragment {
         materialCalendarView = (MaterialCalendarView) fragmentView.findViewById(R.id.material_calendar_view);
         svGatheringScrollview = (ScrollView) fragmentView.findViewById(R.id.sv_gathering_scrollview);
         recyclerView = (RecyclerView) fragmentView.findViewById(R.id.recycler_view);
+
+        // Get the SupportMapFragment and request notification
+        // when the map is ready to be used.
+        supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.location_map);
+        supportMapFragment.getMapAsync(onMapReadyCallback);
 
         createGatheringDto = new CreateGatheringDto();
         new GatheringAsyncTask(cenesApplication, (CenesBaseActivity) getActivity());
@@ -900,6 +919,18 @@ public class CreateGatheringFragment extends CenesFragment {
         }
     };
 
+    OnMapReadyCallback onMapReadyCallback = new OnMapReadyCallback() {
+        @Override
+        public void onMapReady(GoogleMap googleMap) {
+            locationMap = googleMap;
+            if (event.getLatitude() != null) {
+                locationMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(Double.valueOf(event.getLatitude()), Double.valueOf(event.getLongitude())))
+                        .title("Marker"));
+            }
+        }
+    };
+
     public void firePictureIntent(){
         if(isTakeOrUpload == "Upload"){
             Intent browseIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -1107,9 +1138,40 @@ public class CreateGatheringFragment extends CenesFragment {
 
                                 try {
 
-                                    JSONObject locationObj = locations.getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
+                                    JSONObject result = locations.getJSONObject("result");
+                                    JSONObject locationObj = result.getJSONObject("geometry").getJSONObject("location");
                                     event.setLatitude(locationObj.getString("lat"));
                                     event.setLongitude(locationObj.getString("lng"));
+
+                                    if (result.has("opening_hours")) {
+                                        JSONObject openHours = result.getJSONObject("opening_hours");
+                                        if (openHours.has("open_now")) {
+                                            if (openHours.getBoolean("open_now")) {
+                                                tvBusinessStatus.setText("Open");
+                                                tvBusinessStatus.setTextColor(getActivity().getResources().getColor(R.color.cenes_mcv_green));
+                                            } else {
+                                                tvBusinessStatus.setText("Closed");
+                                                tvBusinessStatus.setTextColor(getActivity().getResources().getColor(R.color.red));
+                                            }
+                                        }
+                                    }
+
+                                    if (result.has("international_phone_number")) {
+                                        tvBusinessPhone.setText(result.getString("international_phone_number"));
+                                    } else if (result.has("formatted_phone_number")) {
+                                        tvBusinessPhone.setText(result.getString("formatted_phone_number"));
+                                    } else {
+                                        tvBusinessPhone.setText("");
+                                    }
+
+                                    LatLng latLng = new LatLng(Double.valueOf(event.getLatitude()), Double.valueOf(event.getLongitude()));
+                                    CameraPosition myPosition = new CameraPosition.Builder()
+                                            .target(latLng).zoom(10).bearing(90).build();
+                                    locationMap.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
+                                    locationMap.addMarker(new MarkerOptions()
+                                            .position(new LatLng(Double.valueOf(event.getLatitude()), Double.valueOf(event.getLongitude())))
+                                            .title("Marker"));
+
 
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -1138,11 +1200,41 @@ public class CreateGatheringFragment extends CenesFragment {
 
                                 try {
 
-                                    JSONObject locationObj = locations.getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
+                                    JSONObject result = locations.getJSONObject("result");
+                                    JSONObject locationObj = result.getJSONObject("geometry").getJSONObject("location");
 
                                     //parentEvent.setLocation(job.getJSONObject("result").getString("formatted_address"));
                                     event.setLatitude(locationObj.getString("lat"));
                                     event.setLongitude(locationObj.getString("lng"));
+
+                                    if (result.has("opening_hours")) {
+                                        JSONObject openHours = result.getJSONObject("opening_hours");
+                                        if (result.has("open_now")) {
+                                            if (openHours.getBoolean("open_now")) {
+                                                tvBusinessStatus.setText("Open");
+                                                tvBusinessStatus.setTextColor(getActivity().getResources().getColor(R.color.cenes_mcv_green));
+                                            } else {
+                                                tvBusinessStatus.setText("Closed");
+                                                tvBusinessStatus.setTextColor(getActivity().getResources().getColor(R.color.red));
+                                            }
+                                        }
+                                    }
+
+                                    if (result.has("international_phone_number")) {
+                                        tvBusinessPhone.setText(result.getString("international_phone_number"));
+                                    } else if (result.has("formatted_phone_number")) {
+                                        tvBusinessPhone.setText(result.getString("formatted_phone_number"));
+                                    } else {
+                                        tvBusinessPhone.setText("");
+                                    }
+
+                                    LatLng latLng = new LatLng(Double.valueOf(event.getLatitude()), Double.valueOf(event.getLongitude()));
+                                    CameraPosition myPosition = new CameraPosition.Builder()
+                                            .target(latLng).zoom(17).bearing(90).tilt(30).build();
+                                    locationMap.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
+                                    locationMap.addMarker(new MarkerOptions()
+                                            .position(new LatLng(Double.valueOf(event.getLatitude()), Double.valueOf(event.getLongitude())))
+                                            .title("Marker"));
 
                                 } catch (Exception e) {
                                     e.printStackTrace();

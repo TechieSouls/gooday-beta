@@ -2,9 +2,6 @@ package com.cenesbeta.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +10,10 @@ import com.cenesbeta.R;
 import com.cenesbeta.fragment.guest.SigninFragment;
 
 import java.util.List;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 /**
  * Created by puneet on 11/8/17.

@@ -2,11 +2,6 @@ package com.cenesbeta.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,6 +15,11 @@ import com.cenesbeta.fragment.guest.SignupStepSuccessFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Created by rohan on 10/10/17.
@@ -106,7 +106,7 @@ public class CompleteYourProfileActivity extends CenesActivity {
         }
     }
 
-    private final OnPageChangeListener mPageChangeListener = new OnPageChangeListener() {
+    private final ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
 
         @Override
         public void onPageScrolled(final int position, final float offset, final int offsetPixel) {

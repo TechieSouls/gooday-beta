@@ -54,7 +54,8 @@
                 android:src="@drawable/refresh_cal_icon"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="60dp"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/iv_plus_btn"
@@ -101,9 +102,10 @@
                     android:layout_width="32dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/close_calendar"
-                    android:padding="5dp"
+                    android:padding="9dp"
                     android:layout_marginLeft="5dp"
-                    android:layout_gravity="center_vertical"/>
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="5dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -301,7 +303,7 @@
             android:visibility="gone">
 
 
-            <android.support.v4.widget.SwipeRefreshLayout
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/swiperefresh_invitations"
                 android:layout_width="match_parent"
@@ -313,7 +315,7 @@
                     android:layout_height="match_parent"
                     android:groupIndicator="@null"
                     />
-            </android.support.v4.widget.SwipeRefreshLayout>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         </LinearLayout>
 

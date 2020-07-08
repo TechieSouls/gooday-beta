@@ -1,7 +1,5 @@
 package com.cenesbeta.bo;
 
-import android.support.annotation.NonNull;
-
 import com.cenesbeta.R;
 
 import java.text.Collator;
@@ -9,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by mandeep on 21/9/18.

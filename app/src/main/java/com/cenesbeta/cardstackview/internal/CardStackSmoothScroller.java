@@ -1,6 +1,5 @@
 package com.cenesbeta.cardstackview.internal;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.cenesbeta.cardstackview.CardStackLayoutManager;
@@ -8,6 +7,7 @@ import com.cenesbeta.cardstackview.CardStackListener;
 import com.cenesbeta.cardstackview.RewindAnimationSetting;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CardStackSmoothScroller extends RecyclerView.SmoothScroller {
 

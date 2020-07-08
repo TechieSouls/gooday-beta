@@ -2,8 +2,6 @@ package com.cenesbeta.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +12,9 @@ import com.cenesbeta.fragment.GetStartedFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 /**
  * Created by mandeep on 17/8/17.

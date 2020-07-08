@@ -8,10 +8,6 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +27,6 @@ import com.cenesbeta.Manager.Impl.UrlManagerImpl;
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
-import com.cenesbeta.adapter.CalendarTabExpandableListAdapter;
 import com.cenesbeta.adapter.CalendarTabListViewAdapter;
 import com.cenesbeta.adapter.InvitationListItemAdapter;
 import com.cenesbeta.api.GatheringAPI;
@@ -48,7 +43,6 @@ import com.cenesbeta.dto.HomeScreenDto;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.friend.FriendListFragment;
 import com.cenesbeta.fragment.gathering.GatheringPreviewFragment;
-import com.cenesbeta.fragment.gathering.GatheringsFragment;
 import com.cenesbeta.fragment.profile.ProfileMyCalendarsFragment;
 import com.cenesbeta.materialcalendarview.CalendarDay;
 import com.cenesbeta.materialcalendarview.MaterialCalendarView;
@@ -76,6 +70,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 public class HomeFragmentV2 extends CenesFragment {
 
     public static String TAG = "HomeFragmentV2";
@@ -100,7 +99,6 @@ public class HomeFragmentV2 extends CenesFragment {
     private UserManager userManager;
     public  User loggedInUser;
     private List<Object> getHomelistViewWithHeaders;
-    private CalendarTabExpandableListAdapter calendarTabExpandableListAdapter;
     private CalendarTabListViewAdapter calendarTabListViewAdapter;
     private InvitationListItemAdapter invitationListItemAdapter;
     private Map<SyncCallFor, Boolean> calendarRefreshed = new HashMap<>();

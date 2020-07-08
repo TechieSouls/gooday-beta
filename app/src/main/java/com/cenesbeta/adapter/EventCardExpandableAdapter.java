@@ -2,7 +2,6 @@ package com.cenesbeta.adapter;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -36,6 +35,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import androidx.fragment.app.FragmentManager;
 
 /**
  * Created by mandeep on 5/1/19.

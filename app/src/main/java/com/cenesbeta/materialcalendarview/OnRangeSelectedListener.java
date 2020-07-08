@@ -1,8 +1,9 @@
 package com.cenesbeta.materialcalendarview;
 
-import android.support.annotation.NonNull;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 /**
  * The callback used to indicate a range has been selected

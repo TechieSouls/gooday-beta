@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.text.style.ForegroundColorSpan;
 
 import com.cenesbeta.R;
@@ -14,6 +13,8 @@ import com.cenesbeta.materialcalendarview.DayViewFacade;
 
 import java.util.Collection;
 import java.util.HashSet;
+
+import androidx.core.content.ContextCompat;
 
 /**
  * Created by mandeep on 5/9/17.

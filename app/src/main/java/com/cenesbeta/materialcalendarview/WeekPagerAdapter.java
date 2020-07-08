@@ -1,10 +1,10 @@
 package com.cenesbeta.materialcalendarview;
 
-import android.support.annotation.NonNull;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import androidx.annotation.NonNull;
 
 @Experimental
 public class WeekPagerAdapter extends CalendarPagerAdapter<WeekView> {

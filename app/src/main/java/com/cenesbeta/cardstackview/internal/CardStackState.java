@@ -1,8 +1,8 @@
 package com.cenesbeta.cardstackview.internal;
 
-import android.support.v7.widget.RecyclerView;
-
 import com.cenesbeta.cardstackview.Direction;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CardStackState {
     public Status status = Status.Idle;

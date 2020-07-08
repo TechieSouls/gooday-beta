@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +51,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.FragmentManager;
 
 /**
  * Created by Mandeep on 10/10/17.
@@ -118,7 +119,7 @@ public class MeTimeFragment extends CenesFragment {
         internetManager = coreManager.getInternetManager();
         meTimeManagerImpl = new MeTimeManagerImpl(cenesApplication);
 
-        Glide.with(this).load(loggedInUser.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(homeProfilePic);
+        Glide.with(getActivity()).load(loggedInUser.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(homeProfilePic);
 
         MixpanelAPI mixpanel = MixpanelAPI.getInstance(getContext(), CenesUtils.MIXPANEL_TOKEN);
         try {

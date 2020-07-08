@@ -1,8 +1,6 @@
 package com.cenesbeta.fragment.profile;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -27,6 +25,9 @@ import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.util.CenesUtils;
 
 import org.json.JSONObject;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class ProfileDetailsEditFragment extends CenesFragment {
 

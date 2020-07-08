@@ -1,8 +1,6 @@
 package com.cenesbeta.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +12,9 @@ import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.zoom.image.PhotoView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class ImageZoomerFragment extends CenesFragment {
 

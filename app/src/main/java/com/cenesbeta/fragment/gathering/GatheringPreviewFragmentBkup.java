@@ -8,10 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +45,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class GatheringPreviewFragmentBkup extends CenesFragment {
 
@@ -555,7 +556,7 @@ public class GatheringPreviewFragmentBkup extends CenesFragment {
                 eventPictureFile = new File(event.getEventImageURI());
 
             } else if (event.getEventPicture() != null) {
-                Glide.with(GatheringPreviewFragmentBkup.this).load(event.getEventPicture()).apply(RequestOptions.placeholderOf(R.drawable.gath_upload_img)).into(eventPicture);
+                Glide.with(getCenesActivity()).load(event.getEventPicture()).apply(RequestOptions.placeholderOf(R.drawable.gath_upload_img)).into(eventPicture);
             } else {
 
 
@@ -624,10 +625,10 @@ public class GatheringPreviewFragmentBkup extends CenesFragment {
             try {
                 //This means it is an parentEvent being created by App User
                 if (eventOwner == null) {
-                    Glide.with(GatheringPreviewFragmentBkup.this).load(loggedInUser.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(rivOwnerImage);
+                    Glide.with(getCenesActivity()).load(loggedInUser.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(rivOwnerImage);
                     ownerName.setText(loggedInUser.getName());
                 } else {
-                    Glide.with(GatheringPreviewFragmentBkup.this).load(eventOwner.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(rivOwnerImage);
+                    Glide.with(getCenesActivity()).load(eventOwner.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(rivOwnerImage);
                     ownerName.setText(eventOwner.getName());
                 }
             } catch (Exception e) {

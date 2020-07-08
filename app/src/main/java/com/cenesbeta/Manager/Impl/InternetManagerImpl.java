@@ -1,12 +1,13 @@
 package com.cenesbeta.Manager.Impl;
 
-import android.support.v7.app.AppCompatActivity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.cenesbeta.Manager.InternetManager;
 import com.cenesbeta.application.CenesApplication;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by puneet on 11/8/17.

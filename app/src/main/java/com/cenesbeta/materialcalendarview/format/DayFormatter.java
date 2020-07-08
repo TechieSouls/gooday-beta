@@ -1,10 +1,10 @@
 package com.cenesbeta.materialcalendarview.format;
 
-import android.support.annotation.NonNull;
-
 import com.cenesbeta.materialcalendarview.CalendarDay;
 
 import java.text.SimpleDateFormat;
+
+import androidx.annotation.NonNull;
 
 /**
  * Supply labels for a given day. Default implementation is to format using a {@linkplain SimpleDateFormat}

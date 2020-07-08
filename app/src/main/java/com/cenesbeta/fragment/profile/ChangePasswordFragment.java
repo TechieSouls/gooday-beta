@@ -2,7 +2,6 @@ package com.cenesbeta.fragment.profile;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -27,6 +26,8 @@ import com.cenesbeta.util.CenesMessages;
 import org.json.JSONObject;
 
 import java.util.Map;
+
+import androidx.annotation.Nullable;
 
 public class ChangePasswordFragment extends CenesFragment {
 

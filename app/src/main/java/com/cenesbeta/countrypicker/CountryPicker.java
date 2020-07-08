@@ -3,7 +3,6 @@ package com.cenesbeta.countrypicker;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -17,6 +16,8 @@ import com.cenesbeta.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.fragment.app.DialogFragment;
 
 /**
  * Created by mandeep on 16/9/17.

@@ -24,7 +24,7 @@
             android:layout_height="40dp"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="20dp"
-            android:hint="Choose Country"
+            android:hint="Choose Country/Region"
             android:background="@color/transparent"
             android:layout_centerVertical="true"
             android:fontFamily="@font/avenir_medium"

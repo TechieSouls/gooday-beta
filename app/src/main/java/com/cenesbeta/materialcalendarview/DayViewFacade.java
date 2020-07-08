@@ -1,11 +1,12 @@
 package com.cenesbeta.materialcalendarview;
 
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 /**
  * Abstraction layer to help in decorating Day views

@@ -1,13 +1,13 @@
 package com.cenesbeta.Manager;
 
-import android.support.v7.app.AppCompatActivity;
-
 import com.cenesbeta.bo.User;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by puneet on 15/8/17.

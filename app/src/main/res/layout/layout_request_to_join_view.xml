@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#40000000">
+
+
+    <RelativeLayout
+        android:layout_width="271dp"
+        android:layout_height="202dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/xml_curved_corner_rtj_alert"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Request To Join"
+                android:fontFamily="@font/avenir_medium"
+                android:textSize="17dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/black"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tell host why you like to join the event."
+                android:fontFamily="@font/avenir_light"
+                android:textColor="@color/black"
+                android:textSize="13dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"/>
+            
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                android:fontFamily="@font/avenir_medium"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8.5dp"
+                android:background="#4D4D4D"
+                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal"
+                >
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel"
+                    android:textAllCaps="false"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/transparent"
+                    android:textColor="#007AFF"
+                    />
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#4D4D4D"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Send"
+                    android:textAllCaps="false"
+                    android:layout_marginLeft="20dp"
+                    android:background="@color/transparent"
+                    android:textColor="#007AFF"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

@@ -3,7 +3,6 @@ package com.cenesbeta.service;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.support.v4.content.res.ResourcesCompat;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -30,6 +29,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import androidx.core.content.res.ResourcesCompat;
 
 /**
  * Created by mandeep on 12/1/19.
@@ -248,7 +249,7 @@ public class MeTimeService {
             TextView metimeDays = new TextView(activity);
 
             if (meTime.getDays() != null && meTime.getDays().length() > 0) {
-                metimeDays.setText(meTime.getDays().replaceAll("-", ""));
+                metimeDays.setText(meTime.getDays());
             }
             metimeDays.setTextColor(activity.getResources().getColor(R.color.metime_week_color));
             metimeDays.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);

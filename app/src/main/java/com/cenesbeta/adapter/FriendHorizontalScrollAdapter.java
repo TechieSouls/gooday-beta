@@ -1,6 +1,5 @@
 package com.cenesbeta.adapter;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,8 @@ import com.cenesbeta.fragment.gathering.CreateGatheringFragment;
 import com.cenesbeta.util.RoundedImageView;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class FriendHorizontalScrollAdapter extends RecyclerView.Adapter<FriendHorizontalScrollAdapter.MyViewHolder> {
 
@@ -109,7 +110,7 @@ public class FriendHorizontalScrollAdapter extends RecyclerView.Adapter<FriendHo
                     holder.tvName.setText(invFrn.getName());
                 }
                 if (invFrn.getUser() != null && invFrn.getUser().getPicture() != null) {
-                    Glide.with(context).load(invFrn.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(holder.ivFriend);
+                    Glide.with(context.getCenesActivity()).load(invFrn.getUser().getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(holder.ivFriend);
                 } else {
                     holder.ivFriend.setImageResource(R.drawable.profile_pic_no_image);
                 }

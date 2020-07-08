@@ -1,6 +1,5 @@
 package com.cenesbeta.Manager.Impl;
 
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.cenesbeta.Manager.ApiManager;
@@ -12,6 +11,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by puneet on 15/8/17.
@@ -83,7 +84,7 @@ public class ApiManagerImpl implements ApiManager {
     }
 
     @Override
-    public JSONArray googleEvents(User user,String queryStr,AppCompatActivity activity) {
+    public JSONArray googleEvents(User user, String queryStr, AppCompatActivity activity) {
         try {
             JsonParsing jsonParsing = new JsonParsing();
             String apiUrl = UrlManagerImpl.prodAPIUrl+GOOGLE_EVENTS_URL+queryStr;

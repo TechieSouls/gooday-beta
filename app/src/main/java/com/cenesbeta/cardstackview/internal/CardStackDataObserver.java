@@ -1,10 +1,9 @@
 package com.cenesbeta.cardstackview.internal;
 
-import android.support.v7.widget.RecyclerView;
-
 import com.cenesbeta.cardstackview.CardStackLayoutManager;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CardStackDataObserver extends RecyclerView.AdapterDataObserver {
 

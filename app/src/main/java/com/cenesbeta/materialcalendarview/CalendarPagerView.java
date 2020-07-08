@@ -1,6 +1,5 @@
 package com.cenesbeta.materialcalendarview;
 
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 import static com.cenesbeta.materialcalendarview.MaterialCalendarView.SHOW_DEFAULTS;
 import static com.cenesbeta.materialcalendarview.MaterialCalendarView.showOtherMonths;

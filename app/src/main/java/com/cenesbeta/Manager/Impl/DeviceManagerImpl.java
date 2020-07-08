@@ -1,12 +1,13 @@
 package com.cenesbeta.Manager.Impl;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.cenesbeta.Manager.DeviceManager;
 import com.cenesbeta.application.CenesApplication;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by puneet on 11/8/17.

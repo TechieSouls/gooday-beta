@@ -12,12 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Telephony;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -86,6 +80,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class GatheringPreviewFragment extends CenesFragment {
 
@@ -2022,9 +2023,10 @@ public class GatheringPreviewFragment extends CenesFragment {
         if (!CenesUtils.isEmpty(event.getDescription())) {
 
             System.out.println("Description : event id : "+event.getEventId());
-            if (event.getEventId() == null || (event.getExpired() != null && event.getExpired() == true) || event.getEndTime() < new Date().getTime() ||  event.getEventMembers().size() == 1 ) {
-
-
+            if (event.getEventId() == null ||
+                    (((event.getExpired() != null && event.getExpired() == true) ||
+                            event.getEndTime() < new Date().getTime()) && eventChats.size() == 1) ||
+                    event.getEventMembers().size() == 1 ) {
                 if (rvEventDescriptionDialog.getVisibility() == View.GONE) {
 
                     System.out.println("Stepxx_1 ");
@@ -2044,7 +2046,6 @@ public class GatheringPreviewFragment extends CenesFragment {
                     System.out.println("Stepxx_2 ");
                     hideDescriptionMessage();
                 }
-
             } else {
                 if (rlIncludeChat.getVisibility() == View.GONE || isPushRequest == true) {
 
@@ -2053,12 +2054,22 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                     rlEnterChat.setVisibility(View.GONE);
                     rlIncludeChat.setVisibility(View.VISIBLE);
-                    if (event.isEditMode()) {
+                    if (event.isEditMode() || (event.getExpired() != null && event.getExpired() == true) || event.getEndTime() < new Date().getTime()) {
                         rlChatBubble.setVisibility(View.GONE);
                     } else {
                         rlChatBubble.setVisibility(View.VISIBLE);
                     }
                     llSenderPicture.setVisibility(View.VISIBLE);
+
+                    if (event.isEditMode() || (event.getExpired() != null && event.getExpired() == true) || event.getEndTime() < new Date().getTime()) {
+                        RelativeLayout.LayoutParams rlChatlistAndBubbleParams = (RelativeLayout.LayoutParams)rlChatlistAndBubble.getLayoutParams();
+                        rlChatlistAndBubbleParams.setMargins(0,windowHeight - CenesUtils.dpToPx(500),0,0);
+                        rlChatlistAndBubble.setLayoutParams(rlChatlistAndBubbleParams);
+                    } else {
+                        RelativeLayout.LayoutParams rlChatlistAndBubbleParams = (RelativeLayout.LayoutParams)rlChatlistAndBubble.getLayoutParams();
+                        rlChatlistAndBubbleParams.setMargins(0,windowHeight - CenesUtils.dpToPx(600),0,0);
+                        rlChatlistAndBubble.setLayoutParams(rlChatlistAndBubbleParams);
+                    }
 
                     //new Handler().postDelayed(new Runnable() {
                     //@Override
@@ -2085,9 +2096,9 @@ public class GatheringPreviewFragment extends CenesFragment {
                     options.centerCrop();
                     Glide.with(getContext()).load(loggedInUser.getPicture()).apply(options).into(enterMsgPicture);
 
-                    lvChatListView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+                    //lvChatListView.postDelayed(new Runnable() {
+                       // @Override
+                       // public void run() {
                           /*  int scrollPosition = 0;
                             for (Map.Entry<String, List<EventChat>> entrySet : eventChatMapList.entrySet()) {
                                 scrollPosition = scrollPosition + 1 + entrySet.getValue().size();
@@ -2129,13 +2140,12 @@ public class GatheringPreviewFragment extends CenesFragment {
                             //elvEventChatList.set( eventChatMapList.get(headers.get(headers.size() - 1)).size() - 1);
 
 
-                        }
-                    }, 100);
+                        //}
+                    //}, 100);
 
                     //fragmentView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
                     //}
                     //}, 1000);
-
                 } else {
                     System.out.println("Stepxx_4 ");
                     llSenderPicture.setVisibility(View.GONE);

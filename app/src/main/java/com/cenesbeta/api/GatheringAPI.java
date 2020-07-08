@@ -9,6 +9,7 @@ public class GatheringAPI {
     public static String get_gatherings = "/api/user/gatherings";  //user_id, status
     public static String get_gathering_data = "/api/event/"; //eventId
     public static String get_gathering_detail = "/api/event/details"; //eventId
+    public static String get_google_updates = "/api/google/checkUpdates"; //eventId
 
 
     public static String get_update_invitation_api = "/api/event/memberStatusUpdate";

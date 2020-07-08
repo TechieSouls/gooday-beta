@@ -1,10 +1,11 @@
 package com.cenesbeta.materialcalendarview;
 
 import android.annotation.SuppressLint;
-import android.support.annotation.NonNull;
 
 import java.util.Calendar;
 import java.util.Collection;
+
+import androidx.annotation.NonNull;
 
 /**
  * Display a week of {@linkplain DayView}s and

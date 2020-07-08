@@ -1,7 +1,6 @@
 package com.cenesbeta.fragment;
 
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +38,8 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
+
+import androidx.core.view.GravityCompat;
 
 /**
  * Created by rohan on 10/10/17.
@@ -159,7 +160,7 @@ public class HolidaySyncFragment extends CenesFragment {
 
             if (user != null && !CenesUtils.isEmpty(user.getPicture())) {
                 // DownloadImageTask(homePageProfilePic).execute(user.getPicture());
-                Glide.with(HolidaySyncFragment.this).load(user.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(homeProfilePic);
+                Glide.with(getCenesActivity()).load(user.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(homeProfilePic);
             }
             /*user = userManager.getUser();
             if (user != null && user.getPicture() != null && user.getPicture() != "null") {

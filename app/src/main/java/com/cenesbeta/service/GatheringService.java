@@ -1,9 +1,5 @@
 package com.cenesbeta.service;
 
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-
 import com.cenesbeta.adapter.FriendHorizontalScrollAdapter;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventMember;
