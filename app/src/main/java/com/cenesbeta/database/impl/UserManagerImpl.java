@@ -34,7 +34,8 @@ public class UserManagerImpl implements UserManager {
             "phone TEXT, " +
             "birth_day_str TEXT," +
             "country TEXT," +
-            "google_id TEXT)";
+            "google_id TEXT," +
+            "show_covid_location_data INTEGER DEFAULT 0)";
 
     public UserManagerImpl(CenesApplication cenesApplication){
         this.cenesApplication = cenesApplication;
@@ -115,6 +116,13 @@ public class UserManagerImpl implements UserManager {
         } else {
             insertQuery = insertQuery + ","+user.getGoogleId()+"";
         }
+
+        if (user.isShowCovidLocationData()) {
+            insertQuery = insertQuery + ",1";
+        } else {
+            insertQuery = insertQuery + ",0";
+        }
+
         insertQuery = insertQuery + ")";
         System.out.println(insertQuery);
         db.execSQL(insertQuery);
@@ -193,13 +201,18 @@ public class UserManagerImpl implements UserManager {
                     user.setAuthType(User.AuthenticateType.facebook);
                 } else if (User.AuthenticateType.google.toString().equals(cursor.getString(cursor.getColumnIndex("auth_type")))) {
                     user.setAuthType(User.AuthenticateType.google);
-                }            user.setGender(cursor.getString(cursor.getColumnIndex("gender")));
+                }
+                user.setGender(cursor.getString(cursor.getColumnIndex("gender")));
                 user.setGoogleId(cursor.getString(cursor.getColumnIndex("google_id")));
                 user.setPhone(cursor.getString(cursor.getColumnIndex("phone")));
                 user.setFacebookId(cursor.getString(cursor.getColumnIndex("facebook_id")));
                 user.setBirthDateStr(cursor.getString(cursor.getColumnIndex("birth_day_str")));
                 user.setCountry(cursor.getString(cursor.getColumnIndex("country")));
-
+                if (cursor.getInt(cursor.getColumnIndex("show_covid_location_data")) == 0) {
+                    user.setShowCovidLocationData(false);
+                } else {
+                    user.setShowCovidLocationData(true);
+                }
                 return user;
             }
         } catch (Exception e) {
@@ -255,9 +268,15 @@ public class UserManagerImpl implements UserManager {
 
         if (user.getPassword() != null && user.getPassword().length() == 0) {
             user.setPicture(null);
-            updateData += "password = "+user.getPassword()+"";
+            updateData += "password = "+user.getPassword()+", ";
         } else {
-            updateData += "password = '"+user.getPassword()+"'";
+            updateData += "password = '"+user.getPassword()+"', ";
+        }
+
+        if (user.isShowCovidLocationData()) {
+            updateData += "show_covid_location_data = 1";
+        } else {
+            updateData += "show_covid_location_data = 0";
         }
 
         db.execSQL(updateData);

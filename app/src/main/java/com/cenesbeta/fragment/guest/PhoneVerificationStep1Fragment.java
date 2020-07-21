@@ -27,7 +27,9 @@ import com.cenesbeta.R;
 import com.cenesbeta.activity.GuestActivity;
 import com.cenesbeta.api.UserAPI;
 import com.cenesbeta.application.CenesApplication;
+import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
+import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.dto.AsyncTaskDto;
 import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.service.AuthenticateService;
@@ -53,6 +55,7 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
 
     private CenesApplication cenesApplication;
     private CoreManager coreManager;
+    private UserManager userManager;
     private AlertManager alertManager;
     private AuthenticateService authenticateService;
     private String etPhoneNumberStr;
@@ -178,6 +181,7 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
         cenesApplication = getCenesActivity().getCenesApplication();
         coreManager = cenesApplication.getCoreManager();
         alertManager = coreManager.getAlertManager();
+        userManager = coreManager.getUserManager();
 
         authenticateService = new AuthenticateService();
 
@@ -268,7 +272,15 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
 
                                         System.out.println("countryCodeStr : "+countryCodeStr);
 
-                                        PhoneVerificationStep2Fragment ss2Fragment = new PhoneVerificationStep2Fragment();
+                                        User user = new User();
+                                        user.setCountry(countryCodeStr.toUpperCase());
+                                        user.setPhone(countryCode+phoneNumberTemp);
+                                        userManager.deleteAll();
+                                        userManager.addUser(user);
+                                        SignupOptionsFragment signupOptionsFragment = new SignupOptionsFragment();
+                                        ((GuestActivity) getActivity()).replaceFragment(signupOptionsFragment, PhoneVerificationStep1Fragment.TAG);
+
+                                       /* PhoneVerificationStep2Fragment ss2Fragment = new PhoneVerificationStep2Fragment();
                                         Bundle bundle = new Bundle();
                                         bundle.putString("countryCodeStr", countryCodeStr);
                                         bundle.putString("countryCode", countryCode);
@@ -277,10 +289,21 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
 
                                         ((GuestActivity) getActivity()).replaceFragment(ss2Fragment, PhoneVerificationStep1Fragment.TAG);
 
+                                        */
                                     } else {
-                                        rlPhoneVerificationStep1Continue.setBackgroundColor(getResources().getColor(R.color.button_disable_color));
-                                        btSignupStep1Continue.setEnabled(false);
-                                        alertManager.getAlert((GuestActivity)getActivity(), response.getString("message"), "Alert", null, false, "OK");
+                                        //rlPhoneVerificationStep1Continue.setBackgroundColor(getResources().getColor(R.color.button_disable_color));
+                                        //btSignupStep1Continue.setEnabled(false);
+                                        //alertManager.getAlert((GuestActivity)getActivity(), response.getString("message"), "Alert", null, false, "OK");
+
+                                        System.out.println("countryCodeStr : "+countryCodeStr);
+                                        
+                                        User user = new User();
+                                        user.setCountry(countryCodeStr.toUpperCase());
+                                        user.setPhone(countryCode+phoneNumberTemp);
+                                        userManager.deleteAll();
+                                        userManager.addUser(user);
+                                        SignupOptionsFragment signupOptionsFragment = new SignupOptionsFragment();
+                                        ((GuestActivity) getActivity()).replaceFragment(signupOptionsFragment, PhoneVerificationStep1Fragment.TAG);
                                     }
                             } catch (Exception e) {
                                     e.printStackTrace();

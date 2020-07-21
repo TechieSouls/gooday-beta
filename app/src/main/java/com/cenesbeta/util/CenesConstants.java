@@ -19,5 +19,6 @@ public class CenesConstants {
     public static String GOOGLE_PLACE_SLIDER_PHOTOS_API = "https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyAg8FTMwwY2LwneObVbjcjj-9DYZkrTR58&maxwidth=600&photoreference=";
     public static String GOOGLE_PLACE_THUMBNAIL_PHOTOS_API = "https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyAg8FTMwwY2LwneObVbjcjj-9DYZkrTR58&maxwidth=200&photoreference=";
     public static String GOOGLE_MAP_API_KEY = "AIzaSyAg8FTMwwY2LwneObVbjcjj-9DYZkrTR58";
+    public static String covidDisclaimerLink = "https://cenesgroup.com/app/csd";
 
 }

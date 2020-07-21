@@ -32,6 +32,7 @@ public class User {
     private String googleId;
     private String country;
     private boolean isNew;
+    private boolean showCovidLocationData;
 
     public Integer getUserId() {
         return userId;
@@ -171,6 +172,14 @@ public class User {
 
     public void setNew(boolean aNew) {
         isNew = aNew;
+    }
+
+    public boolean isShowCovidLocationData() {
+        return showCovidLocationData;
+    }
+
+    public void setShowCovidLocationData(boolean showCovidLocationData) {
+        this.showCovidLocationData = showCovidLocationData;
     }
 
     @Override

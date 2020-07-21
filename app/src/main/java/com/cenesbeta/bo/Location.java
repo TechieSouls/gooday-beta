@@ -26,6 +26,20 @@ public class Location {
 
     private Float kilometersInDouble;
 
+    private String country;
+
+    private String state;
+
+    private String county;
+
+    private Boolean isOpenNow;
+
+    private String phoneNumber;
+
+    private String newCases;
+
+    private String markerSnippet;
+
     public String getLocation() {
         return location;
     }
@@ -88,5 +102,61 @@ public class Location {
 
     public void setKilometersInDouble(Float kilometersInDouble) {
         this.kilometersInDouble = kilometersInDouble;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
+    }
+
+    public Boolean isOpenNow() {
+        return isOpenNow;
+    }
+
+    public void setOpenNow(Boolean openNow) {
+        isOpenNow = openNow;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getNewCases() {
+        return newCases;
+    }
+
+    public void setNewCases(String newCases) {
+        this.newCases = newCases;
+    }
+
+    public String getMarkerSnippet() {
+        return markerSnippet;
+    }
+
+    public void setMarkerSnippet(String markerSnippet) {
+        this.markerSnippet = markerSnippet;
     }
 }

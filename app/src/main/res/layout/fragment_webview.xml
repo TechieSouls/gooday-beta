@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:background="#50EFEFEF"
+        >
+        
+        <ImageView
+            android:id="@+id/iv_back_button"
+            android:layout_width="20dp"
+            android:layout_height="25dp"
+            android:src="@drawable/abondan_event_icon"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:layout_marginLeft="15dp"/>
+    </RelativeLayout>
+
+    <WebView
+        android:id="@+id/wv_webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_header"/>
+</RelativeLayout>

@@ -19,7 +19,6 @@ public class GatheringAPI {
 
     public static String get_place_details_api = "https://maps.googleapis.com/maps/api/place/details/json"; //eventId
 
-
     //POST
     public static String post_create_gathering = "/api/event/create"; //Event Data
     public static String post_upload_image = "/api/event/upload"; //File
@@ -27,4 +26,6 @@ public class GatheringAPI {
     public static String post_event_chat_api = "/api/eventchat/create";
     public static String get_event_chat_api = "/api/eventchat/byEventId";
     public static String post_read_event_chat_status = "/api/eventchat/updateStatus";
+    public static String post_covid_stats = "/api/event/covidstats";
+
 }

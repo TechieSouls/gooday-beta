@@ -275,7 +275,8 @@ public class FriendListFragment  extends CenesFragment {
                 headerFriendsMap = new HashMap<>();
                 for (EventMember eventMember : cenesFriends) {
                     try {
-                        if (eventMember.getUser().getName().toLowerCase().contains(editable.toString().toLowerCase())) {
+                        if (eventMember.getUser().getName().toLowerCase().contains(editable.toString().toLowerCase())
+                                || (eventMember.getName() != null && eventMember.getName().toLowerCase().contains(editable.toString().toLowerCase()))) {
                             searchedAllFriends.add(eventMember);
                         }
                     } catch (Exception e) {

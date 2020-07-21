@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="317dp"
-            android:layout_height="255dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/xml_curved_corner_white"
             android:layout_centerInParent="true"
@@ -50,10 +51,170 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"/>
             </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_covid_data_container"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:visibility="visible">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/coronavirus_icon"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Covid-19 Latest Stats"
+                        android:layout_marginLeft="30dp"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/avenir_medium"
+                        android:textSize="14dp"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true">
+                        <ImageView
+                            android:id="@+id/iv_about_covid_info_icon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/coronavirus_info_icon"
+                            android:layout_marginRight="5dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="About this data"
+                            android:textSize="9dp"
+                            android:fontFamily="@font/avenir_medium"
+                            android:textColor="#B5B5B6"
+                            android:layout_gravity="center_vertical"/>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <!-- Setting Height 42% of Width of Screen -->
+                <fragment
+
+                    android:id="@+id/location_map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    map:zOrderOnTop="true"
+                    android:layout_marginTop="12dp"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="New Cases  (yesterday)"
+                        android:textSize="12dp"
+                        android:fontFamily="@font/avenir_light"
+                        android:textColor="@color/black"
+                        android:layout_marginLeft="32dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_new_cases"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:textSize="12dp"
+                        android:fontFamily="@font/avenir_light"
+                        android:text="" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="This location is likely to be"
+                        android:textSize="12dp"
+                        android:fontFamily="@font/avenir_light"
+                        android:textColor="@color/black"
+                        android:layout_marginLeft="32dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_business_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Closed"
+                        android:textSize="12dp"
+                        android:layout_alignParentRight="true"
+                        android:textColor="#D0021B"
+                        android:fontFamily="@font/avenir_heavy"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Location Contact Number"
+                        android:textSize="12dp"
+                        android:fontFamily="@font/avenir_light"
+                        android:textColor="@color/black"
+                        android:layout_marginLeft="32dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_business_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+1 604-568-1701"
+                        android:layout_alignParentRight="true"
+                        android:textSize="12dp"
+                        android:textColor="#F5A623"
+                        android:fontFamily="@font/avenir_medium"/>
+                </RelativeLayout>
+                <TextView
+                    android:id="@+id/tv_donot_show_covid_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Do not show me this data"
+                    android:layout_gravity="right"
+                    android:textColor="#B5B5B6"
+                    android:fontFamily="@font/avenir_medium"
+                    android:textSize="9dp"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_show_covid_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show latest CoVid-19 Information"
+                android:textSize="13dp"
+                android:fontFamily="@font/avenir_medium"
+                android:textColor="#B5B5B6"
+                android:layout_gravity="right"
+                android:layout_marginRight="10dp"
+                android:visibility="gone"
+                />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="#979797"/>
+                android:background="#979797"
+                android:layout_marginTop="5dp"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"

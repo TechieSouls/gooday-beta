@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -15,6 +17,7 @@ import android.provider.Telephony;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,10 +48,12 @@ import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.adapter.EventChatBaseAdapter;
 import com.cenesbeta.adapter.LocationPhotoRecyclerViewAdapter;
 import com.cenesbeta.api.GatheringAPI;
+import com.cenesbeta.api.UserAPI;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventChat;
 import com.cenesbeta.bo.EventMember;
+import com.cenesbeta.bo.Location;
 import com.cenesbeta.bo.LocationPhoto;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
@@ -60,10 +65,19 @@ import com.cenesbeta.dto.GatheringPreviewDto;
 import com.cenesbeta.dto.SelectedEventChatDto;
 import com.cenesbeta.extension.InvitationScrollView;
 import com.cenesbeta.fragment.CenesFragment;
+import com.cenesbeta.fragment.WebViewFragment;
 import com.cenesbeta.service.ResizeAnimation;
 import com.cenesbeta.util.CenesConstants;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -96,17 +110,18 @@ public class GatheringPreviewFragment extends CenesFragment {
     private View fragmentView;
     private ImageView ivEventPicture, ivAcceptSendIcon, ivEditRejectIcon, ivDeleteIcon, ivCardSwipeArrow;
     private TextView tvEventTitle, tvEventDate, tvEventDescriptionDialogText, sendChatTV, enterChatTv;
+    private TextView tvNewCases, tvBusinessStatus, tvBusinessPhone, tvShowCovidData, tvDonotShowCovidData;
     private RelativeLayout rlGuestListBubble, rlLocationBubble, rlDescriptionBubble, rlShareBubble;
     private RelativeLayout rvEventDescriptionDialog, rlIncludeChat, rlChatt;
     private RelativeLayout rlDescriptionBubbleBackground, ivEventPictureOverlay;
-    private ImageView ivDescriptionBubbleIcon;
+    private ImageView ivDescriptionBubbleIcon, ivLocationSpinner, ivLocationBubbleIcon, ivDescriptionSpinner;
     private RoundedImageView ivDescProfilePic,enterMsgPicture;
     private CardView tinderCardView;
     private RelativeLayout rlParentVew, rlSkipText, rlChatBubble, rlEnterChat, rlChatlistAndBubble;
     private RelativeLayout rlInvitationView, rlWelcomeInvitation;
     private RoundedImageView ivProfilePicView;
-    private ImageView invitationAcceptSpinner, invitationRejectSpinner, enterChatImageView;
-    private LinearLayout llBottomButtons, llEventDetails, llInvitationFooter, llInvitationImageLayout, llSenderPicture;
+    private ImageView invitationAcceptSpinner, invitationRejectSpinner, enterChatImageView, ivAboutCovidInfoIcon;
+    private LinearLayout llBottomButtons, llEventDetails, llInvitationFooter, llInvitationImageLayout, llSenderPicture, llCovidLocationIno;
     private InvitationScrollView svCard;
     private ProgressBar progressBar;
 
@@ -117,8 +132,10 @@ public class GatheringPreviewFragment extends CenesFragment {
     private RecyclerView rvLocationPlaces;
 
     public Fragment sourceFragment;
+    private SupportMapFragment supportMapFragment;
     private CenesApplication cenesApplication;
     private InternetManager internetManager;
+    private UserManager userManager;
     private EventManagerImpl eventManagerImpl;
     public User loggedInUser;
     public Event event;
@@ -129,6 +146,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     private List<String> headers;
     private Map<String, List<EventChat>> eventChatMapList;
     private List<Object> eventChatList;
+    private GoogleMap locationMap;
 
 
     private EventMember eventOwner, loggedInUserAsEventMember;
@@ -141,6 +159,8 @@ public class GatheringPreviewFragment extends CenesFragment {
     int screenCenter;
     boolean isLoggedInUserExistsInMemberList = false;
     private List<EventMember> nonCenesMember;
+    private boolean isLocationCached = false;
+    private boolean isChatCached = false;
     private boolean isNewEvent = false;
     private boolean isChatLoaded = false;
     private boolean isDescriptionButtonOn = false;
@@ -155,6 +175,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     private float initialYPress;
     public SelectedEventChatDto selectedEventChatDto;
     public List<LocationPhoto> locationPhotos;
+    private Location location;
     private LocationPhotoRecyclerViewAdapter locationPhotoRecyclerViewAdapter;
 
     @Nullable
@@ -173,6 +194,8 @@ public class GatheringPreviewFragment extends CenesFragment {
         tvEventTitle = (TextView) view.findViewById(R.id.tv_event_title);
         tvEventDate = (TextView) view.findViewById(R.id.tv_event_date);
         tvEventDescriptionDialogText = (TextView) view.findViewById(R.id.tv_event_description_dialog_text);
+        tvShowCovidData = (TextView) view.findViewById(R.id.tv_show_covid_data);
+        tvDonotShowCovidData = (TextView) view.findViewById(R.id.tv_donot_show_covid_data);
 
         rlGuestListBubble = (RelativeLayout) view.findViewById(R.id.rl_guest_list_bubble);
         rlLocationBubble = (RelativeLayout) view.findViewById(R.id.rl_location_bubble);
@@ -198,6 +221,10 @@ public class GatheringPreviewFragment extends CenesFragment {
         invitationAcceptSpinner = (ImageView) view.findViewById(R.id.iv_invitation_accept_spinner);
         invitationRejectSpinner = (ImageView) view.findViewById(R.id.iv_invitation_decline_spinner);
         ivCardSwipeArrow = (ImageView) view.findViewById(R.id.iv_card_swipe_arrow);
+        ivAboutCovidInfoIcon = (ImageView) fragmentView.findViewById(R.id.iv_about_covid_info_icon);
+        ivLocationSpinner = (ImageView) fragmentView.findViewById(R.id.iv_location_spinner);
+        ivLocationBubbleIcon = (ImageView) fragmentView.findViewById(R.id.iv_location_bubble_icon);
+        ivDescriptionSpinner = (ImageView) fragmentView.findViewById(R.id.iv_description_spinner);
 
         tinderCardView = (CardView) view.findViewById(R.id.tinderCardView);
         svCard = (InvitationScrollView) view.findViewById(R.id.sv_card);
@@ -217,12 +244,22 @@ public class GatheringPreviewFragment extends CenesFragment {
         llEventDetails = (LinearLayout) view.findViewById(R.id.ll_event_details);
         llInvitationFooter = (LinearLayout) view.findViewById(R.id.ll_invitation_footer);
         llInvitationImageLayout = (LinearLayout) view.findViewById(R.id.ll_invitation_image_layout);
+        llCovidLocationIno = (LinearLayout) view.findViewById(R.id.ll_covid_data_container);
 
         sendChatTV = (TextView) view.findViewById(R.id.send_chat_tv);
         enterChatTv = (TextView) view.findViewById(R.id.enter_chat_tv);
         enterChatImageView = (ImageView) view.findViewById(R.id.enter_chat_button);
 
+        tvNewCases = (TextView) view.findViewById(R.id.tv_new_cases);
+        tvBusinessPhone = (TextView) view.findViewById(R.id.tv_business_phone);
+        tvBusinessStatus = (TextView) view.findViewById(R.id.tv_business_status);
+
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+
+        // Get the SupportMapFragment and request notification
+        // when the map is ready to be used.
+        supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.location_map);
+        supportMapFragment.getMapAsync(onMapReadyCallback);
 
         ivCardSwipeArrow.setOnClickListener(onClickListener);
         rlGuestListBubble.setOnClickListener(onClickListener);
@@ -232,6 +269,9 @@ public class GatheringPreviewFragment extends CenesFragment {
         ivDeleteIcon.setOnClickListener(onClickListener);
         ivEditRejectIcon.setOnClickListener(onClickListener);
         sendChatTV.setOnClickListener(onClickListener);
+        tvShowCovidData.setOnClickListener(onClickListener);
+        tvDonotShowCovidData.setOnClickListener(onClickListener);
+        ivAboutCovidInfoIcon.setOnClickListener(onClickListener);
         tinderCardView.setOnTouchListener(onTouchListener);
         svCard.setOnTouchListener(onTouchListener);
         enterChatTv.setOnFocusChangeListener(onFocusChangeListener);
@@ -260,13 +300,14 @@ public class GatheringPreviewFragment extends CenesFragment {
 
         cenesApplication = getCenesActivity().getCenesApplication();
         CoreManager coreManager = cenesApplication.getCoreManager();
-        UserManager userManager = coreManager.getUserManager();
+        userManager = coreManager.getUserManager();
         internetManager = coreManager.getInternetManager();
         loggedInUser = userManager.getUser();
         eventManagerImpl = new EventManagerImpl(cenesApplication);
 
         new GatheringPreviewDto();
         locationPhotos = new ArrayList<>();
+        location = new Location();
 
         windowWidth = getActivity().getWindowManager().getDefaultDisplay().getWidth();
         windowHeight = getActivity().getWindowManager().getDefaultDisplay().getHeight();
@@ -348,7 +389,6 @@ public class GatheringPreviewFragment extends CenesFragment {
                     try {
                         boolean success = response.getBoolean("success");
                         if (success) {
-
                             updateEventFromServer(response);
                         }
 
@@ -414,6 +454,7 @@ public class GatheringPreviewFragment extends CenesFragment {
     @Override
     public void onResume() {
         super.onResume();
+        supportMapFragment.onResume();
         getActivity().registerReceiver(mChatMessageReceiver, new IntentFilter("eventchatrefresh"));
     }
 
@@ -427,112 +468,240 @@ public class GatheringPreviewFragment extends CenesFragment {
         }
     }
 
+    OnMapReadyCallback onMapReadyCallback = new OnMapReadyCallback() {
+        @Override
+        public void onMapReady(GoogleMap googleMap) {
+            locationMap = googleMap;
+            /*if (event.getLatitude() != null) {
+                locationMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(Double.valueOf(event.getLatitude()), Double.valueOf(event.getLongitude())))
+                        .title("Marker"));
+            }*/
+        }
+    };
+
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
 
             switch (v.getId()) {
                 case R.id.rl_guest_list_bubble:
-
+                    hideDescriptionMessage();
                     GatheringGuestListFragment gatheringGuestListFragment = new GatheringGuestListFragment();
                     gatheringGuestListFragment.event = event;
                     ((CenesBaseActivity)getActivity()).replaceFragment(gatheringGuestListFragment, GatheringPreviewFragment.TAG);
                     break;
+
                 case R.id.rl_location_bubble:
 
                     hideDescriptionMessage();
-
-                    if (!CenesUtils.isEmpty(event.getLatitude())) {
-
-                        if (locationPhotos.size() > 0) {
-
-                            rlIncludeLocationAlertView.setVisibility(View.VISIBLE);
-
-                            tvLocation.setText(event.getLocation());
-
-                            locationPhotoRecyclerViewAdapter = new LocationPhotoRecyclerViewAdapter(GatheringPreviewFragment.this, locationPhotos);
-                            locationPhotoRecyclerViewAdapter.notifyDataSetChanged();
-                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-                            rvLocationPlaces.setLayoutManager(mLayoutManager);
-                            rvLocationPlaces.setAdapter(locationPhotoRecyclerViewAdapter);
-                            rvLocationPlaces.invalidate();
-
-                        } else {
-                            new AlertDialog.Builder(getActivity())
-                                    .setTitle("")
-                                    .setMessage(event.getLocation())
-                                    .setPositiveButton("Get Directions", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            // Create a Uri from an intent string. Use the result to create an Intent.
-                                            //  Uri gmmIntentUri = Uri.parse("google.streetview:cbll="+event.getLatitude()+","+event.getLongitude()+"");
-                                            Uri gmmIntentUri = Uri.parse("geo:0,0?q="+event.getLatitude()+","+event.getLongitude()+"(label)");
-                                            // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-                                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                                            // Make the Intent explicit by setting the Google Maps package
-                                            mapIntent.setPackage("com.google.android.apps.maps");
-
-                                            // Attempt to start an activity that can handle the Intent
-                                            startActivity(mapIntent);
-
-                                        }
-                                    }).setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                @Override
-                                public void onCancel(DialogInterface dialog) {
-                                    dialog.dismiss();
-                                }
-                            }).show();
-                        }
-
-                    } else  if (!CenesUtils.isEmpty(event.getLocation())) {
-
-                        new AlertDialog.Builder(getActivity())
-                                .setTitle(event.getLocation())
-                                .setMessage("")
-                                .setCancelable(false)
-                                .setPositiveButton("Ok", null).show();
-
-                    } else {
-
-                        new AlertDialog.Builder(getActivity())
-                                .setTitle("No Location Selected")
-                                .setMessage("")
-                                .setCancelable(false)
-                                .setPositiveButton("Ok", null).show();
-
+                    int seconds = 0;
+                    if (!isLocationCached) {
+                        ivLocationBubbleIcon.setVisibility(View.GONE);
+                        ivLocationSpinner.setVisibility(View.VISIBLE);
+                        Glide.with(getContext()).asGif().load(R.drawable.ios_spinner).into(ivLocationSpinner);
+                        seconds = 2000;
                     }
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ivLocationBubbleIcon.setVisibility(View.VISIBLE);
+                            ivLocationSpinner.setVisibility(View.GONE);
+                            isLocationCached = true;
+                            if (!CenesUtils.isEmpty(event.getLatitude())) {
+
+                                if (locationPhotos.size() > 0) {
+
+                                    rlIncludeLocationAlertView.setVisibility(View.VISIBLE);
+
+                                    tvLocation.setText(event.getLocation());
+
+                                    locationPhotoRecyclerViewAdapter = new LocationPhotoRecyclerViewAdapter(GatheringPreviewFragment.this, locationPhotos);
+                                    locationPhotoRecyclerViewAdapter.notifyDataSetChanged();
+                                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                                    rvLocationPlaces.setLayoutManager(mLayoutManager);
+                                    rvLocationPlaces.setAdapter(locationPhotoRecyclerViewAdapter);
+                                    rvLocationPlaces.invalidate();
+
+                                    //Setting fresh cases
+                                    if (location.getNewCases() == null) {
+                                        tvNewCases.setText("No Data");
+                                    } else {
+                                        tvNewCases.setText(location.getNewCases());
+                                        tvNewCases.setTextColor(getResources().getColor(R.color.cenes_light_gray));
+                                    }
+
+                                    //Setting Business Status
+                                    if (location.isOpenNow() == null) {
+                                        tvBusinessStatus.setText("No Data");
+                                        tvBusinessStatus.setTextColor(getResources().getColor(R.color.cenes_light_gray));
+
+                                    } else {
+                                        if (location.isOpenNow()) {
+                                            tvBusinessStatus.setText("Open");
+                                            tvBusinessStatus.setTextColor(getResources().getColor(R.color.cenes_mcv_green));
+                                        } else {
+                                            tvBusinessStatus.setText("Closed");
+                                            tvBusinessStatus.setTextColor(getResources().getColor(R.color.red));
+                                        }
+                                    }
+
+                                    //Setting Phone number
+                                    if (location.getPhoneNumber() == null) {
+                                        tvBusinessPhone.setText("No Data");
+                                        tvBusinessStatus.setTextColor(getResources().getColor(R.color.cenes_light_gray));
+                                    } else {
+                                        tvBusinessPhone.setText(location.getPhoneNumber());
+                                    }
+
+                                    if (loggedInUser.isShowCovidLocationData()) {
+                                        llCovidLocationIno.setVisibility(View.VISIBLE);
+                                        tvShowCovidData.setVisibility(View.GONE);
+                                    } else {
+                                        llCovidLocationIno.setVisibility(View.GONE);
+                                        tvShowCovidData.setVisibility(View.VISIBLE);
+                                    }
+
+                                    locationMap.clear();
+
+                                    LatLng latLng = new LatLng(Double.valueOf(event.getLatitude()), Double.valueOf(event.getLongitude()));
+                                    CameraPosition myPosition = new CameraPosition.Builder()
+                                            .target(latLng).zoom(6).build();
+                                    locationMap.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
+
+                                    String title = "";
+                                    if (location.getCounty() != null) {
+                                        title = location.getCounty();
+                                    } else if (location.getState() != null) {
+                                        title = location.getState();
+                                    } else if (location.getCountry() != null) {
+                                        title = location.getCountry();
+                                    }
+                                    Marker covidMarker = locationMap.addMarker(new MarkerOptions()
+                                            .position(new LatLng(Double.valueOf(event.getLatitude()), Double.valueOf(event.getLongitude())))
+                                            .title(title).snippet(location.getMarkerSnippet()));
+
+                                    locationMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                                        @Override
+                                        public View getInfoWindow(Marker marker) {
+                                            return null;
+                                        }
+
+                                        @Override
+                                        public View getInfoContents(Marker marker) {
+                                            LinearLayout info = new LinearLayout(getContext());
+                                            info.setOrientation(LinearLayout.VERTICAL);
+
+                                            TextView title = new TextView(getContext());
+                                            title.setTextColor(Color.BLACK);
+                                            title.setGravity(Gravity.CENTER);
+                                            title.setTypeface(null, Typeface.BOLD);
+                                            title.setText(marker.getTitle());
+
+                                            TextView snippet = new TextView(getContext());
+                                            snippet.setTextColor(Color.GRAY);
+                                            snippet.setText(marker.getSnippet());
+
+                                            info.addView(title);
+                                            info.addView(snippet);
+
+                                            return info;
+                                        }
+                                    });
+
+                                    covidMarker.showInfoWindow();
+                                } else {
+                                    new AlertDialog.Builder(getActivity())
+                                            .setTitle("")
+                                            .setMessage(event.getLocation())
+                                            .setPositiveButton("Get Directions", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    // Create a Uri from an intent string. Use the result to create an Intent.
+                                                    //  Uri gmmIntentUri = Uri.parse("google.streetview:cbll="+event.getLatitude()+","+event.getLongitude()+"");
+                                                    Uri gmmIntentUri = Uri.parse("geo:0,0?q="+event.getLatitude()+","+event.getLongitude()+"(label)");
+                                                    // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+                                                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                                                    // Make the Intent explicit by setting the Google Maps package
+                                                    mapIntent.setPackage("com.google.android.apps.maps");
+
+                                                    // Attempt to start an activity that can handle the Intent
+                                                    startActivity(mapIntent);
+
+                                                }
+                                            }).setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                        @Override
+                                        public void onCancel(DialogInterface dialog) {
+                                            dialog.dismiss();
+                                        }
+                                    }).show();
+                                }
+
+                            } else  if (!CenesUtils.isEmpty(event.getLocation())) {
+
+                                new AlertDialog.Builder(getActivity())
+                                        .setTitle(event.getLocation())
+                                        .setMessage("")
+                                        .setCancelable(false)
+                                        .setPositiveButton("Ok", null).show();
+
+                            } else {
+
+                                new AlertDialog.Builder(getActivity())
+                                        .setTitle("No Location Selected")
+                                        .setMessage("")
+                                        .setCancelable(false)
+                                        .setPositiveButton("Ok", null).show();
+
+                            }
+                        }
+                    }, seconds);
                     break;
 
                 case R.id.rl_description_bubble:
                     System.out.println("rl_description_bubble");
-                    if(isDescriptionButtonOn == false) {
-
-                        isDescriptionButtonOn = true;
-                        scrollFeatureOff();
-                        ivDescriptionBubbleIcon.setImageResource(R.drawable.message_on_icon);
-                        rlDescriptionBubbleBackground.setAlpha(1);
-                        rlDescriptionBubbleBackground.setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
-
-                    }else {
-                        isDescriptionButtonOn = false;
-                        scrollFeatureOn();
-                        rlDescriptionBubbleBackground.setAlpha(0.3f);
-                        ivDescriptionBubbleIcon.setImageResource(R.drawable.message_off_icon);
-                        rlDescriptionBubbleBackground.setBackground(getResources().getDrawable(R.drawable.xml_circle_black_faded));
-
+                    int descSeconds = 0;
+                    if (!isChatCached) {
+                        ivDescriptionBubbleIcon.setVisibility(View.GONE);
+                        ivDescriptionSpinner.setVisibility(View.VISIBLE);
+                        Glide.with(getContext()).asGif().load(R.drawable.ios_spinner).into(ivDescriptionSpinner);
+                        descSeconds = 2000;
                     }
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            isChatCached = true;
+                            ivDescriptionBubbleIcon.setVisibility(View.VISIBLE);
+                            ivDescriptionSpinner.setVisibility(View.GONE);
 
-                    if (isChatLoaded == false && event.getEventId() != null) {
-                        progressBar.setVisibility(View.VISIBLE);
-                    } else {
+                            if (isDescriptionButtonOn == false) {
 
-                        loadDescriptionData();
+                                isDescriptionButtonOn = true;
+                                scrollFeatureOff();
+                                ivDescriptionBubbleIcon.setImageResource(R.drawable.message_on_icon);
+                                rlDescriptionBubbleBackground.setAlpha(1);
+                                rlDescriptionBubbleBackground.setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
+                            } else {
+                                isDescriptionButtonOn = false;
+                                scrollFeatureOn();
+                                rlDescriptionBubbleBackground.setAlpha(0.3f);
+                                ivDescriptionBubbleIcon.setImageResource(R.drawable.message_off_icon);
+                                rlDescriptionBubbleBackground.setBackground(getResources().getDrawable(R.drawable.xml_circle_black_faded));
+                            }
 
-                    }
+                            //if (isChatLoaded == false && event.getEventId() != null) {
+                            //    progressBar.setVisibility(View.VISIBLE);
+                            //} else {
+                                loadDescriptionData();
+                            //}
+                        }
+                    }, descSeconds);
+
 
                     break;
                 case R.id.rl_share_bubble:
-
+                    hideDescriptionMessage();
                     String name = "Your Friend";
                     if (eventOwner.getName() != null) {
                         name = eventOwner.getName();
@@ -716,10 +885,23 @@ public class GatheringPreviewFragment extends CenesFragment {
                     break;
 
                 case R.id.rl_location_alert_backdrop:
-
                     rlIncludeLocationAlertView.setVisibility(View.GONE);
-
                     break;
+
+                case R.id.tv_show_covid_data:
+                    updateShowCovidDataStatus(true);
+                    break;
+
+                case R.id.tv_donot_show_covid_data:
+                    updateShowCovidDataStatus(false);
+                    break;
+
+                case R.id.iv_about_covid_info_icon:
+                    WebViewFragment webViewFragment = new WebViewFragment();
+                    webViewFragment.webViewUrl = CenesConstants.covidDisclaimerLink;
+                    ((CenesBaseActivity)getActivity()).replaceFragment(webViewFragment, CreateGatheringFragment.TAG);
+                    break;
+
                 default:
                     System.out.println("Heyyy you did it.");
             }
@@ -1147,6 +1329,10 @@ public class GatheringPreviewFragment extends CenesFragment {
         rvEventDescriptionDialog.setVisibility(View.GONE);
         //scrollFeatureOn();
         System.out.println("scroll enabled");
+
+        if (isDescriptionButtonOn == true) {
+            rlDescriptionBubble.performClick();
+        }
     }
 
 
@@ -2183,7 +2369,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
         AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
         asyncTaskDto.setApiUrl(GatheringAPI.get_place_details_api);
-        asyncTaskDto.setQueryStr("place_id="+placeId+"&fields=photos&key="+CenesConstants.GOOGLE_MAP_API_KEY);
+        asyncTaskDto.setQueryStr("place_id="+placeId+"&key="+CenesConstants.GOOGLE_MAP_API_KEY);
         new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
             @Override
             public void processFinish(JSONObject response) {
@@ -2196,10 +2382,183 @@ public class GatheringPreviewFragment extends CenesFragment {
                     Type listType = new TypeToken<List<LocationPhoto>>() {}.getType();
                     locationPhotos = gson.fromJson(photosArray.toString(), listType);
 
+                    if (result.has("opening_hours")) {
+                        JSONObject openHours = result.getJSONObject("opening_hours");
+                        if (openHours.has("open_now")) {
+                            if (openHours.getBoolean("open_now")) {
+                                location.setOpenNow(true);
+                                tvBusinessStatus.setText("Open");
+                                tvBusinessStatus.setTextColor(getActivity().getResources().getColor(R.color.cenes_mcv_green));
+                            } else {
+                                tvBusinessStatus.setText("Closed");
+                                location.setOpenNow(false);
+                                tvBusinessStatus.setTextColor(getActivity().getResources().getColor(R.color.red));
+                            }
+                        }
+                    } else {
+                        tvBusinessStatus.setText("No Data");
+                        tvBusinessStatus.setTextColor(getActivity().getResources().getColor(R.color.cenes_light_gray));
+                    }
+
+                    if (result.has("international_phone_number")) {
+                        location.setPhoneNumber(result.getString("international_phone_number"));
+                        tvBusinessPhone.setText(result.getString("international_phone_number"));
+                    } else if (result.has("formatted_phone_number")) {
+                        location.setPhoneNumber(result.getString("formatted_phone_number"));
+                        tvBusinessPhone.setText(result.getString("formatted_phone_number"));
+                    } else {
+                        tvBusinessPhone.setText("No Data");
+                        tvBusinessPhone.setTextColor(getActivity().getResources().getColor(R.color.cenes_light_gray));
+                    }
+
+                    //Lets find out country, state, county
+                    if (result.has("address_components")) {
+
+                        JSONArray addressComponents = result.getJSONArray("address_components");
+                        for (int i=0; i < addressComponents.length(); i++) {
+
+                            JSONObject addressItemDict = addressComponents.getJSONObject(i);
+                            if (addressItemDict.has("types")) {
+                                JSONArray types = addressItemDict.getJSONArray("types");
+                                for (int j=0; j < types.length(); j++) {
+                                    String typeOfAddress = types.getString(j);
+                                    //Finding Country
+                                    if (typeOfAddress.equals("country")) {
+                                        location.setCountry(addressItemDict.getString("long_name"));
+                                    } else if (typeOfAddress.equals("administrative_area_level_1")) {
+                                        //Finding State
+                                        location.setState(addressItemDict.getString("long_name"));
+                                    } else if (typeOfAddress.equals("administrative_area_level_2")) {//Finding County
+                                        //Finding County
+                                        location.setCounty(addressItemDict.getString("long_name"));
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    getCovidData(location);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }).execute(asyncTaskDto);
     }
+
+    public void getCovidData(final Location locationTemp) {
+
+        String api = UrlManagerImpl.prodAPIUrl+ GatheringAPI.post_covid_stats;
+
+        AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+        asyncTaskDto.setApiUrl(api);
+        try {
+            JSONObject postData = new JSONObject();
+            postData.put("covidTimestamp", new Date().getTime());
+            if (locationTemp.getCountry() != null) {
+                postData.put("countryCode", locationTemp.getCountry());
+            }
+            if (locationTemp.getState() != null) {
+                postData.put("state", locationTemp.getState());
+            }
+            if (locationTemp.getCounty() != null) {
+                postData.put("county", locationTemp.getCounty());
+            }
+            asyncTaskDto.setPostData(postData);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        new ProfileAsyncTask.CommonPostRequestTask(new ProfileAsyncTask.CommonPostRequestTask.AsyncResponse() {
+            @Override
+            public void processFinish(JSONObject response) {
+
+                try {
+                    boolean success = response.getBoolean("success");
+                    if (success == true) {
+
+                        JSONObject covidDataDict = response.getJSONObject("data");
+                        if (covidDataDict.has("city")) {
+
+                            JSONObject cityDict = covidDataDict.getJSONObject("city");
+                            location.setNewCases(cityDict.getString("newCases"));
+                            tvNewCases.setText(cityDict.getString("newCases"));
+
+                            location.setMarkerSnippet("Confirmed \t\t "+cityDict.getString("confirmed")+"" +
+                                    "\nRecovered\t\t "+cityDict.getString("recovered")+"" +
+                                    "\nDeaths   \t\t\t"+cityDict.getString("deaths")+"");
+
+                        } else if (covidDataDict.has("state")) {
+
+                            JSONObject stateDict = covidDataDict.getJSONObject("state");
+                            location.setNewCases(stateDict.getString("newCases"));
+                            tvNewCases.setText(stateDict.getString("newCases"));
+
+                            location.setMarkerSnippet("Confirmed \t\t "+stateDict.getString("confirmed")+"" +
+                                    "\nRecovered\t\t "+stateDict.getString("recovered")+"" +
+                                    "\nDeaths   \t\t\t"+stateDict.getString("deaths")+"");
+
+
+                        } else if (covidDataDict.has("country")) {
+
+                            JSONObject countryDict = covidDataDict.getJSONObject("country");
+                            location.setNewCases(countryDict.getString("newCases"));
+                            tvNewCases.setText(countryDict.getString("newCases"));
+
+                            location.setMarkerSnippet("Confirmed \t\t "+countryDict.getString("confirmed")+"" +
+                                    "\nRecovered\t\t "+countryDict.getString("recovered")+"" +
+                                    "\nDeaths   \t\t\t"+countryDict.getString("deaths")+"");
+
+                        } else {
+                            tvNewCases.setText("No Data");
+                            tvNewCases.setTextColor(getActivity().getResources().getColor(R.color.cenes_light_gray));
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).execute(asyncTaskDto);
+    }
+
+    public void updateShowCovidDataStatus(final boolean showCovidLocationData) {
+
+        try {
+
+            JSONObject postData = new JSONObject();
+            postData.put("userId", loggedInUser.getUserId());
+            postData.put("showCovidLocationData", showCovidLocationData);
+
+            String url = UrlManagerImpl.prodAPIUrl+ UserAPI.post_userdetails;
+            AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+            asyncTaskDto.setPostData(postData);
+            asyncTaskDto.setApiUrl(url);
+            asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+            new ProfileAsyncTask.CommonPostRequestTask(new ProfileAsyncTask.CommonPostRequestTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+
+                    try {
+                        loggedInUser.setShowCovidLocationData(showCovidLocationData);
+                        userManager.updateUser(loggedInUser);
+
+                        if (showCovidLocationData) {
+                            tvShowCovidData.setVisibility(View.GONE);
+                            llCovidLocationIno.setVisibility(View.VISIBLE);
+                        } else {
+                            tvShowCovidData.setVisibility(View.VISIBLE);
+                            llCovidLocationIno.setVisibility(View.GONE);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).execute(asyncTaskDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }

@@ -10,7 +10,7 @@
     <color name="button_disable_color">#DCDDDD</color>
     <color name="button_enable_color">#754A8FE3</color>
     <color name="link_color">#4A90E2</color>
-    <color name="light_link_color">#854A90E2</color>
+    <color name="light_link_color">#4A90E2</color>
     <color name="light_gray_time">#9B9B9B</color>
 
     <color name="cenes_dark_gray">#686868</color>

@@ -8,7 +8,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Point;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,11 +38,17 @@ import android.widget.Toast;
 
 import com.cenesbeta.AsyncTasks.GatheringAsyncTask;
 import com.cenesbeta.AsyncTasks.LocationAsyncTask;
+import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
+import com.cenesbeta.Manager.ApiManager;
 import com.cenesbeta.Manager.DeviceManager;
+import com.cenesbeta.Manager.Impl.UrlManagerImpl;
+import com.cenesbeta.Manager.UrlManager;
 import com.cenesbeta.R;
 import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.activity.SearchLocationActivity;
 import com.cenesbeta.adapter.FriendHorizontalScrollAdapter;
+import com.cenesbeta.api.GatheringAPI;
+import com.cenesbeta.api.UserAPI;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventMember;
@@ -47,25 +57,31 @@ import com.cenesbeta.bo.User;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.impl.EventManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
+import com.cenesbeta.dto.AsyncTaskDto;
 import com.cenesbeta.dto.CreateGatheringDto;
 import com.cenesbeta.dto.PredictiveData;
 import com.cenesbeta.fragment.CardSwipeDemoFragment;
 import com.cenesbeta.fragment.CenesFragment;
+import com.cenesbeta.fragment.WebViewFragment;
 import com.cenesbeta.fragment.friend.FriendListFragment;
 import com.cenesbeta.materialcalendarview.CalendarDay;
 import com.cenesbeta.materialcalendarview.MaterialCalendarView;
 import com.cenesbeta.materialcalendarview.OnDateSelectedListener;
 import com.cenesbeta.materialcalendarview.decorators.BackgroundDecorator;
+import com.cenesbeta.service.CommonService;
 import com.cenesbeta.service.GatheringService;
+import com.cenesbeta.util.CenesConstants;
 import com.cenesbeta.util.CenesEditText;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.ImageUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -126,15 +142,15 @@ public class CreateGatheringFragment extends CenesFragment {
     private ProgressBar progressBar;
 
     public ImageView ivAbandonEvent;
-    private ImageView ivPredictiveInfo, gathInviteFrndsBtn, ivDateBarArrow;
+    private ImageView ivPredictiveInfo, gathInviteFrndsBtn, ivDateBarArrow, ivLocationArrow, ivAboutCovidInfoIcon;
     private TextView tvLocationLabel, tvGatheringMessage, tvCoverImageStatus, tvEventDate, tvChooseLibrary, tvTakePhoto, tvPhotoCancel;
-    private TextView tvBusinessStatus, tvBusinessPhone;
+    private TextView tvBusinessStatus, tvBusinessPhone, tvNewCases, tvShowCovidData, tvDonotShowCovidData;
     private RelativeLayout rlStartBar, rlEndBar, rlDateBar;
     private RelativeLayout rlHeader, gathSearchLocationButton, rlGatheringMessageBar, rlCoverImageBar, rlSelectedFriendsRecyclerView;
-    private RelativeLayout rlPreviewInvitationButton, rlPhotoActionSheet;
+    private RelativeLayout rlPreviewInvitationButton, rlPhotoActionSheet, rlShowCovidDataLayout;
     private ScrollView svGatheringScrollview;
     private LinearLayout llGatheringDateBars, llGatheringInfoBars;
-    private LinearLayout llPredictiveCalCell, llPredictiveCalInfo;
+    private LinearLayout llPredictiveCalCell, llPredictiveCalInfo, llCovidDataContainer, llCovidLocationIno;
     private SupportMapFragment supportMapFragment;
     public static RecyclerView recyclerView;
     private FriendHorizontalScrollAdapter friendHorizontalScrollAdapter;
@@ -225,7 +241,8 @@ public class CreateGatheringFragment extends CenesFragment {
 
                 event.setStartTime(predictedDateStartCal.getTimeInMillis());
                 event.setEndTime(predictedDateEndCal.getTimeInMillis());
-
+                llCovidDataContainer.setVisibility(View.GONE);
+                ivLocationArrow.setEnabled(false);
             } else {
 
                 populateCreateGatheringObj();
@@ -282,10 +299,12 @@ public class CreateGatheringFragment extends CenesFragment {
 
         gathEventTitleEditView = (CenesEditText) fragmentView.findViewById(R.id.gath_event_title_et);
 
+        ivLocationArrow = (ImageView) fragmentView.findViewById(R.id.iv_location_arrow);
         ivDateBarArrow = (ImageView) fragmentView.findViewById(R.id.iv_date_bar_arrow);
         gathInviteFrndsBtn = (ImageView) fragmentView.findViewById(R.id.gath_invite_frnds_btn);
         ivAbandonEvent = (ImageView) fragmentView.findViewById(R.id.iv_abandon_event);
         ivPredictiveInfo = (ImageView) fragmentView.findViewById(R.id.iv_predictive_info);
+        ivAboutCovidInfoIcon = (ImageView) fragmentView.findViewById(R.id.iv_about_covid_info_icon);
         tvGatheringMessage = (TextView) fragmentView.findViewById(R.id.tv_gathering_message);
 
         tvEventDate = (TextView) fragmentView.findViewById(R.id.tv_event_date);
@@ -296,6 +315,9 @@ public class CreateGatheringFragment extends CenesFragment {
         tvPhotoCancel = (TextView) fragmentView.findViewById(R.id.tv_photo_cancel);
         tvBusinessStatus = (TextView) fragmentView.findViewById(R.id.tv_business_status);
         tvBusinessPhone = (TextView) fragmentView.findViewById(R.id.tv_business_phone);
+        tvNewCases = (TextView) fragmentView.findViewById(R.id.tv_new_cases);
+        tvShowCovidData = (TextView) fragmentView.findViewById(R.id.tv_show_covid_data);
+        tvDonotShowCovidData = (TextView) fragmentView.findViewById(R.id.tv_donot_show_covid_data);
 
         gathSearchLocationButton = (RelativeLayout) fragmentView.findViewById(R.id.gath_search_location_button);
         rlCoverImageBar = (RelativeLayout) fragmentView.findViewById(R.id.rl_cover_image_bar);
@@ -307,11 +329,14 @@ public class CreateGatheringFragment extends CenesFragment {
         rlHeader = (RelativeLayout) fragmentView.findViewById(R.id.rl_header);
         rlPreviewInvitationButton = (RelativeLayout) fragmentView.findViewById(R.id.rl_preview_invitation_button);
         rlPhotoActionSheet = (RelativeLayout) fragmentView.findViewById(R.id.rl_photo_action_sheet);
+        rlShowCovidDataLayout = (RelativeLayout) fragmentView.findViewById(R.id.rl_show_covid_data_layout);
 
         llGatheringDateBars = (LinearLayout) fragmentView.findViewById(R.id.ll_gathering_date_bars);
         llGatheringInfoBars = (LinearLayout) fragmentView.findViewById(R.id.ll_gathering_info_bars);
         llPredictiveCalCell = (LinearLayout) fragmentView.findViewById(R.id.ll_predictive_cal_cell);
         llPredictiveCalInfo = (LinearLayout) fragmentView.findViewById(R.id.ll_predictive_cal_info);
+        llCovidDataContainer = (LinearLayout) fragmentView.findViewById(R.id.ll_covid_data_container);
+        llCovidLocationIno = (LinearLayout) fragmentView.findViewById(R.id.ll_covid_location_ino);
 
         predictiveCalSwitch = (Switch) fragmentView.findViewById(R.id.predictive_cal_switch);
         startTimePickerLabel = (TextView) fragmentView.findViewById(R.id.start_time_picker_label);
@@ -326,6 +351,15 @@ public class CreateGatheringFragment extends CenesFragment {
         supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.location_map);
         supportMapFragment.getMapAsync(onMapReadyCallback);
 
+        //Setting 43% of width of the screen.
+        int widthOfScreen = getActivity().getWindowManager().getDefaultDisplay().getWidth();
+        fragmentView.findViewById(R.id.location_map).getLayoutParams().height = (widthOfScreen*80)/100;
+
+        /*int mapCenter = fragmentView.findViewById(R.id.location_map).getLayoutParams().height/2;
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llCovidLocationIno.getLayoutParams();
+        layoutParams.setMargins(0, mapCenter + CenesUtils.dpToPx(30), 0, 0);
+        llCovidLocationIno.setLayoutParams(layoutParams);*/
+
         createGatheringDto = new CreateGatheringDto();
         new GatheringAsyncTask(cenesApplication, (CenesBaseActivity) getActivity());
     }
@@ -339,6 +373,7 @@ public class CreateGatheringFragment extends CenesFragment {
         gathEventTitleEditView.setOnFocusChangeListener(focusListener);
         gathEventTitleEditView.setOnEditorActionListener(oneditorListener);
         gathEventTitleEditView.setOnClickListener(onClickListener);
+        ivLocationArrow.setOnClickListener(onClickListener);
 
         gathSearchLocationButton.setOnClickListener(onClickListener);
         rlGatheringMessageBar.setOnClickListener(onClickListener);
@@ -351,6 +386,9 @@ public class CreateGatheringFragment extends CenesFragment {
         tvChooseLibrary.setOnClickListener(onClickListener);
         tvTakePhoto.setOnClickListener(onClickListener);
         tvPhotoCancel.setOnClickListener(onClickListener);
+        tvShowCovidData.setOnClickListener(onClickListener);
+        tvDonotShowCovidData.setOnClickListener(onClickListener);
+        ivAboutCovidInfoIcon.setOnClickListener(onClickListener);
         predictiveCalSwitch.setOnCheckedChangeListener(onCheckedChangeListener);
         recyclerView.setOnTouchListener(layoutTouchListener);
         //svGatheringScrollview.setOnTouchListener(layoutTouchListener);
@@ -411,6 +449,7 @@ public class CreateGatheringFragment extends CenesFragment {
     @Override
     public void onResume() {
         super.onResume();
+        supportMapFragment.onResume();
         ((CenesBaseActivity) getActivity()).hideFooter();
         System.out.println("On Resume Called..");
     }
@@ -650,6 +689,29 @@ public class CreateGatheringFragment extends CenesFragment {
                 case R.id.gath_search_location_button:
                     hideKeyboardAndClearFocus(gathEventTitleEditView);
                     startActivityForResult(new Intent(getActivity(), SearchLocationActivity.class), SEACRH_LOCATION_RESULT_CODE);
+                    break;
+
+                case R.id.iv_location_arrow:
+
+                    if (llCovidDataContainer.getVisibility() == View.VISIBLE) {
+                        llCovidDataContainer.setVisibility(View.GONE);
+                        ivLocationArrow.setImageDrawable(getResources().getDrawable(R.drawable.gath_info_right_arrow));
+                    } else {
+                        llCovidDataContainer.setVisibility(View.VISIBLE);
+                        ivLocationArrow.setImageDrawable(getResources().getDrawable(R.drawable.gath_info_down_arrow));
+                    }
+                    break;
+
+                case R.id.tv_show_covid_data:
+                    updateShowCovidDataStatus(true);
+                    break;
+                case R.id.tv_donot_show_covid_data:
+                    updateShowCovidDataStatus(false);
+                    break;
+                case R.id.iv_about_covid_info_icon:
+                    WebViewFragment webViewFragment = new WebViewFragment();
+                    webViewFragment.webViewUrl = CenesConstants.covidDisclaimerLink;
+                    ((CenesBaseActivity)getActivity()).replaceFragment(webViewFragment, CreateGatheringFragment.TAG);
                     break;
             }
         }
@@ -923,11 +985,11 @@ public class CreateGatheringFragment extends CenesFragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             locationMap = googleMap;
-            if (event.getLatitude() != null) {
+            /*if (event.getLatitude() != null) {
                 locationMap.addMarker(new MarkerOptions()
                         .position(new LatLng(Double.valueOf(event.getLatitude()), Double.valueOf(event.getLongitude())))
                         .title("Marker"));
-            }
+            }*/
         }
     };
 
@@ -1129,8 +1191,11 @@ public class CreateGatheringFragment extends CenesFragment {
                             tvLocationLabel.setText(location.getLocation().substring(0, 20)+"...");
                         } else {
                             tvLocationLabel.setText(location.getLocation());
-
                         }
+
+                        ivLocationArrow.setEnabled(true);
+                        llCovidDataContainer.setVisibility(View.VISIBLE);
+                        ivLocationArrow.setImageDrawable(getResources().getDrawable(R.drawable.gath_info_down_arrow));
 
                         new LocationAsyncTask.FetchLatLngTask(new LocationAsyncTask.FetchLatLngTask.AsyncResponse() {
                             @Override
@@ -1138,8 +1203,13 @@ public class CreateGatheringFragment extends CenesFragment {
 
                                 try {
 
+                                    Location locModel = new Location();
                                     JSONObject result = locations.getJSONObject("result");
                                     JSONObject locationObj = result.getJSONObject("geometry").getJSONObject("location");
+
+                                    locModel.setLatitude(locationObj.getString("lat"));
+                                    locModel.setLongitude(locationObj.getString("lng"));
+
                                     event.setLatitude(locationObj.getString("lat"));
                                     event.setLongitude(locationObj.getString("lng"));
 
@@ -1154,6 +1224,10 @@ public class CreateGatheringFragment extends CenesFragment {
                                                 tvBusinessStatus.setTextColor(getActivity().getResources().getColor(R.color.red));
                                             }
                                         }
+                                    } else {
+                                        tvBusinessStatus.setText("No Data");
+                                        tvBusinessStatus.setTextColor(getActivity().getResources().getColor(R.color.cenes_light_gray));
+
                                     }
 
                                     if (result.has("international_phone_number")) {
@@ -1161,17 +1235,38 @@ public class CreateGatheringFragment extends CenesFragment {
                                     } else if (result.has("formatted_phone_number")) {
                                         tvBusinessPhone.setText(result.getString("formatted_phone_number"));
                                     } else {
-                                        tvBusinessPhone.setText("");
+                                        tvBusinessPhone.setText("No Data");
+                                        tvBusinessPhone.setTextColor(getActivity().getResources().getColor(R.color.cenes_light_gray));
+
                                     }
 
-                                    LatLng latLng = new LatLng(Double.valueOf(event.getLatitude()), Double.valueOf(event.getLongitude()));
-                                    CameraPosition myPosition = new CameraPosition.Builder()
-                                            .target(latLng).zoom(10).bearing(90).build();
-                                    locationMap.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
-                                    locationMap.addMarker(new MarkerOptions()
-                                            .position(new LatLng(Double.valueOf(event.getLatitude()), Double.valueOf(event.getLongitude())))
-                                            .title("Marker"));
+                                    //Lets find out country, state, county
+                                    if (result.has("address_components")) {
 
+                                        JSONArray addressComponents = result.getJSONArray("address_components");
+                                        for (int i=0; i < addressComponents.length(); i++) {
+
+                                            JSONObject addressItemDict = addressComponents.getJSONObject(i);
+                                            if (addressItemDict.has("types")) {
+                                                JSONArray types = addressItemDict.getJSONArray("types");
+                                                for (int j=0; j < types.length(); j++) {
+                                                    String typeOfAddress = types.getString(j);
+                                                        //Finding Country
+                                                    if (typeOfAddress.equals("country")) {
+                                                        locModel.setCountry(addressItemDict.getString("long_name"));
+                                                    } else if (typeOfAddress.equals("administrative_area_level_1")) {
+                                                        //Finding State
+                                                        locModel.setState(addressItemDict.getString("long_name"));
+                                                    } else if (typeOfAddress.equals("administrative_area_level_2")) {//Finding County
+                                                        //Finding County
+                                                        locModel.setCounty(addressItemDict.getString("long_name"));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    getCovidData(locModel);
 
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -1254,6 +1349,10 @@ public class CreateGatheringFragment extends CenesFragment {
                         event.setLocation(title);
                         event.setLatitude(null);
                         event.setLongitude(null);
+
+                        ivLocationArrow.setEnabled(false);
+                        llCovidDataContainer.setVisibility(View.GONE);
+
                     }
                 }
             }  else if (requestCode == SEARCH_FRIEND_RESULT_CODE) {
@@ -1717,7 +1816,19 @@ public class CreateGatheringFragment extends CenesFragment {
                     tvLocationLabel.setText(event.getLocation());
                 }
                 createGatheringDto.setLocation(true);
+
+                //if location is Custom Location, Lets hide it
+                if (event.getLocation().contains("[CL]")) {
+                    llCovidDataContainer.setVisibility(View.GONE);
+                } else {
+                    llCovidDataContainer.setVisibility(View.VISIBLE);
+                }
+            } else {
+                //if location is empty lets hide it
+                llCovidDataContainer.setVisibility(View.GONE);
             }
+
+
             if (!CenesUtils.isEmpty(event.getDescription())) {
                 tvGatheringMessage.setText("Saved");
                 createGatheringDto.setMesssage(true);
@@ -1776,6 +1887,163 @@ public class CreateGatheringFragment extends CenesFragment {
         }
     }
 
+    public void getCovidData(final Location location) {
+
+        String api = UrlManagerImpl.prodAPIUrl+ GatheringAPI.post_covid_stats;
+
+        AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+        asyncTaskDto.setApiUrl(api);
+        try {
+            JSONObject postData = new JSONObject();
+            postData.put("covidTimestamp", new Date().getTime());
+            if (location.getCountry() != null) {
+                postData.put("countryCode", location.getCountry());
+            }
+            if (location.getState() != null) {
+                postData.put("state", location.getState());
+            }
+            if (location.getCounty() != null) {
+                postData.put("county", location.getCounty());
+            }
+            asyncTaskDto.setPostData(postData);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        new ProfileAsyncTask.CommonPostRequestTask(new ProfileAsyncTask.CommonPostRequestTask.AsyncResponse() {
+            @Override
+            public void processFinish(JSONObject response) {
+
+                try {
+                    boolean success = response.getBoolean("success");
+                    if (success == true) {
+
+                        locationMap.clear();
+
+                        LatLng latLng = new LatLng(Double.valueOf(event.getLatitude()), Double.valueOf(event.getLongitude()));
+                        CameraPosition myPosition = new CameraPosition.Builder()
+                                .target(latLng).zoom(6).build();
+                        locationMap.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
+
+                        JSONObject covidDataDict = response.getJSONObject("data");
+
+                        String snippet = "";
+                        String title = "";
+                        if (covidDataDict.has("city")) {
+
+                            JSONObject cityDict = covidDataDict.getJSONObject("city");
+                            tvNewCases.setText(cityDict.getString("newCases"));
+                            title = location.getCounty();
+
+                            snippet = "Confirmed \t\t "+cityDict.getString("confirmed")+"" +
+                                    "\nRecovered\t\t "+cityDict.getString("recovered")+"" +
+                                    "\nDeaths   \t\t\t"+cityDict.getString("deaths")+"";
+                        } else if (covidDataDict.has("state")) {
+
+
+                            JSONObject stateDict = covidDataDict.getJSONObject("state");
+                            title = location.getState();
+                            tvNewCases.setText(stateDict.getString("newCases"));
+
+                            snippet = "Confirmed \t\t "+stateDict.getString("confirmed")+"" +
+                                    "\nRecovered\t\t "+stateDict.getString("recovered")+"" +
+                                    "\nDeaths   \t\t\t"+stateDict.getString("deaths")+"";
+                        } else if (covidDataDict.has("country")) {
+
+                            title = location.getCountry();
+
+                            JSONObject countryDict = covidDataDict.getJSONObject("country");
+                            tvNewCases.setText(countryDict.getString("newCases"));
+                            snippet = "Confirmed \t\t "+countryDict.getString("confirmed")+"" +
+                                    "\nRecovered\t\t "+countryDict.getString("recovered")+"" +
+                                    "\nDeaths   \t\t\t"+countryDict.getString("deaths")+"";
+                        }
+
+                        System.out.println("Snippet : "+snippet);
+                        Marker covidMarker = locationMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(Double.valueOf(event.getLatitude()), Double.valueOf(event.getLongitude())))
+                                .title(title).snippet(snippet));
+
+                        locationMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                            @Override
+                            public View getInfoWindow(Marker marker) {
+                                return null;
+                            }
+
+                            @Override
+                            public View getInfoContents(Marker marker) {
+                                LinearLayout info = new LinearLayout(getContext());
+                                info.setOrientation(LinearLayout.VERTICAL);
+
+                                TextView title = new TextView(getContext());
+                                title.setTextColor(Color.BLACK);
+                                title.setGravity(Gravity.CENTER);
+                                title.setTypeface(null, Typeface.BOLD);
+                                title.setText(marker.getTitle());
+
+                                TextView snippet = new TextView(getContext());
+                                snippet.setTextColor(Color.GRAY);
+                                snippet.setText(marker.getSnippet());
+
+                                info.addView(title);
+                                info.addView(snippet);
+
+                                return info;
+                            }
+                        });
+
+                        covidMarker.showInfoWindow();
+
+                    } else {
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).execute(asyncTaskDto);
+    }
+
+    public void updateShowCovidDataStatus(final boolean showCovidLocationData) {
+
+        try {
+
+            JSONObject postData = new JSONObject();
+            postData.put("userId", loggedInUser.getUserId());
+            postData.put("showCovidLocationData", showCovidLocationData);
+
+            String url = UrlManagerImpl.prodAPIUrl+ UserAPI.post_userdetails;
+            AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+            asyncTaskDto.setPostData(postData);
+            asyncTaskDto.setApiUrl(url);
+            asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+            new ProfileAsyncTask.CommonPostRequestTask(new ProfileAsyncTask.CommonPostRequestTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+
+                    try {
+                        loggedInUser.setShowCovidLocationData(showCovidLocationData);
+                        userManager.updateUser(loggedInUser);
+
+                        if (showCovidLocationData) {
+                            rlShowCovidDataLayout.setVisibility(View.GONE);
+                            llCovidDataContainer.setVisibility(View.VISIBLE);
+                        } else {
+                            rlShowCovidDataLayout.setVisibility(View.VISIBLE);
+                            llCovidDataContainer.setVisibility(View.GONE);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).execute(asyncTaskDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
     public Event getEvent() {
         return event;
     }

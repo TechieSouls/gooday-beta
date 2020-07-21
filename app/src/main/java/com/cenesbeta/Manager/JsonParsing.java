@@ -63,7 +63,7 @@ public class JsonParsing {
             BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
             response = br.readLine();
 
-//            System.out.println(response.toString());
+            System.out.println(response);
             JSONObject jObj = new JSONObject(response.toString());
             return jObj;
         } catch (Exception e) {
