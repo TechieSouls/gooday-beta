@@ -27,6 +27,7 @@
                 />
 
             <LinearLayout
+                android:id="@+id/ll_private_event_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -72,6 +73,7 @@
                 android:layout_marginTop="30dp"/>
 
             <LinearLayout
+                android:id="@+id/ll_public_event_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

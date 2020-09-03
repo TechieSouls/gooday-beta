@@ -139,5 +139,5 @@ time for everyone to meet.\n\n\nNo more back and forth messaging.\nNo more time 
 
     <string name="private_event_option_text">Invite friends &amp; family in your contact list. Only invited guests will see this event, others don’t.</string>
     <string name="public_event_option_text">Create event/activities can be discovered by everyone. Anyone can request to join event.\n\nNo. of Public Event left: 0.</string>
-
+    <string name="no_contacts_access_permissions">Cenes will upload your address book to our server to help you find mobile contacts using Cenes. This data won\'t be saved or used for other purposes. Match mobile contacts?</string>
 </resources>

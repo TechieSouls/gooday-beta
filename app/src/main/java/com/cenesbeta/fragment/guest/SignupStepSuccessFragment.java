@@ -195,7 +195,7 @@ public class SignupStepSuccessFragment extends CenesFragment {
                             Gson gson = new Gson();
                             jsonObject = new JSONObject(gson.toJson(loggedInUser));
                             jsonObject.put("username", loggedInUser.getName());
-                            jsonObject.put("birthDayStr", loggedInUser.getBirthDateStr());
+                            jsonObject.put("birthDayStr", loggedInUser.getBirthDayStr());
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -341,8 +341,8 @@ public class SignupStepSuccessFragment extends CenesFragment {
             yesCalendar.set(Calendar.MONTH, monthOfYear);
             yesCalendar.set(Calendar.YEAR, year);
 
-            loggedInUser.setBirthDateStr(CenesUtils.ddMMMYYYY.format(yesCalendar.getTime()));
-            etSignupSuccessBirthday.setText(loggedInUser.getBirthDateStr());
+            loggedInUser.setBirthDayStr(CenesUtils.ddMMMYYYY.format(yesCalendar.getTime()));
+            etSignupSuccessBirthday.setText(loggedInUser.getBirthDayStr());
         }
     };
 
@@ -361,7 +361,7 @@ public class SignupStepSuccessFragment extends CenesFragment {
         }
 
 
-        if (CenesUtils.isEmpty(loggedInUser.getBirthDateStr())) {
+        if (CenesUtils.isEmpty(loggedInUser.getBirthDayStr())) {
             if (missingFields.length() > 0) {
                 missingFields.append(", ");
             }
@@ -574,7 +574,7 @@ public class SignupStepSuccessFragment extends CenesFragment {
         //Making Phone Sync Call
         new ProfileAsyncTask.PhoneContactSync(new ProfileAsyncTask.PhoneContactSync.AsyncResponse() {
             @Override
-            public void processFinish(Object response) {
+            public void processFinish(JSONObject response) {
 
                 //((GuestActivity)getActivity()).replaceFragment(new HolidaySyncFragment(), null);
                 try {

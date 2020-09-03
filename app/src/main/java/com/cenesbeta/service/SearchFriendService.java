@@ -47,12 +47,20 @@ public class SearchFriendService {
     }
 
     public static List<EventMember> getCenesContacts (List<EventMember> allContacts) {
+
         List<EventMember> cenesContacts = new ArrayList<>();
+        List<Integer> userContactIDTracking = new ArrayList<>();
+
+
         for (EventMember eventMember: allContacts) {
             try {
 
                 if ("yes".equals(eventMember.getCenesMember())) {
+                    if (userContactIDTracking.contains(eventMember.getUserContactId())) {
+                        continue;
+                    }
                     cenesContacts.add(eventMember);
+                    userContactIDTracking.add(eventMember.getUserContactId());
                 }
             } catch (Exception e) {
                 e.printStackTrace();

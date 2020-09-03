@@ -168,14 +168,14 @@ public class ProfileFragment extends CenesFragment {
         tvName.setText(loggedInUser.getName());
         tvEmail.setText(loggedInUser.getEmail());
         tvPhone.setText(loggedInUser.getPhone());
-        if (CenesUtils.isEmpty(loggedInUser.getBirthDateStr())) {
+        if (CenesUtils.isEmpty(loggedInUser.getBirthDayStr())) {
             tvBirthday.setText("Choose BirthDate");
         } else {
 
             //Calendar yesCalendar = Calendar.getInstance();
             //yesCalendar.setTimeInMillis(loggedInUser.getBirthDateStr());
             //String birthDateStr = CenesUtils.ddMMMYYYY.format(yesCalendar.getTime());
-            tvBirthday.setText(loggedInUser.getBirthDateStr());
+            tvBirthday.setText(loggedInUser.getBirthDayStr());
 
         }
 
@@ -314,11 +314,11 @@ public class ProfileFragment extends CenesFragment {
 
                         // TODO Auto-generated method stub
                         Calendar birthCal = Calendar.getInstance();
-                        if (!CenesUtils.isEmpty(loggedInUser.getBirthDateStr())) {
+                        if (!CenesUtils.isEmpty(loggedInUser.getBirthDayStr())) {
 
                             try {
 
-                                Date birthDate = CenesUtils.ddMMMYYYY.parse(loggedInUser.getBirthDateStr());
+                                Date birthDate = CenesUtils.ddMMMYYYY.parse(loggedInUser.getBirthDayStr());
                                 birthCal.setTimeInMillis(birthDate.getTime());
 
                             } catch (Exception e) {
@@ -459,7 +459,7 @@ public class ProfileFragment extends CenesFragment {
             yesCalendar.set(Calendar.YEAR, year);
 
             String birthDateStr = CenesUtils.ddMMMYYYY.format(yesCalendar.getTime());
-            loggedInUser.setBirthDateStr(birthDateStr);
+            loggedInUser.setBirthDayStr(birthDateStr);
             tvBirthday.setText(birthDateStr);
 
             if (btnProfileDone.getVisibility() == View.GONE) {

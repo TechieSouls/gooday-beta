@@ -45,142 +45,190 @@
             android:layout_alignParentRight="true"
             android:fontFamily="@font/avenir_medium"/>
     </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/gath_search_friend_sub_header"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="20px"
-        android:layout_below="@+id/gath_search_friend_header">
 
-        <EditText
-            android:id="@+id/invite_friend_edit_text"
+    <RelativeLayout
+        android:id="@+id/rl_friends_related_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/gath_search_friend_header">
+        <RelativeLayout
+            android:id="@+id/gath_search_friend_sub_header"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginLeft="35dp"
-            android:layout_marginRight="35dp"
-            android:background="@drawable/curved_search_edit_text_greybg"
-            android:drawableLeft="@drawable/search_icon"
-            android:paddingLeft="10dp"
-            android:singleLine="true"
-            android:imeOptions="actionDone"
-            android:hint="Search Contacts"
-            android:fontFamily="@font/avenir_medium"
-            android:textSize="17dp"
-            />
+            android:layout_marginTop="20px">
 
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/rl_selected_friends_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/gath_search_friend_sub_header"
-        android:visibility="gone"
-        android:clickable="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+            <EditText
+                android:id="@+id/invite_friend_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:background="@drawable/curved_search_edit_text_greybg"
+                android:drawableLeft="@drawable/search_icon"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
+                android:hint="Search Contacts"
+                android:fontFamily="@font/avenir_medium"
+                android:textSize="17dp"
+                />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_selected_friends_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            android:paddingEnd="5dp"
-            android:paddingRight="5dp"
-            android:paddingStart="20dp"
-            android:scrollbars="none"
+            android:layout_height="90dp"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/gath_search_friend_sub_header"
+            android:visibility="gone"
+            android:clickable="true"
             android:focusable="true"
-            android:focusableInTouchMode="true"/>
-    </RelativeLayout>
+            android:focusableInTouchMode="true">
 
-    <!-- CENES & NON Cenes Tappable Bar STARTS -->
-    <RelativeLayout
-        android:id="@+id/cenes_noncenes_select_bar"
-        android:layout_below="@+id/rl_selected_friends_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@drawable/xml_whitelightgrey_gradient_border_bottom">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:paddingStart="20dp"
+                android:scrollbars="none"
+                android:focusable="true"
+                android:focusableInTouchMode="true"/>
+        </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tv_select_bar_title"
+        <!-- CENES & NON Cenes Tappable Bar STARTS -->
+        <RelativeLayout
+            android:id="@+id/cenes_noncenes_select_bar"
+            android:layout_below="@+id/rl_selected_friends_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/xml_whitelightgrey_gradient_border_bottom">
+
+            <TextView
+                android:id="@+id/tv_select_bar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="40dp"
+                android:fontFamily="@font/avenir_medium"
+                android:textSize="15dp"
+                android:textColor="@color/black"
+                android:text="All Contacts"/>
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/grey_arrow_icon"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="40dp"
+                />
+        </RelativeLayout>
+        <!-- CENES & NON Cenes Tappable Bar ENDS -->
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_view_container"
+            android:layout_below="@+id/cenes_noncenes_select_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="40dp"
-            android:fontFamily="@font/avenir_medium"
-            android:textSize="15dp"
-            android:textColor="@color/black"
-            android:text="All Contacts"/>
+            android:layout_gravity="center"
+            android:duration="800"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-        <ImageView
-            android:layout_width="14dp"
-            android:layout_height="14dp"
-            android:src="@drawable/grey_arrow_icon"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="40dp"
-            />
-    </RelativeLayout>
-    <!-- CENES & NON Cenes Tappable Bar ENDS -->
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmer_view_container"
-        android:layout_below="@+id/cenes_noncenes_select_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:duration="800"
-        android:orientation="vertical"
-        android:visibility="visible">
+            <!-- Adding 3 rows of placeholders -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <!-- Adding 3 rows of placeholders -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                <include layout="@layout/layout_friend_placeholder_row" />
 
-            <include layout="@layout/layout_friend_placeholder_row" />
+                <include layout="@layout/layout_friend_placeholder_row" />
 
-            <include layout="@layout/layout_friend_placeholder_row" />
+                <include layout="@layout/layout_friend_placeholder_row" />
+                <include layout="@layout/layout_friend_placeholder_row" />
 
-            <include layout="@layout/layout_friend_placeholder_row" />
-            <include layout="@layout/layout_friend_placeholder_row" />
+            </LinearLayout>
 
-        </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
-    </com.facebook.shimmer.ShimmerFrameLayout>
-
-    <ListView
-        android:id="@+id/gath_search_friend_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:groupIndicator="@null"
-        android:layout_below="@+id/cenes_noncenes_select_bar"
-        android:visibility="gone"
-        ></ListView>
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/swiperefresh_friends"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/cenes_noncenes_select_bar">
-
-
-        <ExpandableListView
-            android:id="@+id/elv_friend_list"
+        <ListView
+            android:id="@+id/gath_search_friend_list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:groupIndicator="@null"
             android:layout_below="@+id/cenes_noncenes_select_bar"
-            android:groupIndicator="@android:color/transparent"></ExpandableListView>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:visibility="gone"
+            ></ListView>
 
-    <TextView
-        android:id="@+id/tv_share_to_friends"
-        android:layout_width="wrap_content"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/swiperefresh_friends"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/cenes_noncenes_select_bar">
+
+
+            <ExpandableListView
+                android:id="@+id/elv_friend_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/cenes_noncenes_select_bar"
+                android:groupIndicator="@android:color/transparent"></ExpandableListView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <TextView
+            android:id="@+id/tv_share_to_friends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_cenes_contacts_list"
+            android:textColor="@color/black"
+            android:layout_centerInParent="true"
+            android:textSize="16dp"
+            android:fontFamily="@font/avenir_medium"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_missing_contact_permissions"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/no_cenes_contacts_list"
-        android:textColor="@color/black"
+        android:orientation="vertical"
         android:layout_centerInParent="true"
-        android:textSize="16dp"
-        android:fontFamily="@font/avenir_medium"
-        android:visibility="gone"/>
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Missing Contacts Access Permission"
+            android:textSize="16dp"
+            android:fontFamily="@font/avenir_heavy"
+            android:textColor="@color/black"
+            android:layout_gravity="center_horizontal"/>
+
+        <TextView
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:text="@string/no_contacts_access_permissions"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:textSize="14dp"
+            android:fontFamily="@font/avenir_light"
+            android:textColor="@color/black"
+            android:lineSpacingExtra="3dp"
+
+            />
+
+        <Button
+            android:id="@+id/btn_open_settings"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:text="Open Settings"
+            android:background="@color/transparent"
+            android:textColor="@color/link_color"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"/>
+    </LinearLayout>
 </RelativeLayout>

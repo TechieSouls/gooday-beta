@@ -2,7 +2,9 @@ package com.cenesbeta.database.impl;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 
+import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
 import com.cenesbeta.bo.EventMember;
@@ -16,9 +18,6 @@ import java.util.List;
 
 public class EventMemberManagerImpl  {
 
-    CenesApplication cenesApplication;
-    CenesDatabase cenesDatabase;
-    SQLiteDatabase db;
     CenesUserManagerImpl cenesUserManagerImpl;
     UserContactManagerImpl userContactManagerImpl;
 
@@ -34,9 +33,9 @@ public class EventMemberManagerImpl  {
             "user_contact_id INTEGER)";
 
     public EventMemberManagerImpl(CenesApplication cenesApplication){
-        this.cenesApplication = cenesApplication;
-        cenesDatabase = new CenesDatabase(cenesApplication);
-        this.db = cenesDatabase.getReadableDatabase();
+        //this.cenesApplication = cenesApplication;
+        //cenesDatabase = new CenesDatabase(cenesApplication);
+        //this.db = cenesDatabase.getReadableDatabase();
         this.cenesUserManagerImpl = new CenesUserManagerImpl(cenesApplication);
         this.userContactManagerImpl = new UserContactManagerImpl(cenesApplication);
     }
@@ -49,13 +48,15 @@ public class EventMemberManagerImpl  {
             }
         } catch (Exception e){
             e.printStackTrace();
+            System.out.println("Error in : addEventMember (List)");
+
         }
     }
     public void addEventMember(EventMember eventMember){
 
         try {
-            if (!this.db.isOpen()) {
-                this.db = cenesDatabase.getReadableDatabase();
+            if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
             }
             if (CenesUtils.isEmpty(eventMember.getPicture())) {
                 eventMember.setPicture("");
@@ -70,7 +71,23 @@ public class EventMemberManagerImpl  {
                     " '"+eventMember.getPicture()+"', '"+eventMember.getStatus()+"', "+eventMember.getUserId()+", '"+eventMember.getPhone()+"', " +
                     "'"+eventMember.getCenesMember()+"', '"+eventMember.getDisplayScreenAt()+"', "+eventMember.getUserContactId()+")";
             System.out.println("Add Member Query : "+insertQuery);
-            db.execSQL(insertQuery);
+
+            String insertQuery1 = "insert into event_members(event_member_id, event_id, name, picture, status, " +
+                    "user_id, phone, cenes_member, display_screen_at, user_contact_id) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            SQLiteStatement stmt = CenesBaseActivity.sqlLiteDatabase.compileStatement(insertQuery1);
+            stmt.bindLong(1, eventMember.getEventMemberId());
+            stmt.bindLong(2, eventMember.getEventId());
+            stmt.bindString(3, !CenesUtils.isEmpty(eventMember.getName()) ? eventMember.getName() : "Guest");
+            stmt.bindString(4, eventMember.getPicture());
+            stmt.bindString(5, !CenesUtils.isEmpty(eventMember.getStatus()) ? eventMember.getStatus() : "");
+            stmt.bindLong(6, eventMember.getUserId() != null ? eventMember.getUserId() : 0);
+            stmt.bindString(7, !CenesUtils.isEmpty(eventMember.getPhone()) ? eventMember.getPhone(): "");
+            stmt.bindString(8, !CenesUtils.isEmpty(eventMember.getCenesMember())? eventMember.getCenesMember(): "");
+            stmt.bindString(9, !CenesUtils.isEmpty(eventMember.getDisplayScreenAt())? eventMember.getDisplayScreenAt(): "");
+            stmt.bindLong(10, eventMember.getUserContactId() != null ? eventMember.getUserContactId() : 0);
+            long entryID = stmt.executeInsert();
+            stmt.clearBindings();
 
             //Lets Add User Now
             if (eventMember.getUser() != null) {
@@ -81,8 +98,10 @@ public class EventMemberManagerImpl  {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error in : addEventMember");
+
         } finally {
-            db.close();
+            //CenesBaseActivity.sqlLiteDatabase.close();
         }
 
     }
@@ -91,11 +110,11 @@ public class EventMemberManagerImpl  {
         List<EventMember> eventMembers = new ArrayList<>();
 
         try {
-            if (!this.db.isOpen()) {
-                this.db = cenesDatabase.getReadableDatabase();
+            if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
             }
             String query = "select * from event_members where event_id = "+eventId;
-            Cursor cursor = db.rawQuery(query, null);
+            Cursor cursor = CenesBaseActivity.sqlLiteDatabase.rawQuery(query, null);
 
             List<Integer> userIdTracking = new ArrayList<>();
             List<Long> eventMemberIdList = new ArrayList<>();
@@ -132,8 +151,10 @@ public class EventMemberManagerImpl  {
             cursor.close();
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error in : fetchEventMembersByEventId");
+
         } finally {
-            db.close();
+            //CenesBaseActivity.sqlLiteDatabase.close();
         }
         return eventMembers;
     }
@@ -142,12 +163,12 @@ public class EventMemberManagerImpl  {
         List<EventMember> eventMembers = new ArrayList<>();
 
         try {
-            if (!this.db.isOpen()) {
-                this.db = cenesDatabase.getReadableDatabase();
+            if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
             }
             String query = "select * from event_members where event_id = "+eventId+" and display_screen_at = '"+displayAtScreen+"' ";
             System.out.printf("EventMember Query : "+query);
-            Cursor cursor = db.rawQuery(query, null);
+            Cursor cursor = CenesBaseActivity.sqlLiteDatabase.rawQuery(query, null);
             System.out.println("Results counts : "+cursor.getCount());
 
             List<Integer> userIdTracking = new ArrayList<>();
@@ -186,70 +207,80 @@ public class EventMemberManagerImpl  {
             cursor.close();
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error in : fetchEventMembersByEventIdAndDisplayAtScreen");
+
         } finally {
-            db.close();
+            //CenesBaseActivity.sqlLiteDatabase.close();
         }
         return eventMembers;
     }
 
     public void deleteFromEventMembersByEventIdsIn(String eventIds) {
         try {
-            if (!this.db.isOpen()) {
-                this.db = cenesDatabase.getReadableDatabase();
+            if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
             }
             String deleteQuery = "delete from event_members where event_id in ("+eventIds+") ";
             System.out.println("Delete Query : "+deleteQuery);
-            db.execSQL(deleteQuery);
+            CenesBaseActivity.sqlLiteDatabase.execSQL(deleteQuery);
             cenesUserManagerImpl.deleteAllUsers();
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error in : deleteFromEventMembersByEventIdsIn");
+
         } finally {
-            db.close();
+            //CenesBaseActivity.sqlLiteDatabase.close();
         }
     }
 
     public void deleteFromEventMembersByEventId(Integer eventId) {
         try {
-            if (!this.db.isOpen()) {
-                this.db = cenesDatabase.getReadableDatabase();
+            if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
             }
             String deleteQuery = "delete from event_members where event_id = "+eventId+" ";
             System.out.println("Delete Query : "+deleteQuery);
-            db.execSQL(deleteQuery);
+            CenesBaseActivity.sqlLiteDatabase.execSQL(deleteQuery);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error in : deleteFromEventMembersByEventId");
+
         } finally {
-            db.close();
+            //CenesBaseActivity.sqlLiteDatabase.close();
         }
     }
 
 
     public void deleteAllFromEventMembers() {
         try {
-            if (!this.db.isOpen()) {
-                this.db = cenesDatabase.getReadableDatabase();
+            if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
             }
             String deleteQuery = "delete from event_members";
-            db.execSQL(deleteQuery);
-            cenesUserManagerImpl.deleteAllUsers();
+            CenesBaseActivity.sqlLiteDatabase.execSQL(deleteQuery);
+            //cenesUserManagerImpl.deleteAllUsers();
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error in : deleteAllFromEventMembers");
+
         } finally {
-            db.close();
+            //CenesBaseActivity.sqlLiteDatabase.close();
         }
     }
 
     public void updateEventMemberStatus(Integer eventId, Integer userId, String eventMemberStatus) {
         try {
-            if (!this.db.isOpen()) {
-                this.db = cenesDatabase.getReadableDatabase();
+            if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
             }
             String updateQuery = "update event_members set status = '"+eventMemberStatus+"' where user_id = "+userId+" and event_id = "+eventId+" ";
-            db.execSQL(updateQuery);
+            CenesBaseActivity.sqlLiteDatabase.execSQL(updateQuery);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error in : updateEventMemberStatus");
+
         } finally {
-            db.close();
+            //CenesBaseActivity.sqlLiteDatabase.close();
         }
     }
 
@@ -259,8 +290,17 @@ public class EventMemberManagerImpl  {
         eventMember.setEventId(cursor.getLong(cursor.getColumnIndex("event_id")));
         eventMember.setEventMemberId(cursor.getLong(cursor.getColumnIndex("event_member_id")));
         eventMember.setName(cursor.getString(cursor.getColumnIndex("name")));
-        eventMember.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
-        eventMember.setUserContactId(cursor.getInt(cursor.getColumnIndex("user_contact_id")));
+        if (cursor.getInt(cursor.getColumnIndex("user_id")) == 0) {
+            eventMember.setUserId(null);
+        } else {
+            eventMember.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
+        }
+        if (cursor.getInt(cursor.getColumnIndex("user_contact_id")) == 0) {
+            eventMember.setUserContactId(null);
+        } else {
+            eventMember.setUserContactId(cursor.getInt(cursor.getColumnIndex("user_contact_id")));
+        }
+
         eventMember.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
         eventMember.setStatus(cursor.getString(cursor.getColumnIndex("status")));
         eventMember.setDisplayScreenAt(cursor.getString(cursor.getColumnIndex("display_screen_at")));

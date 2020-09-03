@@ -29,6 +29,7 @@ public class UserAPI {
     public static String post_sync_holiday_calendar = "/api/holiday/calendar/events/v2";
 
     //GET
+    public static String get_user_profile_data = "/api/user/profileById";//userId
     public static String get_user_ip = "https://api6.ipify.org/?format=json";
     public static String get_country_by_ip_address = "/auth/getCountryByIpAddress";
     public static String get_user_stats = "/api/user/userStatsByUserId";

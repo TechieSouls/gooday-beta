@@ -36,6 +36,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.cenesbeta.AsyncTasks.GatheringAsyncTask;
 import com.cenesbeta.AsyncTasks.LocationAsyncTask;
 import com.cenesbeta.AsyncTasks.ProfileAsyncTask;
@@ -139,7 +140,7 @@ public class CreateGatheringFragment extends CenesFragment {
     private Switch predictiveCalSwitch;
 
     private TextView startTimePickerLabel, endTimePickerLabel;
-    private ProgressBar progressBar;
+    private ProgressBar progressBar, last14DaysProgressBar;
 
     public ImageView ivAbandonEvent;
     private ImageView ivPredictiveInfo, gathInviteFrndsBtn, ivDateBarArrow, ivLocationArrow, ivAboutCovidInfoIcon;
@@ -296,6 +297,7 @@ public class CreateGatheringFragment extends CenesFragment {
         deviceManager = coreManager.getDeviceManager();
 
         progressBar = (ProgressBar) fragmentView.findViewById(R.id.progressBar);
+        last14DaysProgressBar = (ProgressBar) fragmentView.findViewById(R.id.iv_last14days_spinner);
 
         gathEventTitleEditView = (CenesEditText) fragmentView.findViewById(R.id.gath_event_title_et);
 
@@ -1203,70 +1205,82 @@ public class CreateGatheringFragment extends CenesFragment {
 
                                 try {
 
+                                    tvNewCases.setVisibility(View.GONE);
+                                    last14DaysProgressBar.setVisibility(View.VISIBLE);
+
                                     Location locModel = new Location();
-                                    JSONObject result = locations.getJSONObject("result");
-                                    JSONObject locationObj = result.getJSONObject("geometry").getJSONObject("location");
+                                    if (locations.has("result")) {
+                                        JSONObject result = locations.getJSONObject("result");
+                                        JSONObject locationObj = result.getJSONObject("geometry").getJSONObject("location");
 
-                                    locModel.setLatitude(locationObj.getString("lat"));
-                                    locModel.setLongitude(locationObj.getString("lng"));
+                                        locModel.setLatitude(locationObj.getString("lat"));
+                                        locModel.setLongitude(locationObj.getString("lng"));
 
-                                    event.setLatitude(locationObj.getString("lat"));
-                                    event.setLongitude(locationObj.getString("lng"));
+                                        event.setLatitude(locationObj.getString("lat"));
+                                        event.setLongitude(locationObj.getString("lng"));
 
-                                    if (result.has("opening_hours")) {
-                                        JSONObject openHours = result.getJSONObject("opening_hours");
-                                        if (openHours.has("open_now")) {
-                                            if (openHours.getBoolean("open_now")) {
-                                                tvBusinessStatus.setText("Open");
-                                                tvBusinessStatus.setTextColor(getActivity().getResources().getColor(R.color.cenes_mcv_green));
-                                            } else {
-                                                tvBusinessStatus.setText("Closed");
-                                                tvBusinessStatus.setTextColor(getActivity().getResources().getColor(R.color.red));
+                                        if (result.has("opening_hours")) {
+                                            JSONObject openHours = result.getJSONObject("opening_hours");
+                                            if (openHours.has("open_now")) {
+                                                if (openHours.getBoolean("open_now")) {
+                                                    tvBusinessStatus.setText("Open");
+                                                    tvBusinessStatus.setTextColor(getActivity().getResources().getColor(R.color.cenes_mcv_green));
+                                                } else {
+                                                    tvBusinessStatus.setText("Closed");
+                                                    tvBusinessStatus.setTextColor(getActivity().getResources().getColor(R.color.red));
+                                                }
                                             }
+                                        } else {
+                                            tvBusinessStatus.setText("No Data");
+                                            tvBusinessStatus.setTextColor(getActivity().getResources().getColor(R.color.cenes_light_gray));
                                         }
-                                    } else {
-                                        tvBusinessStatus.setText("No Data");
-                                        tvBusinessStatus.setTextColor(getActivity().getResources().getColor(R.color.cenes_light_gray));
 
-                                    }
+                                        if (result.has("international_phone_number")) {
+                                            tvBusinessPhone.setText(result.getString("international_phone_number"));
+                                        } else if (result.has("formatted_phone_number")) {
+                                            tvBusinessPhone.setText(result.getString("formatted_phone_number"));
+                                        } else {
+                                            tvBusinessPhone.setText("No Data");
+                                            tvBusinessPhone.setTextColor(getActivity().getResources().getColor(R.color.cenes_light_gray));
 
-                                    if (result.has("international_phone_number")) {
-                                        tvBusinessPhone.setText(result.getString("international_phone_number"));
-                                    } else if (result.has("formatted_phone_number")) {
-                                        tvBusinessPhone.setText(result.getString("formatted_phone_number"));
-                                    } else {
-                                        tvBusinessPhone.setText("No Data");
-                                        tvBusinessPhone.setTextColor(getActivity().getResources().getColor(R.color.cenes_light_gray));
+                                        }
 
-                                    }
+                                        //Lets find out country, state, county
+                                        if (result.has("address_components")) {
 
-                                    //Lets find out country, state, county
-                                    if (result.has("address_components")) {
+                                            JSONArray addressComponents = result.getJSONArray("address_components");
+                                            for (int i=0; i < addressComponents.length(); i++) {
 
-                                        JSONArray addressComponents = result.getJSONArray("address_components");
-                                        for (int i=0; i < addressComponents.length(); i++) {
-
-                                            JSONObject addressItemDict = addressComponents.getJSONObject(i);
-                                            if (addressItemDict.has("types")) {
-                                                JSONArray types = addressItemDict.getJSONArray("types");
-                                                for (int j=0; j < types.length(); j++) {
-                                                    String typeOfAddress = types.getString(j);
+                                                JSONObject addressItemDict = addressComponents.getJSONObject(i);
+                                                if (addressItemDict.has("types")) {
+                                                    JSONArray types = addressItemDict.getJSONArray("types");
+                                                    for (int j=0; j < types.length(); j++) {
+                                                        String typeOfAddress = types.getString(j);
                                                         //Finding Country
-                                                    if (typeOfAddress.equals("country")) {
-                                                        locModel.setCountry(addressItemDict.getString("long_name"));
-                                                    } else if (typeOfAddress.equals("administrative_area_level_1")) {
-                                                        //Finding State
-                                                        locModel.setState(addressItemDict.getString("long_name"));
-                                                    } else if (typeOfAddress.equals("administrative_area_level_2")) {//Finding County
-                                                        //Finding County
-                                                        locModel.setCounty(addressItemDict.getString("long_name"));
+                                                        if (typeOfAddress.equals("country")) {
+                                                            locModel.setCountry(addressItemDict.getString("long_name"));
+                                                        } else if (typeOfAddress.equals("administrative_area_level_1")) {
+                                                            //Finding State
+                                                            locModel.setState(addressItemDict.getString("long_name"));
+                                                        } else if (typeOfAddress.equals("administrative_area_level_2")) {//Finding County
+                                                            //Finding County
+                                                            locModel.setCounty(addressItemDict.getString("long_name"));
+                                                        } else if (typeOfAddress.equals("locality")) {//Finding City
+                                                            //Finding City
+                                                            locModel.setCity(addressItemDict.getString("long_name"));
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
+
+                                        getCovidData(locModel);
+                                    } else {
+                                        tvNewCases.setVisibility(View.VISIBLE);
+                                        last14DaysProgressBar.setVisibility(View.GONE);
+                                        tvNewCases.setText("No Data");
                                     }
 
-                                    getCovidData(locModel);
 
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -1285,9 +1299,7 @@ public class CreateGatheringFragment extends CenesFragment {
                             tvLocationLabel.setText(title.substring(0, 20)+"...");
                         } else {
                             tvLocationLabel.setText(title);
-
                         }
-
 
                         new LocationAsyncTask.FetchLatLngTask(new LocationAsyncTask.FetchLatLngTask.AsyncResponse() {
                             @Override
@@ -1895,7 +1907,21 @@ public class CreateGatheringFragment extends CenesFragment {
         asyncTaskDto.setApiUrl(api);
         try {
             JSONObject postData = new JSONObject();
-            postData.put("covidTimestamp", new Date().getTime());
+            postData.put("statsDateStr", CenesUtils.yyyyMMdd.format(new Date()));
+            postData.put("statsDate", new Date().getTime());
+
+            if (location.getCountry() != null) {
+                postData.put("country", location.getCountry());
+            }
+            if (location.getState() != null) {
+                postData.put("state", location.getState());
+            }
+            if (location.getCounty() != null) {
+                postData.put("county", location.getCounty());
+            } else if (location.getCity() != null) {
+                postData.put("county", location.getCity());
+            }
+            /*postData.put("covidTimestamp", new Date().getTime());
             if (location.getCountry() != null) {
                 postData.put("countryCode", location.getCountry());
             }
@@ -1904,7 +1930,7 @@ public class CreateGatheringFragment extends CenesFragment {
             }
             if (location.getCounty() != null) {
                 postData.put("county", location.getCounty());
-            }
+            }*/
             asyncTaskDto.setPostData(postData);
 
         } catch (Exception e) {
@@ -1926,14 +1952,24 @@ public class CreateGatheringFragment extends CenesFragment {
                                 .target(latLng).zoom(6).build();
                         locationMap.animateCamera(CameraUpdateFactory.newCameraPosition(myPosition));
 
+                        last14DaysProgressBar.setVisibility(View.GONE);
+                        tvNewCases.setVisibility(View.VISIBLE);
+
+
+
                         JSONObject covidDataDict = response.getJSONObject("data");
 
+                        if (covidDataDict.has("additionalInfo")) {
+                            JSONObject additionalInfoDict = covidDataDict.getJSONObject("additionalInfo");
+                            int lastForteenDays = additionalInfoDict.getInt("lastForteenDays");
+                            tvNewCases.setText(lastForteenDays+"");
+                        }
                         String snippet = "";
                         String title = "";
                         if (covidDataDict.has("city")) {
 
                             JSONObject cityDict = covidDataDict.getJSONObject("city");
-                            tvNewCases.setText(cityDict.getString("newCases"));
+                            //tvNewCases.setText(cityDict.getString("newCases"));
                             title = location.getCounty();
 
                             snippet = "Confirmed \t\t "+cityDict.getString("confirmed")+"" +
@@ -1944,7 +1980,7 @@ public class CreateGatheringFragment extends CenesFragment {
 
                             JSONObject stateDict = covidDataDict.getJSONObject("state");
                             title = location.getState();
-                            tvNewCases.setText(stateDict.getString("newCases"));
+                            //tvNewCases.setText(stateDict.getString("newCases"));
 
                             snippet = "Confirmed \t\t "+stateDict.getString("confirmed")+"" +
                                     "\nRecovered\t\t "+stateDict.getString("recovered")+"" +
@@ -1954,7 +1990,7 @@ public class CreateGatheringFragment extends CenesFragment {
                             title = location.getCountry();
 
                             JSONObject countryDict = covidDataDict.getJSONObject("country");
-                            tvNewCases.setText(countryDict.getString("newCases"));
+                            //tvNewCases.setText(countryDict.getString("newCases"));
                             snippet = "Confirmed \t\t "+countryDict.getString("confirmed")+"" +
                                     "\nRecovered\t\t "+countryDict.getString("recovered")+"" +
                                     "\nDeaths   \t\t\t"+countryDict.getString("deaths")+"";
@@ -1992,9 +2028,7 @@ public class CreateGatheringFragment extends CenesFragment {
                                 return info;
                             }
                         });
-
                         covidMarker.showInfoWindow();
-
                     } else {
 
                     }

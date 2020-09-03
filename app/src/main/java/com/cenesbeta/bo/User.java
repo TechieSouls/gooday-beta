@@ -28,7 +28,7 @@ public class User {
     private AuthenticateType authType;
     private String gender;
     private String phone;
-    private String birthDateStr;
+    private String birthDayStr;
     private String googleId;
     private String country;
     private boolean isNew;
@@ -142,12 +142,12 @@ public class User {
         this.phone = phone;
     }
 
-    public String getBirthDateStr() {
-        return birthDateStr;
+    public String getBirthDayStr() {
+        return birthDayStr;
     }
 
-    public void setBirthDateStr(String birthDateStr) {
-        this.birthDateStr = birthDateStr;
+    public void setBirthDayStr(String birthDayStr) {
+        this.birthDayStr = birthDayStr;
     }
 
     public String getGoogleId() {
@@ -197,7 +197,7 @@ public class User {
                 ", authType='" + authType + '\'' +
                 ", gender='" + gender + '\'' +
                 ", phone='" + phone + '\'' +
-                ", birthDateStr='" + birthDateStr + '\'' +
+                ", birthDateStr='" + birthDayStr + '\'' +
                 ", facebookAuthToken='" + facebookAuthToken + '\'' +
                 '}';
     }

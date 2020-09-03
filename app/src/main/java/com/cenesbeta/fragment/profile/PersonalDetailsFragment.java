@@ -157,8 +157,8 @@ public class PersonalDetailsFragment extends CenesFragment {
             yesCalendar.set(Calendar.MONTH, monthOfYear);
             yesCalendar.set(Calendar.YEAR, year);
 
-            String birthDateStr = CenesUtils.ddMMMYYYY.format(yesCalendar.getTime());
-            loggedInUser.setBirthDateStr(birthDateStr);
+            String birthDateStr = CenesUtils.E_MMMM_d_yyyy.format(yesCalendar.getTime());
+            loggedInUser.setBirthDayStr(birthDateStr);
             userManager.updateUser(loggedInUser);
             tvProfileDOB.setText(birthDateStr);
 
@@ -173,8 +173,8 @@ public class PersonalDetailsFragment extends CenesFragment {
             tvProfileName.setText(loggedInUser.getName());
             tvProfileEmail.setText(loggedInUser.getEmail());
             tvProfileNumber.setText(loggedInUser.getPhone());
-            if (!CenesUtils.isEmpty(loggedInUser.getBirthDateStr())) {
-                tvProfileDOB.setText(loggedInUser.getBirthDateStr());
+            if (!CenesUtils.isEmpty(loggedInUser.getBirthDayStr())) {
+                tvProfileDOB.setText(loggedInUser.getBirthDayStr());
             }
             if (!CenesUtils.isEmpty(loggedInUser.getGender())) {
                 tvProfileGender.setText(loggedInUser.getGender());
@@ -191,21 +191,22 @@ public class PersonalDetailsFragment extends CenesFragment {
     public void birthDateBarPressed() {
         try {
             // TODO Auto-generated method stub
-            Calendar birthCal = Calendar.getInstance();
-            if (!CenesUtils.isEmpty(loggedInUser.getBirthDateStr())) {
+            Calendar eligibleCal = Calendar.getInstance();
+
+            if (!CenesUtils.isEmpty(loggedInUser.getBirthDayStr())) {
 
                 try {
 
-                    Date birthDate = CenesUtils.ddMMMYYYY.parse(loggedInUser.getBirthDateStr());
-                    birthCal.setTimeInMillis(birthDate.getTime());
+                    Date birthDate = CenesUtils.E_MMMM_d_yyyy.parse(loggedInUser.getBirthDayStr());
+                    eligibleCal.setTimeInMillis(birthDate.getTime());
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            } else {
+                eligibleCal.add(Calendar.YEAR, -13);
             }
 
-            Calendar eligibleCal = Calendar.getInstance();
-            eligibleCal.add(Calendar.YEAR, -13);
             DatePickerDialog birthDatePicker = new DatePickerDialog((CenesBaseActivity)getActivity(), datePickerListener, eligibleCal
                     .get(Calendar.YEAR), eligibleCal.get(Calendar.MONTH),
                     eligibleCal.get(Calendar.DAY_OF_MONTH));
@@ -259,7 +260,7 @@ public class PersonalDetailsFragment extends CenesFragment {
 
             JSONObject postData = new JSONObject();
             postData.put("userId", loggedInUser.getUserId());
-            postData.put("birthDayStr", loggedInUser.getBirthDateStr());
+            postData.put("birthDayStr", loggedInUser.getBirthDayStr());
             asyncTaskDto.setPostData(postData);
 
             performUpdateProfileItemsAsynctask(asyncTaskDto);

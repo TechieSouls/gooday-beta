@@ -3,7 +3,8 @@ package com.cenesbeta.bo;
 public class EventCategory {
 
     private Integer eventCategoryId;
-    private String title;
+    private String name;
+    private String shortCode;
     private String icon;
 
     public Integer getEventCategoryId() {
@@ -14,19 +15,27 @@ public class EventCategory {
         this.eventCategoryId = eventCategoryId;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getIcon() {
         return icon;
     }
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getShortCode() {
+        return shortCode;
+    }
+
+    public void setShortCode(String shortCode) {
+        this.shortCode = shortCode;
     }
 }

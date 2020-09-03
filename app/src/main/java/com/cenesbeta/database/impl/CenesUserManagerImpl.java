@@ -2,7 +2,9 @@ package com.cenesbeta.database.impl;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 
+import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.User;
 import com.cenesbeta.database.CenesDatabase;
@@ -22,9 +24,9 @@ public class CenesUserManagerImpl  {
             "phone TEXT)";
 
     public CenesUserManagerImpl(CenesApplication cenesApplication){
-        this.cenesApplication = cenesApplication;
-        cenesDatabase = new CenesDatabase(cenesApplication);
-        this.db = cenesDatabase.getReadableDatabase();
+        //this.cenesApplication = cenesApplication;
+        //cenesDatabase = new CenesDatabase(cenesApplication);
+        //this.db = cenesDatabase.getReadableDatabase();
     }
 
     public void addUser(List<User> users) {
@@ -36,31 +38,37 @@ public class CenesUserManagerImpl  {
     public void addUser(User user){
         try {
             User userExists = fetchCenesUserByUserId(user.getUserId());
-            if (userExists != null) {
+            if (userExists != null && !CenesUtils.isEmpty(userExists.getName())) {
 
                 user.setUserId(userExists.getUserId());
                 updateCenesUser(user);
 
             } else {
-                if (!this.db.isOpen()) {
-                    this.db = cenesDatabase.getReadableDatabase();
-                }
-                if (CenesUtils.isEmpty(user.getPicture())) {
-                    user.setPicture("");
-                }
-                if (CenesUtils.isEmpty(user.getPhone())) {
-                    user.setPhone("");
+                if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                    CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
                 }
 
-                String insertQuery = "insert into cenes_users values("+user.getUserId()+", '"+user.getName()+"', '"+user.getPicture()+"'," +
+                String insertQuery1 = "insert into cenes_users(user_id, name, picture, phone) values("+user.getUserId()+", '"+user.getName()+"', '"+user.getPicture()+"'," +
                         " '"+user.getPhone()+"')";
-                System.out.println("Insert Query : "+insertQuery);
-                db.execSQL(insertQuery);
+
+                String insertQuery = "insert into cenes_users(user_id, name, picture, phone) values(?, ?, ?, ?)";
+                SQLiteStatement stmt = CenesBaseActivity.sqlLiteDatabase.compileStatement(insertQuery);
+                stmt.bindLong(1, user.getUserId());
+                stmt.bindString(2, !CenesUtils.isEmpty(user.getName()) ? user.getName() : "Guest");
+                stmt.bindString(3, !CenesUtils.isEmpty(user.getPicture()) ? user.getPicture() : "");
+                stmt.bindString(4, !CenesUtils.isEmpty(user.getPhone()) ? user.getPhone() : "");
+                long entryID = stmt.executeInsert();
+                stmt.clearBindings();
+
+                //String insertQuery = "insert into cenes_users values("+user.getUserId()+", '"+user.getName()+"', '"+user.getPicture()+"'," +
+                //        " '"+user.getPhone()+"')";
+                //System.out.println("Insert Query : "+insertQuery);
+                //CenesBaseActivity.sqlLiteDatabase.execSQL(insertQuery);
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            db.close();
+            //CenesBaseActivity.sqlLiteDatabase.close();
         }
     }
 
@@ -68,12 +76,12 @@ public class CenesUserManagerImpl  {
 
         User user = null;
         try {
-            if (!this.db.isOpen()) {
-                this.db = cenesDatabase.getReadableDatabase();
+            if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
             }
             String query = "select * from cenes_users where user_id = "+userId;
             System.out.println("User Select Query : "+query);
-            Cursor cursor = db.rawQuery(query, null);
+            Cursor cursor = CenesBaseActivity.sqlLiteDatabase.rawQuery(query, null);
 
             if (cursor.moveToFirst()) {
                 user = new User();
@@ -86,7 +94,7 @@ public class CenesUserManagerImpl  {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            db.close();
+            //CenesBaseActivity.sqlLiteDatabase.close();
         }
         return user;
     }
@@ -94,35 +102,35 @@ public class CenesUserManagerImpl  {
     public void updateCenesUser(User user) {
 
         try {
-            if (!this.db.isOpen()) {
-                this.db = cenesDatabase.getReadableDatabase();
+            if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
             }
 
+            if (CenesUtils.isEmpty(user.getName())) {
+                return;
+            }
             String updateQuery = "update cenes_users set name = '"+user.getName()+"', " +
                     " picture = '"+user.getPicture()+"', phone = '"+user.getPhone()+"' where user_id = "+user.getUserId()+" ";
             System.out.println("Update Query : "+updateQuery);
-            db.execSQL(updateQuery);
+            CenesBaseActivity.sqlLiteDatabase.execSQL(updateQuery);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            db.close();
+            //CenesBaseActivity.sqlLiteDatabase.close();
         }
-
     }
-
-
 
     public void deleteAllUsers() {
         try {
-            if (!this.db.isOpen()) {
-                this.db = cenesDatabase.getReadableDatabase();
+            if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
             }
             String deleteQuery = "delete from cenes_users";
-            db.execSQL(deleteQuery);
+            CenesBaseActivity.sqlLiteDatabase.execSQL(deleteQuery);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            db.close();
+           // CenesBaseActivity.sqlLiteDatabase.close();
         }
     }
 }

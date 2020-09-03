@@ -101,10 +101,10 @@ public class UserManagerImpl implements UserManager {
         } else {
             insertQuery = insertQuery + ","+user.getPhone()+"";
         }
-        if (!CenesUtils.isEmpty(user.getBirthDateStr())) {
-            insertQuery = insertQuery + ",'"+user.getBirthDateStr()+"'";
+        if (!CenesUtils.isEmpty(user.getBirthDayStr())) {
+            insertQuery = insertQuery + ",'"+user.getBirthDayStr()+"'";
         } else {
-            insertQuery = insertQuery + ","+user.getBirthDateStr()+"";
+            insertQuery = insertQuery + ","+user.getBirthDayStr()+"";
         }
         if (!CenesUtils.isEmpty(user.getCountry())) {
             insertQuery = insertQuery + ",'"+user.getCountry()+"'";
@@ -139,6 +139,9 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public User findUserByUserId(Long userId){
+        if (!db.isOpen()) {
+            this.db = cenesDatabase.getReadableDatabase();
+        }
         Cursor cursor = db.rawQuery("select * from user_record where user_id = "+userId+"", null);
         User user = null;
         try {
@@ -153,7 +156,7 @@ public class UserManagerImpl implements UserManager {
                 user.setPicture(cursor.getString(cursor.getColumnIndex("picture")));
                 user.setGender(cursor.getString(cursor.getColumnIndex("gender")));
                 user.setPhone(cursor.getString(cursor.getColumnIndex("phone")));
-                user.setBirthDateStr(cursor.getString(cursor.getColumnIndex("birth_day_str")));
+                user.setBirthDayStr(cursor.getString(cursor.getColumnIndex("birth_day_str")));
 
                 if (User.AuthenticateType.email.toString().equals(cursor.getString(cursor.getColumnIndex("auth_type")))) {
                     user.setAuthType(User.AuthenticateType.email);
@@ -177,6 +180,9 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public User getUser(){
+        if (!db.isOpen()) {
+            db = cenesDatabase.getReadableDatabase();
+        }
         Cursor cursor = db.rawQuery(
                 "select * from user_record", null);
         User user = null;
@@ -186,7 +192,7 @@ public class UserManagerImpl implements UserManager {
                 user.setUserId(cursor.getInt(cursor.getColumnIndex("user_id")));
                 //user.setUserId(812);//Neha
                 //user.setUserId(143);//Creed
-                //user.setUserId(836);
+                //user.setUserId(861);
                 //user.setUserId(616); //Louisa
                 //user.setUserId(230); //Fuad
                 user.setEmail(cursor.getString(cursor.getColumnIndex("email")));
@@ -206,7 +212,7 @@ public class UserManagerImpl implements UserManager {
                 user.setGoogleId(cursor.getString(cursor.getColumnIndex("google_id")));
                 user.setPhone(cursor.getString(cursor.getColumnIndex("phone")));
                 user.setFacebookId(cursor.getString(cursor.getColumnIndex("facebook_id")));
-                user.setBirthDateStr(cursor.getString(cursor.getColumnIndex("birth_day_str")));
+                user.setBirthDayStr(cursor.getString(cursor.getColumnIndex("birth_day_str")));
                 user.setCountry(cursor.getString(cursor.getColumnIndex("country")));
                 if (cursor.getInt(cursor.getColumnIndex("show_covid_location_data")) == 0) {
                     user.setShowCovidLocationData(false);
@@ -259,11 +265,11 @@ public class UserManagerImpl implements UserManager {
             updateData += "picture = '"+user.getPicture()+"',";
         }
 
-        if (user.getBirthDateStr() != null && user.getBirthDateStr().length() == 0) {
-            user.setBirthDateStr(null);
-            updateData += "birth_day_str = "+user.getBirthDateStr()+",";
+        if (user.getBirthDayStr() != null && user.getBirthDayStr().length() == 0) {
+            user.setBirthDayStr(null);
+            updateData += "birth_day_str = "+user.getBirthDayStr()+",";
         } else {
-            updateData += "birth_day_str = '"+user.getBirthDateStr()+"',";
+            updateData += "birth_day_str = '"+user.getBirthDayStr()+"',";
         }
 
         if (user.getPassword() != null && user.getPassword().length() == 0) {

@@ -198,10 +198,10 @@ public class NotificationAdapter extends BaseAdapter {
 
         holder.notificationActionIcon.setVisibility(View.GONE);
         if (notification.getType().equals("Gathering")) {
-            if (notification.getAction().equals("Chat")) {
+            if ("Chat".equals(notification.getAction())) {
                 holder.notificationActionIcon.setVisibility(View.VISIBLE);
                 holder.notificationActionIcon.setImageResource(R.drawable.notificaiton_chat_icon);
-            } else if (notification.getAction().equals("Create")) {
+            } else if ("Create".equals(notification.getAction())) {
                 holder.notificationActionIcon.setVisibility(View.VISIBLE);
                 holder.notificationActionIcon.setImageResource(R.drawable.mdi_party_popper);
             }
@@ -240,7 +240,7 @@ public class NotificationAdapter extends BaseAdapter {
                 if(notification.getEvent() != null) {
                     GatheringPreviewFragment gatheringPreviewFragment = new GatheringPreviewFragment();
                     gatheringPreviewFragment.event = notification.getEvent();
-                    if (notification.getAction().equals("Chat")) {
+                    if ("Chat".equals(notification.getAction())) {
                         SelectedEventChatDto selectedEventChatDto = new SelectedEventChatDto();
                         selectedEventChatDto.setShowChatWindow(true);
                         selectedEventChatDto.setMessage(notification.getMessage());

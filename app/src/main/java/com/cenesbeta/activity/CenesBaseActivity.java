@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.ContactsContract;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
@@ -41,11 +43,16 @@ import com.cenesbeta.api.GatheringAPI;
 import com.cenesbeta.api.NotificationAPI;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Event;
+import com.cenesbeta.bo.EventCategory;
+import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.bo.Gathering;
 import com.cenesbeta.bo.Notification;
 import com.cenesbeta.bo.NotificationCountData;
 import com.cenesbeta.bo.User;
+import com.cenesbeta.bo.UserContact;
 import com.cenesbeta.coremanager.CoreManager;
+import com.cenesbeta.database.CenesDatabase;
+import com.cenesbeta.database.impl.UserContactManagerImpl;
 import com.cenesbeta.dto.AsyncTaskDto;
 import com.cenesbeta.fragment.ImageZoomerFragment;
 import com.cenesbeta.fragment.NavigationFragment;
@@ -62,11 +69,15 @@ import com.cenesbeta.fragment.profile.ProfileFragmentV2;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.zoom.image.PhotoView;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,6 +121,9 @@ public class CenesBaseActivity extends CenesActivity {
     // very frequently.
     private int shortAnimationDuration;
     private User loggedInUser;
+    public List<EventCategory> eventCategories;
+    public static CenesDatabase cenesDatabase;
+    public static SQLiteDatabase sqlLiteDatabase;
 
 
     @Override
@@ -137,6 +151,9 @@ public class CenesBaseActivity extends CenesActivity {
         internetManager = coreManager.getInternetManager();
 
         fragmentManager = getSupportFragmentManager();
+        cenesDatabase = new CenesDatabase(cenesApplication);
+        sqlLiteDatabase = cenesDatabase.getWriteableDatabase();
+
         homeFragmentV2 = new HomeFragmentV2();
         //homeFragmentV2.loadCalendarTabData();
         initialFragment = homeFragmentV2;
@@ -205,7 +222,14 @@ public class CenesBaseActivity extends CenesActivity {
 
             }
         }); */
-        getContacts();
+        try {
+            getContacts();
+        } catch (Exception e) {e.printStackTrace();}
+        try {
+            getAllEventCategories();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         String data = getIntent().getDataString();
         System.out.println(data);
         if (data != null) {
@@ -914,14 +938,94 @@ public class CenesBaseActivity extends CenesActivity {
                 //Making Phone Sync Call
                 new ProfileAsyncTask.PhoneContactSync(new ProfileAsyncTask.PhoneContactSync.AsyncResponse() {
                     @Override
-                    public void processFinish(Object response) {
+                    public void processFinish(JSONObject response) {
+                        try {
+                            boolean success = response.getBoolean("success");
+                            if (success) {
+                                Gson gson = new GsonBuilder().create();
+                                Type listType = new TypeToken<List<EventMember>>() {
+                                }.getType();
+                                List<EventMember> serverFriends = gson.fromJson(response.getJSONArray("data").toString(), listType);
 
+                                List<EventMember> uniqueFriends = new ArrayList<>();
+
+                                List<String> phoneTrackingList = new ArrayList<>();
+                                for (EventMember serverEventMember : serverFriends) {
+
+                                    if (phoneTrackingList.contains(serverEventMember.getPhone())) {
+                                        continue;
+                                    }
+
+                                    phoneTrackingList.add(serverEventMember.getPhone());
+                                    uniqueFriends.add(serverEventMember);
+                                }
+
+
+                                List<EventMember> allFriendsTemp = new ArrayList<>();
+                                for (EventMember eventMember : uniqueFriends) {
+                                    if (eventMember.getFriendId() != null && !eventMember.getFriendId().equals(0) && eventMember.getFriendId().equals(loggedInUser.getUserId())) {
+                                        continue;
+                                    }
+                                    allFriendsTemp.add(eventMember);
+                                }
+
+                                new AsyncTask<List<EventMember>, Void, Void>() {
+                                    @Override
+                                    protected Void doInBackground(List<EventMember>... voids) {
+                                        CenesBaseActivity.sqlLiteDatabase.beginTransaction();
+
+                                        List<EventMember> allFriendsTemp = voids[0];
+                                        UserContactManagerImpl userContactManagerImpl = new UserContactManagerImpl(cenesApplication);
+                                        userContactManagerImpl.deleteAllUserContacts();
+                                        for (EventMember eventMemberTmp: allFriendsTemp) {
+                                            UserContact userContact = new UserContact();
+                                            userContact.setUserContactId(eventMemberTmp.getUserContactId());
+                                            userContact.setCenesMember(eventMemberTmp.getCenesMember());
+                                            userContact.setFriendId(eventMemberTmp.getFriendId());
+                                            userContact.setUserId(eventMemberTmp.getUserId());
+                                            userContact.setPhone(eventMemberTmp.getPhone());
+                                            userContact.setName(eventMemberTmp.getName());
+                                            userContact.setUser(eventMemberTmp.getUser());
+                                            userContactManagerImpl.addUserContact(userContact);
+                                        }
+                                        CenesBaseActivity.sqlLiteDatabase.setTransactionSuccessful();
+                                        CenesBaseActivity.sqlLiteDatabase.endTransaction();
+                                        return null;
+                                    }
+                                }.execute(allFriendsTemp);
+
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }).execute(userContact);
                 return null;
             }
         };
         contactSyncTask.execute();
+    }
+
+    public void getAllEventCategories() {
+        try {
+            AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+            asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+            asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+GatheringAPI.get_event_categories);
+            new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+                    try {
+                        Gson gson = new GsonBuilder().create();
+                        Type listType = new TypeToken<List<EventCategory>>() {}.getType();
+                        eventCategories = gson.fromJson(response.getJSONArray("data").toString(), listType);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).execute(asyncTaskDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -974,7 +1078,7 @@ public class CenesBaseActivity extends CenesActivity {
                             e.printStackTrace();
                         }
                     }
-                }).execute(eventId);
+                }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, eventId);
 
             }
 

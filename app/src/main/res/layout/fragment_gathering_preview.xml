@@ -72,8 +72,6 @@
                     android:src="@drawable/invitation_loader_spinner"
                     android:layout_centerInParent="true"
                     />
-
-
             </RelativeLayout>
 
 
@@ -93,7 +91,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             card_view:cardCornerRadius="6dp"
-            card_view:cardElevation="10dp">
+            card_view:cardElevation="10dp"
+            android:clickable="true">
 
             <com.cenesbeta.extension.InvitationScrollView
                 android:id="@+id/sv_card"
@@ -227,7 +226,6 @@
 
                             </RelativeLayout>
                         </RelativeLayout>
-
 
                         <LinearLayout
                             android:id="@+id/ll_bottom_buttons"

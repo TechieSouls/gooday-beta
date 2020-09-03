@@ -8,7 +8,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cenesbeta.R;
+import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.bo.EventCategory;
+import com.cenesbeta.fragment.gathering.CreatePublicGatheringFragment;
 import com.cenesbeta.fragment.gathering.EventCategoryFragment;
 
 import java.util.List;
@@ -58,12 +60,12 @@ public class EventCategoriesAdapter extends BaseAdapter {
 
         EventCategory eventCategory = getItem(position);
 
-        viewHolder.tvCategoryTitle.setText(eventCategory.getTitle());
+        viewHolder.tvCategoryTitle.setText(eventCategory.getName());
 
         viewHolder.rlCategoryItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ((CenesBaseActivity)eventCategoryFragment.getActivity()).replaceFragment(new CreatePublicGatheringFragment(), null);
             }
         });
         return convertView;

@@ -32,6 +32,10 @@ public class Location {
 
     private String county;
 
+    private String city;
+
+    private Integer lastForteenDays;
+
     private Boolean isOpenNow;
 
     private String phoneNumber;
@@ -158,5 +162,21 @@ public class Location {
 
     public void setMarkerSnippet(String markerSnippet) {
         this.markerSnippet = markerSnippet;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public Integer getLastForteenDays() {
+        return lastForteenDays;
+    }
+
+    public void setLastForteenDays(Integer lastForteenDays) {
+        this.lastForteenDays = lastForteenDays;
     }
 }

@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -161,6 +162,13 @@ public class ProfileFragmentV2  extends CenesFragment {
                 .load(R.drawable.ios_spinner)
                 .into(ivIosSpinner);
         ivIosSpinner.setVisibility(View.GONE);
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                fetchUserProfile();
+            }
+        });
         return view;
     }
 
@@ -480,6 +488,38 @@ public class ProfileFragmentV2  extends CenesFragment {
         }
     }
 
+    public void fetchUserProfile() {
+
+        AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
+        asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+UserAPI.get_user_profile_data);
+        asyncTaskDto.setAuthToken(loggedInUser.getAuthToken());
+        asyncTaskDto.setQueryStr("userId="+loggedInUser.getUserId());
+        new ProfileAsyncTask.CommonGetRequestTask(new ProfileAsyncTask.CommonGetRequestTask.AsyncResponse() {
+            @Override
+            public void processFinish(JSONObject response) {
+                try {
+                    boolean success = response.getBoolean("success");
+                    if (success == true) {
+
+                        User userObj = new Gson().fromJson(response.getJSONObject("data").toString(), User.class);
+                        loggedInUser = userObj;
+                        System.out.println("User Image : "+loggedInUser.getPicture());
+                        RequestOptions requestOptions = new RequestOptions();
+                        requestOptions.placeholder(R.drawable.profile_pic_no_image);
+                        requestOptions.circleCrop();
+                        Glide.with(getContext()).load(loggedInUser.getPicture()).apply(requestOptions).into(ivProfilePic);
+                        tvProfileName.setText(loggedInUser.getName());
+                        userManager.updateUser(userObj);
+                        cenesUserManager.updateCenesUser(loggedInUser);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).execute(asyncTaskDto);
+    }
     public void removePhotoPressed() {
         try {
 

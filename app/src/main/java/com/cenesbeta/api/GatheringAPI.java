@@ -16,6 +16,7 @@ public class GatheringAPI {
     public static String get_delete_event_api = "/api/event/delete";
     public static String get_predictive_calendar_api = "/api/predictive/calendar/v2";
     public static String get_gathering_by_key_api = "/api/event/invitation/";
+    public static String get_event_categories = "/api/event/categories";
 
     public static String get_place_details_api = "https://maps.googleapis.com/maps/api/place/details/json"; //eventId
 
@@ -26,6 +27,7 @@ public class GatheringAPI {
     public static String post_event_chat_api = "/api/eventchat/create";
     public static String get_event_chat_api = "/api/eventchat/byEventId";
     public static String post_read_event_chat_status = "/api/eventchat/updateStatus";
-    public static String post_covid_stats = "/api/event/covidstats";
+    //public static String post_covid_stats = "/api/event/covidstats";
+    public static String post_covid_stats = "/api/event/covidstatsDatabase";
 
 }

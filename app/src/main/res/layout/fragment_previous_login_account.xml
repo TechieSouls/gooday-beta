@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_color">
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:id="@+id/iv_back_button_img"
+            android:layout_width="20dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
+            android:src="@drawable/abondan_event_icon"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_header"
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Verify Your Account"
+            android:textSize="21dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/avenir_medium"/>
+
+        <TextView
+            android:id="@+id/tv_previous_loggedin_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="16dp"
+            android:fontFamily="@font/avenir_light"
+            android:textColor="@color/black"
+            android:text="You may have previously loggedIn with a social account."/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp">
+
+            <RelativeLayout
+                android:id="@+id/rl_facebook_btn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/xml_circle_facebook_blue"
+                android:visibility="gone"
+                >
+
+                <ImageView
+                    android:layout_width="13dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/facebook_icon"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/bt_fb_join"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="facebook"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/rl_google_btn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/xml_circle_google_red"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/google_icon"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_email_btn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/xml_circle_email_pirple"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/email_icon"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

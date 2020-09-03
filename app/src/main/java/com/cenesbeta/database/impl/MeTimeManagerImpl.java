@@ -3,6 +3,7 @@ package com.cenesbeta.database.impl;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.MeTime;
 import com.cenesbeta.bo.MeTimeItem;
@@ -31,15 +32,15 @@ public class MeTimeManagerImpl {
 
     public MeTimeManagerImpl(CenesApplication cenesApplication){
         this.cenesApplication = cenesApplication;
-        cenesDatabase = new CenesDatabase(cenesApplication);
-        this.db = cenesDatabase.getReadableDatabase();
+        //cenesDatabase = new CenesDatabase(cenesApplication);
+        //this.db = cenesDatabase.getReadableDatabase();
     }
 
     public void addMeTime(MeTime metime){
 
         try {
-            if (!this.db.isOpen()) {
-                this.db = cenesDatabase.getReadableDatabase();
+            if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
             }
             String title = "";
             if (!CenesUtils.isEmpty(metime.getTitle())) {
@@ -64,7 +65,7 @@ public class MeTimeManagerImpl {
                     " "+metime.getStartTime()+", "+metime.getEndTime()+", '"+metime.getTimezone()+"', '"+photo+"',  '"+days+"')";
 
             System.out.println(insertQuery);
-            db.execSQL(insertQuery);
+            CenesBaseActivity.sqlLiteDatabase.execSQL(insertQuery);
 
             if (metime.getItems() != null) {
                 for (MeTimeItem meTimeItem: metime.getItems()) {
@@ -81,8 +82,8 @@ public class MeTimeManagerImpl {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (this.db.isOpen()) {
-                this.db.close();
+            if (CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                //this.db.close();
             }
         }
 
@@ -92,11 +93,11 @@ public class MeTimeManagerImpl {
         List<MeTime> metimeRecurringEvents = new ArrayList<>();
 
         try {
-            if (!this.db.isOpen()) {
-                this.db = cenesDatabase.getReadableDatabase();
+            if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
             }
             String query = "select * from "+TableName+"";
-            Cursor cursor = db.rawQuery(query, null);
+            Cursor cursor = CenesBaseActivity.sqlLiteDatabase.rawQuery(query, null);
 
             while (cursor.moveToNext()) {
                 MeTime meTime = new MeTime();
@@ -122,19 +123,19 @@ public class MeTimeManagerImpl {
         }catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (this.db.isOpen()) {
-                this.db.close();
+            if (CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                //this.db.close();
             }
         }
         return metimeRecurringEvents;
     }
 
     public MeTime findMetimeEventByRecurringEventId(Long recurringEventId) {
-        if (!this.db.isOpen()) {
-            this.db = cenesDatabase.getReadableDatabase();
+        if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+            CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
         }
         String query = "select * from "+TableName+" where recurring_event_id = "+recurringEventId+"";
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = CenesBaseActivity.sqlLiteDatabase.rawQuery(query, null);
         MeTime meTime = null;
         if (cursor.moveToFirst()) {
             meTime = new MeTime();
@@ -150,24 +151,24 @@ public class MeTimeManagerImpl {
             List<MeTimeItem> items = meTimePatternManagerImpl.fetchMeTimePatternByRecurringEventId(meTime.getRecurringEventId());
             meTime.setItems(items);
 
-            if (this.db.isOpen()) {
-                this.db.close();
+            if (CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                //this.db.close();
             }
             return meTime;
         }
-        if (this.db.isOpen()) {
-            this.db.close();
+        if (CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+            //this.db.close();
         }
         return meTime;
     }
 
     public void deleteAllMeTimeRecurringEventsByRecurringEventId(Long recurringEventId) {
         try {
-            if (!this.db.isOpen()) {
-                this.db = cenesDatabase.getReadableDatabase();
+            if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
             }
             String deleteQuery = "delete from "+TableName+" where recurring_event_id = "+recurringEventId+" ";
-            db.execSQL(deleteQuery);
+            CenesBaseActivity.sqlLiteDatabase.execSQL(deleteQuery);
 
             MeTimePatternManagerImpl meTimePatternManagerImpl = new MeTimePatternManagerImpl(cenesApplication);
             meTimePatternManagerImpl.deleteMeTimeRecurringPatternsByRecurringEventId(recurringEventId);
@@ -177,8 +178,8 @@ public class MeTimeManagerImpl {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (this.db.isOpen()) {
-                this.db.close();
+            if (CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                //this.db.close();
             }
         }
     }
@@ -186,12 +187,12 @@ public class MeTimeManagerImpl {
 
     public void deleteAllMeTimeRecurringEvents() {
         try {
-            if (!this.db.isOpen()) {
-                this.db = cenesDatabase.getReadableDatabase();
+            if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
             }
             String deleteQuery = "delete from "+TableName+"";
             System.out.println(deleteQuery);
-            db.execSQL(deleteQuery);
+            CenesBaseActivity.sqlLiteDatabase.execSQL(deleteQuery);
 
             MeTimePatternManagerImpl meTimePatternManagerImpl = new MeTimePatternManagerImpl(cenesApplication);
             meTimePatternManagerImpl.deleteMeTimeRecurringPatterns();
@@ -201,8 +202,8 @@ public class MeTimeManagerImpl {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (this.db.isOpen()) {
-                this.db.close();
+            if (CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                //this.db.close();
             }
         }
     }
@@ -210,15 +211,15 @@ public class MeTimeManagerImpl {
     public void updateMeTimePhoto(Long recurringEventId, String photoUrl) {
 
         try {
-            if (!this.db.isOpen()) {
-                this.db = cenesDatabase.getReadableDatabase();
+            if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
             }
-            db.execSQL("update "+TableName+" set photo = '"+photoUrl+"' where recurring_event_id = "+recurringEventId+" ");
+            CenesBaseActivity.sqlLiteDatabase.execSQL("update "+TableName+" set photo = '"+photoUrl+"' where recurring_event_id = "+recurringEventId+" ");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (this.db.isOpen()) {
-                this.db.close();
+            if (CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+                //this.db.close();
             }
         }
     }

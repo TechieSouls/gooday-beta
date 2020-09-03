@@ -52,7 +52,7 @@ public class AllContactsExpandableAdapter extends BaseExpandableListAdapter {
                 }
             });
             this.eventMembersMap = eventMembersMap;
-            recyclerView = (RecyclerView) (this.friendListFragment).getView().findViewById(R.id.recycler_view);
+            recyclerView = (RecyclerView) this.friendListFragment.fragmentView.findViewById(R.id.recycler_view);
             recyclerView.setVisibility(View.VISIBLE);
     }
     @Override

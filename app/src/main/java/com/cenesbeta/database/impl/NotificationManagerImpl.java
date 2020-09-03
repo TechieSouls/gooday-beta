@@ -2,7 +2,9 @@ package com.cenesbeta.database.impl;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 
+import com.cenesbeta.activity.CenesBaseActivity;
 import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.Notification;
 import com.cenesbeta.bo.User;
@@ -15,8 +17,8 @@ import java.util.List;
 public class NotificationManagerImpl {
 
     CenesApplication cenesApplication;
-    CenesDatabase cenesDatabase;
-    SQLiteDatabase db;
+    //CenesDatabase cenesDatabase;
+    //SQLiteDatabase db;
     EventManagerImpl eventManagerImpl;
     CenesUserManagerImpl userManagerImpl;
 
@@ -29,34 +31,36 @@ public class NotificationManagerImpl {
             "created_at LONG, " +
             "sender_image TEXT, " +
             "type TEXT, " +
+            "action TEXT, " +
             "notification_type_status TEXT, " +
             "notification_type_id LONG, " +
             "read_status TEXT)";
 
     public NotificationManagerImpl(CenesApplication cenesApplication){
         this.cenesApplication = cenesApplication;
-        cenesDatabase = new CenesDatabase(cenesApplication);
-        this.db = cenesDatabase.getReadableDatabase();
+        //cenesDatabase = new CenesDatabase(cenesApplication);
+        //this.db = cenesDatabase.getReadableDatabase();
         this.eventManagerImpl = new EventManagerImpl(this.cenesApplication);
         this.userManagerImpl = new CenesUserManagerImpl(this.cenesApplication);
     }
 
     public void addNotification(List<Notification> notifications) {
 
-        /*for (Notification notification: notifications) {
+        for (Notification notification: notifications) {
             saveNotification(notification);
             if (notification.getEvent() != null) {
-
                 if (!this.eventManagerImpl.isEventExist(notification.getEvent())) {
-
                     this.eventManagerImpl.addEvent(notification.getEvent());
                 }
             }
-        }*/
+        }
     }
+
     public void saveNotification(Notification notification){
 
-        this.db = cenesDatabase.getReadableDatabase();
+        if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+            CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
+        }
 
 
         String title = "";
@@ -79,12 +83,37 @@ public class NotificationManagerImpl {
             senderName = notification.getSenderName().replaceAll("'","''");
         }
 
+        String action = "";
+        if (!CenesUtils.isEmpty(notification.getAction())) {
+            action = notification.getAction();
+        }
+
+
         String insertQuery = "insert into notifications values("+notification.getNotificationId()+", "+notification.getSenderId()+", '"+senderName+"'," +
                 " '"+message+"', '"+title+"', "+notification.getNotificationTime()+", '"+senderImage+"', " +
-                "'"+notification.getType()+"', '"+notification.getNotificationTypeStatus()+"', "+notification.getNotificationTypeId()+", '"+notification.getReadStatus()+"')";
+                "'"+notification.getType()+"', '"+action+"', '"+notification.getNotificationTypeStatus()+"', "+notification.getNotificationTypeId()+", '"+notification.getReadStatus()+"')";
 
         System.out.println(insertQuery);
-        db.execSQL(insertQuery);
+        //CenesBaseActivity.sqlLiteDatabase.execSQL(insertQuery);
+        String insertQuery1 = "insert into notifications(notification_id, sender_id, sender_name, message, " +
+                "title, created_at, sender_image, type, action, notification_type_status, " +
+                "notification_type_id, read_status) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        SQLiteStatement stmt = CenesBaseActivity.sqlLiteDatabase.compileStatement(insertQuery1);
+        stmt.bindLong(1, notification.getNotificationId());
+        stmt.bindLong(2, notification.getSenderId());
+        stmt.bindString(3, senderName);
+        stmt.bindString(4, message);
+        stmt.bindString(5, title);
+        stmt.bindLong(6, notification.getNotificationTime());
+        stmt.bindString(7, senderImage);
+        stmt.bindString(8, notification.getType());
+        stmt.bindString(9, action);
+        stmt.bindString(10, notification.getNotificationTypeStatus());
+        stmt.bindLong(11, notification.getNotificationTypeId());
+        stmt.bindString(12, notification.getReadStatus());
+        long entryID = stmt.executeInsert();
+        stmt.clearBindings();
 
         User user = this.userManagerImpl.fetchCenesUserByUserId(notification.getUser().getUserId());
         if (user == null) {
@@ -92,16 +121,17 @@ public class NotificationManagerImpl {
         } else {
             this.userManagerImpl.updateCenesUser(notification.getUser());
         }
-        db.close();
+        //CenesBaseActivity.sqlLiteDatabase.close();
     }
 
     public List<Notification> fetchAllNotifications() {
-        this.db = cenesDatabase.getReadableDatabase();
-
+        if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+            CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
+        }
         List<Notification> notifications = new ArrayList<>();
 
         String query = "select * from notifications order by created_at desc";
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = CenesBaseActivity.sqlLiteDatabase.rawQuery(query, null);
 
         while (cursor.moveToNext()) {
 
@@ -114,10 +144,10 @@ public class NotificationManagerImpl {
             notification.setNotificationTime(cursor.getLong(cursor.getColumnIndex("created_at")));
             notification.setSenderImage(cursor.getString(cursor.getColumnIndex("sender_image")));
             notification.setType(cursor.getString(cursor.getColumnIndex("type")));
+            notification.setAction(cursor.getString(cursor.getColumnIndex("action")));
             notification.setNotificationTypeStatus(cursor.getString(cursor.getColumnIndex("notification_type_status")));
             notification.setNotificationTypeId(cursor.getLong(cursor.getColumnIndex("notification_type_id")));
             notification.setReadStatus(cursor.getString(cursor.getColumnIndex("read_status")));
-
 
             notification.setEvent(eventManagerImpl.findEventByEventId(notification.getNotificationTypeId()));
 
@@ -125,13 +155,15 @@ public class NotificationManagerImpl {
             notifications.add(notification);
         }
         cursor.close();
-        db.close();
+        //CenesBaseActivity.sqlLiteDatabase.close();
         return notifications;
     }
 
     public boolean isNotificationExist(Notification notification) {
-        this.db = cenesDatabase.getReadableDatabase();
-        Cursor cursor = db.rawQuery("select * from notifications where notification_id = "+notification.getNotificationId()+" ", null);
+        if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+            CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
+        }
+        Cursor cursor = CenesBaseActivity.sqlLiteDatabase.rawQuery("select * from notifications where notification_id = "+notification.getNotificationId()+" ", null);
         if (cursor.moveToNext()) {
             return true;
         }
@@ -139,15 +171,18 @@ public class NotificationManagerImpl {
     }
 
     public void updateNotificationReadStatus(Notification notification) {
-        this.db = cenesDatabase.getReadableDatabase();
-        db.execSQL("update notifications set read_status = 'Read' where notification_id = "+notification.getNotificationId()+" ");
-        db.close();
+        if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+            CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
+        }
+        CenesBaseActivity.sqlLiteDatabase.execSQL("update notifications set read_status = 'Read' where notification_id = "+notification.getNotificationId()+" ");
+        //CenesBaseActivity.sqlLiteDatabase.close();
     }
     public void deleteAllNotifications() {
-        this.db = cenesDatabase.getReadableDatabase();
-
+        if (!CenesBaseActivity.sqlLiteDatabase.isOpen()) {
+            CenesBaseActivity.sqlLiteDatabase = CenesBaseActivity.cenesDatabase.getReadableDatabase();
+        }
         String deleteQuery = "delete from notifications";
-        db.execSQL(deleteQuery);
-        db.close();
+        CenesBaseActivity.sqlLiteDatabase.delete("notifications", null, null);
+        //CenesBaseActivity.sqlLiteDatabase.close();
     }
 }

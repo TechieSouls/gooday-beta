@@ -1,9 +1,13 @@
 package com.cenesbeta.fragment.friend;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
@@ -18,6 +22,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,8 +38,10 @@ import com.cenesbeta.application.CenesApplication;
 import com.cenesbeta.bo.EventMember;
 import com.cenesbeta.bo.Notification;
 import com.cenesbeta.bo.User;
+import com.cenesbeta.bo.UserContact;
 import com.cenesbeta.coremanager.CoreManager;
 import com.cenesbeta.database.impl.EventManagerImpl;
+import com.cenesbeta.database.impl.UserContactManagerImpl;
 import com.cenesbeta.database.manager.UserManager;
 import com.cenesbeta.dto.NotificationDto;
 import com.cenesbeta.fragment.CenesFragment;
@@ -58,6 +65,7 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -69,12 +77,14 @@ public class FriendListFragment  extends CenesFragment {
 
     public static String TAG = "FriendListFragment";
 
-    private Button closeSearchFriendsBtn;
+    private Button closeSearchFriendsBtn, btnOpenSettings;
     public EditText searchFriendEditText;
     private ListView gathSearchFriendListView;
     private ExpandableListView expandableFriendListView;
     private Button btnDoneInviteFriend;
     private RelativeLayout cenesNoncenesSelectBar, gathSearchFriendSubHeader, rlSelectedFriendsRecyclerView;
+    private RelativeLayout rlFriendsRelatedContent;
+    private LinearLayout llMissingContactPermissions;
     private TextView tvSelectBarTitle, tvShareToFriends;
     private SwipeRefreshLayout swiperefreshFriends;
 
@@ -82,6 +92,7 @@ public class FriendListFragment  extends CenesFragment {
     private CoreManager coreManager;
     private UserManager userManager;
     private InternetManager internetManager;
+    private UserContactManagerImpl userContactManagerImpl;
 
     private AllContactsExpandableAdapter allContactsExpandableAdapter;
     private List<EventMember> allFriends;
@@ -94,6 +105,7 @@ public class FriendListFragment  extends CenesFragment {
     public User loggedInUser;
     public Boolean cenesFriendsVisible = false;
     public Fragment parentFragment;
+    public View fragmentView;
 
     public List<EventMember> selectedEventMembers;
     public static Map<Integer, CheckBox> checkboxButtonHolder;
@@ -108,29 +120,35 @@ public class FriendListFragment  extends CenesFragment {
 
         View view = inflater.inflate(R.layout.activity_search_friends, container, false);
 
+        fragmentView = view;
         shimmerFrameLayout = (ShimmerFrameLayout) view.findViewById(R.id.shimmer_view_container);
 
         closeSearchFriendsBtn = (Button) view.findViewById(R.id.close_search_friends_btn);
+        btnOpenSettings = (Button) view.findViewById(R.id.btn_open_settings);
         searchFriendEditText = (EditText) view.findViewById(R.id.invite_friend_edit_text);
         gathSearchFriendListView = (ListView) view.findViewById(R.id.gath_search_friend_list_view);
         btnDoneInviteFriend = (Button) view.findViewById(R.id.btn_done_invite_friend);
         cenesNoncenesSelectBar = (RelativeLayout) view.findViewById(R.id.cenes_noncenes_select_bar);
         gathSearchFriendSubHeader = (RelativeLayout) view.findViewById(R.id.gath_search_friend_sub_header);
+        rlFriendsRelatedContent = (RelativeLayout) view.findViewById(R.id.rl_friends_related_content);
         rlSelectedFriendsRecyclerView = (RelativeLayout) view.findViewById(R.id.rl_selected_friends_recycler_view);
         tvSelectBarTitle = (TextView) view.findViewById(R.id.tv_select_bar_title);
         tvShareToFriends = (TextView) view.findViewById(R.id.tv_share_to_friends);
         expandableFriendListView = (ExpandableListView) view.findViewById(R.id.elv_friend_list);
         swiperefreshFriends = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_friends);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        llMissingContactPermissions = (LinearLayout) view.findViewById(R.id.ll_missing_contact_permissions);
 
         cenesApplication = ((CenesBaseActivity) getActivity()).getCenesApplication();
         coreManager = cenesApplication.getCoreManager();
         userManager = coreManager.getUserManager();
         internetManager = coreManager.getInternetManager();
+        userContactManagerImpl = new UserContactManagerImpl(cenesApplication);
 
         loggedInUser = userManager.getUser();
 
         closeSearchFriendsBtn.setOnClickListener(onClickListener);
+        btnOpenSettings.setOnClickListener(onClickListener);
         searchFriendEditText.setOnClickListener(onClickListener);
         btnDoneInviteFriend.setOnClickListener(onClickListener);
         cenesNoncenesSelectBar.setOnClickListener(onClickListener);
@@ -163,6 +181,12 @@ public class FriendListFragment  extends CenesFragment {
         addLoggedInUserAsMember(view);
         loadFriends();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadFriends();
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -232,6 +256,16 @@ public class FriendListFragment  extends CenesFragment {
                             expandableFriendListView.setAdapter(allContactsExpandableAdapter);
                         }
                     }
+                    break;
+
+                case R.id.btn_open_settings:
+
+                    Intent settingIntent = new Intent();
+                    settingIntent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+                    settingIntent.setData(uri);
+                    getContext().startActivity(settingIntent);
+
                     break;
             }
         }
@@ -369,98 +403,149 @@ public class FriendListFragment  extends CenesFragment {
 
                     allFriends = new ArrayList<>();
                     cenesFriends = new ArrayList<>();
-
                     loadFriends();
                 }
-            }, 4000);
+            }, 6000);
         }
     };
     public void loadFriends() {
-        shimmerFrameLayout.setVisibility(View.VISIBLE);
-        new FriendAsyncTask(cenesApplication);
-        new FriendAsyncTask.FriendListTask(new FriendAsyncTask.FriendListTask.AsyncResponse() {
-            @Override
-            public void processFinish(JSONObject response) {
 
-                try {
-                    shimmerFrameLayout.setVisibility(View.GONE);
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            rlFriendsRelatedContent.setVisibility(View.GONE);
+            btnDoneInviteFriend.setVisibility(View.VISIBLE);
+            llMissingContactPermissions.setVisibility(View.VISIBLE);
+        } else {
+            rlFriendsRelatedContent.setVisibility(View.VISIBLE);
+            btnDoneInviteFriend.setVisibility(View.VISIBLE);
+            llMissingContactPermissions.setVisibility(View.GONE);
 
-                    boolean success = false;
-                    if(response != null) {
-                      success = response.getBoolean("success");
-                    }
-                    if (success == true) {
-
-                        Gson gson = new GsonBuilder().create();
-                        Type listType = new TypeToken<List<EventMember>>(){}.getType();
-                        List<EventMember> serverFriends = gson.fromJson( response.getJSONArray("data").toString(), listType);
-                        List<EventMember> uniqueFriends = new ArrayList<>();
-
-                        List<String> phoneTrackingList = new ArrayList<>();
-                        for (EventMember serverEventMember: serverFriends) {
-
-                            if (phoneTrackingList.contains(serverEventMember.getPhone())) {
-                                continue;
-                            }
-
-                            phoneTrackingList.add(serverEventMember.getPhone());
-                            uniqueFriends.add(serverEventMember);
-                        }
-
-
-                        allFriends = uniqueFriends;
-                        List<EventMember> allFriendsTemp = new ArrayList<>();
-                        for (EventMember eventMember: allFriends) {
-                            if (eventMember.getFriendId() != null && !eventMember.getFriendId().equals(0) && eventMember.getFriendId().equals(loggedInUser.getUserId())) {
-                                continue;
-                            }
-                            allFriendsTemp.add(eventMember);
-                        }
-                        allFriends = allFriendsTemp;
-                        cenesFriends = SearchFriendService.getCenesContacts(allFriends);
-
-                        searchedFriends = cenesFriends;
-
-                        List<String> filteredErrors = prepareListHeadersOnScreenLoad();
-                        if (cenesFriends.size() > 0) {
-                            btnDoneInviteFriend.setVisibility(View.VISIBLE);
-
-                            cenesFriendsVisible = true;
-                            //gathSearchFriendListView.setVisibility(View.VISIBLE);
-                            //expandableFriendListView.setVisibility(View.VISIBLE);
-
-                            tvSelectBarTitle.setText("All Contacts (" + allFriends.size() + ")");
-                            //searchFriendAdapter = new FriendListAdapter(FriendListFragment.this, searchedFriends);
-                            //gathSearchFriendListView.setAdapter(searchFriendAdapter);
-                            allContactsExpandableAdapter = new AllContactsExpandableAdapter(FriendListFragment.this, filteredErrors, headerFriendsMap, true);
-                            expandableFriendListView.setAdapter(allContactsExpandableAdapter);
-                        } else {
-
-                            if (parentFragment != null && parentFragment instanceof MeTimeCardFragment) {
-                                expandableFriendListView.setVisibility(View.GONE);
-                                tvShareToFriends.setVisibility(View.VISIBLE);
-                                tvShareToFriends.setMovementMethod(LinkMovementMethod.getInstance());
-
-                            }
-                            cenesNoncenesSelectBar.setVisibility(View.GONE);
-                            cenesFriendsVisible = false;
-
-                            //gathSearchFriendListView.setVisibility(View.GONE);
-                            //expandableFriendListView.setVisibility(View.VISIBLE);
-
-                            tvSelectBarTitle.setText("Cenes Contacts (" + cenesFriends.size() + ")");
-                            allContactsExpandableAdapter = new AllContactsExpandableAdapter(FriendListFragment.this, filteredErrors, headerFriendsMap, false);
-                            expandableFriendListView.setAdapter(allContactsExpandableAdapter);
-                        }
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+            //shimmerFrameLayout.setVisibility(View.VISIBLE);
+            List<UserContact> uerContactList = userContactManagerImpl.fetchAllUserContacts();
+            Log.e("UseContactList", (uerContactList.size())+"");
+            if (uerContactList != null && uerContactList.size() > 0) {
+                List<EventMember> eventMemberList = new ArrayList<>();
+                for (UserContact userContactTmp: uerContactList) {
+                    EventMember eventMember = new EventMember();
+                    eventMember.setUserContactId(userContactTmp.getUserContactId());
+                    eventMember.setUser(userContactTmp.getUser());
+                    eventMember.setCenesMember(userContactTmp.getCenesMember());
+                    eventMember.setUserId(userContactTmp.getUserId());
+                    eventMember.setName(userContactTmp.getName());
+                    eventMember.setPhone(userContactTmp.getPhone());
+                    eventMember.setFriendId(userContactTmp.getFriendId());
+                    eventMemberList.add(eventMember);
                 }
+                Log.e("UseContactListProcess", "Starts");
+                processAllUserContacts(eventMemberList);
+                Log.e("UseContactListProcess", "Ends");
             }
-        }).execute();
+            /*new FriendAsyncTask(cenesApplication);
+            new FriendAsyncTask.FriendListTask(new FriendAsyncTask.FriendListTask.AsyncResponse() {
+                @Override
+                public void processFinish(JSONObject response) {
+
+                    try {
+                        shimmerFrameLayout.setVisibility(View.GONE);
+
+                        boolean success = false;
+                        if (response != null) {
+                            success = response.getBoolean("success");
+                        }
+                        if (success == true) {
+                            Gson gson = new GsonBuilder().create();
+                            Type listType = new TypeToken<List<EventMember>>() {
+                            }.getType();
+                            List<EventMember> serverFriends = gson.fromJson(response.getJSONArray("data").toString(), listType);
+                            processAllUserContacts(serverFriends);
+                            userContactManagerImpl.deleteAllUserContacts();
+                            Log.e("allFriends", (allFriends != null)+"");
+                            for (EventMember eventMemberTmp: allFriends) {
+                                UserContact userContact = new UserContact();
+                                userContact.setUserContactId(eventMemberTmp.getUserContactId());
+                                userContact.setCenesMember(eventMemberTmp.getCenesMember());
+                                userContact.setFriendId(eventMemberTmp.getFriendId());
+                                userContact.setUserId(eventMemberTmp.getUserId());
+                                userContact.setPhone(eventMemberTmp.getPhone());
+                                userContact.setName(eventMemberTmp.getName());
+                                userContact.setUser(eventMemberTmp.getUser());
+                                userContactManagerImpl.addUserContact(userContact);
+                            }
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).execute();*/
+        }
     }
 
+    public void processAllUserContacts(List<EventMember> serverFriends) {
+        List<EventMember> uniqueFriends = new ArrayList<>();
+
+        List<String> phoneTrackingList = new ArrayList<>();
+        List<Integer> contactUserIdTrackingList = new ArrayList<>();
+
+        for (EventMember serverEventMember : serverFriends) {
+
+            if (phoneTrackingList.contains(serverEventMember.getPhone().replace("+",""))) {
+                continue;
+            }
+            if (contactUserIdTrackingList.contains(serverEventMember.getUserContactId())) {
+                continue;
+            }
+
+            contactUserIdTrackingList.add(serverEventMember.getUserContactId());
+            phoneTrackingList.add(serverEventMember.getPhone());
+            uniqueFriends.add(serverEventMember);
+        }
+
+        allFriends = uniqueFriends;
+        List<EventMember> allFriendsTemp = new ArrayList<>();
+        for (EventMember eventMember : allFriends) {
+            if (eventMember.getFriendId() != null && !eventMember.getFriendId().equals(0) && eventMember.getFriendId().equals(loggedInUser.getUserId())) {
+                continue;
+            }
+            allFriendsTemp.add(eventMember);
+        }
+        allFriends = allFriendsTemp;
+        cenesFriends = SearchFriendService.getCenesContacts(allFriends);
+
+        searchedFriends = cenesFriends;
+
+        List<String> filteredErrors = prepareListHeadersOnScreenLoad();
+        if (cenesFriends.size() > 0) {
+            cenesNoncenesSelectBar.setVisibility(View.VISIBLE);
+            btnDoneInviteFriend.setVisibility(View.VISIBLE);
+
+            cenesFriendsVisible = true;
+            //gathSearchFriendListView.setVisibility(View.VISIBLE);
+            //expandableFriendListView.setVisibility(View.VISIBLE);
+
+            tvSelectBarTitle.setText("All Contacts (" + allFriends.size() + ")");
+            //searchFriendAdapter = new FriendListAdapter(FriendListFragment.this, searchedFriends);
+            //gathSearchFriendListView.setAdapter(searchFriendAdapter);
+            allContactsExpandableAdapter = new AllContactsExpandableAdapter(FriendListFragment.this, filteredErrors, headerFriendsMap, true);
+            expandableFriendListView.setAdapter(allContactsExpandableAdapter);
+        } else {
+
+            if (parentFragment != null && parentFragment instanceof MeTimeCardFragment) {
+                expandableFriendListView.setVisibility(View.GONE);
+                tvShareToFriends.setVisibility(View.VISIBLE);
+                tvShareToFriends.setMovementMethod(LinkMovementMethod.getInstance());
+
+            }
+            cenesNoncenesSelectBar.setVisibility(View.GONE);
+            cenesFriendsVisible = false;
+
+            //gathSearchFriendListView.setVisibility(View.GONE);
+            //expandableFriendListView.setVisibility(View.VISIBLE);
+
+            tvSelectBarTitle.setText("Cenes Contacts (" + cenesFriends.size() + ")");
+            allContactsExpandableAdapter = new AllContactsExpandableAdapter(FriendListFragment.this, filteredErrors, headerFriendsMap, false);
+            expandableFriendListView.setAdapter(allContactsExpandableAdapter);
+        }
+    }
     public void addLoggedInUserAsMember(View view) {
         try {
 
@@ -534,7 +619,10 @@ public class FriendListFragment  extends CenesFragment {
         if (cenesFriends.size() > 0) {
 
             for (EventMember friend : cenesFriends) {
-                String initialAlphabet = friend.getUser().getName().substring(0, 1).toUpperCase();
+                String initialAlphabet = friend.getName();
+                if (friend.getUser() != null && friend.getUser().getName() != null) {
+                    initialAlphabet = friend.getUser().getName().substring(0, 1).toUpperCase();
+                }
 
                 System.out.println("Inital ALPHABET " + initialAlphabet);
                 if (!headers.contains(initialAlphabet)) {

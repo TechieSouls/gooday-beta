@@ -10,7 +10,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="52dp"
             android:layout_centerVertical="true"
             android:orientation="horizontal"
             android:layout_marginLeft="20dp"
@@ -25,8 +25,8 @@
                     android:id="@+id/iv_category_icon"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/help_feedback_icon"
-                    android:scaleType="center"/>
+                    android:scaleType="center"
+                    android:src="@drawable/help_feedback_icon" />
 
             </RelativeLayout>
 

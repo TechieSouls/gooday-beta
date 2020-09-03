@@ -48,6 +48,7 @@ public class CenesUtils {
 
     public static SimpleDateFormat EEEMMMMdd = new SimpleDateFormat("EEE MMMM dd"); //Sat March 16
     public static SimpleDateFormat EEEMMMMddcmyyyy = new SimpleDateFormat("EEE MMMM dd, yyyy"); //Sat March 16, 2019
+    public static SimpleDateFormat E_MMMM_d_yyyy = new SimpleDateFormat("E MMMM d yyyy"); //Sat March 16, 2019
 
     public static SimpleDateFormat ddMMMYYYY = new SimpleDateFormat("dd MMM yyyy"); //7 Mar 1967
     public static SimpleDateFormat MMM_dd_cmYYYY = new SimpleDateFormat("MMM dd, yyyy"); //7 Mar 1967

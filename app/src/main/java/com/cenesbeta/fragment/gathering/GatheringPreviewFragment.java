@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -68,6 +69,7 @@ import com.cenesbeta.fragment.CenesFragment;
 import com.cenesbeta.fragment.WebViewFragment;
 import com.cenesbeta.service.ResizeAnimation;
 import com.cenesbeta.util.CenesConstants;
+import com.cenesbeta.util.CenesEditText;
 import com.cenesbeta.util.CenesUtils;
 import com.cenesbeta.util.RoundedImageView;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -103,13 +105,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class GatheringPreviewFragment extends CenesFragment {
-
     public static String TAG = "GatheringPreviewFragment";
     private int SMS_COMPOSE_RESULT_CODE = 1001;
 
     private View fragmentView;
     private ImageView ivEventPicture, ivAcceptSendIcon, ivEditRejectIcon, ivDeleteIcon, ivCardSwipeArrow;
-    private TextView tvEventTitle, tvEventDate, tvEventDescriptionDialogText, sendChatTV, enterChatTv;
+    private TextView tvEventTitle, tvEventDate, tvEventDescriptionDialogText, sendChatTV;
+    private CenesEditText enterChatTv;
     private TextView tvNewCases, tvBusinessStatus, tvBusinessPhone, tvShowCovidData, tvDonotShowCovidData;
     private RelativeLayout rlGuestListBubble, rlLocationBubble, rlDescriptionBubble, rlShareBubble;
     private RelativeLayout rvEventDescriptionDialog, rlIncludeChat, rlChatt;
@@ -247,7 +249,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         llCovidLocationIno = (LinearLayout) view.findViewById(R.id.ll_covid_data_container);
 
         sendChatTV = (TextView) view.findViewById(R.id.send_chat_tv);
-        enterChatTv = (TextView) view.findViewById(R.id.enter_chat_tv);
+        enterChatTv = (CenesEditText) view.findViewById(R.id.enter_chat_tv);
         enterChatImageView = (ImageView) view.findViewById(R.id.enter_chat_button);
 
         tvNewCases = (TextView) view.findViewById(R.id.tv_new_cases);
@@ -278,6 +280,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         enterChatImageView.setOnClickListener(onClickListener);
         rlLocationAlertBackdrop.setOnClickListener(onClickListener);
         btnGetDirections.setOnClickListener(onClickListener);
+        rlChatt.setOnTouchListener(layoutTouchListener);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             svCard.setOnScrollChangeListener(new View.OnScrollChangeListener() {
@@ -343,9 +346,7 @@ public class GatheringPreviewFragment extends CenesFragment {
             fetchLocationPhotos(event.getPlaceId());
         }
         if (event.getScheduleAs() != null && event.getScheduleAs().equals("Notification")) {
-
             populateInvitationCard(event);
-
         } else if (event != null && event.getEventId() != null && event.getEventId() != 0) {
             rlInvitationView.setVisibility(View.VISIBLE);
             rlWelcomeInvitation.setVisibility(View.GONE);
@@ -371,7 +372,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                         e.printStackTrace();
                     }
                 }
-            }).execute(asyncTaskDto);
+            }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, asyncTaskDto);
         } else if (event.getKey() != null) {
             rlInvitationView.setVisibility(View.VISIBLE);
             rlWelcomeInvitation.setVisibility(View.GONE);
@@ -396,7 +397,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                         e.printStackTrace();
                     }
                 }
-            }).execute(asyncTaskDto);
+            }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, asyncTaskDto);
         }
 
         if (event != null) {
@@ -468,6 +469,11 @@ public class GatheringPreviewFragment extends CenesFragment {
         }
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
     OnMapReadyCallback onMapReadyCallback = new OnMapReadyCallback() {
         @Override
         public void onMapReady(GoogleMap googleMap) {
@@ -501,6 +507,8 @@ public class GatheringPreviewFragment extends CenesFragment {
                         ivLocationSpinner.setVisibility(View.VISIBLE);
                         Glide.with(getContext()).asGif().load(R.drawable.ios_spinner).into(ivLocationSpinner);
                         seconds = 2000;
+
+                        rlLocationBubble.setClickable(false);
                     }
 
                     new Handler().postDelayed(new Runnable() {
@@ -509,6 +517,8 @@ public class GatheringPreviewFragment extends CenesFragment {
                             ivLocationBubbleIcon.setVisibility(View.VISIBLE);
                             ivLocationSpinner.setVisibility(View.GONE);
                             isLocationCached = true;
+                            rlLocationBubble.setClickable(true);
+
                             if (!CenesUtils.isEmpty(event.getLatitude())) {
 
                                 if (locationPhotos.size() > 0) {
@@ -528,7 +538,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                                     if (location.getNewCases() == null) {
                                         tvNewCases.setText("No Data");
                                     } else {
-                                        tvNewCases.setText(location.getNewCases());
+                                        tvNewCases.setText(location.getLastForteenDays()+"");
                                         tvNewCases.setTextColor(getResources().getColor(R.color.cenes_light_gray));
                                     }
 
@@ -663,10 +673,15 @@ public class GatheringPreviewFragment extends CenesFragment {
                     System.out.println("rl_description_bubble");
                     int descSeconds = 0;
                     if (!isChatCached) {
+                        rlDescriptionBubble.setClickable(false);
                         ivDescriptionBubbleIcon.setVisibility(View.GONE);
                         ivDescriptionSpinner.setVisibility(View.VISIBLE);
                         Glide.with(getContext()).asGif().load(R.drawable.ios_spinner).into(ivDescriptionSpinner);
                         descSeconds = 2000;
+
+                        if (isChatLoaded == false) {
+                            descSeconds = 4000;
+                        }
                     }
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -681,7 +696,9 @@ public class GatheringPreviewFragment extends CenesFragment {
                                 scrollFeatureOff();
                                 ivDescriptionBubbleIcon.setImageResource(R.drawable.message_on_icon);
                                 rlDescriptionBubbleBackground.setAlpha(1);
-                                rlDescriptionBubbleBackground.setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
+                                if (getContext() != null) {
+                                    rlDescriptionBubbleBackground.setBackground(getContext().getResources().getDrawable(R.drawable.xml_circle_white));
+                                }
                             } else {
                                 isDescriptionButtonOn = false;
                                 scrollFeatureOn();
@@ -821,11 +838,9 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                     System.out.println("rl enter chat width : "+rlEnterChat.getLayoutParams().width);
                     ResizeAnimation resizeAnimation = new ResizeAnimation(rlEnterChat, windowWidth);
-                    resizeAnimation.setDuration(500);
+                    resizeAnimation.setDuration(300);
                     rlEnterChat.startAnimation(resizeAnimation);
                     enterChatTv.setHint("Type a message");
-
-
 
                     /*rlEnterChat.animate()
                             .rotationX(10.0f)
@@ -845,13 +860,15 @@ public class GatheringPreviewFragment extends CenesFragment {
                     public void run() {
 
                         enterChatTv.requestFocus();
+                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(enterChatTv, WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                         //enterChatTv.setFocusableInTouchMode(true);
                         //InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
                         //imm.showSoftInput(enterChatTv, InputMethodManager.SHOW_FORCED);
 
                     }
 
-                }, 1500);
+                }, 400);
 
 
                     break;
@@ -1200,8 +1217,8 @@ public class GatheringPreviewFragment extends CenesFragment {
                 rlEnterChat.setVisibility(View.GONE);
                 rlChatBubble.setVisibility(View.VISIBLE);
                 llSenderPicture.setVisibility(View.VISIBLE);
-
                 hideKeyboard();
+
 
             }
         }
@@ -1727,6 +1744,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                 eventChatBaseAdapter.refreshItems(eventChatList);
             }
 
+            hideKeyboardAndClearFocus(enterChatTv);
 
             AsyncTaskDto asyncTaskDto = new AsyncTaskDto();
             asyncTaskDto.setApiUrl(UrlManagerImpl.prodAPIUrl+ GatheringAPI.post_event_chat_api);
@@ -2196,7 +2214,7 @@ public class GatheringPreviewFragment extends CenesFragment {
                         e.printStackTrace();
                     }
                 }
-            }).execute(asyncTaskDto);
+            }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, asyncTaskDto);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -2206,6 +2224,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         // svCard.setOnTouchListener(null);
         // tinderCardView.setOnTouchListener(null);
         System.out.println("Description : "+event.getDescription());
+        rlDescriptionBubble.setClickable(true);
         if (!CenesUtils.isEmpty(event.getDescription())) {
 
             System.out.println("Description : event id : "+event.getEventId());
@@ -2261,42 +2280,44 @@ public class GatheringPreviewFragment extends CenesFragment {
                     //@Override
                     //public void run() {
 
-                    if (event.getCreatedById().equals(loggedInUser.getUserId())) {
-                        llSenderPicture.setBackground(getResources().getDrawable(R.drawable.host_gradient_circle));
-                    } else {
-                        llSenderPicture.setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
-                    }
+                    if (getContext() != null) {
+                        if (event.getCreatedById().equals(loggedInUser.getUserId())) {
+                            llSenderPicture.setBackground(getResources().getDrawable(R.drawable.host_gradient_circle));
+                        } else {
+                            llSenderPicture.setBackground(getResources().getDrawable(R.drawable.xml_circle_white));
+                        }
 
-                    //elvEventChatList.invalidate();
-                    if (eventChatBaseAdapter == null) {
-                        eventChatBaseAdapter = new EventChatBaseAdapter(GatheringPreviewFragment.this, eventChatList);
-                        lvChatListView.setAdapter(eventChatBaseAdapter);
-                    } else {
-                        eventChatBaseAdapter.refreshItems(eventChatList);
-                        //eventChatExpandableAdapter.notifyDataSetChanged();
-                    }
-                    //
+                        //elvEventChatList.invalidate();
+                        if (eventChatList != null) {
+                            if (eventChatBaseAdapter == null) {
+                                eventChatBaseAdapter = new EventChatBaseAdapter(GatheringPreviewFragment.this, eventChatList);
+                                lvChatListView.setAdapter(eventChatBaseAdapter);
+                            } else {
+                                eventChatBaseAdapter.refreshItems(eventChatList);
+                                //eventChatExpandableAdapter.notifyDataSetChanged();
+                            }
+                        }
 
-                    RequestOptions options = new RequestOptions();
-                    options.placeholder(R.drawable.profile_pic_no_image);
-                    options.centerCrop();
-                    Glide.with(getContext()).load(loggedInUser.getPicture()).apply(options).into(enterMsgPicture);
+                        RequestOptions options = new RequestOptions();
+                        options.placeholder(R.drawable.profile_pic_no_image);
+                        options.centerCrop();
+                        Glide.with(getContext()).load(loggedInUser.getPicture()).apply(options).into(enterMsgPicture);
 
-                    //lvChatListView.postDelayed(new Runnable() {
-                       // @Override
-                       // public void run() {
+                        //lvChatListView.postDelayed(new Runnable() {
+                        // @Override
+                        // public void run() {
                           /*  int scrollPosition = 0;
                             for (Map.Entry<String, List<EventChat>> entrySet : eventChatMapList.entrySet()) {
                                 scrollPosition = scrollPosition + 1 + entrySet.getValue().size();
                             } */
+                        // elvEventChatList.smoothScrollBy(eventChatExpandableAdapter.getGroupCount()-1,100);
+                        //elvEventChatList.smoothScrollToPosition(rlChatBubble.getBottom());
+                        //elvEventChatList.setSelection(scrollPosition);
+                        //elvEventChatList.setSelection(eventChats.size() + headers.size());
+                        //for (int i=0; i < 10; i++) {
+                        // elvEventChatList.setSelection(eventChats.size() + headers.size());
+                        if (eventChatList != null) {
                             System.out.println("size event chat  list : : : " + eventChats.size() + headers.size());
-                            // elvEventChatList.smoothScrollBy(eventChatExpandableAdapter.getGroupCount()-1,100);
-                            //elvEventChatList.smoothScrollToPosition(rlChatBubble.getBottom());
-                            //elvEventChatList.setSelection(scrollPosition);
-                            //elvEventChatList.setSelection(eventChats.size() + headers.size());
-                            //for (int i=0; i < 10; i++) {
-                            // elvEventChatList.setSelection(eventChats.size() + headers.size());
-
                             int selectionIndex = eventChatList.size() - 1;
                             if (selectedEventChatDto != null && selectedEventChatDto.getMessage() != null) {
                                 selectionIndex = 0;
@@ -2315,6 +2336,11 @@ public class GatheringPreviewFragment extends CenesFragment {
                             }
                             System.out.println("Selection Index : "+selectionIndex);
                             lvChatListView.setSelection(selectionIndex);
+                        }
+                    }
+
+
+
                             //try {
                             //  Thread.sleep(1000);
                             //} catch (Exception e) {
@@ -2431,6 +2457,9 @@ public class GatheringPreviewFragment extends CenesFragment {
                                     } else if (typeOfAddress.equals("administrative_area_level_2")) {//Finding County
                                         //Finding County
                                         location.setCounty(addressItemDict.getString("long_name"));
+                                    } else if (typeOfAddress.equals("locality")) {//Finding City
+                                        //Finding City
+                                        location.setCity(addressItemDict.getString("long_name"));
                                     }
                                 }
                             }
@@ -2453,7 +2482,7 @@ public class GatheringPreviewFragment extends CenesFragment {
         asyncTaskDto.setApiUrl(api);
         try {
             JSONObject postData = new JSONObject();
-            postData.put("covidTimestamp", new Date().getTime());
+            /*postData.put("covidTimestamp", new Date().getTime());
             if (locationTemp.getCountry() != null) {
                 postData.put("countryCode", locationTemp.getCountry());
             }
@@ -2462,6 +2491,22 @@ public class GatheringPreviewFragment extends CenesFragment {
             }
             if (locationTemp.getCounty() != null) {
                 postData.put("county", locationTemp.getCounty());
+            }*/
+
+
+            postData.put("statsDateStr", CenesUtils.yyyyMMdd.format(new Date()));
+            postData.put("statsDate", new Date().getTime());
+
+            if (locationTemp.getCountry() != null) {
+                postData.put("country", locationTemp.getCountry());
+            }
+            if (locationTemp.getState() != null) {
+                postData.put("state", locationTemp.getState());
+            }
+            if (locationTemp.getCounty() != null) {
+                postData.put("county", locationTemp.getCounty());
+            } else if (locationTemp.getCity() != null) {
+                postData.put("county", locationTemp.getCity());
             }
             asyncTaskDto.setPostData(postData);
 
@@ -2478,11 +2523,19 @@ public class GatheringPreviewFragment extends CenesFragment {
                     if (success == true) {
 
                         JSONObject covidDataDict = response.getJSONObject("data");
+                        if (covidDataDict.has("additionalInfo")) {
+
+                            covidDataDict.has("");
+                            JSONObject additionalInfoDict = covidDataDict.getJSONObject("additionalInfo");
+                            int lastForteenDays = additionalInfoDict.getInt("lastForteenDays");
+                            tvNewCases.setText(lastForteenDays+"");
+                            location.setLastForteenDays(lastForteenDays);
+                        }
                         if (covidDataDict.has("city")) {
 
                             JSONObject cityDict = covidDataDict.getJSONObject("city");
                             location.setNewCases(cityDict.getString("newCases"));
-                            tvNewCases.setText(cityDict.getString("newCases"));
+                            //tvNewCases.setText(cityDict.getString("newCases"));
 
                             location.setMarkerSnippet("Confirmed \t\t "+cityDict.getString("confirmed")+"" +
                                     "\nRecovered\t\t "+cityDict.getString("recovered")+"" +
@@ -2492,7 +2545,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                             JSONObject stateDict = covidDataDict.getJSONObject("state");
                             location.setNewCases(stateDict.getString("newCases"));
-                            tvNewCases.setText(stateDict.getString("newCases"));
+                            //tvNewCases.setText(stateDict.getString("newCases"));
 
                             location.setMarkerSnippet("Confirmed \t\t "+stateDict.getString("confirmed")+"" +
                                     "\nRecovered\t\t "+stateDict.getString("recovered")+"" +
@@ -2503,7 +2556,7 @@ public class GatheringPreviewFragment extends CenesFragment {
 
                             JSONObject countryDict = covidDataDict.getJSONObject("country");
                             location.setNewCases(countryDict.getString("newCases"));
-                            tvNewCases.setText(countryDict.getString("newCases"));
+                            //tvNewCases.setText(countryDict.getString("newCases"));
 
                             location.setMarkerSnippet("Confirmed \t\t "+countryDict.getString("confirmed")+"" +
                                     "\nRecovered\t\t "+countryDict.getString("recovered")+"" +

@@ -81,6 +81,16 @@ public class GatheringGuestListFragment extends CenesFragment {
         invitedMembers = new ArrayList<>();
         if (event != null && event.getEventMembers() != null) {
             eventMembers = event.getEventMembers();
+            List<Long> uniqueMemberIdTracker = new ArrayList<>();
+            List<EventMember> uniqueMembers = new ArrayList<>();
+            for (EventMember eventMembeTmpr: eventMembers) {
+                if (eventMembeTmpr.getEventMemberId() != null && uniqueMemberIdTracker.contains(eventMembeTmpr.getEventMemberId())) {
+                    continue;
+                }
+                uniqueMemberIdTracker.add(eventMembeTmpr.getEventMemberId());
+                uniqueMembers.add(eventMembeTmpr);
+            }
+            eventMembers = uniqueMembers;
         } else {
             eventMembers = new ArrayList<>();
         }

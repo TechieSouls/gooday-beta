@@ -469,7 +469,7 @@ public class SignupOptionsFragment extends CenesFragment {
         //Making Phone Sync Call
         new ProfileAsyncTask.PhoneContactSync(new ProfileAsyncTask.PhoneContactSync.AsyncResponse() {
             @Override
-            public void processFinish(Object response) {
+            public void processFinish(JSONObject response) {
 
                 //((GuestActivity)getActivity()).replaceFragment(new HolidaySyncFragment(), null);
                 try {

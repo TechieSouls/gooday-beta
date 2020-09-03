@@ -76,37 +76,46 @@
             android:background="@color/theme_color"
             android:paddingBottom="5dp">
 
-            <LinearLayout
-                android:id="@+id/ll_calendar_date_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:orientation="horizontal"
-                android:layout_marginLeft="20dp"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp">
-
-                <TextView
-                    android:id="@+id/tv_cal_date"
+                >
+                <LinearLayout
+                    android:id="@+id/ll_calendar_date_bar"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Month"
-                    android:textSize="30dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:gravity="center_vertical"
-                    android:fontFamily="@font/avenir_black"
-                    />
-                <ImageView
-                    android:id="@+id/iv_cal_date_bar_arrow"
-                    android:layout_width="32dp"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/close_calendar"
-                    android:padding="9dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginTop="5dp"/>
-            </LinearLayout>
+                    android:layout_height="55dp"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="20dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/tv_cal_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Month"
+                        android:textSize="30dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:fontFamily="@font/avenir_black"
+                        />
+                    <ImageView
+                        android:id="@+id/iv_cal_date_bar_arrow"
+                        android:layout_width="32dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/close_calendar"
+                        android:padding="9dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="5dp"/>
+                </LinearLayout>
+                <include layout="@layout/layout_search_events"
+                    android:id="@+id/include_layot_search_events"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/ll_switchable_headres"
@@ -351,5 +360,9 @@
             android:paddingBottom="10dp"
             />
     </LinearLayout>
+
+    <include android:id="@+id/include_event_option_view"
+        layout="@layout/layout_event_type_option_view"
+        android:visibility="gone"/>
 </RelativeLayout>
 

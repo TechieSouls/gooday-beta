@@ -88,7 +88,7 @@
             android:textColor="@color/cenes_teal"
             android:visibility="gone" />
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/swiperefresh_notifications"
             android:layout_width="match_parent"
@@ -100,7 +100,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:divider="@color/transparent"/>
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
     <ImageView
         android:id="@+id/iv_list_loader"

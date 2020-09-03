@@ -103,7 +103,7 @@ public class NotificationFragment extends CenesFragment {
 
         if (loggedInUser != null && loggedInUser.getPicture() != null && loggedInUser.getPicture() != "null") {
             // DownloadImageTask(homePageProfilePic).execute(user.getPicture());
-            Glide.with(NotificationFragment.this).load(loggedInUser.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(homeProfilePic);
+            Glide.with(getContext()).load(loggedInUser.getPicture()).apply(RequestOptions.placeholderOf(R.drawable.profile_pic_no_image)).into(homeProfilePic);
         }
 
         notificationManagerImpl = new NotificationManagerImpl(cenesApplication);
@@ -239,18 +239,19 @@ public class NotificationFragment extends CenesFragment {
     }
     public void loadNotifications() {
 
-        //If its an offline mode
-        if (!internetManager.isInternetConnection(getCenesActivity())) {
+        List<Notification> notifications = notificationManagerImpl.fetchAllNotifications();
+        if (notifications.size() > 0) {
+            filterNotification(notifications);
+        }
 
-            List<Notification> notifications = notificationManagerImpl.fetchAllNotifications();
-            if (notifications.size() > 0) {
-                filterNotification(notifications);
+        if (internetManager.isInternetConnection(getCenesActivity())) {
+            //If  the local notification size if 0
+            //This means user is loading the notification screen for the first time only
+            //Lets show shimmer effect.
+            if (notifications.size() == 0) {
+                shimmerFrameLayout.setVisibility(View.VISIBLE);
             }
-        } else {
-
-            shimmerFrameLayout.setVisibility(View.VISIBLE);
             prepareNotificationCountCall();
-
         }
     }
 
@@ -423,22 +424,29 @@ public class NotificationFragment extends CenesFragment {
                         Type listType = new TypeToken<List<Notification>>() {}.getType();
                         final List<Notification> notificationsTemp = new Gson().fromJson(response.getJSONArray("data").toString(), listType);
 
+                        if (notificationDto.getPageNumber() == 0) {
+                            notificationDto.setAllNotifications(new ArrayList<Notification>());
+                        }
+
                         List<Notification> allNotificationTemp = notificationDto.getAllNotifications();
                         allNotificationTemp.addAll(notificationsTemp);
                         notificationDto.setAllNotifications(allNotificationTemp);
                         //We will reload the notification in local database only once
                         //that is at very first time when page loads
                             //To Run Code of block in background
-                            AsyncTask.execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (notificationDto.getPageNumber() == 0) {
-                                        System.out.println("A3");
-                                        notificationManagerImpl.deleteAllNotifications();
-                                    }
-                                    notificationManagerImpl.addNotification(notificationsTemp);
+                        new AsyncTask<List<Notification>, Void, Void>() {
+                            @Override
+                            protected Void doInBackground(List<Notification>... voids) {
+
+                                List<Notification> allNotificationTemp = voids[0];
+                                if (notificationDto.getPageNumber() == 0) {
+                                    System.out.println("A3");
+                                    notificationManagerImpl.deleteAllNotifications();
                                 }
-                            });
+                                notificationManagerImpl.addNotification(allNotificationTemp);
+                                return null;
+                            }
+                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, notificationsTemp);
 
                         if (notificationDto.getPageNumber() == 0) {
                             System.out.println("A4");
@@ -459,7 +467,7 @@ public class NotificationFragment extends CenesFragment {
                     e.printStackTrace();
                 }
             }
-        }).execute(asyncTaskDto);
+        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, asyncTaskDto);
     }
 
     public void scrollToTop() {

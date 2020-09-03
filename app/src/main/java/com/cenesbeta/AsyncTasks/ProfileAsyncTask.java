@@ -158,14 +158,14 @@ public class ProfileAsyncTask {
         }
     }
 
-    public static class PhoneContactSync extends AsyncTask<JSONObject,Object,Object>{
+    public static class PhoneContactSync extends AsyncTask<JSONObject,Object,JSONObject>{
 
         private CoreManager coreManager = cenesApplication.getCoreManager();
 
         //ProgressDialog syncContactsDialog;
 
         public interface AsyncResponse {
-            void processFinish(Object response);
+            void processFinish(JSONObject response);
         }
         public AsyncResponse delegate = null;
 
@@ -186,7 +186,7 @@ public class ProfileAsyncTask {
         }
 
         @Override
-        protected Object doInBackground(JSONObject... objects) {
+        protected JSONObject doInBackground(JSONObject... objects) {
             UserApiManager userApiManager = coreManager.getUserAppiManager();
             UserManager userManager = coreManager.getUserManager();
             User user = userManager.getUser();
@@ -197,7 +197,7 @@ public class ProfileAsyncTask {
         }
 
         @Override
-        protected void onPostExecute(Object o) {
+        protected void onPostExecute(JSONObject o) {
             super.onPostExecute(o);
             /*if (activity != null) {
                 if (syncContactsDialog != null) {

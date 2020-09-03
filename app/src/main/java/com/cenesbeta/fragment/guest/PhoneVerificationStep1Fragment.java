@@ -272,15 +272,15 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
 
                                         System.out.println("countryCodeStr : "+countryCodeStr);
 
-                                        User user = new User();
+                                        /*User user = new User();
                                         user.setCountry(countryCodeStr.toUpperCase());
                                         user.setPhone(countryCode+phoneNumberTemp);
                                         userManager.deleteAll();
                                         userManager.addUser(user);
                                         SignupOptionsFragment signupOptionsFragment = new SignupOptionsFragment();
-                                        ((GuestActivity) getActivity()).replaceFragment(signupOptionsFragment, PhoneVerificationStep1Fragment.TAG);
+                                        ((GuestActivity) getActivity()).replaceFragment(signupOptionsFragment, PhoneVerificationStep1Fragment.TAG);*/
 
-                                       /* PhoneVerificationStep2Fragment ss2Fragment = new PhoneVerificationStep2Fragment();
+                                        PhoneVerificationStep2Fragment ss2Fragment = new PhoneVerificationStep2Fragment();
                                         Bundle bundle = new Bundle();
                                         bundle.putString("countryCodeStr", countryCodeStr);
                                         bundle.putString("countryCode", countryCode);
@@ -289,7 +289,7 @@ public class PhoneVerificationStep1Fragment extends CenesFragment {
 
                                         ((GuestActivity) getActivity()).replaceFragment(ss2Fragment, PhoneVerificationStep1Fragment.TAG);
 
-                                        */
+
                                     } else {
                                         //rlPhoneVerificationStep1Continue.setBackgroundColor(getResources().getColor(R.color.button_disable_color));
                                         //btSignupStep1Continue.setEnabled(false);

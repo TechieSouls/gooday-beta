@@ -15,6 +15,8 @@ public class UserContact {
 
     private String cenesMember;
 
+    private User user;
+
     public Integer getUserContactId() {
         return userContactId;
     }
@@ -61,5 +63,13 @@ public class UserContact {
 
     public void setCenesMember(String cenesMember) {
         this.cenesMember = cenesMember;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
