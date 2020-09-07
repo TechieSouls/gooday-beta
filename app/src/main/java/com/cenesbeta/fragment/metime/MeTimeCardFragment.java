@@ -93,10 +93,10 @@ import androidx.viewpager.widget.ViewPager;
 public class MeTimeCardFragment extends CenesFragment {
 
     /*
-    *   Long userId;
-	*   List<MeTimeEvent> events;
-	*   String timezone;
-    * */
+     *   Long userId;
+     *   List<MeTimeEvent> events;
+     *   String timezone;
+     * */
 
     public final static String TAG = "MeTimeCardFragment";
     private final static int TIME_PICKER_INTERVAL = 5, SEARCH_FRIEND_RESULT_CODE = 1001;
@@ -205,7 +205,7 @@ public class MeTimeCardFragment extends CenesFragment {
                 metime = new Gson().fromJson(meTimeFragmentBundle.getString("meTimeCard"), MeTime.class);
 
                 if (!CenesUtils.isEmpty(metime.getPhoto())) {
-                   // rivMeTimeImg.setVisibility(View.VISIBLE);
+                    // rivMeTimeImg.setVisibility(View.VISIBLE);
                     //rlUploadMetimeImg.setVisibility(View.GONE);
                     rivMeTimeImg.getLayoutParams().height = CenesUtils.dpToPx(90);
                     rivMeTimeImg.getLayoutParams().width = CenesUtils.dpToPx(90);
@@ -626,20 +626,20 @@ public class MeTimeCardFragment extends CenesFragment {
                     metime.setItems(null);
                     List<MeTimeItem> meTimeItemList = new ArrayList<>();
                     Iterator<String> itr = selectedDaysHolder.keys();
-                     while(itr.hasNext()) {
-                         MeTimeItem meTimeItem = new MeTimeItem();
-                         try {
-                             String dayOfWeek = itr.next();
+                    while(itr.hasNext()) {
+                        MeTimeItem meTimeItem = new MeTimeItem();
+                        try {
+                            String dayOfWeek = itr.next();
 
-                             meTimeItem.setDay_Of_week(dayOfWeek);
-                             if (metime.getRecurringEventId() != null) {
-                                 meTimeItem.setRecurringEventId(metime.getRecurringEventId());
-                             }
-                             meTimeItemList.add(meTimeItem);
-                         } catch (Exception e) {
-                             e.printStackTrace();
-                         }
-                     }
+                            meTimeItem.setDay_Of_week(dayOfWeek);
+                            if (metime.getRecurringEventId() != null) {
+                                meTimeItem.setRecurringEventId(metime.getRecurringEventId());
+                            }
+                            meTimeItemList.add(meTimeItem);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                     metime.setItems(meTimeItemList);
                     /*Intent intent = new Intent();
                     try {
@@ -943,9 +943,9 @@ public class MeTimeCardFragment extends CenesFragment {
                         //Uri resultUri = Uri.fromFile(new File(ImageUtils.getDefaultFile()));
                         ImageUtils.cropImageWithAspect(getImageUri(getContext().getApplicationContext(), rotatedBitmap), this, 200, 200);
                         //UCrop.of(imageUri, resultUri)
-                                //.withAspectRatio(3, 4)
-                                //.withMaxResultSize(200, 200)
-                                //.start(getContext(), MeTimeCardFragment.this, UCrop.REQUEST_CROP);
+                        //.withAspectRatio(3, 4)
+                        //.withMaxResultSize(200, 200)
+                        //.start(getContext(), MeTimeCardFragment.this, UCrop.REQUEST_CROP);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
