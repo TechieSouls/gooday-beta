@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cropimage/cropimage.iml" filepath="$PROJECT_DIR$/cropimage/cropimage.iml" />
-      <module fileurl="file://$PROJECT_DIR$/gooday-beta.iml" filepath="$PROJECT_DIR$/gooday-beta.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="gooday-beta/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cropimage/cropimage.iml" filepath="$PROJECT_DIR$/.idea/modules/cropimage/cropimage.iml" group="gooday-beta/cropimage" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gooday-beta.iml" filepath="$PROJECT_DIR$/.idea/modules/gooday-beta.iml" group="gooday-beta" />
     </modules>
   </component>
 </project>
