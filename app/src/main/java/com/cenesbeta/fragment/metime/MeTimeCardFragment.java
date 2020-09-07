@@ -114,6 +114,9 @@ public class MeTimeCardFragment extends CenesFragment {
     private ImageView rivMeTimeImg;
     private View fragmentView;
     public MeTimeFragment meTimeFragment;
+    private TimePickerDialog startTimeDateTimePicker;
+    private TimePickerDialog endTimeDateTimePicker;
+
     View viewOpaque;
     public MeTime metime;
     private CenesApplication cenesApplication;
@@ -464,7 +467,7 @@ public class MeTimeCardFragment extends CenesFragment {
                             mcurrentTime.set(Calendar.MINUTE, selectedMinute);
                             mcurrentTime.set(Calendar.MILLISECOND, 0);
 
-                            System.out.println("HOur"+mcurrentTime.get(Calendar.HOUR)+"  -- "+selectedHour);
+                            System.out.println("HOur" + mcurrentTime.get(Calendar.HOUR) + "  -- " + selectedHour);
 
                             String ampm = "AM";
                             if (selectedHour >= 12) {
@@ -475,18 +478,31 @@ public class MeTimeCardFragment extends CenesFragment {
                                 singleDigitZero = "0";
                             }*/
 
-                           int selectedHourTemp = 0;
-                           if (selectedHour == 0 || selectedHour == 12) {
-                               selectedHourTemp = 12;
-                           } else {
-                               selectedHourTemp = mcurrentTime.get(Calendar.HOUR);
-                           }
+                            int selectedHourTemp = 0;
+                            if (selectedHour == 0 || selectedHour == 12) {
+                                selectedHourTemp = 12;
+                            } else {
+                                selectedHourTemp = mcurrentTime.get(Calendar.HOUR);
+                            }
 
                             String singleDigitMinuteZero = "";
+                            if (selectedMinute % 5 != 0) {
+
+                                int minutesToAdd = 5 - selectedMinute % 5;
+
+                                if (selectedMinute > 55 && selectedMinute < 60) {
+                                    minutesToAdd = selectedMinute - (selectedMinute % 5);
+                                    selectedMinute = minutesToAdd;
+                                } else {
+                                    selectedMinute = selectedMinute + minutesToAdd;
+                                }
+                                mcurrentTime.set(Calendar.MINUTE, selectedMinute);
+                            }
+
                             if (selectedMinute < 10) {
                                 singleDigitMinuteZero = "0";
                             }
-                            startTimeText.setText( selectedHourTemp+ ":" + singleDigitMinuteZero + selectedMinute+ampm);
+                            startTimeText.setText(selectedHourTemp + ":" + singleDigitMinuteZero + selectedMinute + ampm);
                             metime.setStartTime(mcurrentTime.getTimeInMillis());
 
                             if (metime.getEndTime() == null) {
@@ -504,12 +520,24 @@ public class MeTimeCardFragment extends CenesFragment {
                                 if (endTimeCalendar.get(Calendar.MINUTE) < 10) {
                                     singleDigitMinuteZeroEndTime = "0";
                                 }
-                                endTimeText.setText( endTimeCalendar.get(Calendar.HOUR)+ ":" + singleDigitMinuteZeroEndTime + endTimeCalendar.get(Calendar.MINUTE)+ampmEndTime);
+                                endTimeText.setText(endTimeCalendar.get(Calendar.HOUR) + ":" + singleDigitMinuteZeroEndTime + endTimeCalendar.get(Calendar.MINUTE) + ampmEndTime);
                             }
                         }
                     };
 
-                    TimePickerDialog startTimeDateTimePicker = new TimePickerDialog(getCenesActivity(), startTimePickerListener, mcurrentTimeForStartTimeHour, mcurrentTimeForStartTimeMinute, false);
+                    if (startTimeDateTimePicker != null && metime.getStartTime() != null) {
+                        Calendar mcurrentTime = Calendar.getInstance();
+                        mcurrentTime.setTimeInMillis(metime.getStartTime());
+                        startTimeDateTimePicker = new TimePickerDialog(getCenesActivity(), startTimePickerListener, mcurrentTime.get(Calendar.HOUR_OF_DAY), mcurrentTime.get(Calendar.MINUTE), false);
+                    } else {
+                        if (metime.getRecurringEventId() != null && metime.getStartTime() != null) {
+                            Calendar mcurrentTime = Calendar.getInstance();
+                            mcurrentTime.setTimeInMillis(metime.getStartTime());
+                            startTimeDateTimePicker = new TimePickerDialog(getCenesActivity(), startTimePickerListener, mcurrentTime.get(Calendar.HOUR_OF_DAY), mcurrentTime.get(Calendar.MINUTE), false);
+                        } else {
+                            startTimeDateTimePicker = new TimePickerDialog(getCenesActivity(), startTimePickerListener, mcurrentTimeForStartTimeHour, mcurrentTimeForStartTimeMinute, false);
+                        }
+                    }
                     startTimeDateTimePicker.setTitle("Select Time");
                     startTimeDateTimePicker.show();
 
@@ -552,8 +580,19 @@ public class MeTimeCardFragment extends CenesFragment {
                         }
                     };
 
-                    TimePickerDialog endTimeDateTimePicker;
-                    endTimeDateTimePicker = new TimePickerDialog(getCenesActivity(), onTimeSetListenerEndTime, endTimeHour, endTimeMinute / TIME_PICKER_INTERVAL, false);
+                    if (endTimeDateTimePicker != null && metime.getEndTime() != null) {
+                        Calendar mcurrentTime = Calendar.getInstance();
+                        mcurrentTime.setTimeInMillis(metime.getEndTime());
+                        endTimeDateTimePicker = new TimePickerDialog(getCenesActivity(), onTimeSetListenerEndTime, mcurrentTime.get(Calendar.HOUR_OF_DAY), mcurrentTime.get(Calendar.MINUTE), false);
+                    } else {
+                        if (metime.getEndTime() != null) {
+                            Calendar mcurrentTime = Calendar.getInstance();
+                            mcurrentTime.setTimeInMillis(metime.getEndTime());
+                            endTimeDateTimePicker = new TimePickerDialog(getCenesActivity(), onTimeSetListenerEndTime, mcurrentTime.get(Calendar.HOUR_OF_DAY), mcurrentTime.get(Calendar.MINUTE), false);
+                        } else {
+                            endTimeDateTimePicker = new TimePickerDialog(getCenesActivity(), onTimeSetListenerEndTime, endTimeHour, endTimeMinute, false);
+                        }
+                    }
                     endTimeDateTimePicker.setTitle("Select Time");
                     endTimeDateTimePicker.show();
                     break;
